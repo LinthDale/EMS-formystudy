@@ -1,0 +1,76 @@
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: EMS-功率告警
+    folder: EMS
+    interval: 1m
+    rules:
+      - uid: ems-power-kw-high
+        title: "功率超限 (power_kw > 100 kW)"
+        condition: C
+        data:
+          # A: 查過去 5 分鐘的 power_kw 時序
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: time_series
+              rawQuery: true
+              rawSql: |
+                SELECT
+                  time,
+                  power_kw
+                FROM electricity_measurements
+                WHERE time >= now() - interval '5 minutes'
+                  AND power_kw < 1000
+                ORDER BY time
+              refId: A
+          # B: Reduce → 取平均值
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: mean
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          # C: Threshold → 平均 > 100 kW 就告警
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 100
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: NoData
+        execErrState: Alerting
+        for: 30s
+        labels:
+          severity: warning
+        annotations:
+          summary: "功率超過 100 kW"
+          description: "過去 1 分鐘平均 power_kw 超過 100 kW，請確認現場狀況"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram

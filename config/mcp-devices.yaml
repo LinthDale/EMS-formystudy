@@ -1,0 +1,92 @@
+# Device profile for kc-mcp-server.
+
+devices:
+  energy_meter:
+    host: simulator
+    port: 5020
+    slave_id: 1
+    byte_order: big
+    registers:
+      voltage:
+        address: 0
+        function_code: 3
+        data_type: int16
+        scale: 0.1
+        unit: "V"
+        access: read
+        description: "Line voltage"
+      current:
+        address: 1
+        function_code: 3
+        data_type: int16
+        scale: 0.1
+        unit: "A"
+        access: read
+        description: "Line current"
+      power_kw:
+        address: 2
+        function_code: 3
+        data_type: float32
+        scale: 1.0
+        unit: "kW"
+        access: read
+        description: "Active power"
+      energy_kwh:
+        address: 4
+        function_code: 3
+        data_type: float32
+        scale: 1.0
+        unit: "kWh"
+        access: read
+        description: "Cumulative energy"
+
+  factory_plc:
+    host: kc-modbus-sim
+    port: 5020
+    slave_id: 1
+    byte_order: big
+    registers:
+      temperature:
+        address: 0
+        function_code: 3
+        data_type: float32
+        scale: 1.0
+        unit: "C"
+        access: read
+        description: "Factory PLC temperature"
+      humidity:
+        address: 2
+        function_code: 3
+        data_type: float32
+        scale: 1.0
+        unit: "%RH"
+        access: read
+        description: "Factory PLC humidity"
+      motor_speed:
+        address: 4
+        function_code: 3
+        data_type: uint16
+        scale: 1.0
+        unit: "RPM"
+        access: read_write
+        description: "Motor speed setpoint"
+      pressure:
+        address: 0
+        function_code: 4
+        data_type: uint16
+        scale: 1.0
+        unit: "kPa"
+        access: read
+        description: "Factory PLC pressure"
+      pump_on:
+        address: 0
+        function_code: 1
+        data_type: bool
+        access: read_write
+        description: "Pump state"
+      valve_open:
+        address: 1
+        function_code: 1
+        data_type: bool
+        access: read_write
+        description: "Valve state"

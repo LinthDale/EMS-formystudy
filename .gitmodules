@@ -1,0 +1,6 @@
+[submodule "external/kc_iot_gateway"]
+	path = external/kc_iot_gateway
+	url = git@github.com:LinthDale/kc_iot_gateway.git
+[submodule "external/kc_modbus_mcp"]
+	path = external/kc_modbus_mcp
+	url = git@github.com:LinthDale/kc_modbus_mcp.git

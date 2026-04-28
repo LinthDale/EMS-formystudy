@@ -1,0 +1,196 @@
+services:
+  # ===== Infrastructure =====
+  timescaledb:
+    image: timescale/timescaledb:latest-pg15
+    container_name: ems-timescaledb
+    environment:
+      POSTGRES_DB: ems
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      AUTHENTICATOR_PASSWORD: ${AUTHENTICATOR_PASSWORD:-changeme}
+    volumes:
+      - timescale_data:/var/lib/postgresql/data
+      - ./infra/timescaledb/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+      - ./infra/timescaledb/02-authenticator.sh:/docker-entrypoint-initdb.d/02-authenticator.sh:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ems"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: ems-mosquitto
+    volumes:
+      - ./infra/mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf:ro
+    ports:
+      - "1883:1883"
+    restart: unless-stopped
+
+  # ===== Dev-only: fake Modbus meter =====
+  simulator:
+    build: ./services/simulator
+    container_name: ems-simulator
+    ports:
+      - "5020:5020"   # Modbus TCP
+      - "8001:8000"   # FastAPI REST (config, fault injection)
+    restart: unless-stopped
+
+  # ===== Data plane =====
+  gateway:
+    image: telegraf:1.30
+    container_name: ems-gateway
+    depends_on:
+      simulator:
+        condition: service_started
+      mosquitto:
+        condition: service_started
+    volumes:
+      - ./services/gateway/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: unless-stopped
+
+  ingest:
+    image: telegraf:1.30
+    container_name: ems-ingest
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./services/ingest/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: unless-stopped
+
+  # ===== Visualisation + Alerting =====
+  grafana:
+    image: grafana/grafana-oss:11.3.0
+    container_name: ems-grafana
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_UNIFIED_ALERTING_ENABLED: "true"
+      GF_ALERTING_ENABLED: "false"
+      # Pass secrets so provisioning YAMLs can read them via ${VAR}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    ports:
+      - "3000:3000"
+    dns:
+      - 1.1.1.1
+      - 9.9.9.9
+      - 8.8.8.8
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./infra/grafana/provisioning:/etc/grafana/provisioning:ro
+    restart: unless-stopped
+
+  # ===== REST API =====
+  query:
+    image: postgrest/postgrest:latest
+    container_name: ems-query
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    environment:
+      # Use key=value format (not URI) so special chars like '@' in the password
+      # don't need URL-encoding.
+      PGRST_DB_URI: "host=timescaledb port=5432 dbname=ems user=authenticator password=${AUTHENTICATOR_PASSWORD:-changeme}"
+      PGRST_DB_SCHEMAS: api
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_SERVER_PORT: "3000"
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
+
+  # ===== KC Integration: factory PLC + MQTT sensor + MCP =====
+  kc-modbus-sim:
+    build:
+      context: ./external/kc_modbus_mcp
+    image: ems-kc-modbus-mcp:local
+    container_name: ems-kc-modbus-sim
+    command: python simulator.py
+    environment:
+      - SIMULATOR_HOST=0.0.0.0
+      - SIMULATOR_PORT=5020
+    ports:
+      - "5021:5020"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost',5020)); s.close()"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  kc-mqtt-sim:
+    build:
+      context: ./external/kc_iot_gateway
+    image: ems-kc-iot-gateway:local
+    container_name: ems-kc-mqtt-sim
+    command: python simulators/mqtt_simulator.py
+    environment:
+      - MQTT_BROKER=mosquitto
+      - MQTT_PORT=1883
+    depends_on:
+      mosquitto:
+        condition: service_started
+    restart: unless-stopped
+
+  kc-gateway:
+    image: telegraf:1.30
+    container_name: ems-kc-gateway
+    depends_on:
+      kc-modbus-sim:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    volumes:
+      - ./services/kc-gateway/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: unless-stopped
+
+  kc-ingest:
+    image: telegraf:1.30
+    container_name: ems-kc-ingest
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+      mosquitto:
+        condition: service_started
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      - ./services/kc-ingest/telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    restart: unless-stopped
+
+  kc-mcp-server:
+    build:
+      context: ./external/kc_modbus_mcp
+    image: ems-kc-modbus-mcp:local
+    container_name: ems-kc-mcp-server
+    command: python server.py
+    environment:
+      - MODBUS_PROFILE=/app/devices.yaml
+      - MCP_HOST=0.0.0.0
+      - MCP_PORT=8765
+    ports:
+      - "127.0.0.1:8765:8765"
+    volumes:
+      - ./config/mcp-devices.yaml:/app/devices.yaml:ro
+    depends_on:
+      simulator:
+        condition: service_started
+      kc-modbus-sim:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  timescale_data:
+  grafana_data:
