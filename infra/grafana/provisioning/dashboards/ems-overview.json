@@ -1,0 +1,1243 @@
+{
+  "annotations": {
+    "list": []
+  },
+  "description": "EMS 能源監控與 KC 工廠環境/設備狀態 dashboard",
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "refresh": "5s",
+  "schemaVersion": 39,
+  "tags": [
+    "ems",
+    "factory",
+    "kc"
+  ],
+  "time": {
+    "from": "now-24h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "Asia/Taipei",
+  "title": "EMS 能源監控",
+  "uid": "ems-overview",
+  "version": 2,
+  "weekStart": "",
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "目前功率 (kW)",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kwatt",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT avg(power_kw) AS \"功率 (kW)\"\nFROM electricity_measurements\nWHERE time > now() - interval '1 minute'\n  AND power_kw < 1000",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "電壓 (V)",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "volt",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 361
+              },
+              {
+                "color": "yellow",
+                "value": 399
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT avg(voltage) AS \"電壓 (V)\"\nFROM electricity_measurements\nWHERE time > now() - interval '1 minute'\n  AND power_kw < 1000",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "電流 (A)",
+      "gridPos": {
+        "x": 12,
+        "y": 0,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "amp",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 130
+              },
+              {
+                "color": "red",
+                "value": 150
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT avg(current) AS \"電流 (A)\"\nFROM electricity_measurements\nWHERE time > now() - interval '1 minute'\n  AND power_kw < 1000",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "累計電量 (kWh)",
+      "gridPos": {
+        "x": 18,
+        "y": 0,
+        "w": 6,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kwatth",
+          "decimals": 2,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT max(energy_kwh) AS \"累計電量 (kWh)\"\nFROM electricity_measurements\nWHERE time > now() - interval '1 minute'\n  AND power_kw < 1000",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "功率曲線 (kW)",
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "kwatt",
+          "decimals": 1,
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 15,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": false,
+            "thresholdsStyle": {
+              "mode": "line+area"
+            }
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(time, $__interval),\n  avg(power_kw) AS \"功率 (kW)\"\nFROM electricity_measurements\nWHERE $__timeFilter(time)\n  AND power_kw < 1000\nGROUP BY 1\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "電壓 / 電流曲線",
+      "gridPos": {
+        "x": 0,
+        "y": 13,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "電壓 (V)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "volt"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "left"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "電流 (A)"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "amp"
+              },
+              {
+                "id": "custom.axisPlacement",
+                "value": "right"
+              }
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(time, $__interval),\n  avg(voltage) AS \"電壓 (V)\",\n  avg(current) AS \"電流 (A)\"\nFROM electricity_measurements\nWHERE $__timeFilter(time)\n  AND power_kw < 1000\nGROUP BY 1\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 70,
+      "type": "row",
+      "title": "KC 工廠環境與設備狀態",
+      "gridPos": {
+        "x": 0,
+        "y": 21,
+        "w": 24,
+        "h": 1
+      },
+      "collapsed": false,
+      "panels": []
+    },
+    {
+      "id": 71,
+      "type": "gauge",
+      "title": "KC PLC 溫度 (C)",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "blue",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 20
+              },
+              {
+                "color": "yellow",
+                "value": 28
+              },
+              {
+                "color": "red",
+                "value": 35
+              }
+            ]
+          },
+          "min": 0,
+          "max": 50
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT temperature AS \"PLC 溫度 (C)\" FROM factory_measurements WHERE device_id='plc-001' AND temperature IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 72,
+      "type": "gauge",
+      "title": "KC PLC 濕度 (%RH)",
+      "gridPos": {
+        "x": 4,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 40
+              },
+              {
+                "color": "yellow",
+                "value": 60
+              },
+              {
+                "color": "red",
+                "value": 75
+              }
+            ]
+          },
+          "min": 0,
+          "max": 100
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT humidity AS \"PLC 濕度 (%RH)\" FROM factory_measurements WHERE device_id='plc-001' AND humidity IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 73,
+      "type": "gauge",
+      "title": "KC 壓力 (kPa)",
+      "gridPos": {
+        "x": 8,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 900
+              },
+              {
+                "color": "yellow",
+                "value": 1050
+              },
+              {
+                "color": "red",
+                "value": 1120
+              }
+            ]
+          },
+          "min": 800,
+          "max": 1200
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT pressure AS \"壓力 (kPa)\" FROM factory_measurements WHERE device_id='plc-001' AND pressure IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 74,
+      "type": "gauge",
+      "title": "KC 馬達轉速 (RPM)",
+      "gridPos": {
+        "x": 12,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "rpm",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 1500
+              },
+              {
+                "color": "red",
+                "value": 2500
+              }
+            ]
+          },
+          "min": 0,
+          "max": 3000
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT motor_speed AS \"馬達轉速 (RPM)\" FROM factory_measurements WHERE device_id='plc-001' AND motor_speed IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 75,
+      "type": "stat",
+      "title": "KC Pump",
+      "gridPos": {
+        "x": 16,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "OFF",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ON",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT CASE WHEN pump_on THEN 1 ELSE 0 END AS \"Pump\" FROM factory_measurements WHERE device_id='plc-001' AND pump_on IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 76,
+      "type": "stat",
+      "title": "KC Valve",
+      "gridPos": {
+        "x": 20,
+        "y": 22,
+        "w": 4,
+        "h": 5
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "value"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "OFF",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ON",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT CASE WHEN valve_open THEN 1 ELSE 0 END AS \"Valve\" FROM factory_measurements WHERE device_id='plc-001' AND valve_open IS NOT NULL ORDER BY time DESC LIMIT 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 77,
+      "type": "timeseries",
+      "title": "KC 溫度趨勢：PLC vs Sensor",
+      "gridPos": {
+        "x": 0,
+        "y": 27,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "celsius",
+          "decimals": 1,
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(time, $__interval),\n  avg(temperature) FILTER (WHERE device_id='plc-001') AS \"PLC 溫度\",\n  avg(temperature) FILTER (WHERE device_id='sensor-001') AS \"Sensor 溫度\"\nFROM factory_measurements\nWHERE $__timeFilter(time)\n  AND temperature IS NOT NULL\nGROUP BY 1\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 78,
+      "type": "timeseries",
+      "title": "KC 濕度趨勢：PLC vs Sensor",
+      "gridPos": {
+        "x": 12,
+        "y": 27,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 1,
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(time, $__interval),\n  avg(humidity) FILTER (WHERE device_id='plc-001') AS \"PLC 濕度\",\n  avg(humidity) FILTER (WHERE device_id='sensor-001') AS \"Sensor 濕度\"\nFROM factory_measurements\nWHERE $__timeFilter(time)\n  AND humidity IS NOT NULL\nGROUP BY 1\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 79,
+      "type": "timeseries",
+      "title": "KC 壓力趨勢 (kPa)",
+      "gridPos": {
+        "x": 0,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "legend": {
+          "calcs": [
+            "min",
+            "max",
+            "mean"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "decimals": 0,
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "drawStyle": "line",
+            "lineInterpolation": "smooth",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "showPoints": "never",
+            "spanNulls": false
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "transparent",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  $__timeGroupAlias(time, $__interval),\n  avg(pressure) AS \"壓力 (kPa)\"\nFROM factory_measurements\nWHERE $__timeFilter(time)\n  AND device_id='plc-001'\n  AND pressure IS NOT NULL\nGROUP BY 1\nORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 80,
+      "type": "state-timeline",
+      "title": "KC 設備狀態時間軸：Pump / Valve",
+      "gridPos": {
+        "x": 12,
+        "y": 35,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "alignValue": "center",
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "mergeValues": true,
+        "rowHeight": 0.8,
+        "showValue": "auto",
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "0": {
+                  "text": "OFF",
+                  "color": "red"
+                },
+                "1": {
+                  "text": "ON",
+                  "color": "green"
+                }
+              },
+              "type": "value"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "red",
+                "value": null
+              },
+              {
+                "color": "green",
+                "value": 1
+              }
+            ]
+          },
+          "color": {
+            "mode": "thresholds"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  max(CASE WHEN pump_on THEN 1 ELSE 0 END) AS \"Pump\",\n  max(CASE WHEN valve_open THEN 1 ELSE 0 END) AS \"Valve\"\nFROM factory_measurements\nWHERE $__timeFilter(time)\n  AND device_id='plc-001'\n  AND (pump_on IS NOT NULL OR valve_open IS NOT NULL)\nGROUP BY time\nORDER BY time",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 81,
+      "type": "table",
+      "title": "KC 最新工廠資料",
+      "gridPos": {
+        "x": 0,
+        "y": 43,
+        "w": 24,
+        "h": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "showHeader": true,
+        "cellHeight": "sm",
+        "footer": {
+          "show": false
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "cellOptions": {
+              "type": "auto"
+            }
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT\n  time,\n  device_id,\n  device_type,\n  temperature,\n  humidity,\n  pressure,\n  motor_speed,\n  pump_on,\n  valve_open\nFROM factory_measurements\nWHERE time > now() - interval '30 minutes'\nORDER BY time DESC\nLIMIT 20",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

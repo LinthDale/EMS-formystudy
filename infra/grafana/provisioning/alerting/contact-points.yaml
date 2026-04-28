@@ -1,0 +1,20 @@
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: Telegram
+    receivers:
+      - uid: telegram-main
+        type: telegram
+        settings:
+          bottoken: "${TELEGRAM_BOT_TOKEN}"
+          chatid: "7171144544"   # change here if chat_id changes; env var can't be used (Grafana parses numeric values as JSON number)
+          message: |
+            EMS 告警 [{{ .Status | toUpper }}]
+            {{ range .Alerts -}}
+            規則：{{ .Labels.alertname }}
+            摘要：{{ .Annotations.summary }}
+            說明：{{ .Annotations.description }}
+            時間：{{ .StartsAt.UTC.Format "2006-01-02 15:04 UTC" }}
+            {{ end -}}
+        disableResolveMessage: false

@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: TimescaleDB
+    uid: timescaledb-ems
+    type: postgres
+    url: timescaledb:5432
+    user: postgres
+    secureJsonData:
+      password: "${POSTGRES_PASSWORD}"
+    jsonData:
+      database: ems
+      sslmode: disable
+      postgresVersion: 1500
+      timescaledb: true
+    isDefault: true
+    editable: true

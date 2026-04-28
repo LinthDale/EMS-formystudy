@@ -1,0 +1,822 @@
+openapi: 3.1.0
+info:
+  title: EMS API
+  description: |
+    Energy Management System API 規範
+
+    本系統包含以下 API 端點：
+    - **Simulator API** (port 8001): 模擬電表控制
+    - **Query API** (port 3001): 歷史資料查詢 (PostgREST)
+    - **Grafana API** (port 3000): 告警與儀表板管理
+    - **Grafana Dashboard**: 已新增 KC 工廠環境與設備狀態 panels
+  version: 1.1.0
+  contact:
+    name: EMS Development Team
+  license:
+    name: Proprietary
+
+servers:
+  - url: http://localhost:8001
+    description: Simulator API (模擬電表控制)
+  - url: http://localhost:3001
+    description: Query API - PostgREST (歷史資料查詢)
+  - url: http://localhost:3000
+    description: Grafana API (告警與儀表板)
+
+tags:
+  - name: Simulator
+    description: 模擬電表控制 API
+  - name: Query
+    description: 歷史資料查詢 API (PostgREST)
+  - name: Grafana
+    description: Grafana 告警與儀表板管理 API
+
+paths:
+  # ============================================================
+  # Simulator API (port 8001)
+  # ============================================================
+  /health:
+    get:
+      tags:
+        - Simulator
+      summary: 健康檢查
+      description: 檢查模擬器服務是否運作中
+      operationId: getSimulatorHealth
+      servers:
+        - url: http://localhost:8001
+      responses:
+        '200':
+          description: 服務正常運作
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+              example:
+                status: ok
+
+  /config:
+    get:
+      tags:
+        - Simulator
+      summary: 取得模擬參數
+      description: 取得目前的模擬電表參數設定
+      operationId: getSimulatorConfig
+      servers:
+        - url: http://localhost:8001
+      responses:
+        '200':
+          description: 目前的模擬參數
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorConfig'
+              example:
+                noise_voltage_v: 3.0
+                current_base_a: 100.0
+                current_swing_a: 40.0
+                noise_current_a: 2.0
+                power_factor: 0.85
+                period_seconds: 3600.0
+                fault_mode: none
+
+    post:
+      tags:
+        - Simulator
+      summary: 修改模擬參數
+      description: |
+        修改模擬電表的參數設定。所有參數都是可選的，只會更新有提供的參數。
+
+        **功率計算公式：**
+        ```
+        P (kW) = √3 × 380V × current_base_a × power_factor / 1000
+        ```
+
+        **快速參考：**
+        - current_base_a=100, power_factor=0.85 → ~56 kW
+        - current_base_a=180, power_factor=0.85 → ~101 kW (會觸發告警)
+      operationId: setSimulatorConfig
+      servers:
+        - url: http://localhost:8001
+      parameters:
+        - name: noise_voltage_v
+          in: query
+          description: 電壓雜訊標準差 (V)
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            default: 3.0
+        - name: current_base_a
+          in: query
+          description: 基礎電流 (A)，直接影響功率大小
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            default: 100.0
+        - name: current_swing_a
+          in: query
+          description: 電流波動幅度 (A)
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            default: 40.0
+        - name: noise_current_a
+          in: query
+          description: 電流雜訊標準差 (A)
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            default: 2.0
+        - name: power_factor
+          in: query
+          description: 功率因數 (0-1)
+          schema:
+            type: number
+            format: float
+            minimum: 0
+            maximum: 1
+            default: 0.85
+        - name: period_seconds
+          in: query
+          description: 負載週期秒數
+          schema:
+            type: number
+            format: float
+            minimum: 1
+            default: 3600.0
+      responses:
+        '200':
+          description: 更新後的參數
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SimulatorConfig'
+
+  /inject-fault:
+    post:
+      tags:
+        - Simulator
+      summary: 注入故障模式
+      description: |
+        設定故障模式以測試告警機制：
+        - `none`: 正常運作
+        - `zero`: 所有數值歸零
+        - `freeze`: 數值凍結不更新
+      operationId: injectFault
+      servers:
+        - url: http://localhost:8001
+      parameters:
+        - name: mode
+          in: query
+          required: true
+          description: 故障模式
+          schema:
+            type: string
+            enum:
+              - none
+              - zero
+              - freeze
+            default: none
+      responses:
+        '200':
+          description: 故障模式已設定
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FaultResponse'
+              example:
+                fault_mode: freeze
+        '400':
+          description: 無效的故障模式
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  # ============================================================
+  # Query API - PostgREST (port 3001)
+  # ============================================================
+  /electricity_measurements:
+    get:
+      tags:
+        - Query
+      summary: 查詢歷史電力量測資料
+      description: |
+        使用 PostgREST 語法查詢 TimescaleDB 中的歷史電力量測資料（electricity_measurements 表）。
+
+        **支援的運算子：**
+        - `eq.` 等於
+        - `gt.` 大於
+        - `gte.` 大於等於
+        - `lt.` 小於
+        - `lte.` 小於等於
+        - `neq.` 不等於
+
+        **範例：**
+        - `?power_kw=gt.50` - 功率大於 50kW
+        - `?time=gte.2026-04-23T00:00:00` - 時間大於等於指定時間
+      operationId: getMeasurements
+      servers:
+        - url: http://localhost:3001
+      parameters:
+        - name: select
+          in: query
+          description: 選擇要回傳的欄位 (逗號分隔)
+          schema:
+            type: string
+          example: time,power_kw,voltage
+        - name: device_id
+          in: query
+          description: 依設備 ID 過濾 (使用 eq.xxx 格式)
+          schema:
+            type: string
+          example: eq.sim-001
+        - name: time
+          in: query
+          description: 依時間過濾 (使用 gte.xxx 或 lte.xxx 格式)
+          schema:
+            type: string
+          example: gte.2026-04-23T00:00:00
+        - name: power_kw
+          in: query
+          description: 依功率過濾 (使用 gt.xxx, lt.xxx 等格式)
+          schema:
+            type: string
+          example: gt.50
+        - name: voltage
+          in: query
+          description: 依電壓過濾
+          schema:
+            type: string
+        - name: current
+          in: query
+          description: 依電流過濾
+          schema:
+            type: string
+        - name: order
+          in: query
+          description: 排序欄位 (欄位名.asc 或 欄位名.desc)
+          schema:
+            type: string
+            default: time.desc
+          example: time.desc
+        - name: limit
+          in: query
+          description: 限制回傳筆數
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            default: 100
+          example: 10
+        - name: offset
+          in: query
+          description: 跳過前 N 筆
+          schema:
+            type: integer
+            minimum: 0
+          example: 0
+      responses:
+        '200':
+          description: 量測資料列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Measurement'
+              example:
+                - time: "2026-04-23T10:30:00Z"
+                  device_id: sim-001
+                  voltage: 381.2
+                  current: 105.3
+                  power_kw: 58.7
+                  energy_kwh: 1234.56
+        '400':
+          description: 查詢參數錯誤
+
+
+  /factory_measurements:
+    get:
+      tags:
+        - Query
+      summary: 查詢工廠量測資料
+      description: |
+        使用 PostgREST 語法查詢 TimescaleDB 中的工廠 PLC 與 JSON 感測器資料（factory_measurements 表）。
+
+        **來源設備：**
+        - `plc-001`: KC Modbus PLC simulator，包含 temperature、humidity、motor_speed、pump_on、valve_open、pressure
+        - `sensor-001`: KC MQTT JSON sensor，包含 temperature、humidity
+      operationId: getFactoryMeasurements
+      servers:
+        - url: http://localhost:3001
+      parameters:
+        - name: select
+          in: query
+          description: 選擇要回傳的欄位 (逗號分隔)
+          schema:
+            type: string
+          example: time,device_id,temperature,humidity,pressure
+        - name: device_id
+          in: query
+          description: 依設備 ID 過濾 (使用 eq.xxx 格式)
+          schema:
+            type: string
+          example: eq.plc-001
+        - name: device_type
+          in: query
+          description: 依設備類型過濾 (plc 或 sensor)
+          schema:
+            type: string
+          example: eq.plc
+        - name: time
+          in: query
+          description: 依時間過濾 (使用 gte.xxx 或 lte.xxx 格式)
+          schema:
+            type: string
+          example: gte.2026-04-27T00:00:00
+        - name: order
+          in: query
+          description: 排序欄位 (欄位名.asc 或 欄位名.desc)
+          schema:
+            type: string
+            default: time.desc
+          example: time.desc
+        - name: limit
+          in: query
+          description: 限制回傳筆數
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 10000
+            default: 100
+          example: 10
+      responses:
+        '200':
+          description: 工廠量測資料列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FactoryMeasurement'
+              example:
+                - time: "2026-04-27T09:00:00Z"
+                  device_id: plc-001
+                  device_type: plc
+                  temperature: 25.3
+                  humidity: 55.2
+                  motor_speed: 1500
+                  pump_on: true
+                  valve_open: false
+                  pressure: 1013
+        '400':
+          description: 查詢參數錯誤
+
+  # ============================================================
+  # Grafana API (port 3000)
+  # ============================================================
+  /api/admin/provisioning/alerting/reload:
+    post:
+      tags:
+        - Grafana
+      summary: 重新載入告警設定
+      description: 重新載入 provisioning 目錄下的告警規則和聯絡點設定
+      operationId: reloadAlertingConfig
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: 告警設定已重新載入
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: alerting config reloaded
+
+  /api/admin/provisioning/dashboards/reload:
+    post:
+      tags:
+        - Grafana
+      summary: 重新載入儀表板設定
+      description: 重新載入 provisioning 目錄下的儀表板設定
+      operationId: reloadDashboardsConfig
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: 儀表板設定已重新載入
+
+  /api/admin/provisioning/datasources/reload:
+    post:
+      tags:
+        - Grafana
+      summary: 重新載入資料來源設定
+      description: 重新載入 provisioning 目錄下的資料來源設定
+      operationId: reloadDatasourcesConfig
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: 資料來源設定已重新載入
+
+  /api/prometheus/grafana/api/v1/rules:
+    get:
+      tags:
+        - Grafana
+      summary: 取得告警規則狀態
+      description: 取得所有告警規則的目前狀態
+      operationId: getAlertRules
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: 告警規則列表
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertRulesResponse'
+
+  /api/alertmanager/grafana/api/v2/alerts:
+    get:
+      tags:
+        - Grafana
+      summary: 取得目前觸發中的告警
+      description: 取得所有正在觸發 (firing) 的告警
+      operationId: getActiveAlerts
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: 觸發中的告警列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ActiveAlert'
+
+  /api/datasources/uid/{uid}/health:
+    get:
+      tags:
+        - Grafana
+      summary: 檢查資料來源健康狀態
+      description: 檢查指定資料來源是否可以連線
+      operationId: checkDatasourceHealth
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: 資料來源的 UID
+          schema:
+            type: string
+          example: timescaledb-ems
+      responses:
+        '200':
+          description: 資料來源健康狀態
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DatasourceHealthResponse'
+
+  /api/alertmanager/grafana/config/api/v1/receivers/test:
+    post:
+      tags:
+        - Grafana
+      summary: 測試通知接收者
+      description: 發送測試通知到指定的接收者 (例如 Telegram)
+      operationId: testNotificationReceiver
+      servers:
+        - url: http://localhost:3000
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TestReceiverRequest'
+            example:
+              receivers:
+                - name: Telegram
+                  grafana_managed_receiver_configs:
+                    - uid: telegram-main
+                      name: Telegram
+                      type: telegram
+                      settings:
+                        bottoken: "<YOUR_BOT_TOKEN>"
+                        chatid: "7171144544"
+                        message: "EMS 測試訊息"
+      responses:
+        '200':
+          description: 測試通知已發送
+        '400':
+          description: 請求格式錯誤
+
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+      description: Grafana admin 帳號密碼 (預設 admin:admin)
+
+  schemas:
+    HealthResponse:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum:
+            - ok
+          description: 服務狀態
+
+    SimulatorConfig:
+      type: object
+      properties:
+        noise_voltage_v:
+          type: number
+          format: float
+          description: 電壓雜訊標準差 (V)
+          example: 3.0
+        current_base_a:
+          type: number
+          format: float
+          description: 基礎電流 (A)
+          example: 100.0
+        current_swing_a:
+          type: number
+          format: float
+          description: 電流波動幅度 (A)
+          example: 40.0
+        noise_current_a:
+          type: number
+          format: float
+          description: 電流雜訊標準差 (A)
+          example: 2.0
+        power_factor:
+          type: number
+          format: float
+          description: 功率因數
+          minimum: 0
+          maximum: 1
+          example: 0.85
+        period_seconds:
+          type: number
+          format: float
+          description: 負載週期秒數
+          example: 3600.0
+        fault_mode:
+          type: string
+          enum:
+            - none
+            - zero
+            - freeze
+          description: 目前的故障模式
+
+    FaultResponse:
+      type: object
+      properties:
+        fault_mode:
+          type: string
+          enum:
+            - none
+            - zero
+            - freeze
+          description: 已設定的故障模式
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: 錯誤訊息
+
+    Measurement:
+      type: object
+      required:
+        - time
+        - device_id
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: 量測時間 (UTC)
+          example: "2026-04-23T10:30:00Z"
+        device_id:
+          type: string
+          description: 設備 ID
+          example: sim-001
+        voltage:
+          type: number
+          format: float
+          description: 電壓 (V)
+          example: 381.2
+        current:
+          type: number
+          format: float
+          description: 電流 (A)
+          example: 105.3
+        power_kw:
+          type: number
+          format: float
+          description: 功率 (kW)
+          example: 58.7
+        energy_kwh:
+          type: number
+          format: float
+          description: 累計電量 (kWh)
+          example: 1234.56
+
+    FactoryMeasurement:
+      type: object
+      required:
+        - time
+        - device_id
+      properties:
+        time:
+          type: string
+          format: date-time
+          description: 量測時間 (UTC)
+          example: "2026-04-27T09:00:00Z"
+        device_id:
+          type: string
+          description: 設備 ID
+          example: plc-001
+        device_type:
+          type: string
+          description: 設備類型
+          enum:
+            - plc
+            - sensor
+          example: plc
+        temperature:
+          type: number
+          format: float
+          description: 溫度
+          example: 25.3
+        humidity:
+          type: number
+          format: float
+          description: 濕度 (%RH)
+          example: 55.2
+        motor_speed:
+          type: number
+          format: float
+          description: 馬達轉速 (RPM)
+          example: 1500
+        pump_on:
+          type: boolean
+          description: 幫浦狀態
+          example: true
+        valve_open:
+          type: boolean
+          description: 閥門狀態
+          example: false
+        pressure:
+          type: number
+          format: float
+          description: 壓力 (kPa)
+          example: 1013
+
+    AlertRulesResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: success
+        data:
+          type: object
+          properties:
+            groups:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: EMS-功率告警
+                  rules:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: "功率超限 (power_kw > 100 kW)"
+                        state:
+                          type: string
+                          enum:
+                            - inactive
+                            - pending
+                            - firing
+                          example: firing
+
+    ActiveAlert:
+      type: object
+      properties:
+        labels:
+          type: object
+          properties:
+            alertname:
+              type: string
+              example: "功率超限 (power_kw > 100 kW)"
+            severity:
+              type: string
+              example: warning
+        annotations:
+          type: object
+          properties:
+            summary:
+              type: string
+              example: "功率超過 100 kW"
+            description:
+              type: string
+              example: "過去 5 分鐘平均 power_kw 超過 100 kW，請確認現場狀況"
+        startsAt:
+          type: string
+          format: date-time
+          example: "2026-04-23T10:30:00Z"
+        status:
+          type: object
+          properties:
+            state:
+              type: string
+              enum:
+                - active
+                - suppressed
+              example: active
+
+    DatasourceHealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum:
+            - OK
+            - ERROR
+          example: OK
+        message:
+          type: string
+          example: "Connection successful"
+
+    TestReceiverRequest:
+      type: object
+      required:
+        - receivers
+      properties:
+        receivers:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Telegram
+              grafana_managed_receiver_configs:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uid:
+                      type: string
+                      example: telegram-main
+                    name:
+                      type: string
+                      example: Telegram
+                    type:
+                      type: string
+                      example: telegram
+                    settings:
+                      type: object
+                      properties:
+                        bottoken:
+                          type: string
+                          description: Telegram Bot Token
+                        chatid:
+                          type: string
+                          description: Telegram Chat ID
+                        message:
+                          type: string
+                          description: 測試訊息內容
