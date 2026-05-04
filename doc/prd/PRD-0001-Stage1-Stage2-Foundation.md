@@ -5,7 +5,7 @@
 | 狀態 | **Implemented**（追溯式 PRD） |
 | 起案日期 | 2026-04-22 |
 | PRD 化日期 | 2026-04-29 |
-| 原始規劃文件 | `doc/plan/EMS實作計畫.md` |
+| 原始規劃文件 | `doc/archive/plan/EMS實作計畫.md` |
 | 主要實作 commit 區間 | Stage 1 完成於 2026-04-22；Stage 2 進行中 |
 
 ---
@@ -83,7 +83,7 @@
 
 ## 5. Non-Functional Requirements
 
-> 全量化指標見 [`doc/nfr.md`](../nfr.md)。本節摘錄 Stage 1 / Stage 2（Dev / Demo）範圍：
+> 全量化指標見 [`doc/governance/nfr.md`](../governance/nfr.md)。本節摘錄 Stage 1 / Stage 2（Dev / Demo）範圍：
 
 | 維度 | 目標 |
 |------|------|
@@ -188,7 +188,7 @@
 
 ## 11. Risks & Mitigations
 
-主要風險（完整見 [`doc/risk-register.md`](../risk-register.md)）：
+主要風險（完整見 [`doc/governance/risk-register.md`](../governance/risk-register.md)）：
 
 | ID | 風險 | 等級 | 緩解 |
 |----|------|------|------|
@@ -260,10 +260,10 @@ make -C tests coverage      # 含覆蓋率報告
 - 2026-04-29 PRD-0001 補建（追溯式）
 
 ### B. 相關文件
-- `doc/plan/EMS實作計畫.md`（原始規劃）
-- `doc/stage_1/README.md`（進度紀錄）
-- `doc/容器速查表.md`
-- `doc/操作手冊.md`
+- `doc/archive/plan/EMS實作計畫.md`（原始規劃）
+- `doc/archive/stage_1/README.md`（進度紀錄）
+- `doc/operations/容器速查表.md`
+- `doc/operations/操作手冊.md`
 - `自學架構.md`（位於 `Documents/EMS/`）
 
 ### C. 對應 ADR

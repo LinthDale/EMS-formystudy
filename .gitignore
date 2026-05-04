@@ -11,9 +11,13 @@ build/
 .DS_Store
 .idea/
 .vscode/
+.claude/
 *.log
 external.bak/
 
 # Editor swap files
 *.swp
 *.swo
+
+# Third-party installer artifacts (download via wget per ops docs)
+cloudflared-linux-amd64.deb*
