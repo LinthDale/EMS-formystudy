@@ -9,7 +9,7 @@
 | [PRD-0001](PRD-0001-Stage1-Stage2-Foundation.md) | EMS Stage 1 / Stage 2 基礎管線與儀表板 | Implemented | services/{simulator,gateway,ingest}, infra/{mosquitto,timescaledb,grafana} |
 | [PRD-0002](PRD-0002-KC-Factory-Integration.md) | KC Factory 工廠 PLC 整合 | Implemented (Phase 1-6) | services/{kc-gateway,kc-ingest}, external/{kc_iot_gateway,kc_modbus_mcp} |
 
-> 既有 `doc/plan/EMS實作計畫.md` 與 `doc/plan/kc_integration_plan.md` 為**原始規劃文件**（過程紀錄、取捨討論），保留不刪除；PRD-0001 / PRD-0002 為對應的**正式 PRD 形式**，提供 Guideline 15 章節結構。兩者衝突時以 PRD 為準。
+> 既有 `doc/archive/plan/EMS實作計畫.md` 與 `doc/archive/plan/kc_integration_plan.md` 為**原始規劃文件**（過程紀錄、取捨討論），保留於 archive 下不刪除；PRD-0001 / PRD-0002 為對應的**正式 PRD 形式**，提供 Guideline 15 章節結構。兩者衝突時以 PRD 為準。
 
 ## 撰寫規則
 

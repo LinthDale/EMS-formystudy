@@ -1,6 +1,10 @@
 apiVersion: 1
 
 groups:
+  # ============================================================
+  # Group 1: 業務告警 (功率超限)
+  # noData/execErr 設為 OK，避免管線中斷時誤觸
+  # ============================================================
   - orgId: 1
     name: EMS-功率告警
     folder: EMS
@@ -63,14 +67,157 @@ groups:
                 name: Expression
                 type: __expr__
                 uid: "-100"
-        noDataState: NoData
-        execErrState: Alerting
+        noDataState: OK
+        execErrState: OK
         for: 30s
         labels:
           severity: warning
         annotations:
           summary: "功率超過 100 kW"
           description: "過去 1 分鐘平均 power_kw 超過 100 kW，請確認現場狀況"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+  # ============================================================
+  # Group 2: 管線健康告警 (資料寫入停滯)
+  # 監控兩條 ingest 鏈路 (electricity + factory) 是否還在寫入
+  # 這裡 noData/execErr 設為 Alerting，因為「沒資料 = 真的有問題」
+  # ============================================================
+  - orgId: 1
+    name: EMS-管線健康
+    folder: EMS
+    interval: 1m
+    rules:
+      # ----- 電表 ingest 停滯 -----
+      - uid: ems-pipeline-electricity-stale
+        title: "電表資料寫入停滯 (>2 分鐘無新資料)"
+        condition: C
+        data:
+          # A: 查過去 2 分鐘有幾筆 electricity_measurements
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT
+                  COUNT(*)::float8 AS row_count
+                FROM electricity_measurements
+                WHERE time > now() - interval '2 minutes'
+              refId: A
+          # B: Reduce → last value
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          # C: Threshold → row_count < 1 就告警
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: lt
+                    params:
+                      - 1
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: Alerting    # 沒資料 = 真的壞了，要告警
+        execErrState: Alerting   # SQL 錯誤 = 真的壞了，要告警
+        for: 1m
+        labels:
+          severity: critical
+          component: pipeline
+        annotations:
+          summary: "電表資料寫入停滯"
+          description: "過去 2 分鐘沒有新的 electricity_measurements 寫入。請檢查 ems-simulator / ems-gateway / ems-ingest / mosquitto / timescaledb"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- 工廠 ingest 停滯 -----
+      - uid: ems-pipeline-factory-stale
+        title: "工廠資料寫入停滯 (>2 分鐘無新資料)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT
+                  COUNT(*)::float8 AS row_count
+                FROM factory_measurements
+                WHERE time > now() - interval '2 minutes'
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 300
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: lt
+                    params:
+                      - 1
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: Alerting
+        execErrState: Alerting
+        for: 1m
+        labels:
+          severity: critical
+          component: pipeline
+        annotations:
+          summary: "工廠資料寫入停滯"
+          description: "過去 2 分鐘沒有新的 factory_measurements 寫入。請檢查 kc-modbus-sim / kc-mqtt-sim / kc-gateway / kc-ingest / mosquitto / timescaledb"
         isPaused: false
         notification_settings:
           receiver: Telegram

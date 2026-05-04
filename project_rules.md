@@ -2,7 +2,7 @@
 
 > **Think using first principles. Do not always assume I am very clear about what I want and how to get it. Be prudent — start from the raw requirements and the problem itself. If the motivation and goal are unclear, stop and discuss with me. If the goal is clear but the path is not the shortest, tell me and suggest a better approach.**
 
-每次完成重要的計畫後，要更新 `api/openapi.yml`、`doc/容器速查表.md`、`doc/操作手冊.md`（`doc/` 裡的重要文檔）還有 `README.md`。
+每次完成重要的計畫後，要更新 `api/openapi.yml`、`doc/operations/容器速查表.md`、`doc/operations/操作手冊.md`（`doc/` 裡的重要文檔）還有 `README.md`。
 
 ---
 
@@ -28,8 +28,8 @@
 
 每次重大變更完成，**必須同步更新**：
 1. `api/openapi.yml`
-2. `doc/容器速查表.md`
-3. `doc/操作手冊.md`
+2. `doc/operations/容器速查表.md`
+3. `doc/operations/操作手冊.md`
 4. `README.md`
 
 PR 缺一不予合併。
@@ -45,6 +45,91 @@ PRD 鎖定後的架構變更，皆需以 ADR 形式登記於 `doc/adr/`，PR 連
 ### 6. WSL 為單一真相
 
 `/home/emsuser/synaiq/EMS/` 為權威路徑；Windows 端 `C:\Users\User\synaiq\EMS\` 僅為備份，禁止直接編輯。
+
+---
+
+## PRD-First：未來改動必讀流程
+
+> **致未來接手的工程師（含 AI agent）**：本節為**動手前的閱讀清單**。任何改動在開始之前，必先按順序讀過下列文件；違反此流程的 PR 不予合併。
+
+### 14. 改動前必讀順序（強制）
+
+```
+1. project_rules.md（本檔）             ← 規範總則
+       ↓
+2. doc/PRD-架構設計-Guideline.md         ← 架構設計權威
+       ↓
+3. doc/prd/README.md（PRD 索引）          ← 找出與本次改動相關的 PRD
+       ↓
+4. 相關 PRD 全文（如 PRD-0001、PRD-0002） ← 理解設計意圖、Goals/Non-Goals、約束
+       ↓
+5. doc/architecture/{c4-context,c4-container,data-flow}.md  ← 確認改動影響範圍
+       ↓
+6. doc/adr/（與改動範圍相關的 ADR）       ← 理解既有決策與 Why
+       ↓
+7. doc/governance/risk-register.md + doc/governance/threat-model.md  ← 確認改動是否觸動既有風險
+       ↓
+8. 才開始撰寫程式碼 / 修改設定
+```
+
+「相關」的判斷：當改動觸發 §2 任一觸發條件時，至少有一份 PRD 與之相關。若無對應 PRD，**先寫 PRD（§15）再動手**。
+
+### 15. 改動類型對應動作
+
+| 改動類型 | 對應動作 |
+|---------|---------|
+| 新功能 / 新服務 / 新整合 | **先寫新 PRD**（PRD-NNNN），通過 §10 自查再開始實作 |
+| 修改既有功能行為（FR 變更）| 在對應 PRD 附加變更紀錄（§15 附錄）+ 開 ADR 紀錄變更原因 |
+| 修改架構（資料流 / 部署 / 服務拆併）| **新開 ADR**；若影響 PRD 的 §6 或 §7，更新對應 PRD |
+| API / Schema / MQTT topic 變更 | 同步 `api/openapi.yml` + 對應 PRD §7/§8 + ADR-007（若 topic）|
+| 修 bug（不改行為）| 不需新 PRD；於 commit message 引用相關 PRD 編號便於追溯 |
+| 純 refactor（不改契約）| 不需新 PRD；於 PR 描述列出涵蓋的 PRD 編號確認契約未動 |
+| 測試補強 / 文件補齊 | 不需新 PRD；於 PR 描述標明對應 PRD/ADR 編號 |
+| 安全 / 合規調整 | 必須更新 `doc/governance/threat-model.md` + `doc/governance/risk-register.md` + 對應 ADR |
+
+### 16. PR Checklist（與 PRD 對應）
+
+PR 描述必須包含下列勾選欄位，缺項即 block：
+
+```
+## Related PRD / ADR
+- 對應 PRD：[PRD-XXXX]（或「不適用」+ 理由）
+- 新增 / 影響 ADR：[ADR-XXX]（或「無」）
+
+## Pre-flight reading（請勾選已讀）
+- [ ] project_rules.md
+- [ ] doc/PRD-架構設計-Guideline.md（必要章節）
+- [ ] 對應 PRD 全文
+- [ ] 對應 ADR
+- [ ] doc/governance/risk-register.md（評估是否觸動既有風險）
+- [ ] doc/governance/threat-model.md（若涉及對外介面 / 認證 / 資料邊界）
+
+## 文件四同步（§3）
+- [ ] api/openapi.yml
+- [ ] doc/operations/容器速查表.md
+- [ ] doc/operations/操作手冊.md
+- [ ] README.md
+
+## 測試（§7-13）
+- [ ] Unit / Integration / E2E 對照觸發條件全跑
+- [ ] 新邏輯有對應測試
+- [ ] 覆蓋率達 §10 下限
+
+## Guideline §10 PRD Quality Checklist
+- [ ] Goals / Non-Goals 清楚分離
+- [ ] FR 編號可追蹤至測試
+- [ ] NFR 量化（連動 doc/governance/nfr.md）
+- [ ] 三張架構圖齊備（影響時更新）
+- [ ] 風險登記已 review
+```
+
+### 17. AI Agent 指引
+
+未來由 AI（Claude / Cursor / Copilot 等）執行改動時：
+- 工作開始前，agent 必須**主動讀過 §14 完整清單**，並在 thinking 中列出讀過的檔案
+- 若使用者提示與既有 PRD/ADR 衝突，**停下確認**而非自行決策（呼應檔頭 IMPORTANT NOTES 的 first principles 原則）
+- agent 寫 PRD / ADR 時，文件結構嚴格遵守 Guideline 對應章節，不自創格式
+- agent 撰寫程式碼前，先搜尋既有 PRD 是否已涵蓋；已涵蓋時引用該 PRD 的 FR 編號到 commit / PR
 
 ---
 
@@ -170,3 +255,40 @@ python -m pytest tests/integration -v -m integration
 | `config/mcp-devices.yaml` | `tests/integration/test_pipeline_factory.py` MCP 區段 |
 
 測試檔案與程式碼分離 PR 提交視為**不完整交付**，不予合併。
+
+---
+
+### 18. 依賴與安裝需求清單維護
+
+根目錄 `requirements.txt` 是可直接用 pip 安裝的本機 Python 開發 / 測試需求檔：
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+`requirements-inventory.md` 是本專案的完整執行需求總表，涵蓋：
+
+- 主機端必要工具，例如 Docker Engine、Docker Compose、Git、curl
+- Docker image 與本地 build image
+- 各 Python service 的 runtime dependencies
+- 測試 dependencies
+- 可選維運/除錯工具，例如 mosquitto-clients、postgresql-client
+- Demo/對外公開工具，例如 cloudflared、Tailscale
+- 可選前端 dashboard 開發工具與 npm dependencies
+
+任何 PR / commit 只要新增、移除或升級下列項目，必須同步更新根目錄 `requirements.txt`：
+
+- 本機開發 / 測試需要 pip 安裝的新 Python 套件
+- `services/simulator/requirements.txt`
+- `tests/requirements-test.txt`
+
+任何 PR / commit 只要新增、移除或升級下列項目，必須同步更新 `requirements-inventory.md`：
+
+- `docker-compose.yml` 中的 image、build service、port/runtime 需求
+- `services/*/requirements.txt`
+- `external/*/pyproject.toml`
+- `tests/requirements-test.txt`
+- `package.json` / 前端工具鏈
+- 文件或操作手冊要求使用的新 CLI、daemon、雲端工具或外部服務
+
+注意：KC 外部專案維持各自的 `pyproject.toml` 與容器環境，不強行合併進根目錄 `requirements.txt`。目前 EMS simulator 鎖定 `pymodbus==3.6.9`，KC 外部專案使用 `pymodbus>=3.7.0`，合併到同一個 pip 環境會造成版本解析衝突。
