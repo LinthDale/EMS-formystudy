@@ -36,7 +36,7 @@ Accepted（2026-04-24）
 | `ems-kc-mqtt-sim` | 本地 build（external/kc_iot_gateway） | MQTT JSON 感測器模擬 |
 | `ems-kc-mcp-server` | 本地 build（external/kc_modbus_mcp） | MCP Server，讓 AI 控制設備 |
 
-外部 repo 以 git submodule 管理於 `external/`，docker-compose 本地 build。
+外部 repo 暫以一般 clone 置於 `external/`（EMS 目錄尚未初始化為 git repo，submodule 化為後續工作），docker-compose 本地 build image。
 
 ## Consequences
 
@@ -48,7 +48,7 @@ Accepted（2026-04-24）
 
 **負面**
 - 容器數量增加（+5 個）
-- 需要管理 git submodule
+- 外部來源版本管理目前依賴一般 clone（無 submodule pin），上游變更難以追蹤（風險登記 R-010）
 - Telegraf conf 重複片段（mosquitto 連線、output 設定等）
 
 **後續觸發**
