@@ -19,9 +19,9 @@ SELECT v.device_id, v.signal_name, v.unit, v.datatype, v.direction, v.source_ref
 FROM (VALUES
     -- sim-001 (electricity)
     ('sim-001',    'voltage',     'V',       'float', 'read', 'modbus:holding:0'),
-    ('sim-001',    'current',     'A',       'float', 'read', 'modbus:holding:2'),
-    ('sim-001',    'power_kw',    'kW',      'float', 'read', 'modbus:holding:4'),
-    ('sim-001',    'energy_kwh',  'kWh',     'float', 'read', 'modbus:holding:6'),
+    ('sim-001',    'current',     'A',       'float', 'read', 'modbus:holding:1'),
+    ('sim-001',    'power_kw',    'kW',      'float', 'read', 'modbus:holding:2'),
+    ('sim-001',    'energy_kwh',  'kWh',     'float', 'read', 'modbus:holding:4'),
     -- plc-001 (PLC, unknown)
     ('plc-001',    'temperature', 'degC',    'float', 'read', 'modbus:holding:0'),
     ('plc-001',    'humidity',    '%RH',     'float', 'read', 'modbus:holding:2'),
