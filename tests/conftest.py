@@ -16,3 +16,9 @@ for _p in _candidates:
     if (_p / "main.py").exists():
         sys.path.insert(0, str(_p))
         break
+
+# device-service package (PRD-0003) — import as `device_service`
+for _dp in (_root / "services" / "device-service", _root):
+    if (_dp / "device_service" / "__init__.py").exists():
+        sys.path.insert(0, str(_dp))
+        break

@@ -27,7 +27,7 @@
 
 ```
 Dockerfile, requirements.txt
-src/
+device_service/        # Python package, imported as device_service.* (避免與 simulator 的 import main 撞名)
   main.py            FastAPI app + lifespan(初始化雙池) + router
   config.py          pydantic-settings；LLM_BASE_URL allowlist 驗證(FR-342)
   db.py              asyncpg get_ai_pool/get_ops_pool；freeze_override helper；healthz ping
@@ -63,7 +63,7 @@ docker-compose.yml + ems-device-service（REST :8002）
 
 ## 驗證
 
-- `pytest tests/unit/test_device_service_*.py --cov=services/device-service/src`（≥ 90%）
+- `pytest tests/unit/test_device_service_*.py --cov=device_service`（≥ 90%）
 - `pytest tests/integration/test_device_service_*.py`（throwaway container）
 - `docker compose up -d ems-device-service` → `curl :8002/healthz` 兩池綠
 - 既有 schema / pipeline 測試不受影響

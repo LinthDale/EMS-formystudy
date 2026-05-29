@@ -1,0 +1,1 @@
+"""device-service — PRD-0003 Device Registry & Auto-Discovery."""
