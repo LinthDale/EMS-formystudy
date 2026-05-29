@@ -18,6 +18,7 @@ _REGISTRY_MIGRATIONS = [
     "008_backfill_existing_devices.sql",
     "009_create_api_views.sql",
     "010_create_db_roles_and_freeze_trigger.sql",
+    "011_extend_freeze_protected_columns.sql",
 ]
 
 _BACKFILLED_DEVICES = ("sim-001", "plc-001", "sensor-001")
@@ -399,6 +400,44 @@ class TestMigration010FreezeTrigger:
             cur.execute("RESET ROLE")
             cur.close()
 
+
+class TestMigration011ExtendedFreeze:
+    """011_extend_freeze_protected_columns.sql — vendor/model/location/protocol also frozen (ADR-018)."""
+
+    def test_run_twice_does_not_raise(self, db_conn):
+        _apply_registry_chain(db_conn)
+        _run_sql_file(db_conn, "011_extend_freeze_protected_columns.sql")
+
+    def test_ai_role_cannot_mutate_frozen_vendor(self, registry_migrated):
+        c = registry_migrated
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            raised = False
+            try:
+                cur.execute("UPDATE public.devices SET vendor = 'attacker' WHERE device_id = 'sim-001'")
+            except psycopg2.Error:
+                raised = True
+            c.rollback()
+            assert raised, "extended freeze must block ai role from mutating frozen vendor"
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+
+    def test_ai_role_may_still_write_ai_confidence_on_frozen(self, registry_migrated):
+        c = registry_migrated
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            # ai_confidence stays AI-writable (FR-335 drift detection) even on a frozen device
+            cur.execute("UPDATE public.devices SET ai_confidence = 0.42 WHERE device_id = 'sim-001'")
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+        with c.cursor() as cur2:
+            cur2.execute("UPDATE public.devices SET ai_confidence = NULL WHERE device_id = 'sim-001'")
 
 class TestDeviceRegistryChainIdempotent:
     """Full 003-010 chain must be safe to apply twice (project_rules §13)."""
