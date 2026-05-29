@@ -16,6 +16,17 @@
 | ADR-006 | KC Factory 鏈路獨立為 kc-gateway / kc-ingest | Accepted | 2026-04-24 |
 | ADR-007 | MQTT Topic 命名規範 `ems/devices/{id}/measurements` | Accepted | 2026-04-22 |
 | ADR-008 | Grafana 對外採 Cloudflare Tunnel + Access | Accepted | 2026-04-28 |
+| ADR-009 | LLM Provider 抽象層 + SanitizedSample 強制入參 | Accepted | 2026-05-29 |
+| ADR-010 | Device 狀態機（五狀態 + stale 軟旗標）| Accepted | 2026-05-29 |
+| ADR-011 | device_signals 採 current-state + soft delete | Accepted | 2026-05-29 |
+| ADR-012 | device-service 自帶獨立 MCP endpoint（AI 通道僅讀 + 重跑分類）| Accepted | 2026-05-29 |
+| ADR-013 | MQTT Topic Parser Matrix v3（deny-by-default）| Accepted | 2026-05-29 |
+| ADR-014 | LLM Budget Ledger Fail-Closed Gate | Accepted | 2026-05-29 |
+| ADR-015 | AI Bounded Autonomy + Correction Loop | Accepted | 2026-05-29 |
+| ADR-016 | Two-Layer AI Guardrail + DB Freeze Trigger | Accepted | 2026-05-29 |
+| ADR-017 | DB Connection Pool & Role Switching | Accepted | 2026-05-29 |
+
+> ADR-009 ~ ADR-017 源自 PRD-0003（Device Registry & Auto-Discovery，Approved 2026-05-08 / DL-007），將 PRD §6.4 鎖定之 9 項架構決策正式化。
 
 ## 撰寫規則
 
