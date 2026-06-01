@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, Field
 
@@ -76,6 +77,40 @@ class DigestOut(BaseModel):
     provider: str | None = None
     model: str | None = None
     prompt_version: str | None = None
+
+
+class CorrectionCreate(BaseModel):
+    verdict: Literal["wrong_classification", "wrong_signals", "wrong_unit", "missed_signal", "good_with_note"]
+    corrected_device_type: str | None = None
+    corrected_signals: list[SignalCreate] | None = None
+    human_explanation: str
+    # FR-330 action flags. Behaviour (immediate re-classify / unfreeze->candidate) lands in
+    # slice 2c with the classify path; until then a true value is rejected (never silently
+    # ignored). prompt_version_at_correction is server-stamped provenance, NOT a client field.
+    rerun_classification: bool = False
+    demote_to_candidate: bool = False
+
+
+class CorrectionDeactivateRequest(BaseModel):
+    reason: str  # PRD §624 body field name; validated like human_explanation (§7.3a)
+
+
+class CorrectionOut(BaseModel):
+    id: int
+    device_id: str
+    verdict: str
+    corrected_device_type: str | None = None
+    corrected_signals: list[dict] | None = None
+    human_explanation: str
+    created_at: datetime | None = None
+    created_by_key_id: str
+    salt_version: str
+    prompt_version_at_correction: str | None = None
+    applied_count: int
+    last_applied_at: datetime | None = None
+    is_active: bool
+    deactivated_at: datetime | None = None
+    deactivation_reason: str | None = None
 
 
 class HealthOut(BaseModel):

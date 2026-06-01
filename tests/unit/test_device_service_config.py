@@ -177,6 +177,7 @@ def test_toml_secret_keys_are_ignored(tmp_path, monkeypatch):
     cfg = tmp_path / "ds.toml"
     cfg.write_text('[db]\ndb_ai_password = "leaked-from-toml"\ndb_host = "toml-host"\n', encoding="utf-8")
     monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    monkeypatch.delenv("DB_AI_PASSWORD", raising=False)  # hermetic: ignore ambient secret env
     s = Settings(_env_file=None)
     assert s.db_ai_password == ""          # secret ignored -> falls back to .env/default, NOT the toml value
     assert s.db_host == "toml-host"         # non-secret still loaded
