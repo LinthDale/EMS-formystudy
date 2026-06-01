@@ -1,5 +1,8 @@
 # 可調參數表（Tunable Parameters Registry）
 
+> **人類調參主檔：[`config/device-service.toml`](../../config/device-service.toml)**（有完整註解；改檔後重啟服務生效）。本表為總覽 / 稽核索引。
+> 載入優先序（高→低）：環境變數 > `.env` > `device-service.toml` > 程式 default。機密（DB 密碼 / API keys）只放 `.env`。
+>
 > 依 `project_rules.md` §19。列出 device-service 所有運行期可調 / spec 鎖定的參數。
 > **operational** 落於 `config.Settings`（env 可覆寫）；**spec-locked** 由 PRD/ADR 鎖定，放寬走 ADR。
 >

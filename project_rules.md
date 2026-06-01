@@ -297,7 +297,7 @@ python -m pip install -r requirements.txt
 
 所有「可調整 / 運行期可能需要調整」的參數**不可散落為各模組的硬編 magic constant**（例如 LLM `max_tokens`、reservation token 估算、信心門檻、retry 次數、cache 上限、dedupe / rate-limit 視窗、reconnect 延遲、月預算、provider/model pricing 等）。必須：
 
-1. **集中於單一 config 介面**（device-service 為 `config.Settings`，pydantic-settings、env 可覆寫），spec / 合理值作為 default，**預留運行期調整空間**。
+1. **集中於單一 config 介面**（device-service 為 `config.Settings`，pydantic-settings），且提供**單一有註解的參數檔** [`config/device-service.toml`](config/device-service.toml) 作為人類調參主檔；載入優先序 env > `.env` > toml > 程式 default，spec / 合理值作為 default，**改檔重啟即生效**。機密只放 `.env`。
 2. **登錄於可調參數表** [`doc/governance/tunable-parameters.md`](doc/governance/tunable-parameters.md)：每個參數列 名稱 / env var / 預設 / 單位 / 所屬模組 / 對應 FR-ADR / 是否 spec-locked。
 3. **區分兩類**：
    - **operational 可調**（timeout、threshold、max_tokens、budget、retries、cache、reconnect、pricing…）→ 走 `Settings`，env 可覆寫。

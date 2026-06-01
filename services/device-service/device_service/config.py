@@ -1,15 +1,58 @@
-"""Runtime configuration (pydantic-settings) + LLM_BASE_URL allowlist (FR-342).
+"""Runtime configuration (pydantic-settings).
 
-Env (no prefix): LLM_PROVIDER, LLM_MODEL, LLM_API_KEY, LLM_BASE_URL,
-LLM_PROVIDER_DOMAIN_ALLOWLIST, DB_HOST, DB_PORT, DB_NAME, DB_AI_PASSWORD,
-DB_OPS_PASSWORD, OPS_API_KEY, INGEST_API_KEY, AI_API_KEY.
+Single human-editable tunable file: config/device-service.toml (annotated). Load
+precedence (high -> low): env vars > .env > TOML file > code defaults. Secrets
+(DB_*_PASSWORD, *_API_KEY, LLM_API_KEY) live in .env only, never in the TOML.
+TOML path overridable via DEVICE_SERVICE_CONFIG_FILE. See project_rules §19 and
+doc/governance/tunable-parameters.md.
 """
 from __future__ import annotations
 
+import os
+import tomllib
+from pathlib import Path
 from urllib.parse import urlparse
 
 from pydantic import field_validator, model_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic.fields import FieldInfo
+from pydantic_settings import (
+    BaseSettings,
+    PydanticBaseSettingsSource,
+    SettingsConfigDict,
+)
+
+DEFAULT_CONFIG_FILE = "config/device-service.toml"
+
+
+class TomlConfigSource(PydanticBaseSettingsSource):
+    """Loads tunables from an annotated TOML file (flattened one level of [tables]).
+    Missing file -> empty (code defaults apply). Path: DEVICE_SERVICE_CONFIG_FILE
+    or config/device-service.toml relative to CWD."""
+
+    def __init__(self, settings_cls: type[BaseSettings]):
+        super().__init__(settings_cls)
+        self._data = self._load()
+
+    @staticmethod
+    def _load() -> dict:
+        path = Path(os.getenv("DEVICE_SERVICE_CONFIG_FILE", DEFAULT_CONFIG_FILE))
+        if not path.is_file():
+            return {}
+        with path.open("rb") as fh:
+            raw = tomllib.load(fh)
+        flat: dict = {}
+        for key, value in raw.items():
+            if isinstance(value, dict):      # [section] table -> flatten its keys
+                flat.update(value)
+            else:
+                flat[key] = value
+        return flat
+
+    def get_field_value(self, field: FieldInfo, field_name: str):
+        return self._data.get(field_name), field_name, False
+
+    def __call__(self) -> dict:
+        return {k: v for k, v in self._data.items()}
 
 # http:// is only accepted for these local hosts (covers Ollama via host.docker.internal,
 # per PRD §14); everything else over http is rejected (FR-342 rule a).
@@ -114,3 +157,11 @@ class Settings(BaseSettings):
     def _check_base_url(self) -> "Settings":
         validate_base_url(self.llm_base_url, self.allowlist)
         return self
+
+    @classmethod
+    def settings_customise_sources(
+        cls, settings_cls, init_settings, env_settings, dotenv_settings, file_secret_settings,
+    ):
+        # precedence high -> low: init (kwargs) > env > .env > TOML > code defaults
+        return (init_settings, env_settings, dotenv_settings,
+                TomlConfigSource(settings_cls), file_secret_settings)

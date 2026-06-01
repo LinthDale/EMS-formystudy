@@ -199,6 +199,7 @@ services:
       timescaledb:
         condition: service_healthy
     environment:
+      DEVICE_SERVICE_CONFIG_FILE: /app/config/device-service.toml
       DB_HOST: timescaledb
       DB_NAME: ems
       DB_AI_PASSWORD: ${DB_AI_PASSWORD:-changeme_ai}
@@ -210,6 +211,8 @@ services:
       LLM_MODEL: ${LLM_MODEL:-}
       LLM_API_KEY: ${LLM_API_KEY:-}
       LLM_BASE_URL: ${LLM_BASE_URL:-}
+    volumes:
+      - ./config:/app/config:ro
     ports:
       - "8002:8002"
     restart: unless-stopped
