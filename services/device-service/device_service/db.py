@@ -65,7 +65,7 @@ class Database:
         async with self.ops_pool.acquire() as conn:  # type: ignore[union-attr]
             async with conn.transaction():
                 if lock:
-                    await conn.execute("SELECT pg_advisory_xact_lock(hashtext($1))", lock)
+                    await conn.execute("SELECT pg_advisory_xact_lock(hashtextextended('device:'||$1, 0))", lock)
                 if freeze_override:
                     await conn.execute(
                         "SELECT set_config('device_service.freeze_override', $1, true)",
@@ -81,5 +81,5 @@ class Database:
         async with self.ai_pool.acquire() as conn:  # type: ignore[union-attr]
             async with conn.transaction():
                 if lock:
-                    await conn.execute("SELECT pg_advisory_xact_lock(hashtext($1))", lock)
+                    await conn.execute("SELECT pg_advisory_xact_lock(hashtextextended('device:'||$1, 0))", lock)
                 yield conn

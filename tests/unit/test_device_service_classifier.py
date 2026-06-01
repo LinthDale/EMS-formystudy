@@ -164,3 +164,11 @@ async def test_cache_not_used_when_corrections_present_reruns_guardrail():
     )
     o = await c.classify(poisoned)
     assert o.summary_source == "system_fallback" and o.last_error == "guardrail_blocked_input"
+
+async def test_cache_is_size_bounded():
+    p = _CountingProvider(_res(conf=0.95))
+    c = Classifier(p, _PASS, cache_max=2)
+    for i in range(4):
+        s = sanitize(f"dev-{i}", f"ems/devices/dev-{i}/measurements", "ilp", [{f"f{i}": float(i)}])
+        await c.classify(s)
+    assert len(c._cache) <= 2

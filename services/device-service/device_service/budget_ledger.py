@@ -27,6 +27,8 @@ def evaluate_budget(spent_usd: float, budget_usd: float, *, warn_ratio: float = 
         return BudgetDecision(allow=True, alert="warn_80")
     return BudgetDecision(allow=True, alert=None)
 
+# TODO(Phase 1.4, FR-329): implement record_usage(conn, provider, cost_usd) and call it after every
+# real (non-mock) LLM call so the gate actually trips. Until then spend stays 0 for real providers.
 async def get_period_budget(conn, provider: str, monthly_budget_usd: float) -> tuple[float, float]:
     """Return (spent_usd, budget_usd) for the active ledger period of a provider.
     No ledger row yet -> (0, monthly_budget_usd) (full budget available)."""

@@ -90,7 +90,7 @@ async def create_candidate(
                (device_id, device_type, status, gateway_id, metadata, last_seen_at)
            VALUES ($1, $2, 'candidate', $3, jsonb_build_object('source_topic', $4::text), now())
            ON CONFLICT (device_id) DO NOTHING
-           RETURNING device_id""",
+           RETURNING created_at""",
         device_id, device_type, gateway_id, source_topic,
     )
 

@@ -7,6 +7,7 @@ persist under advisory lock. The MQTT transport lives in mqtt_subscriber.py.
 from __future__ import annotations
 
 import json
+import logging
 from collections import deque
 from collections.abc import Mapping
 from datetime import datetime, timezone
@@ -14,7 +15,9 @@ from datetime import datetime, timezone
 from .budget_ledger import evaluate_budget, get_period_budget
 from .repositories import device_repo
 from .sanitizer import sanitize
-from .topic_parser import parse
+from .topic_parser import MAX_PAYLOAD_BYTES, parse
+
+_log = logging.getLogger("device_service.discovery")
 
 DEDUPE_WINDOW = 60.0
 RATE_LIMIT = 60
@@ -29,6 +32,10 @@ class AdmissionGate:
         self._dedupe_window = dedupe_window
         self._rate_limit = rate_limit
         self._rate_window = rate_window
+        # one entry per topic that has created a candidate; bounded by the DB device
+        # count (record_candidate only fires on a committed INSERT), so this grows at
+        # the same rate as the devices table, not per-message. Explicit eviction is a
+        # future concern if the fleet reaches hundreds of thousands.
         self._last_candidate_for: dict[str, float] = {}
         self._candidate_times: deque[float] = deque()
 
@@ -69,7 +76,6 @@ def parse_fields(payload, payload_format: str) -> dict:
         except (json.JSONDecodeError, TypeError):
             return {}
         return data if isinstance(data, Mapping) else {}
-    # Influx Line Protocol: "measurement,tags k1=v1,k2=v2 timestamp"
     parts = text.strip().split(" ")
     if len(parts) < 2:
         return {}
@@ -94,14 +100,19 @@ def _gateway_for(topic: str) -> str | None:
 async def process_message(topic, payload, *, db, classifier, gate, settings, now) -> str:
     """Process one MQTT message. Returns a short status string (for metrics / tests)."""
     size = len(payload) if isinstance(payload, (bytes, bytearray)) else len(str(payload).encode())
+    if size > MAX_PAYLOAD_BYTES:                                       # fast-fail before any decode
+        return "reject:mqtt_oversized_payload_total"
+
     fmt_guess = "json" if topic.startswith("factory/sensor/") else "ilp"
     fields = parse_fields(payload, fmt_guess)
 
     pr = parse(topic, payload=fields, payload_size=size)
     if not pr.ok:
         return f"reject:{pr.metric}"
+    if not fields:
+        _log.warning("accepted topic %s parsed to zero fields (publisher format mismatch?)", topic)
 
-    if gate.is_duplicate(topic, now):                                   # rule #5
+    if gate.is_duplicate(topic, now):                                  # rule #5
         async with db.ai_pool.acquire() as conn:
             await device_repo.touch_last_seen(conn, pr.device_id)
         return "dedupe"
@@ -113,25 +124,25 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
             await device_repo.touch_last_seen(conn, pr.device_id)
         return "existing"
 
-    if not gate.allow_rate(now):                                        # rule #6
+    if not gate.allow_rate(now):                                       # rule #6
         return "rate_limited"
 
-    async with db.ai_tx(lock=pr.device_id) as conn:                     # rule #7: candidate
+    async with db.ai_tx(lock=pr.device_id) as conn:                    # rule #7: candidate
         if await device_repo.get(conn, pr.device_id) is not None:
             return "existing"
-        await device_repo.create_candidate(conn, pr.device_id, pr.device_type, topic, _gateway_for(topic))
+        created_at = await device_repo.create_candidate(
+            conn, pr.device_id, pr.device_type, topic, _gateway_for(topic))
     gate.record_candidate(topic, now)
 
-    # classify (slice 3b)
+    first_seen = created_at.isoformat() if created_at is not None else datetime.now(timezone.utc).isoformat()
     sanitized = sanitize(pr.device_id, topic, pr.payload_format, [fields])
     async with db.ai_pool.acquire() as conn:
         spent, budget = await get_period_budget(conn, settings.llm_provider, settings.llm_monthly_budget_usd)
     decision = evaluate_budget(spent, budget)
-    ts = datetime.now(timezone.utc).isoformat()
     outcome = await classifier.classify(
         sanitized, budget_ok=decision.allow, default_device_type=pr.device_type,
-        first_seen_at=ts, generated_at=ts,
+        first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(),
     )
-    async with db.ai_tx(lock=pr.device_id) as conn:                     # §8.6.8 advisory lock
+    async with db.ai_tx(lock=pr.device_id) as conn:                    # §8.6.8 advisory lock
         await device_repo.apply_outcome(conn, pr.device_id, outcome)
     return f"created:{outcome.new_status}"

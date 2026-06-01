@@ -53,6 +53,12 @@ async def lifespan(app: FastAPI):
     sub_task = None
     if settings.mqtt_enabled:
         sub_task = asyncio.create_task(run_subscriber(db, app.state.classifier, settings))
+
+        def _on_sub_done(task: asyncio.Task) -> None:
+            if not task.cancelled() and task.exception() is not None:
+                _log.error("MQTT subscriber task exited", exc_info=task.exception())
+
+        sub_task.add_done_callback(_on_sub_done)
     try:
         yield
     finally:

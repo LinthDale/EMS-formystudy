@@ -52,6 +52,7 @@ class Classifier:
         self, provider: LLMProvider, guardrail: GuardrailProvider, *,
         model: str = "", prompt_version: str = "v1",
         confidence_threshold: float = CONFIDENCE_THRESHOLD, retries: int = DEFAULT_RETRIES,
+        cache_max: int = 4096,
     ):
         self._provider = provider
         self._guardrail = guardrail
@@ -59,6 +60,7 @@ class Classifier:
         self._prompt_version = prompt_version
         self._threshold = confidence_threshold
         self._retries = retries
+        self._cache_max = cache_max
         self._cache: dict[str, Outcome] = {}
 
     def _fallback(
@@ -137,5 +139,7 @@ class Classifier:
         )
         outcome = Outcome(cleaned, digest, "llm", new_status, conflict, None)
         if cacheable:  # only clean, context-free results are cached (see above)
+            if len(self._cache) >= self._cache_max:
+                self._cache.pop(next(iter(self._cache)))  # bound memory: drop oldest entry
             self._cache[key] = outcome
         return outcome

@@ -51,3 +51,20 @@ async def test_apply_outcome_skips_non_candidate_row():
         async def execute(self, *a):
             raise AssertionError("must not write when row is no longer a candidate")
     assert await apply_outcome(_Conn(), "x", object()) is False
+
+async def test_oversized_payload_rejected_before_touching_db():
+    from device_service.discovery import AdmissionGate, process_message
+    from device_service.topic_parser import MAX_PAYLOAD_BYTES
+
+    class _NoDB:
+        @property
+        def ai_pool(self):
+            raise AssertionError("db must not be touched for an oversized payload")
+        def ai_tx(self, **kw):
+            raise AssertionError("db must not be touched for an oversized payload")
+
+    payload = b"x" * (MAX_PAYLOAD_BYTES + 1)
+    status = await process_message(
+        "ems/devices/d/measurements", payload,
+        db=_NoDB(), classifier=None, gate=AdmissionGate(), settings=None, now=1.0)
+    assert status == "reject:mqtt_oversized_payload_total"
