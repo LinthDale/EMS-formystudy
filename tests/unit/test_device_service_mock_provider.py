@@ -43,3 +43,8 @@ def test_bool_field_maps_to_bool_datatype():
     s = _sample([{"valve_open": True}], topic="ems/factory/plc/measurements")
     r = MockProvider().classify_device("d", s.topic, s)
     assert any(sig.datatype == "bool" for sig in r.suggested_signals)
+
+def test_classifies_motor_from_pure_motor_speed():
+    s = _sample([{"motor_speed": 1500.0}], topic="ems/factory/plc/measurements")
+    r = MockProvider().classify_device("plc", s.topic, s)
+    assert r.device_type == "motor"

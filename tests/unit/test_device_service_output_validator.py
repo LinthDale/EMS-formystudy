@@ -64,3 +64,8 @@ def test_confidence_out_of_range_rejected():
     r = ClassificationResult("electricity", (SignalSuggestion("voltage", "V", "float", "read"),), 1.5, "ok")
     ok, reason, _ = validate(r)
     assert not ok and reason == "confidence_out_of_range"
+
+def test_unsafe_signal_unit_rejected():
+    """output_validator: a unit containing unsafe chars must be rejected."""
+    ok, reason, _ = validate(_result(signals=(SignalSuggestion("flow", "m3; DROP", "float", "read"),)))
+    assert not ok and reason == "unsafe_signal_unit"

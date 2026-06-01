@@ -68,3 +68,13 @@ def test_nan_inf_never_in_min_max():
     f = next((f for f in s.fields if f.field_name == "v"), None)
     if f is not None and f.value_min is not None:
         assert math.isfinite(f.value_min) and math.isfinite(f.value_max)
+
+def test_all_none_field_is_skipped():
+    s = sanitize("d", "t", "ilp", [{"x": None}, {"x": None}, {"voltage": 220.0}])
+    names = {f.field_name for f in s.fields}
+    assert "x" not in names and "voltage" in names
+
+
+def test_all_nonfinite_numeric_field_is_skipped():
+    s = sanitize("d", "t", "ilp", [{"y": float("nan")}, {"y": float("inf")}])
+    assert all(f.field_name != "y" for f in s.fields)
