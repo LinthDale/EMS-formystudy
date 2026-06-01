@@ -292,3 +292,17 @@ python -m pip install -r requirements.txt
 - 文件或操作手冊要求使用的新 CLI、daemon、雲端工具或外部服務
 
 注意：KC 外部專案維持各自的 `pyproject.toml` 與容器環境，不強行合併進根目錄 `requirements.txt`。目前 EMS simulator 鎖定 `pymodbus==3.6.9`，KC 外部專案使用 `pymodbus>=3.7.0`，合併到同一個 pip 環境會造成版本解析衝突。
+
+### 19. 可調參數集中管理（可調參數表）
+
+所有「可調整 / 運行期可能需要調整」的參數**不可散落為各模組的硬編 magic constant**（例如 LLM `max_tokens`、reservation token 估算、信心門檻、retry 次數、cache 上限、dedupe / rate-limit 視窗、reconnect 延遲、月預算、provider/model pricing 等）。必須：
+
+1. **集中於單一 config 介面**（device-service 為 `config.Settings`，pydantic-settings、env 可覆寫），spec / 合理值作為 default，**預留運行期調整空間**。
+2. **登錄於可調參數表** [`doc/governance/tunable-parameters.md`](doc/governance/tunable-parameters.md)：每個參數列 名稱 / env var / 預設 / 單位 / 所屬模組 / 對應 FR-ADR / 是否 spec-locked。
+3. **區分兩類**：
+   - **operational 可調**（timeout、threshold、max_tokens、budget、retries、cache、reconnect、pricing…）→ 走 `Settings`，env 可覆寫。
+   - **security / spec-mandated 限制**（payload size、欄位數、樣本上限、reasoning 上限、id regex 等，由 PRD/ADR 鎖定）→ 仍登錄於表中並標 **spec-locked**；放寬須走 ADR，不可隨意 env 調降。
+4. 新增 / 修改此類參數時，**同步更新 `tunable-parameters.md`**（納入 §3 文件同步義務精神）。
+5. 注意**跨參數耦合**要在表中標明（例：LLM 輸出 `max_tokens` 必須等於 budget reservation 的輸出上限 `RESERVE_OUTPUT_TOKENS`，否則 hard cap 失效）。
+
+> 動機：避免 `max_tokens=1024` 之類數字寫死在程式各處、無調整空間、耦合不可見。集中表化使調參、稽核、跨參數耦合一目了然。
