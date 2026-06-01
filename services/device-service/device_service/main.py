@@ -1,14 +1,31 @@
 """FastAPI app for device-service (PRD-0003). CRUD/lifecycle + healthz (Slice 3)."""
 from __future__ import annotations
 
+import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+import asyncpg
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 
 from .config import Settings
 from .db import Database
 from .llm.factory import make_provider
 from .routes import devices, health, signals
+
+_log = logging.getLogger("device_service")
+
+
+async def db_error_handler(request: Request, exc: Exception) -> JSONResponse:
+    """Map uncaught asyncpg errors to safe status codes (no stack-trace / detail leak)."""
+    if isinstance(exc, asyncpg.UniqueViolationError):
+        code, detail = 409, "conflict"
+    elif isinstance(exc, (asyncpg.CheckViolationError, asyncpg.NotNullViolationError, asyncpg.DataError)):
+        code, detail = 422, "invalid value for a constrained field"
+    else:
+        code, detail = 500, "internal database error"
+    _log.warning("db error -> %d: %s", code, type(exc).__name__)
+    return JSONResponse(status_code=code, content={"detail": detail})
 
 
 @asynccontextmanager
@@ -33,6 +50,7 @@ async def lifespan(app: FastAPI):
 
 def create_app() -> FastAPI:
     app = FastAPI(title="EMS device-service", version="0.1.0", lifespan=lifespan)
+    app.add_exception_handler(asyncpg.PostgresError, db_error_handler)
     app.include_router(health.router)
     app.include_router(devices.router)
     app.include_router(signals.router)

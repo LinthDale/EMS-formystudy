@@ -3,6 +3,10 @@
 AI pool (device_service_ai): MQTT/classification path, writes ai_* + digests.
 OPS pool (device_service_ops): CRUD / confirm / override / reject; mutating a frozen
 record requires SET LOCAL device_service.freeze_override (migration 010/011).
+
+Note: ops_tx GUC + advisory lock are transaction-scoped — requires direct asyncpg
+pooling or a session-mode external pooler (PgBouncer transaction/statement mode
+would break them; see ADR-017).
 """
 from __future__ import annotations
 
@@ -37,8 +41,11 @@ class Database:
     async def healthz(self) -> dict[str, str]:
         out: dict[str, str] = {}
         for name, pool in (("ai", self.ai_pool), ("ops", self.ops_pool)):
+            if pool is None:
+                out[name] = "starting"
+                continue
             try:
-                async with pool.acquire() as conn:  # type: ignore[union-attr]
+                async with pool.acquire() as conn:
                     await conn.fetchval("SELECT 1")
                 out[name] = "ok"
             except Exception:
@@ -46,11 +53,19 @@ class Database:
         return out
 
     @asynccontextmanager
-    async def ops_tx(self, *, freeze_override: str | None = None):
-        """OPS transaction; if freeze_override (a request id) is given, set the GUC token
-        so the freeze trigger lets a legitimate confirm/override/reject mutate a frozen row."""
+    async def ops_tx(self, *, freeze_override: str | None = None, lock: str | None = None):
+        """OPS transaction.
+
+        lock: if given, take a transaction-scoped advisory lock keyed on it (serialises
+              concurrent lifecycle mutations of the same device vs the AI auto-confirm
+              path, §8.6.8 / W-A).
+        freeze_override: if given (a request id), set the GUC token so the freeze trigger
+              lets a legitimate confirm/override/reject mutate a frozen row.
+        """
         async with self.ops_pool.acquire() as conn:  # type: ignore[union-attr]
             async with conn.transaction():
+                if lock:
+                    await conn.execute("SELECT pg_advisory_xact_lock(hashtext($1))", lock)
                 if freeze_override:
                     await conn.execute(
                         "SELECT set_config('device_service.freeze_override', $1, true)",

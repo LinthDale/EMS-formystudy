@@ -40,3 +40,17 @@ async def test_database_healthz_marks_pool_down_on_error():
     db.ai_pool = _BadPool()
     db.ops_pool = _BadPool()
     assert await db.healthz() == {"ai": "down", "ops": "down"}
+
+async def test_database_healthz_none_pool_is_starting():
+    db = Database(host="x", port=1, name="ems", ai_password="", ops_password="")
+    assert await db.healthz() == {"ai": "starting", "ops": "starting"}
+
+
+async def test_db_error_handler_maps_status_codes():
+    import asyncpg
+
+    from device_service.main import db_error_handler
+
+    assert (await db_error_handler(None, asyncpg.UniqueViolationError("dup"))).status_code == 409
+    assert (await db_error_handler(None, asyncpg.CheckViolationError("bad"))).status_code == 422
+    assert (await db_error_handler(None, asyncpg.PostgresError("other"))).status_code == 500

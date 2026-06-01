@@ -97,6 +97,9 @@ async def test_full_crud_lifecycle(api):
     r = await client.post(f"/devices/{_DEV}/confirm", headers=_OPS)
     assert r.status_code == 200 and r.json()["status"] == "confirmed" and r.json()["classified_by"] == "human"
 
+    # confirming again (no longer candidate) -> 409
+    assert (await client.post(f"/devices/{_DEV}/confirm", headers=_OPS)).status_code == 409
+
     # patch device_type on a now-frozen device WITHOUT override -> 409 (freeze trigger)
     assert (await client.patch(f"/devices/{_DEV}", json={"device_type": "electricity"}, headers=_OPS)).status_code == 409
 
@@ -190,3 +193,5 @@ async def test_signal_mutation_on_frozen_device_blocked(api):
     # delete an existing active signal of the frozen device -> 409
     r = await client.delete("/devices/sim-001/signals/voltage", headers=_OPS)
     assert r.status_code == 409
+    # retiring a frozen device via plain DELETE is blocked -> use /reject
+    assert (await client.delete("/devices/sim-001", headers=_OPS)).status_code == 409
