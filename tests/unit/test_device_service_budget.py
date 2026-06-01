@@ -24,3 +24,18 @@ def test_over_budget_blocks():
 def test_zero_budget_allows():
     d = evaluate_budget(5.0, 0.0)
     assert d.allow and d.alert is None
+
+async def test_get_period_budget_no_row_uses_monthly():
+    from device_service.budget_ledger import get_period_budget
+    class _Conn:
+        async def fetchrow(self, *a):
+            return None
+    assert await get_period_budget(_Conn(), "anthropic", 20.0) == (0.0, 20.0)
+
+
+async def test_get_period_budget_with_row():
+    from device_service.budget_ledger import get_period_budget
+    class _Conn:
+        async def fetchrow(self, *a):
+            return {"cost_usd": 7.5, "budget_usd": 18.0}
+    assert await get_period_budget(_Conn(), "anthropic", 20.0) == (7.5, 18.0)

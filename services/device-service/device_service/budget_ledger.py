@@ -26,3 +26,15 @@ def evaluate_budget(spent_usd: float, budget_usd: float, *, warn_ratio: float = 
     if ratio >= warn_ratio:
         return BudgetDecision(allow=True, alert="warn_80")
     return BudgetDecision(allow=True, alert=None)
+
+async def get_period_budget(conn, provider: str, monthly_budget_usd: float) -> tuple[float, float]:
+    """Return (spent_usd, budget_usd) for the active ledger period of a provider.
+    No ledger row yet -> (0, monthly_budget_usd) (full budget available)."""
+    row = await conn.fetchrow(
+        "SELECT cost_usd, budget_usd FROM public.llm_budget_ledger "
+        "WHERE provider=$1 AND active=TRUE ORDER BY period_start DESC LIMIT 1",
+        provider,
+    )
+    if row is None:
+        return 0.0, monthly_budget_usd
+    return float(row["cost_usd"]), float(row["budget_usd"])
