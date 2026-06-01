@@ -71,3 +71,8 @@ docker-compose.yml + ems-device-service（REST :8002）
 ## 建議起步
 
 #1~#4（純函數核心，TDD、不依賴 DB），做完一批 review 後再往 DB / 路由推進。
+
+## 未來 PRD 旗標（DL-009）
+
+- **本地 / 自訓模型**（更小更快、離線、降低資安風險）= **既定演進路徑，不需另開 PRD**：靠 `LLMProvider` 抽象（ADR-009 / FR-305，`local` = OpenAI-compatible，如 Ollama）+ correction loop（`device_corrections`，FR-330/331）累積的標註資料訓練/蒸餾，env 切換即可上線；輸出仍走 output_validator → L2 guardrail → bounded autonomy → DB freeze。
+- **Gateway 嵌入式 / 邊緣分類**（運算搬到 gateway、ingestion 前就分類）= **架構性變更，未來必須另開新 PRD**（含邊緣運算、模型 OTA、邊緣端護欄）；勿直接擴 device-service。
