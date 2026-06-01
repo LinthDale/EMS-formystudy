@@ -81,8 +81,17 @@ class Classifier:
         default_device_type: str = "unknown", latest_correction_device_type: str | None = None,
         first_seen_at: str = "", generated_at: str = "", force: bool = False,
     ) -> Outcome:
+        # Cache is reused ONLY for clean, context-free, same-shape classifications.
+        # Any security-relevant context (human corrections, correction-conflict context,
+        # budget block, or force) bypasses the cache entirely so the gates always run —
+        # FR-316 (token saving) must never defeat FR-329 budget / FR-332 conflict / §8.7 guardrail.
+        cacheable = (
+            not force and budget_ok
+            and not sanitized.human_corrections
+            and latest_correction_device_type is None
+        )
         key = cache_key(sanitized, self._provider.name, self._model, self._prompt_version)
-        if not force and key in self._cache:                       # FR-316
+        if cacheable and key in self._cache:                       # FR-316
             return replace(self._cache[key], from_cache=True)
 
         rendered = render_sample(sanitized)
@@ -127,5 +136,6 @@ class Classifier:
             first_seen_at=first_seen_at, generated_at=generated_at, prompt_version=self._prompt_version,
         )
         outcome = Outcome(cleaned, digest, "llm", new_status, conflict, None)
-        self._cache[key] = outcome
+        if cacheable:  # only clean, context-free results are cached (see above)
+            self._cache[key] = outcome
         return outcome
