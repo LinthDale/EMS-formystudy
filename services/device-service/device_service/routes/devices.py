@@ -12,8 +12,8 @@ import asyncpg
 from fastapi import APIRouter, HTTPException, Request
 
 from ..auth import Channel, require
-from ..models import DeviceCreate, DeviceOut, DeviceUpdate, OverrideRequest
-from ..repositories import device_repo, signal_repo
+from ..models import DeviceCreate, DeviceOut, DeviceUpdate, DigestOut, OverrideRequest
+from ..repositories import device_repo, digest_repo, signal_repo
 
 router = APIRouter(prefix="/devices", tags=["devices"])
 _OPS = require(Channel.OPS)
@@ -38,6 +38,21 @@ async def create_device(body: DeviceCreate, request: Request) -> dict:
 async def list_devices(request: Request, status: str | None = None, stale: bool | None = None) -> list[dict]:
     async with request.app.state.db.ops_pool.acquire() as conn:
         return [dict(r) for r in await device_repo.list_(conn, status, stale)]
+
+
+@router.get("/{device_id}/human-review", response_model=DigestOut, dependencies=[_OPS])
+async def human_review(device_id: str, request: Request) -> dict:
+    """Return the stored human-review digest (§8.4). Read-only: never calls the LLM.
+    A system_fallback digest is returned with 200 just like an llm one. 404 if the
+    device is unknown or has no digest yet (e.g. a migration-backfilled device).
+    Declared before GET /{device_id} (specific-before-general convention)."""
+    async with request.app.state.db.ops_pool.acquire() as conn:
+        exists, rec = await digest_repo.get_with_device(conn, device_id)
+    if not exists:
+        raise HTTPException(404, "device not found")
+    if rec is None:
+        raise HTTPException(404, "no review digest for device")
+    return rec
 
 
 @router.get("/{device_id}", response_model=DeviceOut, dependencies=[_OPS])

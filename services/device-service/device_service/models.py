@@ -66,6 +66,18 @@ class OverrideRequest(BaseModel):
     signals: list[SignalCreate] = []
 
 
+class DigestOut(BaseModel):
+    """Human-review digest envelope (PRD-0003 §8.4). `digest` is the fixed-shape JSON
+    built by digest.py (llm or system_fallback); kept as a free dict to avoid drift."""
+    device_id: str
+    digest: dict
+    summary_source: str
+    generated_at: datetime | None = None
+    provider: str | None = None
+    model: str | None = None
+    prompt_version: str | None = None
+
+
 class HealthOut(BaseModel):
     status: str
     pools: dict[str, str]
