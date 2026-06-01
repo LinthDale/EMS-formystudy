@@ -197,3 +197,30 @@ async def test_real_provider_classify_settles_actual_cost(budget_db):
     ps, _ = current_period()
     expected = estimate_cost(_MODEL, 1000, 500)
     assert abs(await _cost(db, ps) - expected) < 1e-3   # settled to actual, reservation refunded
+
+async def test_reservation_refunded_on_unexpected_classify_exception(budget_db):
+    """Reserve succeeds, then the provider raises a non-ProviderError exception.
+    process_message must re-raise BUT the reservation must be refunded (no ledger leak)."""
+    import pytest
+    from types import SimpleNamespace
+    from device_service.budget_ledger import current_period
+    from device_service.classifier import Classifier
+    from device_service.discovery import AdmissionGate, process_message
+    from device_service.llm.guardrail import MockGuardrail
+
+    _, db = budget_db
+    settings = SimpleNamespace(llm_provider=_PROV, llm_model=_MODEL, llm_monthly_budget_usd=20.0)
+
+    class _Boom:
+        name = _PROV
+        async def classify_device(self, d, t, sanitized):
+            raise RuntimeError("kaboom")   # NOT a ProviderError -> propagates out of classify()
+
+    with pytest.raises(RuntimeError):
+        await process_message(
+            "ems/devices/itest-bud-3/measurements", b"e,d=x voltage=1 1",
+            db=db, classifier=Classifier(_Boom(), MockGuardrail()), gate=AdmissionGate(),
+            settings=settings, now=1.0)
+
+    ps, _ = current_period()
+    assert await _cost(db, ps) < 1e-9   # reservation refunded, not leaked
