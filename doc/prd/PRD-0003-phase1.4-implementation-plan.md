@@ -23,7 +23,10 @@
 ## Phase 1.4 其餘範圍（§12.4）
 
 - ✅ **Human-review endpoint（DONE，batch 1）**：`GET /devices/{id}/human-review` 回 §8.4 digest（讀 `device_review_digests`，不現呼 LLM；system_fallback 亦回 200）。OPS channel；新 `repositories/digest_repo.py`（`get_with_device` 單次 LEFT JOIN 原子取 device-exists+digest，避開讀競態；`get` 為 MCP 預留的 digest-only 取用）；`models.DigestOut` response_model；404 分裝置不存在 / 無 digest。6 integration tests，touched 檔 100% cov（容器量測）。
-- **`/ai-feedback` + correction loop 寫入**：`device_corrections` 寫入（FR-330，含 NFKC/injection allow-list、rate-limit FR-343）、deactivate（FR-341）、retrieval 注入（FR-331）、衝突偵測串接（FR-332 已在 classifier，需接 DB correction 來源）。
+- **`/ai-feedback` + correction loop（分 3 slice）**：
+  - ✅ **2a（DONE）**：`correction_validator.py`（§7.3a 寫入檢查：NFKC→length 30-500→control char→**Cf format char 拒絕**[sec-review H-1/M-1：ZWSP/RTL-override 等不被 NFKC 收斂、可拆解 injection phrase，故一律拒絕]→structural `<>{}\\\``→secret 黑名單→injection phrase 白名單）+ `key_id.py`（`hash_key_id` HMAC-SHA256(salt, api_key)，不存原始 key，FR-345；fail-closed on empty salt/key/version）+ config `audit_hash_salt`(secret,.env)/`audit_salt_version`(TOML)。29→31 validator unit tests + config drift test 改由 SECRET_FIELDS 推導。security-review 通過後合併。
+  - ⏳ **2b（NEXT）**：`correction_repo` + `POST /devices/{id}/ai-feedback`、`GET /devices/{id}/corrections`、`POST /…/corrections/{cid}/deactivate`（FR-330/341）+ per-key-id 30/h、per-device 10/h 速率限制（FR-343, 429）。**MUST**：補 §2b 起始強制 `audit_hash_salt` 非空（sec-review M-2：目前 fail-closed 在 hash_key_id 呼叫點，缺啟動檢查）。
+  - ⏳ **2c**：相關性 retrieval（同 device/gateway/type 家族/topic prefix 聯集，無筆數上限 FR-331）→ sanitize 注入 prompt + `applied_count` 累加 + 衝突來源接 classifier（FR-332）+ 32KB user_message LRU 斷路（§8.6.5a）。
 - **`device_audit_log` 表 + FR-339 告警**：override token（reject/override/delete）、L2 guardrail BLOCK、AI status 推進的 audit 持久化（取代目前的結構化 log line）；連續 BLOCK / 大量 deactivate alert。
 - **MCP server**：device-service 自帶 127.0.0.1:8766，AI 通道僅 `list_low_confidence_candidates` / `get_device_digest` / `classify_with_context`（ADR-012）。
 - **Grafana panel**：鎖定 4 個（pending count / status distribution / error & latency / cost）。

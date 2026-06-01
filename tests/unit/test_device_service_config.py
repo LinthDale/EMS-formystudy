@@ -151,11 +151,11 @@ def test_committed_toml_mirrors_code_defaults(monkeypatch):
     for key, val in flat.items():
         assert key in fields, f"toml key {key} not a Settings field"
         assert fields[key].default == val, f"toml {key}={val!r} != code default {fields[key].default!r}"
-    # reverse direction: every non-secret, non-excluded Settings field must be in the TOML
-    excluded = {
-        "llm_api_key", "db_ai_password", "db_ops_password",
-        "ops_api_key", "ingest_api_key", "ai_api_key",  # secrets -> .env only
-        "llm_base_url",                                  # optional, commented out in TOML
+    # reverse direction: every non-secret, non-excluded Settings field must be in the TOML.
+    # Secrets are derived from SECRET_FIELDS so the two can never drift.
+    from device_service.config import SECRET_FIELDS
+    excluded = set(SECRET_FIELDS) | {
+        "llm_base_url",  # optional, commented out in TOML
     }
     for key in fields:
         if key not in excluded:

@@ -78,6 +78,11 @@ db_host = "timescaledb"
 db_port = 5432
 db_name = "ems"
 
+[audit]
+# 人類修正 created_by_key_id 的 salt 版本標籤（§7.3a / FR-345）；rotation 後改版號。
+# 注意：salt 本體 AUDIT_HASH_SALT 是機密，放 .env，不放這裡。
+audit_salt_version = "v1"
+
 # -----------------------------------------------------------------------------
 # 不在本檔（spec-locked，放寬須走 ADR；見 tunable-parameters.md B 區）：
 #   MQTT payload 上限 16KB(FR-323)、欄位上限 64(FR-324/328)、樣本上限 20(FR-328)、
