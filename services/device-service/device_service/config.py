@@ -27,7 +27,7 @@ DEFAULT_CONFIG_FILE = "config/device-service.toml"
 # secrets must come from env/.env only; ignored if present in the (committed) TOML
 SECRET_FIELDS = frozenset({
     "llm_api_key", "db_ai_password", "db_ops_password",
-    "ops_api_key", "ingest_api_key", "ai_api_key",
+    "ops_api_key", "ingest_api_key", "ai_api_key", "audit_hash_salt",
 })
 
 
@@ -147,6 +147,11 @@ class Settings(BaseSettings):
     ops_api_key: str = ""
     ingest_api_key: str = ""
     ai_api_key: str = ""
+
+    # audit identity for human corrections (§7.3a / FR-345); salt is a SECRET (.env only),
+    # version is non-secret and recorded alongside created_by_key_id for rotation lineage.
+    audit_hash_salt: str = ""
+    audit_salt_version: str = "v1"
 
     # MQTT auto-discovery (Phase 1.3)
     mqtt_host: str = "mosquitto"
