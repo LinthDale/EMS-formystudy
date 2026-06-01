@@ -97,3 +97,94 @@ def test_provider_defaults_and_subscriptions_in_settings():
     # env override
     s2 = Settings(_env_file=None, mqtt_subscriptions="ems/+/+/measurements")
     assert s2.mqtt_subscriptions == "ems/+/+/measurements"
+
+# --- TOML config file source (project_rules §19; precedence env > .env > toml > default) ---
+
+def _write_toml(tmp_path, body):
+    p = tmp_path / "ds.toml"
+    p.write_text(body, encoding="utf-8")
+    return str(p)
+
+
+def test_toml_file_overrides_code_defaults(tmp_path, monkeypatch):
+    cfg = _write_toml(tmp_path, '[llm]\nllm_provider = "anthropic"\n[llm_tuning]\nllm_retries = 7\nllm_confidence_threshold = 0.75\n')
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", cfg)
+    s = Settings(_env_file=None)
+    assert s.llm_provider == "anthropic" and s.llm_retries == 7 and s.llm_confidence_threshold == 0.75
+    # untouched key keeps code default
+    assert s.llm_cache_max == 4096
+
+
+def test_env_var_overrides_toml(tmp_path, monkeypatch):
+    cfg = _write_toml(tmp_path, '[llm]\nllm_provider = "anthropic"\n')
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", cfg)
+    monkeypatch.setenv("LLM_PROVIDER", "openai")   # env must win over toml
+    s = Settings(_env_file=None)
+    assert s.llm_provider == "openai"
+
+
+def test_missing_toml_file_falls_back_to_defaults(tmp_path, monkeypatch):
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(tmp_path / "nope.toml"))
+    s = Settings(_env_file=None)
+    assert s.llm_provider == "mock" and s.llm_retries == 3
+
+
+def test_committed_toml_mirrors_code_defaults(monkeypatch):
+    """Drift guard: config/device-service.toml must equal Settings code defaults
+    (the file is the documented default; tests assume they match)."""
+    import tomllib
+    from pathlib import Path
+
+    from device_service.config import DEFAULT_CONFIG_FILE
+    # locate repo config relative to this test file
+    here = Path(__file__).resolve()
+    candidates = [Path(DEFAULT_CONFIG_FILE), here.parents[2] / DEFAULT_CONFIG_FILE]
+    toml_path = next((p for p in candidates if p.is_file()), None)
+    if toml_path is None:
+        import pytest
+        pytest.skip("device-service.toml not found from test CWD")
+    monkeypatch.delenv("DEVICE_SERVICE_CONFIG_FILE", raising=False)
+    flat = {}
+    for v in tomllib.loads(toml_path.read_text(encoding="utf-8")).values():
+        flat.update(v if isinstance(v, dict) else {})
+    fields = Settings.model_fields
+    for key, val in flat.items():
+        assert key in fields, f"toml key {key} not a Settings field"
+        assert fields[key].default == val, f"toml {key}={val!r} != code default {fields[key].default!r}"
+    # reverse direction: every non-secret, non-excluded Settings field must be in the TOML
+    excluded = {
+        "llm_api_key", "db_ai_password", "db_ops_password",
+        "ops_api_key", "ingest_api_key", "ai_api_key",  # secrets -> .env only
+        "llm_base_url",                                  # optional, commented out in TOML
+    }
+    for key in fields:
+        if key not in excluded:
+            assert key in flat, f"Settings field {key!r} missing from committed TOML"
+
+def test_toml_source_flattens_and_get_field_value(tmp_path, monkeypatch):
+    from device_service.config import Settings, TomlConfigSource
+    # top-level key (no section) + a sectioned key -> both flattened
+    cfg = tmp_path / "ds.toml"
+    cfg.write_text('llm_retries = 9\n[llm]\nllm_provider = "openai"\n', encoding="utf-8")
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    src = TomlConfigSource(Settings)
+    assert src()["llm_retries"] == 9 and src()["llm_provider"] == "openai"
+    val, name, complex_ = src.get_field_value(Settings.model_fields["llm_provider"], "llm_provider")
+    assert val == "openai" and name == "llm_provider" and complex_ is False
+
+def test_toml_secret_keys_are_ignored(tmp_path, monkeypatch):
+    """A secret accidentally placed in the TOML must NOT be loaded (footgun guard)."""
+    cfg = tmp_path / "ds.toml"
+    cfg.write_text('[db]\ndb_ai_password = "leaked-from-toml"\ndb_host = "toml-host"\n', encoding="utf-8")
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    s = Settings(_env_file=None)
+    assert s.db_ai_password == ""          # secret ignored -> falls back to .env/default, NOT the toml value
+    assert s.db_host == "toml-host"         # non-secret still loaded
+
+
+def test_toml_duplicate_key_across_sections_raises(tmp_path, monkeypatch):
+    cfg = tmp_path / "ds.toml"
+    cfg.write_text('[a]\nllm_retries = 1\n[b]\nllm_retries = 2\n', encoding="utf-8")
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    with pytest.raises(ValueError):
+        Settings(_env_file=None)
