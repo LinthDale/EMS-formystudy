@@ -1,7 +1,8 @@
 """Runtime configuration (pydantic-settings) + LLM_BASE_URL allowlist (FR-342).
 
-Env vars (no prefix): LLM_PROVIDER, LLM_MODEL, LLM_API_KEY, LLM_BASE_URL,
-LLM_PROVIDER_DOMAIN_ALLOWLIST.
+Env (no prefix): LLM_PROVIDER, LLM_MODEL, LLM_API_KEY, LLM_BASE_URL,
+LLM_PROVIDER_DOMAIN_ALLOWLIST, DB_HOST, DB_PORT, DB_NAME, DB_AI_PASSWORD,
+DB_OPS_PASSWORD, OPS_API_KEY, INGEST_API_KEY, AI_API_KEY.
 """
 from __future__ import annotations
 
@@ -46,11 +47,24 @@ def validate_base_url(base_url: str | None, allowlist: frozenset[str]) -> None:
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=False, extra="ignore")
 
+    # LLM
     llm_provider: str = "mock"
     llm_model: str = ""  # blank -> factory applies per-provider default
     llm_api_key: str = ""
     llm_base_url: str | None = None
     llm_provider_domain_allowlist: str = DEFAULT_ALLOWLIST
+
+    # DB (ADR-017 dual pools; per-role login)
+    db_host: str = "timescaledb"
+    db_port: int = 5432
+    db_name: str = "ems"
+    db_ai_password: str = ""
+    db_ops_password: str = ""
+
+    # X-API-Key channels (FR-310)
+    ops_api_key: str = ""
+    ingest_api_key: str = ""
+    ai_api_key: str = ""
 
     @property
     def allowlist(self) -> frozenset[str]:

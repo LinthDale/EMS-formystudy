@@ -191,6 +191,29 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # ===== PRD-0003: Device Registry & Auto-Discovery =====
+  device-service:
+    build: ./services/device-service
+    container_name: ems-device-service
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    environment:
+      DB_HOST: timescaledb
+      DB_NAME: ems
+      DB_AI_PASSWORD: ${DB_AI_PASSWORD:-changeme_ai}
+      DB_OPS_PASSWORD: ${DB_OPS_PASSWORD:-changeme_ops}
+      OPS_API_KEY: ${OPS_API_KEY:-}
+      INGEST_API_KEY: ${INGEST_API_KEY:-}
+      AI_API_KEY: ${AI_API_KEY:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+
 volumes:
   timescale_data:
   grafana_data:
