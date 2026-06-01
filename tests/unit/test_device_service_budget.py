@@ -93,6 +93,8 @@ def test_resolve_pricing_invalid_json_falls_back_to_base():
     from device_service.budget_ledger import _PRICING, resolve_pricing
     assert resolve_pricing("not json") == _PRICING
     assert resolve_pricing("") == _PRICING
+    assert resolve_pricing("[1, 2]") == _PRICING   # valid JSON but not an object (no AttributeError)
+    assert resolve_pricing("42") == _PRICING
 
 
 def test_reserve_estimate_honours_tokens_and_pricing():

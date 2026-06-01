@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from urllib.parse import urlparse
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # http:// is only accepted for these local hosts (covers Ollama via host.docker.internal,
@@ -89,6 +89,20 @@ class Settings(BaseSettings):
     @property
     def allowlist(self) -> frozenset[str]:
         return parse_allowlist(self.llm_provider_domain_allowlist)
+
+    @field_validator("llm_pricing_json")
+    @classmethod
+    def _check_pricing_json(cls, v: str) -> str:
+        if not v:
+            return v
+        import json
+        try:
+            parsed = json.loads(v)
+        except ValueError as exc:
+            raise ValueError(f"LLM_PRICING_JSON must be valid JSON: {exc}") from exc
+        if not isinstance(parsed, dict):
+            raise ValueError("LLM_PRICING_JSON must be a JSON object {model: [in_per_1M, out_per_1M]}")
+        return v
 
     @model_validator(mode="after")
     def _check_base_url(self) -> "Settings":

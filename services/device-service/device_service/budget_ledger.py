@@ -56,7 +56,7 @@ def resolve_pricing(pricing_json: str = "") -> dict:
         try:
             for model, pair in (_json.loads(pricing_json) or {}).items():
                 table[model] = (float(pair[0]), float(pair[1]))
-        except (ValueError, TypeError, KeyError, IndexError):
+        except (ValueError, TypeError, KeyError, IndexError, AttributeError):
             _log.warning("LLM_PRICING_JSON is invalid; using built-in pricing table only")
     return table
 

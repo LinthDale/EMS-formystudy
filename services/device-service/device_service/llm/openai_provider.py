@@ -14,7 +14,7 @@ from .parsing import result_from_dict
 from .prompt import SYSTEM_PROMPT, render_sample
 from .types import ClassificationResult, ProviderError, SanitizedSample
 
-_MAX_OUTPUT_TOKENS = 1024  # must match budget_ledger.RESERVE_OUTPUT_TOKENS so the reservation is a true upper bound
+_MAX_OUTPUT_TOKENS = 1024  # default only; production value = Settings.llm_max_output_tokens (single source, §19)
 
 _JSON_INSTRUCTION = (
     " Respond ONLY with a JSON object: "
