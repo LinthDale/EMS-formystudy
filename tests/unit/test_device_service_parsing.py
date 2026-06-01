@@ -37,3 +37,13 @@ def test_signals_not_a_list_ignored():
 def test_non_dict_signal_items_skipped():
     r = result_from_dict({"suggested_signals": ["bad", {"signal_name": "v"}]}, {})
     assert len(r.suggested_signals) == 1 and r.suggested_signals[0].signal_name == "v"
+
+def test_null_device_type_becomes_unknown():
+    """MEDIUM: JSON null device_type must not become the string 'None'."""
+    r = result_from_dict({"device_type": None}, {})
+    assert r.device_type == "unknown"
+
+
+def test_null_signal_name_becomes_empty():
+    r = result_from_dict({"suggested_signals": [{"signal_name": None, "unit": None}]}, {})
+    assert r.suggested_signals[0].signal_name == "" and r.suggested_signals[0].unit == ""

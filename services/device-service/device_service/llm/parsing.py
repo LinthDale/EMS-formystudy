@@ -12,10 +12,10 @@ from .types import ClassificationResult, SignalSuggestion
 
 def _to_signal(d: Mapping) -> SignalSuggestion:
     return SignalSuggestion(
-        signal_name=str(d.get("signal_name", "")),
-        unit=str(d.get("unit", "")),
-        datatype=str(d.get("datatype", "")),
-        direction=str(d.get("direction", "read")),
+        signal_name=str(d.get("signal_name") or ""),
+        unit=str(d.get("unit") or ""),
+        datatype=str(d.get("datatype") or ""),
+        direction=str(d.get("direction") or "read"),
     )
 
 
@@ -32,7 +32,7 @@ def result_from_dict(data: Mapping, raw_response: Mapping) -> ClassificationResu
         signals_raw = []
     signals = tuple(_to_signal(s) for s in signals_raw if isinstance(s, Mapping))
     return ClassificationResult(
-        device_type=str(data.get("device_type", "unknown")),
+        device_type=str(data.get("device_type") or "unknown"),
         suggested_signals=signals,
         confidence=_to_float(data.get("confidence", 0.0)),
         reasoning=str(data.get("reasoning", "")),

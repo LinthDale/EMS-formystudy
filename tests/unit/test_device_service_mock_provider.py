@@ -1,4 +1,4 @@
-"""Unit: MockProvider deterministic classification (ADR-009)."""
+"""Unit: MockProvider deterministic classification (ADR-009). Async provider API."""
 from device_service.llm.mock_provider import MockProvider
 from device_service.llm.provider import LLMProvider
 from device_service.sanitizer import sanitize
@@ -13,38 +13,39 @@ def test_satisfies_llm_provider_protocol():
     assert MockProvider().name == "mock"
 
 
-def test_classifies_electricity_from_fields():
+async def test_classifies_electricity_from_fields():
     s = _sample([{"voltage": 220.0, "current": 1.1, "power_kw": 0.2}])
-    r = MockProvider().classify_device("sim-001", s.topic, s)
+    r = await MockProvider().classify_device("sim-001", s.topic, s)
     assert r.device_type == "electricity" and r.confidence > 0.9
     assert {sig.signal_name for sig in r.suggested_signals} == {"voltage", "current", "power_kw"}
 
 
-def test_classifies_temperature():
+async def test_classifies_temperature():
     s = _sample([{"temperature": 25.0, "humidity": 60.0}], topic="ems/factory/sensor-001/measurements")
-    r = MockProvider().classify_device("sensor-001", s.topic, s)
+    r = await MockProvider().classify_device("sensor-001", s.topic, s)
     assert r.device_type == "temperature"
 
 
-def test_unknown_fallback_low_confidence():
+async def test_unknown_fallback_low_confidence():
     s = _sample([{"weird_metric": 1.0}], topic="x/y/z")
-    r = MockProvider().classify_device("d", s.topic, s)
+    r = await MockProvider().classify_device("d", s.topic, s)
     assert r.device_type == "unknown" and r.confidence < 0.5
 
 
-def test_deterministic_same_input_same_output():
+async def test_deterministic_same_input_same_output():
     s = _sample([{"pressure": 101.0}], topic="ems/factory/plc/measurements")
-    a = MockProvider().classify_device("d", s.topic, s)
-    b = MockProvider().classify_device("d", s.topic, s)
+    a = await MockProvider().classify_device("d", s.topic, s)
+    b = await MockProvider().classify_device("d", s.topic, s)
     assert a == b
 
 
-def test_bool_field_maps_to_bool_datatype():
+async def test_bool_field_maps_to_bool_datatype():
     s = _sample([{"valve_open": True}], topic="ems/factory/plc/measurements")
-    r = MockProvider().classify_device("d", s.topic, s)
+    r = await MockProvider().classify_device("d", s.topic, s)
     assert any(sig.datatype == "bool" for sig in r.suggested_signals)
 
-def test_classifies_motor_from_pure_motor_speed():
+
+async def test_classifies_motor_from_pure_motor_speed():
     s = _sample([{"motor_speed": 1500.0}], topic="ems/factory/plc/measurements")
-    r = MockProvider().classify_device("plc", s.topic, s)
+    r = await MockProvider().classify_device("plc", s.topic, s)
     assert r.device_type == "motor"

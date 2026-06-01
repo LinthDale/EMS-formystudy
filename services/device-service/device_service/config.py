@@ -25,8 +25,10 @@ def validate_base_url(base_url: str | None, allowlist: frozenset[str]) -> None:
     if not base_url:
         return
     parsed = urlparse(base_url)
+    if parsed.username or parsed.password:
+        raise ValueError("LLM_BASE_URL: credentials (user:pass@) must not be embedded; use LLM_API_KEY")
     scheme = (parsed.scheme or "").lower()
-    host = (parsed.hostname or "").lower()
+    host = (parsed.hostname or "").lower()  # note: "::1" only matches RFC 2732 bracketed form [::1]
     if scheme == "http":
         if host not in LOCAL_HTTP_HOSTS:
             raise ValueError(f"LLM_BASE_URL: http:// only allowed for local hosts, got {base_url!r}")
@@ -45,7 +47,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(case_sensitive=False, extra="ignore")
 
     llm_provider: str = "mock"
-    llm_model: str = "claude-haiku-4-5"
+    llm_model: str = ""  # blank -> factory applies per-provider default
     llm_api_key: str = ""
     llm_base_url: str | None = None
     llm_provider_domain_allowlist: str = DEFAULT_ALLOWLIST

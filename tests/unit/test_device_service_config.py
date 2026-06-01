@@ -51,7 +51,7 @@ def test_parse_allowlist_normalises():
 
 def test_settings_defaults_to_mock():
     s = Settings(_env_file=None)
-    assert s.llm_provider == "mock" and s.llm_model == "claude-haiku-4-5"
+    assert s.llm_provider == "mock"
 
 
 def test_settings_rejects_bad_base_url():
@@ -63,3 +63,16 @@ def test_settings_rejects_bad_base_url():
 def test_settings_accepts_allowlisted_base_url():
     s = Settings(_env_file=None, llm_base_url="https://api.anthropic.com")
     assert s.llm_base_url == "https://api.anthropic.com"
+
+# --- code review regression (RED) ---
+
+def test_credentials_in_base_url_rejected():
+    """MEDIUM: userinfo in LLM_BASE_URL must be rejected (use LLM_API_KEY)."""
+    with pytest.raises(ValueError):
+        validate_base_url("https://user:pass@api.anthropic.com", _allow())
+
+
+def test_llm_model_default_is_empty_for_factory_fallback():
+    """HIGH: config must not default to an Anthropic model (breaks openai/local)."""
+    s = Settings(_env_file=None)
+    assert s.llm_model == ""

@@ -36,7 +36,7 @@ def _classify(field_names: set[str], topic: str) -> tuple[str, float]:
 class MockProvider:
     name = "mock"
 
-    def classify_device(
+    async def classify_device(
         self, device_id: str, topic: str, sanitized: SanitizedSample
     ) -> ClassificationResult:
         field_names = {f.field_name for f in sanitized.fields}

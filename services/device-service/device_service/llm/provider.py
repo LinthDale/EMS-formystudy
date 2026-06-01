@@ -1,7 +1,8 @@
 """LLMProvider Protocol (ADR-009).
 
-Every implementation MUST take a SanitizedSample as input — never a raw MQTT
-payload string / dict. Sanitisation happens in the service layer (sanitizer.py).
+Every implementation's input MUST be a SanitizedSample (never a raw MQTT payload).
+classify_device is async so network-bound providers do not block the FastAPI event
+loop; a CPU-bound local model implementation should offload via asyncio.to_thread.
 """
 from __future__ import annotations
 
@@ -14,7 +15,7 @@ from .types import ClassificationResult, SanitizedSample
 class LLMProvider(Protocol):
     name: str  # 'anthropic' | 'openai' | 'local' | 'mock'
 
-    def classify_device(
+    async def classify_device(
         self,
         device_id: str,
         topic: str,

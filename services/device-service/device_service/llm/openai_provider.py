@@ -1,8 +1,9 @@
 """OpenAIProvider — OpenAI-compatible L1 classifier (OpenAI / Together / Groq /
 local Ollama via base_url), ADR-009. Shared code path for the 'local' provider.
 
-The openai SDK is imported lazily so unit tests can inject a fake client.
-Uses JSON-mode chat completion and parses the JSON content.
+Async (AsyncOpenAI), SDK imported lazily. Tries JSON-mode; if the server rejects
+response_format (common for Ollama base models) it retries without it, then parses
+the JSON content. SDK errors are re-raised as ProviderError.
 """
 from __future__ import annotations
 
@@ -10,7 +11,7 @@ import json
 
 from .parsing import result_from_dict
 from .prompt import SYSTEM_PROMPT, render_sample
-from .types import ClassificationResult, SanitizedSample
+from .types import ClassificationResult, ProviderError, SanitizedSample
 
 _JSON_INSTRUCTION = (
     " Respond ONLY with a JSON object: "
@@ -32,7 +33,7 @@ class OpenAIProvider:
         if self._client is None:
             import openai  # lazy
 
-            self._client = openai.OpenAI(api_key=self._api_key or "not-needed", base_url=self._base_url)
+            self._client = openai.AsyncOpenAI(api_key=self._api_key or "not-needed", base_url=self._base_url)
         return self._client
 
     @staticmethod
@@ -43,20 +44,32 @@ class OpenAIProvider:
         message = getattr(choices[0], "message", None)
         return (getattr(message, "content", None) or "{}") if message else "{}"
 
-    def classify_device(
+    async def _complete(self, client, sanitized: SanitizedSample) -> str:
+        messages = [
+            {"role": "system", "content": SYSTEM_PROMPT + _JSON_INSTRUCTION},
+            {"role": "user", "content": render_sample(sanitized)},
+        ]
+        try:
+            response = await client.chat.completions.create(
+                model=self._model, messages=messages,
+                response_format={"type": "json_object"}, temperature=0,
+            )
+        except Exception:
+            # Some OpenAI-compatible servers (e.g. Ollama base models) reject
+            # response_format=json_object — retry once without it.
+            try:
+                response = await client.chat.completions.create(
+                    model=self._model, messages=messages, temperature=0,
+                )
+            except Exception as exc:
+                raise ProviderError(f"openai classify_device failed: {exc}") from exc
+        return self._extract_content(response)
+
+    async def classify_device(
         self, device_id: str, topic: str, sanitized: SanitizedSample
     ) -> ClassificationResult:
         client = self._ensure_client()
-        response = client.chat.completions.create(
-            model=self._model,
-            messages=[
-                {"role": "system", "content": SYSTEM_PROMPT + _JSON_INSTRUCTION},
-                {"role": "user", "content": render_sample(sanitized)},
-            ],
-            response_format={"type": "json_object"},
-            temperature=0,
-        )
-        content = self._extract_content(response)
+        content = await self._complete(client, sanitized)
         try:
             data = json.loads(content)
         except (json.JSONDecodeError, TypeError):

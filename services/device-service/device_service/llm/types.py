@@ -64,3 +64,10 @@ class ClassificationResult:
         # cannot mutate it in place (the project immutability rule).
         if not isinstance(self.raw_response, MappingProxyType):
             object.__setattr__(self, "raw_response", MappingProxyType(dict(self.raw_response)))
+
+class ProviderError(RuntimeError):
+    """Raised when an LLM provider call fails (network / auth / rate-limit / bad response).
+
+    Providers catch SDK-specific exceptions and re-raise this single type so the
+    service layer stays decoupled from any one SDK (retry/fallback lives there).
+    """
