@@ -13,9 +13,14 @@
 
 這兩項在 Phase 1.3 是**實質 deferred**，必須在 Phase 1.4 補完，且**接真 provider 上線前為硬前置**：
 
-1. **`record_usage` / FR-329 budget fail-closed 完整化**
-   - 現況（保守表述）：pre-call budget gate（`evaluate_budget`）已接上分類管線，但 **token/cost 從未寫回 `llm_budget_ledger`**（`record_usage` 僅為 `budget_ledger.py` 的 TODO）。對 Anthropic/OpenAI 真 provider，spent 永遠是 0，**budget gate 不會真的 trip**。Mock 免費故無影響。
-   - Must-do：在每次**真實（非 mock）LLM call 後**寫回用量（tokens_in/out、cost_usd）到 `llm_budget_ledger`（含 L1 與 `provider='guardrail'` 的 L2 各自 row）；80% Telegram alert、100% fail-closed 走 fallback；對應 unit + integration 測試（模擬 80%/100% 門檻）。**接真 provider 啟用前 block。**
+1. **`record_usage` / FR-329 budget — 部分完成（1.4a），HARD CAP + 並發仍 must-do**
+   - **已完成（1.4a, 4fd96f6）**：post-call usage accounting（`record_usage` 累加 tokens/cost 進 `llm_budget_ledger`，ON CONFLICT 累加為單句原子）；pre-call **soft gate**（已 ≥100% 才擋）；provider 回報 usage；unpriced model 不再靜默（`record_usage` 對 cost=0+tokens>0 記 WARNING）。
+   - **尚未完成 / MUST-DO（不可標 FR-329 完成）**：
+     - **Hard cap（單次 call 不打穿）**：pre-call estimated-cost **reservation**——近預算（如 99%）時單次 call 仍可能衝過 100%；需在呼叫前以估算上限預扣、呼叫後 reconcile 實際。
+     - **並發保護（ADR-014 明文）**：budget-namespace `pg_advisory_xact_lock`（與 §8.6.8 device lock 不同 namespace）+ 原子 reserve，避免多 worker 同讀 spent<budget 都放行而並發超扣。**現況**：單一 subscriber 逐則序列處理 → 同進程不會並發超扣；風險在**多實例擴展**（未部署）。
+     - **§13 測試**：near-budget large-call、concurrent workers 不超扣、80%/100% 門檻、guardrail provider='guardrail' 獨立 row。
+     - 確保實際設定的 `LLM_MODEL` 在 pricing table（否則 cost 恆 0、USD gate 不 trip——目前僅 WARNING，未硬擋）。
+   - **這些是接真 provider / 水平擴展前的硬前置。**（scope 降級紀錄：DL-013）
 
 2. **MQTT subscriber reconnect / error branch 測試覆蓋**
    - 現況（保守表述）：`run_subscriber` 已加 defensive reconnect loop + lifespan task done-callback，但 **reconnect 路徑與 per-message error branch 尚無單元/整合測試**（commit 已註明 uncovered）。

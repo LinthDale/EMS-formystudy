@@ -6,8 +6,11 @@ the gate actually trips for real providers (Phase 1.4 completion of FR-329).
 """
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from datetime import datetime, timezone
+
+_log = logging.getLogger("device_service.budget")
 
 WARN_RATIO = 0.8
 
@@ -69,6 +72,13 @@ async def record_usage(
 ) -> float:
     """Accumulate token/cost usage into the (period_start, provider) ledger row. Returns the cost added."""
     cost = estimate_cost(model, tokens_in, tokens_out)
+    if cost == 0.0 and (tokens_in or tokens_out):
+        # point 4: do not silently fail the USD budget gate for an unpriced model
+        _log.warning(
+            "model %r not in pricing table: %d/%d tokens recorded but cost_usd unchanged; "
+            "the USD budget gate will NOT trip for provider %r until pricing is configured",
+            model, tokens_in, tokens_out, provider,
+        )
     await conn.execute(
         """INSERT INTO public.llm_budget_ledger
                (period_start, period_end, provider, tokens_in, tokens_out, cost_usd, budget_usd, active, updated_at)

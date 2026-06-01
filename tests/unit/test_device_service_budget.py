@@ -64,3 +64,18 @@ def test_current_period_month_bounds_and_rollover():
     assert s == datetime(2026, 5, 1, tzinfo=timezone.utc) and e == datetime(2026, 6, 1, tzinfo=timezone.utc)
     s2, e2 = current_period(datetime(2026, 12, 31, 23, 59, tzinfo=timezone.utc))
     assert s2 == datetime(2026, 12, 1, tzinfo=timezone.utc) and e2 == datetime(2027, 1, 1, tzinfo=timezone.utc)
+
+async def test_record_usage_warns_on_unpriced_model(caplog):
+    import logging
+    from device_service.budget_ledger import record_usage
+    from datetime import datetime, timezone
+
+    class _Conn:
+        async def execute(self, *a):
+            return None
+
+    ps = datetime(2026, 5, 1, tzinfo=timezone.utc)
+    with caplog.at_level(logging.WARNING, logger="device_service.budget"):
+        cost = await record_usage(_Conn(), "p", ps, ps, "unknown-model", 1000, 1000, 20.0)
+    assert cost == 0.0
+    assert any("not in pricing table" in r.message for r in caplog.records)
