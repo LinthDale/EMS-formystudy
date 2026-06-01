@@ -45,3 +45,26 @@ def test_property_no_raw_string_value_leaks():
     rows = [{"label": "SECRET_PAYLOAD_XYZ", "current": 1.2} for _ in range(3)]
     s = sanitize("d", "t", "json", rows)
     assert "SECRET_PAYLOAD_XYZ" not in repr(s)
+
+# --- regression tests from code review (RED first) ---
+
+def test_pii_segment_match_keeps_core_fields():
+    """HIGH-1: substring 'lat' must NOT drop cumulative_kwh / calculated_power / accumulated_kwh."""
+    s = sanitize("d", "t", "ilp", [{"cumulative_kwh": 1.0, "calculated_power": 2.0, "accumulated_kwh": 3.0}])
+    names = {f.field_name for f in s.fields}
+    assert {"cumulative_kwh", "calculated_power", "accumulated_kwh"} <= names
+
+
+def test_pii_real_fields_still_dropped():
+    s = sanitize("d", "t", "json", [{"gps_lat": 25.0, "user_id": "u1", "owner": "x", "voltage": 220.0}])
+    names = {f.field_name for f in s.fields}
+    assert names == {"voltage"}
+
+
+def test_nan_inf_never_in_min_max():
+    """HIGH-3: NaN/Inf must not propagate into value_min/value_max."""
+    import math
+    s = sanitize("d", "t", "ilp", [{"v": float("nan")}, {"v": float("inf")}, {"v": 220.0}])
+    f = next((f for f in s.fields if f.field_name == "v"), None)
+    if f is not None and f.value_min is not None:
+        assert math.isfinite(f.value_min) and math.isfinite(f.value_max)

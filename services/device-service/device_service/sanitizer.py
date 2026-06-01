@@ -3,15 +3,18 @@
 Builds a SanitizedSample from raw observations. Rules:
   1. field whitelist — keep numeric / bool only; strings are stripped (only a
      distinct_count is recorded, never the value).
-  2. PII blacklist field names are dropped entirely.
+  2. PII field names are dropped entirely — matched by NAME SEGMENT, not
+     substring, so EMS fields like cumulative_kwh / calculated_power survive.
   3. field count cap (<= 64), sample count cap (<= 20).
-  4. numeric -> min/max/count only (never individual readings).
+  4. numeric -> min/max/count only (never individual readings); NaN/Inf excluded.
   5. bool -> true ratio.
 Invariant (property-tested): no raw string VALUE appears in the output.
 """
 from __future__ import annotations
 
+import math
 import re
+from collections import deque
 from numbers import Real
 from typing import Iterable, Mapping, Sequence
 
@@ -19,9 +22,20 @@ from .llm.types import CorrectionContext, FieldSummary, SanitizedSample
 
 MAX_FIELDS = 64
 MAX_SAMPLES = 20
-PII_FIELD_RE = re.compile(
-    r"(name|user|email|phone|address|location|gps|lat|lng|owner)", re.IGNORECASE
-)
+
+# PII matched by whole name-segment (split on non-alphanumeric), NOT substring,
+# so 'cumulative_kwh' / 'calculated_power' / 'accumulated_kwh' are NOT dropped,
+# while 'gps_lat' / 'user_id' / 'owner_name' are.
+PII_SEGMENTS = {
+    "name", "user", "email", "phone", "address", "location",
+    "gps", "lat", "lng", "owner", "longitude", "latitude",
+}
+_SEG_SPLIT = re.compile(r"[^a-z0-9]+")
+
+
+def _is_pii(field_name: str) -> bool:
+    segments = set(_SEG_SPLIT.split(field_name.lower()))
+    return bool(PII_SEGMENTS & segments)
 
 
 def _is_bool(v: object) -> bool:
@@ -50,13 +64,14 @@ def sanitize(
     raw_samples: Iterable[Mapping],
     corrections: Iterable[CorrectionContext] = (),
 ) -> SanitizedSample:
-    samples = list(raw_samples)[-MAX_SAMPLES:]
+    # deque(maxlen) caps during ingestion — safe even for huge/streamed inputs.
+    samples = list(deque(raw_samples, maxlen=MAX_SAMPLES))
     summaries: list[FieldSummary] = []
 
     for name in _ordered_field_names(samples):
         if len(summaries) >= MAX_FIELDS:
             break
-        if PII_FIELD_RE.search(name):
+        if _is_pii(name):
             continue  # drop PII field entirely (not even a count)
         values = [s[name] for s in samples if name in s and s[name] is not None]
         if not values:
@@ -67,11 +82,14 @@ def sanitize(
                 FieldSummary(name, "bool", sample_count=len(values), bool_true_ratio=round(ratio, 4))
             )
         elif all(_is_number(v) for v in values):
+            finite = [float(v) for v in values if math.isfinite(float(v))]
+            if not finite:
+                continue  # all NaN/Inf -> no usable numeric summary
             dt = "int" if all(isinstance(v, int) for v in values) else "float"
             summaries.append(
                 FieldSummary(
-                    name, dt, value_min=float(min(values)),
-                    value_max=float(max(values)), sample_count=len(values),
+                    name, dt, value_min=min(finite),
+                    value_max=max(finite), sample_count=len(finite),
                 )
             )
         else:

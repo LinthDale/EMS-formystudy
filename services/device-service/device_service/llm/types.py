@@ -1,11 +1,14 @@
 """Immutable data structures for the LLM provider contract (PRD-0003 §8.3, ADR-009).
 
 SanitizedSample is the ONLY structure sent to an external LLM — no raw payload,
-no free-text values, no PII. All structures are frozen (immutable by design).
+no free-text values, no PII. All structures are frozen and deeply immutable
+(raw_response is wrapped in a read-only MappingProxyType).
 """
 from __future__ import annotations
 
+from collections.abc import Mapping
 from dataclasses import dataclass, field
+from types import MappingProxyType
 
 
 @dataclass(frozen=True)
@@ -54,4 +57,10 @@ class ClassificationResult:
     suggested_signals: tuple[SignalSuggestion, ...]
     confidence: float            # 0.0 - 1.0
     reasoning: str
-    raw_response: dict = field(default_factory=dict)  # provider raw; stored internally only
+    raw_response: Mapping = field(default_factory=dict)  # provider raw; internal only, read-only
+
+    def __post_init__(self) -> None:
+        # Deep immutability: wrap raw_response in a read-only view so callers
+        # cannot mutate it in place (the project immutability rule).
+        if not isinstance(self.raw_response, MappingProxyType):
+            object.__setattr__(self, "raw_response", MappingProxyType(dict(self.raw_response)))

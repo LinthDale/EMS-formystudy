@@ -26,4 +26,13 @@ def test_classification_result_holds_tuple_signals():
         0.95, "ok",
     )
     assert r.suggested_signals[0].unit == "V"
-    assert isinstance(r.raw_response, dict)
+    from collections.abc import Mapping
+    assert isinstance(r.raw_response, Mapping)
+
+# --- regression test from code review (RED first) ---
+
+def test_raw_response_is_immutable():
+    """CRITICAL-1: raw_response must not be mutable in-place on a frozen result."""
+    r = ClassificationResult("electricity", (), 0.9, "ok", {"provider": "mock"})
+    with pytest.raises(TypeError):
+        r.raw_response["x"] = 1  # type: ignore[index]
