@@ -41,6 +41,10 @@ async def lifespan(app: FastAPI):
         settings.llm_provider, api_key=settings.llm_api_key,
         model=settings.llm_model, base_url=settings.llm_base_url,
         max_tokens=settings.llm_max_output_tokens,
+        default_model_anthropic=settings.llm_default_model_anthropic,
+        default_model_openai=settings.llm_default_model_openai,
+        default_model_local=settings.llm_default_model_local,
+        local_base_url=settings.llm_local_base_url,
     )
     app.state.provider = provider
     app.state.classifier = Classifier(

@@ -25,6 +25,9 @@
 | **Dedupe 視窗** | `DEDUPE_WINDOW_S` | 60.0 | s | config → mqtt_subscriber → AdmissionGate | FR-326 | ✅ | |
 | **Rate limit / 視窗** | `RATE_LIMIT_PER_MIN` / `RATE_WINDOW_S` | 60 / 60.0 | /min, s | config → mqtt_subscriber → AdmissionGate | FR-325 | ✅ | |
 | **MQTT reconnect 延遲** | `MQTT_RECONNECT_DELAY_S` | 5.0 | s | config → mqtt_subscriber | — | ✅ | |
+| **MQTT 訂閱 topic** | `MQTT_SUBSCRIPTIONS` | ems/+/+/measurements,factory/sensor/+ | csv | config → mqtt_subscriber | §8.5 | ✅ | 逗號分隔；放寬訂閱範圍仍受 parser deny-by-default 約束 |
+| **Provider 預設 model（anthropic/openai/local）** | `LLM_DEFAULT_MODEL_ANTHROPIC` / `LLM_DEFAULT_MODEL_OPENAI` / `LLM_DEFAULT_MODEL_LOCAL` | claude-haiku-4-5 / gpt-4o-mini / qwen2.5 | — | config → factory | FR-305 | ✅ | factory 不再是第二 config source；LLM_MODEL 設定時覆寫 |
+| **Local provider base URL** | `LLM_LOCAL_BASE_URL` | http://host.docker.internal:11434/v1 | — | config → factory | FR-305 | ✅ | Ollama 端點 |
 | MQTT host/port/enabled | `MQTT_HOST`/`MQTT_PORT`/`MQTT_ENABLED` | mosquitto/1883/false | — | config | §8.5 | ✅ | |
 | DB host/port/name/passwords | `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_AI_PASSWORD`/`DB_OPS_PASSWORD` | timescaledb/5432/ems | — | config | ADR-017 | ✅ | |
 | API keys (OPS/INGEST/AI) | `OPS_API_KEY`/`INGEST_API_KEY`/`AI_API_KEY` | "" | — | config | FR-310 | ✅ | secret |

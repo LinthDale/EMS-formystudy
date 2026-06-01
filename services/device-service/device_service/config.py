@@ -67,6 +67,12 @@ class Settings(BaseSettings):
     rate_limit_per_min: int = 60
     rate_window_s: float = 60.0
     mqtt_reconnect_delay_s: float = 5.0
+    mqtt_subscriptions: str = "ems/+/+/measurements,factory/sensor/+"  # comma-separated MQTT topics
+    # per-provider default model + local endpoint (single source; factory reads these)
+    llm_default_model_anthropic: str = "claude-haiku-4-5"
+    llm_default_model_openai: str = "gpt-4o-mini"
+    llm_default_model_local: str = "qwen2.5"
+    llm_local_base_url: str = "http://host.docker.internal:11434/v1"
 
     # DB (ADR-017 dual pools; per-role login)
     db_host: str = "timescaledb"
