@@ -13,7 +13,10 @@ from collections import deque
 from collections.abc import Mapping
 from datetime import datetime, timezone
 
-from .budget_ledger import budget_reserve, budget_settle, current_period, reserve_estimate
+from .budget_ledger import (
+    RESERVE_INPUT_TOKENS, RESERVE_OUTPUT_TOKENS,
+    budget_reserve, budget_settle, current_period, reserve_estimate, resolve_pricing,
+)
 from .repositories import device_repo
 from .sanitizer import sanitize
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
@@ -139,7 +142,13 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     sanitized = sanitize(pr.device_id, topic, pr.payload_format, [fields])
     period_start, period_end = current_period()
     is_mock = settings.llm_provider == "mock"
-    est = reserve_estimate(settings.llm_model)
+    pricing = resolve_pricing(getattr(settings, "llm_pricing_json", ""))
+    est = reserve_estimate(
+        settings.llm_model,
+        getattr(settings, "llm_reserve_input_tokens", RESERVE_INPUT_TOKENS),
+        getattr(settings, "llm_max_output_tokens", RESERVE_OUTPUT_TOKENS),
+        pricing,
+    )
     if is_mock:
         budget_ok = True                                               # mock is free
     else:
@@ -165,7 +174,7 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
             else:
                 tin = tout = 0
             async with db.ai_tx() as conn:
-                await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout)
+                await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout, pricing)
             settled = True
         return f"created:{outcome.new_status}"
     finally:
@@ -175,4 +184,4 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
         if not is_mock and budget_ok and not settled:
             with contextlib.suppress(Exception):
                 async with db.ai_tx() as conn:
-                    await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0)
+                    await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)

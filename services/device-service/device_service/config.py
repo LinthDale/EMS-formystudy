@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from urllib.parse import urlparse
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # http:// is only accepted for these local hosts (covers Ollama via host.docker.internal,
@@ -54,6 +54,20 @@ class Settings(BaseSettings):
     llm_base_url: str | None = None
     llm_provider_domain_allowlist: str = DEFAULT_ALLOWLIST
 
+    # LLM tuning (single source; project_rules §19 / tunable-parameters.md)
+    llm_max_output_tokens: int = 1024       # provider max_tokens AND budget reservation output bound (COUPLED)
+    llm_reserve_input_tokens: int = 4000    # budget reservation input estimate
+    llm_confidence_threshold: float = 0.9   # FR-303: > this -> auto confirmed
+    llm_retries: int = 3                    # FR-312
+    llm_cache_max: int = 4096               # FR-316 classifier cache size
+    llm_pricing_json: str = ""            # optional JSON {model: [in_per_1M, out_per_1M]} merged onto defaults
+    budget_warn_ratio: float = 0.8          # FR-319
+    # discovery admission (FR-325/326) + transport
+    dedupe_window_s: float = 60.0
+    rate_limit_per_min: int = 60
+    rate_window_s: float = 60.0
+    mqtt_reconnect_delay_s: float = 5.0
+
     # DB (ADR-017 dual pools; per-role login)
     db_host: str = "timescaledb"
     db_port: int = 5432
@@ -75,6 +89,20 @@ class Settings(BaseSettings):
     @property
     def allowlist(self) -> frozenset[str]:
         return parse_allowlist(self.llm_provider_domain_allowlist)
+
+    @field_validator("llm_pricing_json")
+    @classmethod
+    def _check_pricing_json(cls, v: str) -> str:
+        if not v:
+            return v
+        import json
+        try:
+            parsed = json.loads(v)
+        except ValueError as exc:
+            raise ValueError(f"LLM_PRICING_JSON must be valid JSON: {exc}") from exc
+        if not isinstance(parsed, dict):
+            raise ValueError("LLM_PRICING_JSON must be a JSON object {model: [in_per_1M, out_per_1M]}")
+        return v
 
     @model_validator(mode="after")
     def _check_base_url(self) -> "Settings":

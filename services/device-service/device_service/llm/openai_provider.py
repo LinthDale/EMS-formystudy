@@ -14,7 +14,7 @@ from .parsing import result_from_dict
 from .prompt import SYSTEM_PROMPT, render_sample
 from .types import ClassificationResult, ProviderError, SanitizedSample
 
-_MAX_OUTPUT_TOKENS = 1024  # must match budget_ledger.RESERVE_OUTPUT_TOKENS so the reservation is a true upper bound
+_MAX_OUTPUT_TOKENS = 1024  # default only; production value = Settings.llm_max_output_tokens (single source, §19)
 
 _JSON_INSTRUCTION = (
     " Respond ONLY with a JSON object: "
@@ -26,10 +26,11 @@ _JSON_INSTRUCTION = (
 class OpenAIProvider:
     name = "openai"
 
-    def __init__(self, api_key: str = "", model: str = "gpt-4o-mini", base_url: str | None = None, client=None):
+    def __init__(self, api_key: str = "", model: str = "gpt-4o-mini", base_url: str | None = None, max_tokens: int = _MAX_OUTPUT_TOKENS, client=None):
         self._api_key = api_key
         self._model = model
         self._base_url = base_url
+        self._max_tokens = max_tokens
         self._client = client
 
     def _ensure_client(self):
@@ -64,13 +65,13 @@ class OpenAIProvider:
         ]
         try:
             return await client.chat.completions.create(
-                model=self._model, messages=messages, max_tokens=_MAX_OUTPUT_TOKENS,
+                model=self._model, messages=messages, max_tokens=self._max_tokens,
                 response_format={"type": "json_object"}, temperature=0,
             )
         except Exception:
             try:
                 return await client.chat.completions.create(
-                    model=self._model, messages=messages, max_tokens=_MAX_OUTPUT_TOKENS, temperature=0,
+                    model=self._model, messages=messages, max_tokens=self._max_tokens, temperature=0,
                 )
             except Exception as exc:
                 raise ProviderError(f"openai classify_device failed: {exc}") from exc

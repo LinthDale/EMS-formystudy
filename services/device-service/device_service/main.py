@@ -40,9 +40,14 @@ async def lifespan(app: FastAPI):
     provider = make_provider(
         settings.llm_provider, api_key=settings.llm_api_key,
         model=settings.llm_model, base_url=settings.llm_base_url,
+        max_tokens=settings.llm_max_output_tokens,
     )
     app.state.provider = provider
-    app.state.classifier = Classifier(provider, MockGuardrail(), model=settings.llm_model)
+    app.state.classifier = Classifier(
+        provider, MockGuardrail(), model=settings.llm_model,
+        confidence_threshold=settings.llm_confidence_threshold,
+        retries=settings.llm_retries, cache_max=settings.llm_cache_max,
+    )
     db = Database(
         host=settings.db_host, port=settings.db_port, name=settings.db_name,
         ai_password=settings.db_ai_password, ops_password=settings.db_ops_password,

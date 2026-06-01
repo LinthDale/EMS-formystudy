@@ -76,3 +76,13 @@ def test_llm_model_default_is_empty_for_factory_fallback():
     """HIGH: config must not default to an Anthropic model (breaks openai/local)."""
     s = Settings(_env_file=None)
     assert s.llm_model == ""
+
+def test_llm_pricing_json_must_be_object():
+    from pydantic import ValidationError
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, llm_pricing_json="[1, 2]")    # valid JSON but an array
+    with pytest.raises(ValidationError):
+        Settings(_env_file=None, llm_pricing_json="not json")
+    s = Settings(_env_file=None, llm_pricing_json='{"m": [1.0, 2.0]}')
+    assert s.llm_pricing_json == '{"m": [1.0, 2.0]}'
+    assert Settings(_env_file=None).llm_pricing_json == ""       # empty default ok
