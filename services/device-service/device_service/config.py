@@ -54,6 +54,20 @@ class Settings(BaseSettings):
     llm_base_url: str | None = None
     llm_provider_domain_allowlist: str = DEFAULT_ALLOWLIST
 
+    # LLM tuning (single source; project_rules §19 / tunable-parameters.md)
+    llm_max_output_tokens: int = 1024       # provider max_tokens AND budget reservation output bound (COUPLED)
+    llm_reserve_input_tokens: int = 4000    # budget reservation input estimate
+    llm_confidence_threshold: float = 0.9   # FR-303: > this -> auto confirmed
+    llm_retries: int = 3                    # FR-312
+    llm_cache_max: int = 4096               # FR-316 classifier cache size
+    llm_pricing_json: str = ""            # optional JSON {model: [in_per_1M, out_per_1M]} merged onto defaults
+    budget_warn_ratio: float = 0.8          # FR-319
+    # discovery admission (FR-325/326) + transport
+    dedupe_window_s: float = 60.0
+    rate_limit_per_min: int = 60
+    rate_window_s: float = 60.0
+    mqtt_reconnect_delay_s: float = 5.0
+
     # DB (ADR-017 dual pools; per-role login)
     db_host: str = "timescaledb"
     db_port: int = 5432

@@ -34,3 +34,9 @@ def test_local_respects_explicit_base_url():
 def test_unknown_provider_raises():
     with pytest.raises(ValueError):
         make_provider("gemini")
+
+def test_max_tokens_propagates_to_providers():
+    # §19 migration: llm_max_output_tokens flows from config -> factory -> provider max_tokens
+    assert make_provider("anthropic", max_tokens=2048)._max_tokens == 2048
+    assert make_provider("openai", max_tokens=512)._max_tokens == 512
+    assert make_provider("local", max_tokens=256)._max_tokens == 256

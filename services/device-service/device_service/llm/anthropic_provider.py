@@ -42,9 +42,10 @@ _CLASSIFY_TOOL = {
 class AnthropicProvider:
     name = "anthropic"
 
-    def __init__(self, api_key: str = "", model: str = "claude-haiku-4-5", client=None):
+    def __init__(self, api_key: str = "", model: str = "claude-haiku-4-5", max_tokens: int = _MAX_CLASSIFY_TOKENS, client=None):
         self._api_key = api_key
         self._model = model
+        self._max_tokens = max_tokens
         self._client = client
 
     def _ensure_client(self):
@@ -69,7 +70,7 @@ class AnthropicProvider:
         try:
             response = await client.messages.create(
                 model=self._model,
-                max_tokens=_MAX_CLASSIFY_TOKENS,
+                max_tokens=self._max_tokens,
                 system=[{"type": "text", "text": SYSTEM_PROMPT, "cache_control": {"type": "ephemeral"}}],
                 tools=[_CLASSIFY_TOOL],
                 tool_choice={"type": "tool", "name": "record_classification"},

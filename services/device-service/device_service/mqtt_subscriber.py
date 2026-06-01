@@ -8,7 +8,7 @@ import asyncio
 import logging
 import time
 
-from .discovery import AdmissionGate, process_message
+from .discovery import DEDUPE_WINDOW, RATE_LIMIT, RATE_WINDOW, AdmissionGate, process_message
 
 _log = logging.getLogger("device_service.discovery")
 
@@ -19,7 +19,12 @@ RECONNECT_DELAY = 5.0
 async def run_subscriber(db, classifier, settings, *, stop_event=None) -> None:
     import aiomqtt  # lazy
 
-    gate = AdmissionGate()
+    gate = AdmissionGate(
+        dedupe_window=getattr(settings, "dedupe_window_s", DEDUPE_WINDOW),
+        rate_limit=getattr(settings, "rate_limit_per_min", RATE_LIMIT),
+        rate_window=getattr(settings, "rate_window_s", RATE_WINDOW),
+    )
+    reconnect_delay = getattr(settings, "mqtt_reconnect_delay_s", RECONNECT_DELAY)
     while True:
         try:
             async with aiomqtt.Client(hostname=settings.mqtt_host, port=settings.mqtt_port) as client:
@@ -39,7 +44,7 @@ async def run_subscriber(db, classifier, settings, *, stop_event=None) -> None:
         except asyncio.CancelledError:
             raise
         except Exception:  # broker disconnect / connect failure -> retry
-            _log.exception("MQTT subscriber disconnected; reconnecting in %.0fs", RECONNECT_DELAY)
+            _log.exception("MQTT subscriber disconnected; reconnecting in %.0fs", reconnect_delay)
             if stop_event is not None and stop_event.is_set():
                 return
-            await asyncio.sleep(RECONNECT_DELAY)
+            await asyncio.sleep(reconnect_delay)

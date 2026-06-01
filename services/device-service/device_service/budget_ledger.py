@@ -42,9 +42,23 @@ def evaluate_budget(spent_usd: float, budget_usd: float, *, warn_ratio: float = 
     return BudgetDecision(allow=True, alert=None)
 
 
-def estimate_cost(model: str, tokens_in: int, tokens_out: int) -> float:
-    p_in, p_out = _PRICING.get(model, (0.0, 0.0))
+def estimate_cost(model: str, tokens_in: int, tokens_out: int, pricing: dict | None = None) -> float:
+    table = pricing if pricing is not None else _PRICING
+    p_in, p_out = table.get(model, (0.0, 0.0))
     return (tokens_in / 1_000_000) * p_in + (tokens_out / 1_000_000) * p_out
+
+
+def resolve_pricing(pricing_json: str = "") -> dict:
+    """Base pricing table merged with optional env JSON overrides ({model: [in, out]})."""
+    table = dict(_PRICING)
+    if pricing_json:
+        import json as _json
+        try:
+            for model, pair in (_json.loads(pricing_json) or {}).items():
+                table[model] = (float(pair[0]), float(pair[1]))
+        except (ValueError, TypeError, KeyError, IndexError):
+            _log.warning("LLM_PRICING_JSON is invalid; using built-in pricing table only")
+    return table
 
 
 def current_period(now: datetime | None = None) -> tuple[datetime, datetime]:
@@ -109,9 +123,13 @@ def _budget_lock_key(provider: str, period_start: datetime) -> str:
     return f"budget:{provider}:{period_start.isoformat()}"
 
 
-def reserve_estimate(model: str) -> float:
-    """Worst-case cost of one classification call (used as the pre-call reservation)."""
-    return estimate_cost(model, RESERVE_INPUT_TOKENS, RESERVE_OUTPUT_TOKENS)
+def reserve_estimate(
+    model: str, input_tokens: int = RESERVE_INPUT_TOKENS,
+    output_tokens: int = RESERVE_OUTPUT_TOKENS, pricing: dict | None = None,
+) -> float:
+    """Worst-case cost of one classification call (the pre-call reservation).
+    output_tokens MUST equal the provider's max_tokens or the cap is not an upper bound."""
+    return estimate_cost(model, input_tokens, output_tokens, pricing)
 
 
 async def budget_reserve(
@@ -142,13 +160,13 @@ async def budget_reserve(
 
 async def budget_settle(
     conn, provider: str, period_start: datetime, reserved_est: float, model: str,
-    tokens_in: int, tokens_out: int,
+    tokens_in: int, tokens_out: int, pricing: dict | None = None,
 ) -> float:
     """Under the budget advisory lock: replace the reservation with the actual cost
     (delta = actual - reserved_est, usually a refund) and add token counts.
     For a fallback (no real call) pass tokens 0 -> the full reservation is refunded.
     Returns the actual cost. Must run inside a transaction."""
-    actual = estimate_cost(model, tokens_in, tokens_out)
+    actual = estimate_cost(model, tokens_in, tokens_out, pricing)
     if actual == 0.0 and (tokens_in or tokens_out):
         _log.warning(
             "model %r not in pricing table: %d/%d tokens settled at cost 0 for provider %r; "

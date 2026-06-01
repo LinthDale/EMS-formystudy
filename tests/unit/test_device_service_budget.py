@@ -79,3 +79,22 @@ async def test_record_usage_warns_on_unpriced_model(caplog):
         cost = await record_usage(_Conn(), "p", ps, ps, "unknown-model", 1000, 1000, 20.0)
     assert cost == 0.0
     assert any("not in pricing table" in r.message for r in caplog.records)
+
+# --- §19 migration: pricing override + parameterised reserve estimate ---
+
+def test_resolve_pricing_merges_env_override():
+    from device_service.budget_ledger import estimate_cost, resolve_pricing
+    p = resolve_pricing('{"my-model": [1.0, 2.0]}')
+    assert p["my-model"] == (1.0, 2.0) and "claude-haiku-4-5" in p   # base retained
+    assert abs(estimate_cost("my-model", 1_000_000, 1_000_000, p) - 3.0) < 1e-9
+
+
+def test_resolve_pricing_invalid_json_falls_back_to_base():
+    from device_service.budget_ledger import _PRICING, resolve_pricing
+    assert resolve_pricing("not json") == _PRICING
+    assert resolve_pricing("") == _PRICING
+
+
+def test_reserve_estimate_honours_tokens_and_pricing():
+    from device_service.budget_ledger import reserve_estimate
+    assert abs(reserve_estimate("m", 1_000_000, 0, {"m": (1.0, 9.0)}) - 1.0) < 1e-9
