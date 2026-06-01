@@ -12,7 +12,7 @@ from collections import deque
 from collections.abc import Mapping
 from datetime import datetime, timezone
 
-from .budget_ledger import current_period, evaluate_budget, get_period_budget, record_usage
+from .budget_ledger import budget_reserve, budget_settle, current_period, reserve_estimate
 from .repositories import device_repo
 from .sanitizer import sanitize
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
@@ -137,21 +137,30 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     first_seen = created_at.isoformat() if created_at is not None else datetime.now(timezone.utc).isoformat()
     sanitized = sanitize(pr.device_id, topic, pr.payload_format, [fields])
     period_start, period_end = current_period()
-    async with db.ai_pool.acquire() as conn:
-        spent, budget = await get_period_budget(conn, settings.llm_provider, period_start, settings.llm_monthly_budget_usd)
-    decision = evaluate_budget(spent, budget)
+    is_mock = settings.llm_provider == "mock"
+    est = reserve_estimate(settings.llm_model)
+    if is_mock:
+        budget_ok = True                                               # mock is free
+    else:
+        # FR-329 hard cap: reserve the worst-case cost up front under the budget advisory
+        # lock; a near-budget or concurrent call that would cross is denied here (ADR-014).
+        async with db.ai_tx() as conn:
+            budget_ok = await budget_reserve(
+                conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
     outcome = await classifier.classify(
-        sanitized, budget_ok=decision.allow, default_device_type=pr.device_type,
+        sanitized, budget_ok=budget_ok, default_device_type=pr.device_type,
         first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(),
     )
-    async with db.ai_tx(lock=pr.device_id) as conn:                    # §8.6.8 advisory lock
+    async with db.ai_tx(lock=pr.device_id) as conn:                    # §8.6.8 device advisory lock
         await device_repo.apply_outcome(conn, pr.device_id, outcome)
-    # FR-329: record token/cost for real (non-mock) LLM calls so the budget gate trips
-    if outcome.summary_source == "llm" and settings.llm_provider != "mock":
+    if not is_mock and budget_ok:
+        # settle the reservation to actual cost (refund the over-reservation; a fallback
+        # with no real call refunds the full reservation)
         usage = (outcome.result.raw_response or {}).get("usage") or {}
+        if outcome.summary_source == "llm":
+            tin, tout = int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0))
+        else:
+            tin = tout = 0
         async with db.ai_tx() as conn:
-            await record_usage(
-                conn, settings.llm_provider, period_start, period_end, settings.llm_model,
-                int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0)), budget,
-            )
+            await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout)
     return f"created:{outcome.new_status}"

@@ -90,3 +90,110 @@ async def test_budget_gate_trips_for_nonmock_provider(budget_db):
     async with db.ops_pool.acquire() as conn:
         row = await conn.fetchrow("SELECT classified_by, ai_provider FROM public.devices WHERE device_id='itest-bud-1'")
     assert row["ai_provider"] is None               # system_fallback, no provider attributed
+
+# --- FR-329 hard cap + concurrency (§13) ---
+
+_MODEL = "claude-haiku-4-5"
+
+
+async def _seed(db, ps, pe, cost, budget):
+    async with db.ops_pool.acquire() as conn:
+        await conn.execute(
+            """INSERT INTO public.llm_budget_ledger
+                   (period_start, period_end, provider, cost_usd, budget_usd, active, updated_at)
+               VALUES ($1,$2,$3,$4,$5,TRUE, now())
+               ON CONFLICT (period_start, provider) DO UPDATE SET cost_usd=EXCLUDED.cost_usd""",
+            ps, pe, _PROV, cost, budget)
+
+
+async def _cost(db, ps):
+    async with db.ops_pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT cost_usd FROM public.llm_budget_ledger WHERE provider=$1 AND period_start=$2", _PROV, ps)
+    return float(row["cost_usd"])
+
+
+async def test_reserve_denies_when_call_would_cross_budget(budget_db):
+    from device_service.budget_ledger import budget_reserve, current_period, reserve_estimate
+    _, db = budget_db
+    ps, pe = current_period()
+    est = reserve_estimate(_MODEL)
+    budget = 20.0
+    await _seed(db, ps, pe, budget - est / 2, budget)   # headroom < one call
+    async with db.ai_tx() as conn:
+        ok = await budget_reserve(conn, _PROV, ps, pe, est, budget)
+    assert ok is False
+    assert abs(await _cost(db, ps) - (budget - est / 2)) < 1e-3   # unchanged, no overspend (NUMERIC(10,4))
+
+
+async def test_concurrent_reserves_only_one_succeeds(budget_db):
+    import asyncio
+    from device_service.budget_ledger import budget_reserve, current_period, reserve_estimate
+    _, db = budget_db
+    ps, pe = current_period()
+    est = reserve_estimate(_MODEL)
+    budget = 20.0
+    await _seed(db, ps, pe, budget - 1.5 * est, budget)   # only ONE more call fits
+
+    async def _r():
+        async with db.ai_tx() as conn:
+            return await budget_reserve(conn, _PROV, ps, pe, est, budget)
+
+    r1, r2 = await asyncio.gather(_r(), _r())
+    assert sorted([r1, r2]) == [False, True]              # advisory lock prevents double-pass
+    assert abs(await _cost(db, ps) - (budget - 1.5 * est + est)) < 1e-3  # exactly one reservation
+
+
+async def test_settle_refunds_overreservation(budget_db):
+    from device_service.budget_ledger import (
+        budget_reserve, budget_settle, current_period, estimate_cost, reserve_estimate)
+    _, db = budget_db
+    ps, pe = current_period()
+    est = reserve_estimate(_MODEL)
+    async with db.ai_tx() as conn:
+        assert await budget_reserve(conn, _PROV, ps, pe, est, 20.0)
+    async with db.ai_tx() as conn:
+        actual = await budget_settle(conn, _PROV, ps, est, _MODEL, 100, 50)
+    expected = estimate_cost(_MODEL, 100, 50)
+    assert abs(actual - expected) < 1e-9
+    assert abs(await _cost(db, ps) - expected) < 1e-3     # ledger holds actual, not the reservation (NUMERIC(10,4))
+
+
+async def test_fallback_settle_refunds_full_reservation(budget_db):
+    from device_service.budget_ledger import budget_reserve, budget_settle, current_period, reserve_estimate
+    _, db = budget_db
+    ps, pe = current_period()
+    est = reserve_estimate(_MODEL)
+    async with db.ai_tx() as conn:
+        assert await budget_reserve(conn, _PROV, ps, pe, est, 20.0)
+    async with db.ai_tx() as conn:
+        await budget_settle(conn, _PROV, ps, est, _MODEL, 0, 0)   # no real call -> full refund
+    assert await _cost(db, ps) < 1e-9
+
+async def test_real_provider_classify_settles_actual_cost(budget_db):
+    """Reserve succeeds, real provider classifies, settle records actual cost (>0)."""
+    from types import SimpleNamespace
+    from device_service.classifier import Classifier
+    from device_service.discovery import AdmissionGate, process_message
+    from device_service.llm.guardrail import MockGuardrail
+    from device_service.llm.types import ClassificationResult, SignalSuggestion
+
+    _, db = budget_db
+    settings = SimpleNamespace(llm_provider=_PROV, llm_model=_MODEL, llm_monthly_budget_usd=20.0)
+
+    class _Provider:
+        name = _PROV
+        async def classify_device(self, d, t, sanitized):
+            return ClassificationResult(
+                "electricity", (SignalSuggestion("voltage", "V", "float", "read"),), 0.95, "ok",
+                {"provider": _PROV, "usage": {"input_tokens": 1000, "output_tokens": 500}})
+
+    status = await process_message(
+        "ems/devices/itest-bud-2/measurements", b"e,d=x voltage=220 1",
+        db=db, classifier=Classifier(_Provider(), MockGuardrail()), gate=AdmissionGate(),
+        settings=settings, now=1.0)
+    assert status == "created:confirmed"
+    from device_service.budget_ledger import current_period, estimate_cost
+    ps, _ = current_period()
+    expected = estimate_cost(_MODEL, 1000, 500)
+    assert abs(await _cost(db, ps) - expected) < 1e-3   # settled to actual, reservation refunded
