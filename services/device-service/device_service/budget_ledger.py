@@ -1,8 +1,10 @@
 """LLM budget gate + ledger I/O (PRD-0003 §10, ADR-014, FR-329/319).
 
-evaluate_budget: pure pre-call decision (80% warn, 100% fail-closed).
-record_usage: writes token/cost back to llm_budget_ledger after a real LLM call so
-the gate actually trips for real providers (Phase 1.4 completion of FR-329).
+The ACTIVE accounting path is the reservation pattern: budget_reserve (pre-call, under a
+budget-namespace advisory lock) -> budget_settle (post-call reconcile/refund). This gives a
+hard cap with concurrency protection (FR-329 / ADR-014).
+evaluate_budget is a pure read-only decision helper (reporting). record_usage is a simple
+upsert helper used for ops/test seeding only -- it is NOT on the production accounting path.
 """
 from __future__ import annotations
 
@@ -66,6 +68,8 @@ async def get_period_budget(conn, provider: str, period_start: datetime, monthly
     return float(row["cost_usd"]), float(row["budget_usd"])
 
 
+# NOTE: NOT the production accounting path (budget_reserve/budget_settle is). Retained as a
+# plain upsert helper for ops/test seeding; it does not take the budget advisory lock.
 async def record_usage(
     conn, provider: str, period_start: datetime, period_end: datetime, model: str,
     tokens_in: int, tokens_out: int, budget_usd: float,
@@ -152,11 +156,17 @@ async def budget_settle(
             model, tokens_in, tokens_out, provider,
         )
     await conn.execute(_BUDGET_LOCK, _budget_lock_key(provider, period_start))
-    await conn.execute(
+    updated = await conn.fetchval(
         """UPDATE public.llm_budget_ledger SET
                cost_usd = GREATEST(0, cost_usd + $3),
                tokens_in = tokens_in + $4, tokens_out = tokens_out + $5, updated_at = now()
-           WHERE provider=$1 AND period_start=$2""",
+           WHERE provider=$1 AND period_start=$2
+           RETURNING cost_usd""",
         provider, period_start, actual - reserved_est, tokens_in, tokens_out,
     )
+    if updated is None:
+        _log.warning(
+            "budget_settle: no ledger row for provider %r period %s; actual cost %.6f not recorded",
+            provider, period_start, actual,
+        )
     return actual

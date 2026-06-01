@@ -14,6 +14,8 @@ from .parsing import result_from_dict
 from .prompt import SYSTEM_PROMPT, render_sample
 from .types import ClassificationResult, ProviderError, SanitizedSample
 
+_MAX_OUTPUT_TOKENS = 1024  # must match budget_ledger.RESERVE_OUTPUT_TOKENS so the reservation is a true upper bound
+
 _JSON_INSTRUCTION = (
     " Respond ONLY with a JSON object: "
     '{"device_type": str, "confidence": number, "reasoning": str, '
@@ -62,13 +64,13 @@ class OpenAIProvider:
         ]
         try:
             return await client.chat.completions.create(
-                model=self._model, messages=messages,
+                model=self._model, messages=messages, max_tokens=_MAX_OUTPUT_TOKENS,
                 response_format={"type": "json_object"}, temperature=0,
             )
         except Exception:
             try:
                 return await client.chat.completions.create(
-                    model=self._model, messages=messages, temperature=0,
+                    model=self._model, messages=messages, max_tokens=_MAX_OUTPUT_TOKENS, temperature=0,
                 )
             except Exception as exc:
                 raise ProviderError(f"openai classify_device failed: {exc}") from exc
