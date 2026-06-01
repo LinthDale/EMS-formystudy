@@ -13,15 +13,9 @@
 
 這兩項在 Phase 1.3 是**實質 deferred**，必須在 Phase 1.4 補完，且**接真 provider 上線前為硬前置**：
 
-1. **`record_usage` / FR-329 budget — 部分完成（1.4a），HARD CAP + 並發仍 must-do**
-   - **已完成（1.4a, 4fd96f6）**：post-call usage accounting（`record_usage` 累加 tokens/cost 進 `llm_budget_ledger`，ON CONFLICT 累加為單句原子）；pre-call **soft gate**（已 ≥100% 才擋）；provider 回報 usage；unpriced model 不再靜默（`record_usage` 對 cost=0+tokens>0 記 WARNING）。
-   - **尚未完成 / MUST-DO（不可標 FR-329 完成）**：
-     - **Hard cap（單次 call 不打穿）**：pre-call estimated-cost **reservation**——近預算（如 99%）時單次 call 仍可能衝過 100%；需在呼叫前以估算上限預扣、呼叫後 reconcile 實際。
-     - **並發保護（ADR-014 明文）**：budget-namespace `pg_advisory_xact_lock`（與 §8.6.8 device lock 不同 namespace）+ 原子 reserve，避免多 worker 同讀 spent<budget 都放行而並發超扣。**現況**：單一 subscriber 逐則序列處理 → 同進程不會並發超扣；風險在**多實例擴展**（未部署）。
-     - **§13 測試**：near-budget large-call、concurrent workers 不超扣、80%/100% 門檻、guardrail provider='guardrail' 獨立 row。
-     - 確保實際設定的 `LLM_MODEL` 在 pricing table（否則 cost 恆 0、USD gate 不 trip——目前僅 WARNING，未硬擋）。
-   - **這些是接真 provider / 水平擴展前的硬前置。**（scope 降級紀錄：DL-013）
-
+1. **FR-329 budget HARD CAP — implemented (5e0b86d) + §13 tests**
+   - **Done**: pre-call estimated-cost **reservation** (`reserve_estimate` + `budget_reserve`) under a **budget-namespace `pg_advisory_xact_lock`** (key `budget:provider:period`, separate from the §8.6.8 `device:` lock) → a near-budget single call cannot cross, concurrent workers cannot both pass; **`budget_settle`** reconciles reservation → actual (refund; full refund on fallback); unpriced-model WARNING. discovery uses reserve→classify→settle. §13 tests: near-budget denied, concurrent→exactly-one, settle refund, full refund, real-provider settle.
+   - **Remaining caveats (NOT a production guarantee, real-provider enablement)**: verified with a fake non-mock provider + real DB lock, **not against live Anthropic/OpenAI**; cost is an estimate (not real billing); rare guardrail-post-block-after-L1 path refunds full reservation though L1 spent tokens (minor under-count); **L2 guardrail `provider='guardrail'` ledger row not yet recorded** (MockGuardrail is free). (DL-013/DL-014)
 2. **MQTT subscriber reconnect / error branch 測試覆蓋**
    - 現況（保守表述）：`run_subscriber` 已加 defensive reconnect loop + lifespan task done-callback，但 **reconnect 路徑與 per-message error branch 尚無單元/整合測試**（commit 已註明 uncovered）。
    - Must-do：補測試 — (a) broker 斷線觸發 reconnect（可用 fake aiomqtt client 模擬 raise→重試）；(b) 單則訊息 `process_message` 拋例外不殺 loop；(c) done-callback 在 task 異常結束時記 error。
