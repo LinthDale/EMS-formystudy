@@ -37,6 +37,10 @@ async def db_error_handler(request: Request, exc: Exception) -> JSONResponse:
 async def lifespan(app: FastAPI):
     settings: Settings = getattr(app.state, "settings", None) or Settings()
     app.state.settings = settings
+    if not settings.audit_hash_salt:
+        # M-2: don't hard-fail boot (CRUD / human-review still work), but make the gap loud —
+        # /ai-feedback fail-closes with 503 until AUDIT_HASH_SALT is set (§7.3a / FR-345).
+        _log.warning("AUDIT_HASH_SALT is empty: /ai-feedback will return 503 until it is set")
     provider = make_provider(
         settings.llm_provider, api_key=settings.llm_api_key,
         model=settings.llm_model, base_url=settings.llm_base_url,

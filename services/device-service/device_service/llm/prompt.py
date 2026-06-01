@@ -5,6 +5,7 @@ import json
 
 from .types import SanitizedSample
 
+PROMPT_VERSION = "v1"  # bump when SYSTEM_PROMPT / render_sample change; stamped into provenance
 DEVICE_TYPES = ("electricity", "temperature", "pressure", "motor", "valve", "hvac", "unknown")
 
 SYSTEM_PROMPT = (
