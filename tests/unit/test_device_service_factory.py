@@ -40,3 +40,17 @@ def test_max_tokens_propagates_to_providers():
     assert make_provider("anthropic", max_tokens=2048)._max_tokens == 2048
     assert make_provider("openai", max_tokens=512)._max_tokens == 512
     assert make_provider("local", max_tokens=256)._max_tokens == 256
+
+def test_provider_default_models_come_from_params_not_hardcoded():
+    # §19 follow-up: factory default models/base_url are parameters (single source = Settings)
+    a = make_provider("anthropic", default_model_anthropic="claude-sonnet-4-6")
+    assert a._model == "claude-sonnet-4-6"
+    o = make_provider("openai", default_model_openai="gpt-4o")
+    assert o._model == "gpt-4o"
+    loc = make_provider("local", default_model_local="llama3", local_base_url="http://localhost:9999/v1")
+    assert loc._model == "llama3" and loc._base_url == "http://localhost:9999/v1"
+
+
+def test_explicit_model_overrides_provider_default():
+    p = make_provider("anthropic", model="claude-haiku-4-5", default_model_anthropic="other")
+    assert p._model == "claude-haiku-4-5"

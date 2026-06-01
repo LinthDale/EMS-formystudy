@@ -86,3 +86,14 @@ def test_llm_pricing_json_must_be_object():
     s = Settings(_env_file=None, llm_pricing_json='{"m": [1.0, 2.0]}')
     assert s.llm_pricing_json == '{"m": [1.0, 2.0]}'
     assert Settings(_env_file=None).llm_pricing_json == ""       # empty default ok
+
+def test_provider_defaults_and_subscriptions_in_settings():
+    s = Settings(_env_file=None)
+    assert s.llm_default_model_anthropic == "claude-haiku-4-5"
+    assert s.llm_default_model_openai == "gpt-4o-mini"
+    assert s.llm_default_model_local == "qwen2.5"
+    assert s.llm_local_base_url == "http://host.docker.internal:11434/v1"
+    assert s.mqtt_subscriptions == "ems/+/+/measurements,factory/sensor/+"
+    # env override
+    s2 = Settings(_env_file=None, mqtt_subscriptions="ems/+/+/measurements")
+    assert s2.mqtt_subscriptions == "ems/+/+/measurements"

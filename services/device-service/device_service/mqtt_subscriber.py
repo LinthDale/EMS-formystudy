@@ -25,10 +25,12 @@ async def run_subscriber(db, classifier, settings, *, stop_event=None) -> None:
         rate_window=getattr(settings, "rate_window_s", RATE_WINDOW),
     )
     reconnect_delay = getattr(settings, "mqtt_reconnect_delay_s", RECONNECT_DELAY)
+    raw_subs = getattr(settings, "mqtt_subscriptions", "") or ",".join(SUBSCRIPTIONS)
+    subscriptions = tuple(t.strip() for t in raw_subs.split(",") if t.strip())
     while True:
         try:
             async with aiomqtt.Client(hostname=settings.mqtt_host, port=settings.mqtt_port) as client:
-                for topic in SUBSCRIPTIONS:
+                for topic in subscriptions:
                     await client.subscribe(topic, qos=1)
                 async for message in client.messages:
                     try:
