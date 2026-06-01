@@ -30,7 +30,7 @@ async def run_subscriber(db, classifier, settings, *, stop_event=None) -> None:
     while True:
         try:
             async with aiomqtt.Client(hostname=settings.mqtt_host, port=settings.mqtt_port) as client:
-                for topic in SUBSCRIPTIONS:
+                for topic in subscriptions:
                     await client.subscribe(topic, qos=1)
                 async for message in client.messages:
                     try:
