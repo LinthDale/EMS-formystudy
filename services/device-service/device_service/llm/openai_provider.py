@@ -3,7 +3,8 @@ local Ollama via base_url), ADR-009. Shared code path for the 'local' provider.
 
 Async (AsyncOpenAI), SDK imported lazily. Tries JSON-mode; if the server rejects
 response_format (common for Ollama base models) it retries without it, then parses
-the JSON content. SDK errors are re-raised as ProviderError.
+the JSON content. SDK errors are re-raised as ProviderError. Token usage (when the
+server reports it) is surfaced in raw_response['usage'] for the budget ledger.
 """
 from __future__ import annotations
 
@@ -44,36 +45,47 @@ class OpenAIProvider:
         message = getattr(choices[0], "message", None)
         return (getattr(message, "content", None) or "{}") if message else "{}"
 
-    async def _complete(self, client, sanitized: SanitizedSample) -> str:
+    @staticmethod
+    def _extract_usage(response) -> dict | None:
+        usage = getattr(response, "usage", None)
+        if usage is None:
+            return None
+        return {
+            "input_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
+            "output_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
+        }
+
+    async def _complete(self, client, sanitized: SanitizedSample):
         messages = [
             {"role": "system", "content": SYSTEM_PROMPT + _JSON_INSTRUCTION},
             {"role": "user", "content": render_sample(sanitized)},
         ]
         try:
-            response = await client.chat.completions.create(
+            return await client.chat.completions.create(
                 model=self._model, messages=messages,
                 response_format={"type": "json_object"}, temperature=0,
             )
         except Exception:
-            # Some OpenAI-compatible servers (e.g. Ollama base models) reject
-            # response_format=json_object — retry once without it.
             try:
-                response = await client.chat.completions.create(
+                return await client.chat.completions.create(
                     model=self._model, messages=messages, temperature=0,
                 )
             except Exception as exc:
                 raise ProviderError(f"openai classify_device failed: {exc}") from exc
-        return self._extract_content(response)
 
     async def classify_device(
         self, device_id: str, topic: str, sanitized: SanitizedSample
     ) -> ClassificationResult:
         client = self._ensure_client()
-        content = await self._complete(client, sanitized)
+        response = await self._complete(client, sanitized)
         try:
-            data = json.loads(content)
+            data = json.loads(self._extract_content(response))
         except (json.JSONDecodeError, TypeError):
             data = {}
         if not isinstance(data, dict):
             data = {}
-        return result_from_dict(data, {"provider": self.name, "model": self._model})
+        raw = {"provider": self.name, "model": self._model}
+        usage = self._extract_usage(response)
+        if usage is not None:
+            raw["usage"] = usage
+        return result_from_dict(data, raw)

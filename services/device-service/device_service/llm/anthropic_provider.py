@@ -78,4 +78,11 @@ class AnthropicProvider:
         except Exception as exc:  # SDK / network / rate-limit -> single boundary error
             raise ProviderError(f"anthropic classify_device failed: {exc}") from exc
         data = self._extract_tool_input(response)
-        return result_from_dict(data, {"provider": self.name, "model": self._model})
+        raw = {"provider": self.name, "model": self._model}
+        usage = getattr(response, "usage", None)
+        if usage is not None:
+            raw["usage"] = {
+                "input_tokens": int(getattr(usage, "input_tokens", 0) or 0),
+                "output_tokens": int(getattr(usage, "output_tokens", 0) or 0),
+            }
+        return result_from_dict(data, raw)

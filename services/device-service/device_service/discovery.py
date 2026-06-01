@@ -12,7 +12,7 @@ from collections import deque
 from collections.abc import Mapping
 from datetime import datetime, timezone
 
-from .budget_ledger import evaluate_budget, get_period_budget
+from .budget_ledger import current_period, evaluate_budget, get_period_budget, record_usage
 from .repositories import device_repo
 from .sanitizer import sanitize
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
@@ -136,8 +136,9 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
 
     first_seen = created_at.isoformat() if created_at is not None else datetime.now(timezone.utc).isoformat()
     sanitized = sanitize(pr.device_id, topic, pr.payload_format, [fields])
+    period_start, period_end = current_period()
     async with db.ai_pool.acquire() as conn:
-        spent, budget = await get_period_budget(conn, settings.llm_provider, settings.llm_monthly_budget_usd)
+        spent, budget = await get_period_budget(conn, settings.llm_provider, period_start, settings.llm_monthly_budget_usd)
     decision = evaluate_budget(spent, budget)
     outcome = await classifier.classify(
         sanitized, budget_ok=decision.allow, default_device_type=pr.device_type,
@@ -145,4 +146,12 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     )
     async with db.ai_tx(lock=pr.device_id) as conn:                    # §8.6.8 advisory lock
         await device_repo.apply_outcome(conn, pr.device_id, outcome)
+    # FR-329: record token/cost for real (non-mock) LLM calls so the budget gate trips
+    if outcome.summary_source == "llm" and settings.llm_provider != "mock":
+        usage = (outcome.result.raw_response or {}).get("usage") or {}
+        async with db.ai_tx() as conn:
+            await record_usage(
+                conn, settings.llm_provider, period_start, period_end, settings.llm_model,
+                int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0)), budget,
+            )
     return f"created:{outcome.new_status}"
