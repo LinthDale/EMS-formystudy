@@ -151,6 +151,15 @@ def test_committed_toml_mirrors_code_defaults(monkeypatch):
     for key, val in flat.items():
         assert key in fields, f"toml key {key} not a Settings field"
         assert fields[key].default == val, f"toml {key}={val!r} != code default {fields[key].default!r}"
+    # reverse direction: every non-secret, non-excluded Settings field must be in the TOML
+    excluded = {
+        "llm_api_key", "db_ai_password", "db_ops_password",
+        "ops_api_key", "ingest_api_key", "ai_api_key",  # secrets -> .env only
+        "llm_base_url",                                  # optional, commented out in TOML
+    }
+    for key in fields:
+        if key not in excluded:
+            assert key in flat, f"Settings field {key!r} missing from committed TOML"
 
 def test_toml_source_flattens_and_get_field_value(tmp_path, monkeypatch):
     from device_service.config import Settings, TomlConfigSource
@@ -162,3 +171,20 @@ def test_toml_source_flattens_and_get_field_value(tmp_path, monkeypatch):
     assert src()["llm_retries"] == 9 and src()["llm_provider"] == "openai"
     val, name, complex_ = src.get_field_value(Settings.model_fields["llm_provider"], "llm_provider")
     assert val == "openai" and name == "llm_provider" and complex_ is False
+
+def test_toml_secret_keys_are_ignored(tmp_path, monkeypatch):
+    """A secret accidentally placed in the TOML must NOT be loaded (footgun guard)."""
+    cfg = tmp_path / "ds.toml"
+    cfg.write_text('[db]\ndb_ai_password = "leaked-from-toml"\ndb_host = "toml-host"\n', encoding="utf-8")
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    s = Settings(_env_file=None)
+    assert s.db_ai_password == ""          # secret ignored -> falls back to .env/default, NOT the toml value
+    assert s.db_host == "toml-host"         # non-secret still loaded
+
+
+def test_toml_duplicate_key_across_sections_raises(tmp_path, monkeypatch):
+    cfg = tmp_path / "ds.toml"
+    cfg.write_text('[a]\nllm_retries = 1\n[b]\nllm_retries = 2\n', encoding="utf-8")
+    monkeypatch.setenv("DEVICE_SERVICE_CONFIG_FILE", str(cfg))
+    with pytest.raises(ValueError):
+        Settings(_env_file=None)

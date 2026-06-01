@@ -8,6 +8,7 @@ doc/governance/tunable-parameters.md.
 """
 from __future__ import annotations
 
+import logging
 import os
 import tomllib
 from pathlib import Path
@@ -21,7 +22,13 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
+_cfg_log = logging.getLogger("device_service.config")
 DEFAULT_CONFIG_FILE = "config/device-service.toml"
+# secrets must come from env/.env only; ignored if present in the (committed) TOML
+SECRET_FIELDS = frozenset({
+    "llm_api_key", "db_ai_password", "db_ops_password",
+    "ops_api_key", "ingest_api_key", "ai_api_key",
+})
 
 
 class TomlConfigSource(PydanticBaseSettingsSource):
@@ -37,15 +44,27 @@ class TomlConfigSource(PydanticBaseSettingsSource):
     def _load() -> dict:
         path = Path(os.getenv("DEVICE_SERVICE_CONFIG_FILE", DEFAULT_CONFIG_FILE))
         if not path.is_file():
+            _cfg_log.info("TOML config not found at %s - using code defaults", path)
             return {}
         with path.open("rb") as fh:
-            raw = tomllib.load(fh)
+            raw = tomllib.load(fh)   # malformed TOML -> TOMLDecodeError (fail fast at startup)
         flat: dict = {}
+
+        def _put(key, value):
+            if key in SECRET_FIELDS:                 # never load secrets from the (committed) TOML
+                _cfg_log.warning("ignoring secret-like key %r in TOML; set it via .env instead", key)
+                return
+            if key in flat:                          # same key under two [sections]
+                raise ValueError(f"TOML key {key!r} appears in multiple sections")
+            flat[key] = value
+
         for key, value in raw.items():
-            if isinstance(value, dict):      # [section] table -> flatten its keys
-                flat.update(value)
+            if isinstance(value, dict):              # [section] table -> flatten its keys
+                for k, v in value.items():
+                    _put(k, v)
             else:
-                flat[key] = value
+                _put(key, value)
+        _cfg_log.info("loaded TOML config from %s (%d keys)", path, len(flat))
         return flat
 
     def get_field_value(self, field: FieldInfo, field_name: str):
