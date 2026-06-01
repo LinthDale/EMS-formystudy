@@ -26,16 +26,56 @@ def test_zero_budget_allows():
     assert d.allow and d.alert is None
 
 async def test_get_period_budget_no_row_uses_monthly():
+    from datetime import datetime, timezone
     from device_service.budget_ledger import get_period_budget
     class _Conn:
         async def fetchrow(self, *a):
             return None
-    assert await get_period_budget(_Conn(), "anthropic", 20.0) == (0.0, 20.0)
+    ps = datetime(2026, 5, 1, tzinfo=timezone.utc)
+    assert await get_period_budget(_Conn(), "anthropic", ps, 20.0) == (0.0, 20.0)
 
 
 async def test_get_period_budget_with_row():
+    from datetime import datetime, timezone
     from device_service.budget_ledger import get_period_budget
     class _Conn:
         async def fetchrow(self, *a):
             return {"cost_usd": 7.5, "budget_usd": 18.0}
-    assert await get_period_budget(_Conn(), "anthropic", 20.0) == (7.5, 18.0)
+    ps = datetime(2026, 5, 1, tzinfo=timezone.utc)
+    assert await get_period_budget(_Conn(), "anthropic", ps, 18.0) == (7.5, 18.0)
+
+# --- FR-329 completion: cost estimate + period ---
+
+def test_estimate_cost_known_model():
+    from device_service.budget_ledger import estimate_cost
+    c = estimate_cost("claude-haiku-4-5", 1_000_000, 1_000_000)
+    assert abs(c - (0.80 + 4.00)) < 1e-9
+
+
+def test_estimate_cost_unknown_model_is_zero():
+    from device_service.budget_ledger import estimate_cost
+    assert estimate_cost("nope", 5_000_000, 5_000_000) == 0.0
+
+
+def test_current_period_month_bounds_and_rollover():
+    from datetime import datetime, timezone
+    from device_service.budget_ledger import current_period
+    s, e = current_period(datetime(2026, 5, 17, 9, 0, tzinfo=timezone.utc))
+    assert s == datetime(2026, 5, 1, tzinfo=timezone.utc) and e == datetime(2026, 6, 1, tzinfo=timezone.utc)
+    s2, e2 = current_period(datetime(2026, 12, 31, 23, 59, tzinfo=timezone.utc))
+    assert s2 == datetime(2026, 12, 1, tzinfo=timezone.utc) and e2 == datetime(2027, 1, 1, tzinfo=timezone.utc)
+
+async def test_record_usage_warns_on_unpriced_model(caplog):
+    import logging
+    from device_service.budget_ledger import record_usage
+    from datetime import datetime, timezone
+
+    class _Conn:
+        async def execute(self, *a):
+            return None
+
+    ps = datetime(2026, 5, 1, tzinfo=timezone.utc)
+    with caplog.at_level(logging.WARNING, logger="device_service.budget"):
+        cost = await record_usage(_Conn(), "p", ps, ps, "unknown-model", 1000, 1000, 20.0)
+    assert cost == 0.0
+    assert any("not in pricing table" in r.message for r in caplog.records)

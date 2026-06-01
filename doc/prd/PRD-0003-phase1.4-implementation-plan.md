@@ -13,10 +13,9 @@
 
 這兩項在 Phase 1.3 是**實質 deferred**，必須在 Phase 1.4 補完，且**接真 provider 上線前為硬前置**：
 
-1. **`record_usage` / FR-329 budget fail-closed 完整化**
-   - 現況（保守表述）：pre-call budget gate（`evaluate_budget`）已接上分類管線，但 **token/cost 從未寫回 `llm_budget_ledger`**（`record_usage` 僅為 `budget_ledger.py` 的 TODO）。對 Anthropic/OpenAI 真 provider，spent 永遠是 0，**budget gate 不會真的 trip**。Mock 免費故無影響。
-   - Must-do：在每次**真實（非 mock）LLM call 後**寫回用量（tokens_in/out、cost_usd）到 `llm_budget_ledger`（含 L1 與 `provider='guardrail'` 的 L2 各自 row）；80% Telegram alert、100% fail-closed 走 fallback；對應 unit + integration 測試（模擬 80%/100% 門檻）。**接真 provider 啟用前 block。**
-
+1. **FR-329 budget HARD CAP — implemented (5e0b86d) + reservation-leak fix (2665012) + §13 tests**
+   - **Done**: pre-call estimated-cost **reservation** (`budget_reserve`) under a **budget-namespace `pg_advisory_xact_lock`** (`budget:provider:period`, separate from §8.6.8 `device:` lock) → near-budget single call cannot cross; concurrent workers cannot both pass. **`budget_settle`** reconciles reservation→actual (refund; full refund on fallback). **Reservation never leaks**: `process_message` wraps reserve→classify→apply→settle in try/finally; an unexpected exception after a successful reservation refunds the full reservation. unpriced-model WARNING. §13 tests: near-budget denied, concurrent→exactly-one, settle refund, full refund, **exception-refund (no leak)**, real-provider settle. 185 tests, device_service ~99% (test container).
+   - **Remaining caveats (NOT a production guarantee — real-provider enablement)**: NOT run against live Anthropic/OpenAI; cost is an estimate (not real billing); **L2 guardrail `provider='guardrail'` ledger row not yet recorded** (MockGuardrail is free); rare guardrail-post-block-after-L1 path refunds full reservation though L1 spent tokens (minor under-count); the in-`finally` refund itself is best-effort (suppressed on a secondary DB failure). (decision context: local DL-013/14/15 — NOT in git; this plan doc + commits are the tracked record, since `doc/governance/decision-log.md` is gitignored by convention.)
 2. **MQTT subscriber reconnect / error branch 測試覆蓋**
    - 現況（保守表述）：`run_subscriber` 已加 defensive reconnect loop + lifespan task done-callback，但 **reconnect 路徑與 per-message error branch 尚無單元/整合測試**（commit 已註明 uncovered）。
    - Must-do：補測試 — (a) broker 斷線觸發 reconnect（可用 fake aiomqtt client 模擬 raise→重試）；(b) 單則訊息 `process_message` 拋例外不殺 loop；(c) done-callback 在 task 異常結束時記 error。
