@@ -66,6 +66,12 @@ class Settings(BaseSettings):
     ingest_api_key: str = ""
     ai_api_key: str = ""
 
+    # MQTT auto-discovery (Phase 1.3)
+    mqtt_host: str = "mosquitto"
+    mqtt_port: int = 1883
+    mqtt_enabled: bool = False
+    llm_monthly_budget_usd: float = 20.0
+
     @property
     def allowlist(self) -> frozenset[str]:
         return parse_allowlist(self.llm_provider_domain_allowlist)

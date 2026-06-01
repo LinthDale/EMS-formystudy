@@ -65,10 +65,21 @@ class Database:
         async with self.ops_pool.acquire() as conn:  # type: ignore[union-attr]
             async with conn.transaction():
                 if lock:
-                    await conn.execute("SELECT pg_advisory_xact_lock(hashtext($1))", lock)
+                    await conn.execute("SELECT pg_advisory_xact_lock(hashtextextended('device:'||$1, 0))", lock)
                 if freeze_override:
                     await conn.execute(
                         "SELECT set_config('device_service.freeze_override', $1, true)",
                         freeze_override,
                     )
+                yield conn
+
+    @asynccontextmanager
+    async def ai_tx(self, *, lock: str | None = None):
+        """AI-pool transaction (device_service_ai). Never sets a freeze override — the
+        AI role can only mutate non-frozen rows (candidate -> confirmed); the DB trigger
+        blocks frozen rows. Optional advisory lock serialises per-device classification."""
+        async with self.ai_pool.acquire() as conn:  # type: ignore[union-attr]
+            async with conn.transaction():
+                if lock:
+                    await conn.execute("SELECT pg_advisory_xact_lock(hashtextextended('device:'||$1, 0))", lock)
                 yield conn
