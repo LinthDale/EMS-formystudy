@@ -116,6 +116,32 @@ async def test_rate_limited_returns_without_creating(disc):
     assert status == "rate_limited"
 
 
+async def test_relevant_correction_injected_and_conflict_forces_candidate(disc):
+    """FR-331 + FR-332 wiring: a correction on a gateway sibling is retrieved + injected
+    (applied_count bumps), and its corrected_device_type conflicting with the LLM result
+    forces the new device to stay candidate despite mock's high confidence."""
+    process_message, settings, db, classifier, gate = disc
+    async with db.ops_pool.acquire() as conn:
+        await conn.execute(
+            "INSERT INTO public.devices (device_id, status, gateway_id) "
+            "VALUES ('itest-disc-sib', 'candidate', 'ems-gateway')")
+        cid = await conn.fetchval(
+            """INSERT INTO public.device_corrections
+                  (device_id, verdict, corrected_device_type, human_explanation, created_by_key_id, salt_version)
+               VALUES ('itest-disc-sib','wrong_classification','pressure',
+                       'operator says devices on this gateway are pressure sensors not electricity','kid','v1')
+               RETURNING id""")
+    # new electricity device on the SAME gateway -> mock says electricity, gateway correction
+    # says pressure -> FR-332 conflict -> candidate (not confirmed)
+    payload = b"electricity,device_id=itest-disc-inj voltage=220,current=1.1,power_kw=0.2 1700000000"
+    status = await process_message("ems/devices/itest-disc-inj/measurements", payload,
+                                   db=db, classifier=classifier, gate=gate, settings=settings, now=5000.0)
+    assert status == "created:candidate"
+    async with db.ops_pool.acquire() as conn:
+        ac = await conn.fetchval("SELECT applied_count FROM public.device_corrections WHERE id=$1", cid)
+    assert ac == 1  # injected into the prompt -> §7.3a applied_count bump
+
+
 async def test_live_mqtt_publish_creates_and_confirms():
     """End-to-end: subscriber (lifespan) + real mosquitto publish -> candidate -> confirmed."""
     import asyncio

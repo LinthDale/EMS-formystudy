@@ -11,13 +11,15 @@ import json
 import logging
 from collections import deque
 from collections.abc import Mapping
+from dataclasses import replace
 from datetime import datetime, timezone
 
 from .budget_ledger import (
     RESERVE_INPUT_TOKENS, RESERVE_OUTPUT_TOKENS,
     budget_reserve, budget_settle, current_period, reserve_estimate, resolve_pricing,
 )
-from .repositories import device_repo
+from .correction_context import build_context, cap_to_prompt_size, device_type_family, topic_prefix
+from .repositories import correction_repo, device_repo
 from .sanitizer import sanitize
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
 
@@ -139,7 +141,24 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     gate.record_candidate(topic, now)
 
     first_seen = created_at.isoformat() if created_at is not None else datetime.now(timezone.utc).isoformat()
-    sanitized = sanitize(pr.device_id, topic, pr.payload_format, [fields])
+    gateway_id = _gateway_for(topic)
+    # FR-331 / §8.6.4: retrieve relevant ACTIVE corrections (AI role has SELECT-only on
+    # device_corrections, migration 012) + the latest corrected type for FR-332 conflict.
+    async with db.ai_pool.acquire() as conn:
+        corr_rows = await correction_repo.retrieve_relevant(
+            conn, device_id=pr.device_id, gateway_id=gateway_id,
+            device_type_family=device_type_family(pr.device_type), topic_prefix=topic_prefix(topic))
+        latest_corr_type = await correction_repo.latest_corrected_device_type(
+            conn, device_id=pr.device_id, gateway_id=gateway_id)
+    base_sample = sanitize(pr.device_id, topic, pr.payload_format, [fields])
+    # §8.6.5a: cap the rendered user_message at 32KB, LRU-dropping the oldest corrections.
+    kept_ctx, truncated = cap_to_prompt_size(base_sample, [build_context(r) for r in corr_rows])
+    if truncated:
+        _log.warning("correction_truncated device=%s kept=%d of=%d (32KB prompt cap)",
+                     pr.device_id, len(kept_ctx), len(corr_rows))
+    sanitized = replace(base_sample, human_corrections=tuple(kept_ctx))
+    # kept is a prefix of corr_rows (oldest dropped from the tail) -> map back by position
+    applied_ids = [corr_rows[i]["id"] for i in range(len(kept_ctx))]
     period_start, period_end = current_period()
     is_mock = settings.llm_provider == "mock"
     pricing = resolve_pricing(getattr(settings, "llm_pricing_json", ""))
@@ -161,10 +180,16 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     try:
         outcome = await classifier.classify(
             sanitized, budget_ok=budget_ok, default_device_type=pr.device_type,
+            latest_correction_device_type=latest_corr_type,                # FR-332 conflict source
             first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(),
         )
         async with db.ai_tx(lock=pr.device_id) as conn:               # §8.6.8 device advisory lock
             await device_repo.apply_outcome(conn, pr.device_id, outcome)
+            # §7.3a applied_count bump, in the SAME tx as apply_outcome so the two cannot
+            # diverge (no partial-success window). Only when the LLM actually ran — a
+            # budget/guardrail fallback never reached the prompt, so nothing was injected.
+            if outcome.summary_source == "llm" and applied_ids:
+                await correction_repo.mark_applied(conn, applied_ids)
         if not is_mock and budget_ok:
             # settle the reservation to actual cost (refund the over-reservation; a fallback
             # with no real call refunds the full reservation)

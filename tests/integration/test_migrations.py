@@ -19,6 +19,7 @@ _REGISTRY_MIGRATIONS = [
     "009_create_api_views.sql",
     "010_create_db_roles_and_freeze_trigger.sql",
     "011_extend_freeze_protected_columns.sql",
+    "012_grant_ai_correction_read.sql",
 ]
 
 _BACKFILLED_DEVICES = ("sim-001", "plc-001", "sensor-001")
@@ -439,8 +440,81 @@ class TestMigration011ExtendedFreeze:
         with c.cursor() as cur2:
             cur2.execute("UPDATE public.devices SET ai_confidence = NULL WHERE device_id = 'sim-001'")
 
+class TestMigration012AiCorrectionGrant:
+    """012 — AI role gets SELECT + column-scoped UPDATE(applied_count,last_applied_at)
+    on device_corrections, but cannot create or alter human correction content."""
+
+    @staticmethod
+    def _seed_correction(c):
+        # sim-001 is a backfilled (existing) device; insert one correction as superuser
+        with c.cursor() as cur:
+            cur.execute(
+                """INSERT INTO public.device_corrections
+                       (device_id, verdict, corrected_device_type, human_explanation,
+                        created_by_key_id, salt_version)
+                   VALUES ('sim-001','wrong_classification','electricity',
+                           'a sufficiently long operator explanation for the migration grant test',
+                           'kid','v1')
+                   RETURNING id""")
+            cid = cur.fetchone()[0]
+        c.commit()
+        return cid
+
+    def test_ai_can_select_corrections(self, registry_migrated):
+        c = registry_migrated
+        cid = self._seed_correction(c)
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            cur.execute("SELECT id FROM public.device_corrections WHERE id=%s", (cid,))
+            assert cur.fetchone()[0] == cid
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+
+    def test_ai_can_bump_applied_count_only(self, registry_migrated):
+        c = registry_migrated
+        cid = self._seed_correction(c)
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            cur.execute(
+                "UPDATE public.device_corrections SET applied_count=applied_count+1, last_applied_at=now() WHERE id=%s",
+                (cid,))
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+
+    def test_ai_cannot_insert_or_alter_content(self, registry_migrated):
+        c = registry_migrated
+        cid = self._seed_correction(c)
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            for sql, args in (
+                ("UPDATE public.device_corrections SET human_explanation='a long enough replacement explanation here' WHERE id=%s", (cid,)),
+                ("UPDATE public.device_corrections SET is_active=FALSE WHERE id=%s", (cid,)),
+                ("""INSERT INTO public.device_corrections
+                       (device_id, verdict, human_explanation, created_by_key_id, salt_version)
+                    VALUES ('sim-001','good_with_note','another long enough explanation here for test','k','v1')""", None),
+            ):
+                raised = False
+                try:
+                    cur.execute(sql, args) if args else cur.execute(sql)
+                except psycopg2.Error:
+                    raised = True
+                c.rollback()
+                assert raised, f"AI must be denied: {sql[:48]}"
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+
+
 class TestDeviceRegistryChainIdempotent:
-    """Full 003-010 chain must be safe to apply twice (project_rules §13)."""
+    """Full 003-012 chain must be safe to apply twice (project_rules §13)."""
 
     def test_chain_runs_twice(self, db_conn):
         _apply_registry_chain(db_conn)
