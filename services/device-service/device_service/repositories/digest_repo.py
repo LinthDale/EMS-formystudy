@@ -40,6 +40,24 @@ async def get(conn: asyncpg.Connection, device_id: str) -> dict | None:
     return _shape(row) if row is not None else None
 
 
+async def list_low_confidence(
+    conn: asyncpg.Connection, *, threshold: float = 0.9, limit: int = 20,
+) -> list[dict]:
+    """Digests of CANDIDATE devices with ai_confidence <= threshold (MCP
+    list_low_confidence_candidates, §8.2). Lowest-confidence first. Joins devices (status +
+    ai_confidence) to device_review_digests; only devices that already have a digest appear."""
+    rows = await conn.fetch(
+        f"""SELECT {_DR_COLS}
+            FROM public.devices d
+            JOIN public.device_review_digests dr ON dr.device_id = d.device_id
+            WHERE d.status = 'candidate' AND d.ai_confidence IS NOT NULL AND d.ai_confidence <= $1
+            ORDER BY d.ai_confidence ASC, d.device_id
+            LIMIT $2""",
+        threshold, max(1, min(int(limit), 200)),
+    )
+    return [_shape(r) for r in rows]  # type: ignore[misc]
+
+
 async def get_with_device(conn: asyncpg.Connection, device_id: str) -> tuple[bool, dict | None]:
     """Atomic (device_exists, digest_or_None) in one round-trip via LEFT JOIN, so a
     concurrent delete cannot split the existence check from the digest fetch.

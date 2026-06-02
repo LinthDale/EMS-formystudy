@@ -51,11 +51,14 @@ class CorrectionRejected(ValueError):
         super().__init__(f"{reason}: {detail}" if detail else reason)
 
 
-def validate_correction_text(raw: str) -> str:
+def validate_correction_text(raw: str, *, min_len: int = MIN_LEN, max_len: int = MAX_LEN) -> str:
+    """§7.3a content validation. Default length 30-500 (human_explanation / deactivation_reason).
+    min_len is relaxable for shorter free text that still must pass the injection/structural/
+    secret/format checks — e.g. an MCP classify_with_context `hint` (min_len=1)."""
     text = unicodedata.normalize("NFKC", raw or "")          # (0)
 
-    if not (MIN_LEN <= len(text) <= MAX_LEN):                # (1)
-        raise CorrectionRejected("length", f"{len(text)} chars (allowed {MIN_LEN}-{MAX_LEN})")
+    if not (min_len <= len(text) <= max_len):                # (1)
+        raise CorrectionRejected("length", f"{len(text)} chars (allowed {min_len}-{max_len})")
 
     if _CONTROL_RE.search(text):                             # (2)
         raise CorrectionRejected("control_char")
