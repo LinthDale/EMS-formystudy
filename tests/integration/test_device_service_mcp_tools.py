@@ -120,6 +120,33 @@ async def test_classify_with_context_rejects_injection_hint(ctx):
     assert e.value.code == "invalid_hint"
 
 
+async def test_hint_injected_in_cap_and_excluded_from_applied_ids(ctx):
+    """The hint goes THROUGH load_correction_context (so it is inside the §8.6.5a 32KB cap as a
+    must-keep most-recent context), is the first human_correction, and is NOT counted in
+    applied_ids (it has no DB row)."""
+    from device_service.discovery_pipeline import load_correction_context
+    from device_service.llm.types import CorrectionContext
+    settings, db, classifier, su = ctx
+    dev = f"{_PREFIX}hintcap"
+    await _seed_candidate(su, dev, ai_confidence=0.3, gateway_id="ems-gateway", digest=False)
+    await su.execute(
+        "INSERT INTO public.device_corrections "
+        "(device_id, verdict, corrected_device_type, human_explanation, created_by_key_id, salt_version) "
+        "VALUES ($1,'wrong_classification','pressure',"
+        "'a valid operator explanation for this device with sufficient length ok',$2,'v1')", dev, "kid")
+    hint = CorrectionContext("hint", None, "operator hint: looks like a pressure sensor", "t0")
+    loaded = await load_correction_context(
+        db, device_id=dev, topic=f"ems/devices/{dev}/measurements", payload_format="ilp",
+        samples=[{"voltage": 220.0}], device_type="unknown", gateway_id="ems-gateway",
+        prepend_context=hint)
+    hc = loaded.sanitized.human_corrections
+    # robust to other corrections matching on the shared dev DB (sim-001 etc. via gateway):
+    assert hc[0].verdict == "hint"                       # hint is first = most-recent / must-keep
+    assert len(hc) >= 2                                  # hint + >=1 retrieved correction
+    # every non-hint kept context is a persisted correction (has an id); the hint is excluded
+    assert len(loaded.applied_ids) == len(hc) - 1
+
+
 async def test_classify_with_context_non_candidate_errors(ctx):
     from device_service.mcp_tools import ToolError, classify_with_context
     settings, db, classifier, su = ctx

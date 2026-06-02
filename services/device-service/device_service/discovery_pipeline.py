@@ -38,11 +38,16 @@ class CorrectionContextLoad:
 async def load_correction_context(
     db, *, device_id: str, topic: str, payload_format: str, samples: list[dict],
     device_type: str | None, gateway_id: str | None,
+    prepend_context: CorrectionContext | None = None,
 ) -> CorrectionContextLoad:
     """FR-331 / §8.6.4: pull relevant ACTIVE corrections (AI role has SELECT-only on
     device_corrections, migration 012) + the latest corrected type for FR-332, sanitize the
     sample(s), and apply the §8.6.5a 32KB prompt cap (LRU-dropping the oldest corrections).
-    `samples` is the raw observation list (one dict per message / measurement row)."""
+    `samples` is the raw observation list (one dict per message / measurement row).
+
+    `prepend_context` (e.g. an MCP classify_with_context hint) is a NON-persisted context placed
+    FIRST so it is counted IN the 32KB cap (must-keep — the cap drops from the tail, so an older
+    persisted correction is dropped before the hint). It is never counted in applied_ids."""
     async with db.ai_pool.acquire() as conn:
         corr_rows = await correction_repo.retrieve_relevant(
             conn, device_id=device_id, gateway_id=gateway_id,
@@ -50,13 +55,20 @@ async def load_correction_context(
         latest = await correction_repo.latest_corrected_device_type(
             conn, device_id=device_id, gateway_id=gateway_id)
     base_sample = sanitize(device_id, topic, payload_format, samples)
-    kept_ctx, truncated = cap_to_prompt_size(base_sample, [build_context(r) for r in corr_rows])
+    contexts = [build_context(r) for r in corr_rows]
+    offset = 0
+    if prepend_context is not None:
+        contexts = [prepend_context, *contexts]
+        offset = 1
+    kept_ctx, truncated = cap_to_prompt_size(base_sample, contexts)
     if truncated:
         _log.warning("correction_truncated device=%s kept=%d of=%d (32KB prompt cap)",
-                     device_id, len(kept_ctx), len(corr_rows))
+                     device_id, len(kept_ctx), len(contexts))
     sanitized = replace(base_sample, human_corrections=tuple(kept_ctx))
-    # kept is a prefix of corr_rows (oldest dropped from the tail) -> map back by position
-    applied_ids = tuple(corr_rows[i]["id"] for i in range(len(kept_ctx)))
+    # kept is a prefix of `contexts` (oldest dropped from the tail). A prepended context is index 0
+    # and has no DB row -> exclude it from applied_ids; the remaining kept map to corr_rows.
+    retrieved_kept = max(0, len(kept_ctx) - offset)
+    applied_ids = tuple(corr_rows[i]["id"] for i in range(retrieved_kept))
     return CorrectionContextLoad(sanitized, applied_ids, latest)
 
 
@@ -168,16 +180,16 @@ async def reclassify_device(
     # payload_format is informational for the prompt; best-effort by table.
     payload_format = "ilp" if table == "electricity_measurements" else "json"
     first_seen = row["created_at"].isoformat() if row["created_at"] is not None else ""
+    # the (pre-validated) hint is a non-persisted, must-keep MOST-RECENT context -> pass it into
+    # load_correction_context so it is INSIDE the 32KB cap (older persisted corrections drop first,
+    # never the hint), and it stays out of applied_ids.
+    hint_ctx = (CorrectionContext("hint", None, hint, datetime.now(timezone.utc).isoformat())
+                if hint else None)
     ctx = await load_correction_context(
         db, device_id=device_id, topic=row["source_topic"] or "", payload_format=payload_format,
-        samples=samples, device_type=row["device_type"], gateway_id=row["gateway_id"])
-    sanitized = ctx.sanitized
-    if hint:
-        # inject the (pre-validated) hint as the MOST-RECENT correction context so the LLM
-        # weighs it first. Not a persisted correction -> no applied_count / not in applied_ids.
-        hint_ctx = CorrectionContext("hint", None, hint, datetime.now(timezone.utc).isoformat())
-        sanitized = replace(sanitized, human_corrections=(hint_ctx, *sanitized.human_corrections))
+        samples=samples, device_type=row["device_type"], gateway_id=row["gateway_id"],
+        prepend_context=hint_ctx)
     return await classify_under_budget(
-        db, classifier, settings, sanitized=sanitized, default_device_type=row["device_type"],
+        db, classifier, settings, sanitized=ctx.sanitized, default_device_type=row["device_type"],
         latest_correction_device_type=ctx.latest_correction_device_type,
         applied_ids=ctx.applied_ids, device_id=device_id, first_seen=first_seen, force=force)
