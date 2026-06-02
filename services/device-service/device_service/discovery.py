@@ -19,7 +19,7 @@ from .budget_ledger import (
     budget_reserve, budget_settle, current_period, reserve_estimate, resolve_pricing,
 )
 from .correction_context import build_context, cap_to_prompt_size, device_type_family, topic_prefix
-from .repositories import correction_repo, device_repo
+from .repositories import audit_repo, correction_repo, device_repo
 from .sanitizer import sanitize
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
 
@@ -190,6 +190,17 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
             # budget/guardrail fallback never reached the prompt, so nothing was injected.
             if outcome.summary_source == "llm" and applied_ids:
                 await correction_repo.mark_applied(conn, applied_ids)
+            # FR-339 / §8.7.5: persist every L2 guardrail BLOCK to the audit trail (AI role
+            # has INSERT-only on device_audit_log). The consecutive-BLOCK alert is a Grafana
+            # window query over these rows. Atomic with the fallback-persist above.
+            gb = outcome.guardrail_block
+            if gb is not None:
+                await audit_repo.record(
+                    conn, event_type="guardrail_block", actor="ai", device_id=pr.device_id,
+                    outcome="blocked", detail={
+                        "phase": gb.phase, "threat_category": gb.threat_category,
+                        "reasoning": gb.reasoning, "l1_input_hash": gb.l1_input_hash,
+                        "l1_output_hash": gb.l1_output_hash})
         if not is_mock and budget_ok:
             # settle the reservation to actual cost (refund the over-reservation; a fallback
             # with no real call refunds the full reservation)

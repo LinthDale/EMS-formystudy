@@ -22,6 +22,7 @@ _REGISTRY_MIGRATIONS = [
     "012_grant_ai_correction_read.sql",
     "013_index_corrections_key_time.sql",
     "014_create_device_audit_log.sql",
+    "015_audit_log_ai_least_privilege.sql",
 ]
 
 _BACKFILLED_DEVICES = ("sim-001", "plc-001", "sensor-001")
@@ -559,21 +560,20 @@ class TestMigration014AuditLog:
             c.rollback()
             assert raised
 
-    def test_both_roles_insert_select_but_not_update_delete(self, registry_migrated):
+    def test_both_roles_insert_but_not_update_delete(self, registry_migrated):
+        # append-only: both roles INSERT (RETURNING id proves the grant), neither UPDATE/DELETE.
+        # (AI SELECT is revoked by migration 015 — covered in TestMigration015.)
         c = registry_migrated
-        for role in ("device_service_ai", "device_service_ops"):
+        for role, actor in (("device_service_ai", "ai"), ("device_service_ops", "ops")):
             cur = c.cursor()
             try:
                 cur.execute(f"SET ROLE {role}")
                 cur.execute(
                     "INSERT INTO public.device_audit_log (event_type, actor, device_id) "
-                    "VALUES ('guardrail_block', %s, 'itest-audit-x') RETURNING id",
-                    (role.split("_")[-1] if role.endswith("ops") else "ai",))
+                    "VALUES ('guardrail_block', %s, 'itest-audit-x') RETURNING id", (actor,))
                 rid = cur.fetchone()[0]
-                cur.execute("SELECT count(*) FROM public.device_audit_log WHERE id=%s", (rid,))
-                assert cur.fetchone()[0] == 1
+                assert rid
                 c.commit()
-                # append-only: UPDATE and DELETE must be denied
                 for sql in ("UPDATE public.device_audit_log SET outcome='x' WHERE id=%s",
                             "DELETE FROM public.device_audit_log WHERE id=%s"):
                     denied = False
@@ -592,8 +592,53 @@ class TestMigration014AuditLog:
         c.commit()
 
 
+class TestMigration015AiLeastPrivilege:
+    """015 — AI keeps INSERT + column-scoped SELECT(id) on device_audit_log (so RETURNING id
+    works), but cannot read content columns (detail/actor_key_id/...). OPS unchanged."""
+
+    def test_ai_insert_returning_and_count_ok_but_content_denied(self, registry_migrated):
+        c = registry_migrated
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ai")
+            # INSERT ... RETURNING id works (SELECT(id) covers the returned column)
+            cur.execute("INSERT INTO public.device_audit_log (event_type, actor, device_id) "
+                        "VALUES ('guardrail_block','ai','itest-audit-lp') RETURNING id")
+            assert cur.fetchone()[0]
+            c.commit()
+            # reading ANY content column is denied -> no enumeration of operator audit detail
+            for col in ("detail", "actor_key_id", "outcome", "device_id",
+                        "event_type", "request_id", "correction_id"):
+                denied = False
+                try:
+                    cur.execute(f"SELECT {col} FROM public.device_audit_log LIMIT 1")
+                except psycopg2.Error:
+                    denied = True
+                c.rollback()
+                assert denied, f"AI must NOT read device_audit_log.{col} (least-privilege)"
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+
+    def test_ops_can_still_select(self, registry_migrated):
+        c = registry_migrated
+        cur = c.cursor()
+        try:
+            cur.execute("SET ROLE device_service_ops")
+            cur.execute("SELECT count(*) FROM public.device_audit_log")
+            assert cur.fetchone()[0] >= 0
+        finally:
+            c.rollback()
+            cur.execute("RESET ROLE")
+            cur.close()
+        with c.cursor() as cur2:
+            cur2.execute("DELETE FROM public.device_audit_log WHERE device_id IN ('itest-audit-lp','itest-audit-x')")
+        c.commit()
+
+
 class TestDeviceRegistryChainIdempotent:
-    """Full 003-014 chain must be safe to apply twice (project_rules §13)."""
+    """Full 003-015 chain must be safe to apply twice (project_rules §13)."""
 
     def test_chain_runs_twice(self, db_conn):
         _apply_registry_chain(db_conn)
