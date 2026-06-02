@@ -129,15 +129,21 @@ async def test_ai_feedback_rerun_classification_deferred_501(api):
             "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 0
 
 
-async def test_ai_feedback_demote_retired_device_409(api):
-    """A retired device must not be resurrected into the AI pipeline via demote (HIGH fix).
-    409 + no correction written."""
+async def test_ai_feedback_demote_only_valid_for_confirmed(api):
+    """demote_to_candidate is the §885 confirmed->candidate transition only. A retired
+    device (must not be resurrected) AND a still-candidate device (already the target,
+    must not wipe classified_by) both -> 409 with no correction written."""
     client, db = api
+    # candidate (freshly created, not confirmed) -> 409
     await _seed_device(client)
-    assert (await client.delete("/devices/itest-corr-1", headers=_OPS)).status_code == 204  # -> retired
     r = await client.post("/devices/itest-corr-1/ai-feedback",
                           json=_body(demote_to_candidate=True), headers=_OPS)
     assert r.status_code == 409
+    # retired -> 409
+    assert (await client.delete("/devices/itest-corr-1", headers=_OPS)).status_code == 204
+    r2 = await client.post("/devices/itest-corr-1/ai-feedback",
+                           json=_body(demote_to_candidate=True), headers=_OPS)
+    assert r2.status_code == 409
     async with db.ops_pool.acquire() as conn:
         assert await conn.fetchval(
             "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 0

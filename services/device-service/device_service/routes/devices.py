@@ -85,12 +85,10 @@ async def create_ai_feedback(
     into the classifier prompt. Raw API keys are never stored; audit identity is
     HMAC-derived from the presented OPS key and the configured audit salt.
 
-    Rate-limit note (FR-343): the per-device limit is serialised by the
-    ops_tx(lock=device_id) advisory lock, but the per-key limit is NOT — two
-    concurrent requests with the same key on DIFFERENT devices hold different
-    locks and can each pass the per-key count, overshooting by ~1. This is an
-    accepted soft-limit trade-off (a global per-key lock would contend across all
-    devices); tighten with pg_advisory_xact_lock(hashtext(key_id)) if ever needed.
+    Rate-limit (FR-343) is a HARD limit on both axes: the per-device limit is
+    serialised by the ops_tx(lock=device_id) advisory lock, and the per-key limit by
+    a second 'correction-key:' advisory lock taken below (so the same key on different
+    devices cannot concurrently overshoot). Both locks are transaction-scoped.
     """
     # FR-330 rerun_classification needs the on-demand reclassify pipeline (fetch recent raw
     # samples from the measurements tables via the OPS pool, §234/§761) — the same primitive
@@ -120,13 +118,21 @@ async def create_ai_feedback(
     override = rid if body.demote_to_candidate else None
     db = request.app.state.db
     async with db.ops_tx(lock=device_id, freeze_override=override) as conn:
+        # FR-343 per-key HARD limit: also serialise same-key submissions across devices
+        # (the device lock only serialises per-device, so a single key hitting many devices
+        # concurrently could otherwise overshoot). Acquired AFTER the device lock — no path
+        # takes device-after-key, so the fixed order cannot deadlock.
+        await conn.execute(
+            "SELECT pg_advisory_xact_lock(hashtextextended('correction-key:'||$1, 0))", key_id)
         current = await device_repo.get(conn, device_id)
         if current is None:
             raise HTTPException(404, "device not found")
-        # demote re-opens for review (§885 confirmed->candidate); a retired device must not be
-        # resurrected into the AI pipeline. Reject before writing the correction.
-        if body.demote_to_candidate and current["status"] == "retired":
-            raise HTTPException(409, "cannot demote a retired device to candidate")
+        # demote is ONLY the §885 confirmed->candidate transition. A candidate is already the
+        # target (demoting would needlessly wipe classified_by); a retired device must not be
+        # resurrected into the AI pipeline. Reject any non-confirmed demote before writing.
+        if body.demote_to_candidate and current["status"] != "confirmed":
+            raise HTTPException(
+                409, f"demote_to_candidate only applies to a confirmed device (status={current['status']!r})")
         if await correction_repo.count_recent_by_key(conn, key_id, since) >= _CORRECTION_KEY_LIMIT_PER_HOUR:
             _audit.warning("ai_feedback_rate_limited scope=key key_id=%s device=%s", key_id, device_id)
             raise HTTPException(429, "correction rate limit exceeded: per-key 30/hour")

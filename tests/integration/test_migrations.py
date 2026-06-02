@@ -20,6 +20,7 @@ _REGISTRY_MIGRATIONS = [
     "010_create_db_roles_and_freeze_trigger.sql",
     "011_extend_freeze_protected_columns.sql",
     "012_grant_ai_correction_read.sql",
+    "013_index_corrections_key_time.sql",
 ]
 
 _BACKFILLED_DEVICES = ("sim-001", "plc-001", "sensor-001")
@@ -513,8 +514,17 @@ class TestMigration012AiCorrectionGrant:
             cur.close()
 
 
+class TestMigration013KeyTimeIndex:
+    """013 — per-key rate-limit support index on (created_by_key_id, created_at)."""
+
+    def test_index_exists(self, registry_migrated):
+        with registry_migrated.cursor() as cur:
+            cur.execute("SELECT indexname FROM pg_indexes WHERE indexname='device_corrections_key_time'")
+            assert cur.fetchone() is not None
+
+
 class TestDeviceRegistryChainIdempotent:
-    """Full 003-012 chain must be safe to apply twice (project_rules §13)."""
+    """Full 003-013 chain must be safe to apply twice (project_rules §13)."""
 
     def test_chain_runs_twice(self, db_conn):
         _apply_registry_chain(db_conn)
