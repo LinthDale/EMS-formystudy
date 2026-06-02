@@ -5,7 +5,6 @@ Override/reject emit a structured audit log line carrying the request id (interi
 accountability until the dedicated audit table lands in Phase 1.4 observability)."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone
 import logging
 import uuid
 
@@ -13,9 +12,9 @@ import asyncpg
 from fastapi import APIRouter, Header, HTTPException, Request
 
 from ..auth import Channel, require
-from ..correction_validator import CorrectionRejected, validate_correction_text
+from ..correction_service import CorrectionService, CorrectionServiceError
+from ..correction_validator import CorrectionRejected
 from ..key_id import hash_key_id
-from ..llm.prompt import PROMPT_VERSION
 from ..models import (
     CorrectionCreate,
     CorrectionDeactivateRequest,
@@ -26,34 +25,26 @@ from ..models import (
     DigestOut,
     OverrideRequest,
 )
-from ..repositories import audit_repo, correction_repo, device_repo, digest_repo, signal_repo
+from ..repositories import audit_repo, device_repo, digest_repo, signal_repo
 
 router = APIRouter(prefix="/devices", tags=["devices"])
 _OPS = require(Channel.OPS)
 _audit = logging.getLogger("device_service.audit")
-_CORRECTION_KEY_LIMIT_PER_HOUR = 30
-_CORRECTION_DEVICE_LIMIT_PER_HOUR = 10
 
 
 def _rid() -> str:
     return uuid.uuid4().hex
 
 
-def _validated_correction_text(raw: str) -> str:
+async def _call(coro):
+    """Run a CorrectionService coroutine, mapping its HTTP-agnostic domain errors to HTTP
+    responses (keeps the service free of FastAPI)."""
     try:
-        return validate_correction_text(raw)
-    except CorrectionRejected as exc:
-        # FR-330 / FR-341: content-rule violation -> 400 (spec); pydantic body-shape
-        # errors stay 422. detail carries the stable machine reason for clients.
-        raise HTTPException(status_code=400, detail={"reason": exc.reason, "message": str(exc)}) from exc
-
-
-def _created_by_key_id(raw_key: str | None, request: Request) -> str:
-    settings = request.app.state.settings
-    try:
-        return hash_key_id(raw_key or "", settings.audit_hash_salt, settings.audit_salt_version)
-    except ValueError as exc:
-        raise HTTPException(status_code=503, detail=f"audit identity unavailable: {exc}") from exc
+        return await coro
+    except CorrectionRejected as exc:   # §7.3a content-rule violation -> 400
+        raise HTTPException(400, {"reason": exc.reason, "message": str(exc)}) from exc
+    except CorrectionServiceError as exc:
+        raise HTTPException(exc.status_code, exc.detail) from exc
 
 
 def _optional_key_id(raw_key: str | None, request: Request) -> tuple[str | None, str | None]:
@@ -92,81 +83,23 @@ async def create_ai_feedback(
     request: Request,
     x_api_key: str | None = Header(default=None, alias="X-API-Key"),
 ) -> dict:
-    """Persist OPS human feedback for later correction-loop retrieval.
-
-    Free text is validated before persistence because it will later be injected
-    into the classifier prompt. Raw API keys are never stored; audit identity is
-    HMAC-derived from the presented OPS key and the configured audit salt.
-
-    Rate-limit (FR-343) is a HARD limit on both axes: the per-device limit is
-    serialised by the ops_tx(lock=device_id) advisory lock, and the per-key limit by
-    a second 'correction-key:' advisory lock taken below (so the same key on different
-    devices cannot concurrently overshoot). Both locks are transaction-scoped.
-    """
-    # FR-330 rerun_classification needs the on-demand reclassify pipeline (fetch recent raw
-    # samples from the measurements tables via the OPS pool, §234/§761) — the same primitive
-    # as the MCP classify_with_context tool, so it lands with that capability. Reject a true
-    # value now rather than silently ignoring it. demote_to_candidate IS supported below.
+    """OPS human feedback (FR-330). Validation, audit identity, FR-343 rate limit, persist,
+    optional demote + audit all live in CorrectionService; the router only rejects the not-yet
+    -supported rerun flag and maps domain errors to HTTP."""
     if body.rerun_classification:
+        # rerun needs the on-demand reclassify pipeline (recent raw samples via the OPS pool,
+        # §234/§761) — the MCP classify_with_context primitive; lands with that capability.
         raise HTTPException(
             501, "rerun_classification not yet supported (needs the on-demand reclassify "
                  "pipeline shared with MCP classify_with_context)")
-
-    human_explanation = _validated_correction_text(body.human_explanation)
-    # _OPS dependency already guaranteed a non-empty valid OPS key; x_api_key is never None here.
-    key_id = _created_by_key_id(x_api_key, request)
-    since = datetime.now(timezone.utc) - timedelta(hours=1)
-    data = body.model_dump(exclude={"rerun_classification", "demote_to_candidate"})
-    data.update(
-        device_id=device_id,
-        human_explanation=human_explanation,
-        created_by_key_id=key_id,
-        salt_version=request.app.state.settings.audit_salt_version,
-        prompt_version_at_correction=PROMPT_VERSION,  # server-stamped provenance, not client-supplied
-    )
-
-    # demote_to_candidate re-opens a (possibly frozen) device for review — needs the freeze
-    # override token (§590 "ai-feedback (with demote)") so the trigger permits the status flip.
-    rid = _rid()
-    override = rid if body.demote_to_candidate else None
-    db = request.app.state.db
-    async with db.ops_tx(lock=device_id, freeze_override=override) as conn:
-        # FR-343 per-key HARD limit: also serialise same-key submissions across devices
-        # (the device lock only serialises per-device, so a single key hitting many devices
-        # concurrently could otherwise overshoot). Acquired AFTER the device lock — no path
-        # takes device-after-key, so the fixed order cannot deadlock.
-        await conn.execute(
-            "SELECT pg_advisory_xact_lock(hashtextextended('correction-key:'||$1, 0))", key_id)
-        current = await device_repo.get(conn, device_id)
-        if current is None:
-            raise HTTPException(404, "device not found")
-        # demote is ONLY the §885 confirmed->candidate transition. A candidate is already the
-        # target (demoting would needlessly wipe classified_by); a retired device must not be
-        # resurrected into the AI pipeline. Reject any non-confirmed demote before writing.
-        if body.demote_to_candidate and current["status"] != "confirmed":
-            raise HTTPException(
-                409, f"demote_to_candidate only applies to a confirmed device (status={current['status']!r})")
-        if await correction_repo.count_recent_by_key(conn, key_id, since) >= _CORRECTION_KEY_LIMIT_PER_HOUR:
-            _audit.warning("ai_feedback_rate_limited scope=key key_id=%s device=%s", key_id, device_id)
-            raise HTTPException(429, "correction rate limit exceeded: per-key 30/hour")
-        if await correction_repo.count_recent_by_device(conn, device_id, since) >= _CORRECTION_DEVICE_LIMIT_PER_HOUR:
-            _audit.warning("ai_feedback_rate_limited scope=device key_id=%s device=%s", key_id, device_id)
-            raise HTTPException(429, "correction rate limit exceeded: per-device 10/hour")
-        rec = await correction_repo.create(conn, data)
-        if body.demote_to_candidate:
-            if await device_repo.demote_to_candidate(conn, device_id) is None:
-                raise HTTPException(404, "device not found")   # concurrent delete within the lock
-            _audit.info("ai_feedback_demote device=%s from_status=%s correction_id=%s request_id=%s actor=ops",
-                        device_id, current["status"], rec["id"], rid)
-    return rec
+    svc = CorrectionService(request.app.state.db, request.app.state.settings)
+    return await _call(svc.create_feedback(device_id, body, x_api_key))
 
 
 @router.get("/{device_id}/corrections", response_model=list[CorrectionOut], dependencies=[_OPS])
 async def list_corrections(device_id: str, request: Request, active_only: bool = False) -> list[dict]:
-    async with request.app.state.db.ops_pool.acquire() as conn:
-        if await device_repo.get(conn, device_id) is None:
-            raise HTTPException(404, "device not found")
-        return await correction_repo.list_for_device(conn, device_id, active_only=active_only)
+    svc = CorrectionService(request.app.state.db, request.app.state.settings)
+    return await _call(svc.list_feedback(device_id, active_only=active_only))
 
 
 @router.post("/{device_id}/corrections/{correction_id}/deactivate", response_model=CorrectionOut, dependencies=[_OPS])
@@ -175,16 +108,10 @@ async def deactivate_correction(
     correction_id: int,
     body: CorrectionDeactivateRequest,
     request: Request,
+    x_api_key: str | None = Header(default=None, alias="X-API-Key"),
 ) -> dict:
-    reason = _validated_correction_text(body.reason)
-    async with request.app.state.db.ops_pool.acquire() as conn:
-        if await device_repo.get(conn, device_id) is None:
-            raise HTTPException(404, "device not found")
-        rec = await correction_repo.deactivate(conn, device_id, correction_id, reason)
-    if rec is None:
-        raise HTTPException(409, "correction not active or not found")
-    _audit.info("correction_deactivated correction_id=%s actor=ops", correction_id)
-    return rec
+    svc = CorrectionService(request.app.state.db, request.app.state.settings)
+    return await _call(svc.deactivate(device_id, correction_id, body.reason, x_api_key))
 
 
 @router.get("/{device_id}/human-review", response_model=DigestOut, dependencies=[_OPS])
