@@ -92,11 +92,14 @@ async def create_ai_feedback(
     accepted soft-limit trade-off (a global per-key lock would contend across all
     devices); tighten with pg_advisory_xact_lock(hashtext(key_id)) if ever needed.
     """
-    # FR-330 action flags (immediate re-classify / unfreeze->candidate) are wired in slice 2c
-    # with the classify path. Reject a true value now rather than silently ignoring it.
-    if body.rerun_classification or body.demote_to_candidate:
+    # FR-330 rerun_classification needs the on-demand reclassify pipeline (fetch recent raw
+    # samples from the measurements tables via the OPS pool, §234/§761) — the same primitive
+    # as the MCP classify_with_context tool, so it lands with that capability. Reject a true
+    # value now rather than silently ignoring it. demote_to_candidate IS supported below.
+    if body.rerun_classification:
         raise HTTPException(
-            501, "rerun_classification / demote_to_candidate not yet supported (lands in slice 2c)")
+            501, "rerun_classification not yet supported (needs the on-demand reclassify "
+                 "pipeline shared with MCP classify_with_context)")
 
     human_explanation = _validated_correction_text(body.human_explanation)
     # _OPS dependency already guaranteed a non-empty valid OPS key; x_api_key is never None here.
@@ -111,10 +114,19 @@ async def create_ai_feedback(
         prompt_version_at_correction=PROMPT_VERSION,  # server-stamped provenance, not client-supplied
     )
 
+    # demote_to_candidate re-opens a (possibly frozen) device for review — needs the freeze
+    # override token (§590 "ai-feedback (with demote)") so the trigger permits the status flip.
+    rid = _rid()
+    override = rid if body.demote_to_candidate else None
     db = request.app.state.db
-    async with db.ops_tx(lock=device_id) as conn:
-        if await device_repo.get(conn, device_id) is None:
+    async with db.ops_tx(lock=device_id, freeze_override=override) as conn:
+        current = await device_repo.get(conn, device_id)
+        if current is None:
             raise HTTPException(404, "device not found")
+        # demote re-opens for review (§885 confirmed->candidate); a retired device must not be
+        # resurrected into the AI pipeline. Reject before writing the correction.
+        if body.demote_to_candidate and current["status"] == "retired":
+            raise HTTPException(409, "cannot demote a retired device to candidate")
         if await correction_repo.count_recent_by_key(conn, key_id, since) >= _CORRECTION_KEY_LIMIT_PER_HOUR:
             _audit.warning("ai_feedback_rate_limited scope=key key_id=%s device=%s", key_id, device_id)
             raise HTTPException(429, "correction rate limit exceeded: per-key 30/hour")
@@ -122,6 +134,11 @@ async def create_ai_feedback(
             _audit.warning("ai_feedback_rate_limited scope=device key_id=%s device=%s", key_id, device_id)
             raise HTTPException(429, "correction rate limit exceeded: per-device 10/hour")
         rec = await correction_repo.create(conn, data)
+        if body.demote_to_candidate:
+            if await device_repo.demote_to_candidate(conn, device_id) is None:
+                raise HTTPException(404, "device not found")   # concurrent delete within the lock
+            _audit.info("ai_feedback_demote device=%s from_status=%s correction_id=%s request_id=%s actor=ops",
+                        device_id, current["status"], rec["id"], rid)
     return rec
 
 
