@@ -221,3 +221,230 @@ groups:
         isPaused: false
         notification_settings:
           receiver: Telegram
+
+  # ============================================================
+  # Group 3: 設備分類安全告警 (PRD-0003 device_audit_log)
+  # 來源 = device_audit_log rows (audit Slice A-C2)。低基數設計：用 SQL
+  # GROUP BY ... HAVING 算出「跨閾值的 device/key 數量」當單一指標，device_id /
+  # actor_key_id 不進 Prometheus label。noData/execErr = OK：沒有 audit row 或
+  # 查詢暫時失敗都不應誤觸安全告警。
+  # ============================================================
+  - orgId: 1
+    name: EMS-設備分類安全
+    folder: EMS
+    interval: 1m
+    rules:
+      # ----- FR-339：L2 guardrail 連續 BLOCK 同 device / 1h ≥ 5 -----
+      - uid: ems-guardrail-block-burst
+        title: "L2 guardrail BLOCK 爆量 (同 device 1h ≥ 5 次)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS offending_devices FROM (
+                  SELECT device_id
+                  FROM public.device_audit_log
+                  WHERE event_type = 'guardrail_block'
+                    AND event_time > now() - interval '1 hour'
+                  GROUP BY device_id
+                  HAVING count(*) >= 5
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        # 安全告警：查詢執行失敗時進 Error 狀態（會通知），避免壞查詢靜默失效；
+        # 空表/平靜期則維持 OK（沒有 audit row 不該誤觸）。
+        execErrState: Error
+        for: 0s
+        labels:
+          severity: warning
+          component: device-classification
+        annotations:
+          summary: "L2 guardrail 連續 BLOCK (FR-339)"
+          description: "過去 1 小時內有 device 的 L2 guardrail BLOCK ≥ 5 次，可能正被持續 prompt-injection 攻擊。查 SELECT device_id, count(*) FROM device_audit_log WHERE event_type='guardrail_block' AND event_time>now()-interval '1 hour' GROUP BY device_id HAVING count(*)>=5。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- FR-344：大量 deactivate 同 key / 1h ≥ 5 -----
+      - uid: ems-mass-deactivate-1h
+        title: "大量 deactivate (同 key 1h ≥ 5)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS offending_keys FROM (
+                  SELECT actor_key_id
+                  FROM public.device_audit_log
+                  WHERE event_type = 'deactivate'
+                    AND actor_key_id IS NOT NULL
+                    AND event_time > now() - interval '1 hour'
+                  GROUP BY actor_key_id
+                  HAVING count(*) >= 5
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 3600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        # 安全告警：查詢執行失敗時進 Error 狀態（會通知），避免壞查詢靜默失效；
+        # 空表/平靜期則維持 OK（沒有 audit row 不該誤觸）。
+        execErrState: Error
+        for: 0s
+        labels:
+          severity: warning
+          component: device-corrections
+        annotations:
+          summary: "大量 deactivate / 1h (FR-344)"
+          description: "過去 1 小時內有 OPS key 將 ≥ 5 筆 corrections 標為 deactivate，可能是 correction 毒化/竄改。查 device_audit_log event_type='deactivate' GROUP BY actor_key_id。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- FR-344：大量 deactivate 同 key / 24h ≥ 20 -----
+      - uid: ems-mass-deactivate-24h
+        title: "大量 deactivate (同 key 24h ≥ 20)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 86400
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS offending_keys FROM (
+                  SELECT actor_key_id
+                  FROM public.device_audit_log
+                  WHERE event_type = 'deactivate'
+                    AND actor_key_id IS NOT NULL
+                    AND event_time > now() - interval '24 hours'
+                  GROUP BY actor_key_id
+                  HAVING count(*) >= 20
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 86400
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 86400
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        # 安全告警：查詢執行失敗時進 Error 狀態（會通知），避免壞查詢靜默失效；
+        # 空表/平靜期則維持 OK（沒有 audit row 不該誤觸）。
+        execErrState: Error
+        for: 0s
+        labels:
+          severity: warning
+          component: device-corrections
+        annotations:
+          summary: "大量 deactivate / 24h (FR-344)"
+          description: "過去 24 小時內有 OPS key 將 ≥ 20 筆 corrections 標為 deactivate。查 device_audit_log event_type='deactivate' GROUP BY actor_key_id。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
