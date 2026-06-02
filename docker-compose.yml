@@ -217,6 +217,33 @@ services:
       - "8002:8002"
     restart: unless-stopped
 
+  # device-service MCP endpoint (PRD-0003 §8.2, ADR-012): SAME image as device-service, runs the
+  # MCP Streamable-HTTP server instead of the REST app. Host mapping is loopback-only
+  # (127.0.0.1:8766) — control/management-plane separation; X-API-Key=AI_API_KEY is the gate.
+  device-service-mcp:
+    build: ./services/device-service
+    container_name: ems-device-service-mcp
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    command: ["uvicorn", "device_service.mcp_server:app", "--host", "0.0.0.0", "--port", "8766"]
+    environment:
+      DEVICE_SERVICE_CONFIG_FILE: /app/config/device-service.toml
+      DB_HOST: timescaledb
+      DB_NAME: ems
+      DB_AI_PASSWORD: ${DB_AI_PASSWORD:-changeme_ai}
+      DB_OPS_PASSWORD: ${DB_OPS_PASSWORD:-changeme_ops}
+      AI_API_KEY: ${AI_API_KEY:-}
+      LLM_PROVIDER: ${LLM_PROVIDER:-mock}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      LLM_BASE_URL: ${LLM_BASE_URL:-}
+    volumes:
+      - ./config:/app/config:ro
+    ports:
+      - "127.0.0.1:8766:8766"
+    restart: unless-stopped
+
 volumes:
   timescale_data:
   grafana_data:
