@@ -43,7 +43,12 @@ async def count_recent(
     device_id: str | None = None, actor_key_id: str | None = None,
 ) -> int:
     """Count events of a type since a cutoff, optionally scoped by device or key.
-    Serves FR-339 (per-device guardrail BLOCK / 1h) and FR-344 (per-key deactivate window)."""
+    Serves the FR-344 per-key deactivate window from the OPS path (CorrectionService).
+
+    OPS / Grafana ONLY — do NOT call from the AI path: after migration 015 the AI role
+    has column-scoped SELECT(id) on device_audit_log and CANNOT read event_type /
+    event_time / device_id / actor_key_id, so this query would be permission-denied for AI.
+    The FR-339 / FR-344 alert windows are Grafana SQL queries (own DB user), not AI-side."""
     clauses, args = ["event_type = $1", "event_time >= $2"], [event_type, since]
     if device_id is not None:
         args.append(device_id)
