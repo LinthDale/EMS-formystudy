@@ -138,7 +138,7 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     # correction-context loader -> classifier runner (which persists the outcome + settles budget).
     ctx = await load_correction_context(
         db, device_id=pr.device_id, topic=topic, payload_format=pr.payload_format,
-        fields=fields, device_type=pr.device_type, gateway_id=_gateway_for(topic))
+        samples=[fields], device_type=pr.device_type, gateway_id=_gateway_for(topic))
     outcome = await classify_under_budget(
         db, classifier, settings, sanitized=ctx.sanitized, default_device_type=pr.device_type,
         latest_correction_device_type=ctx.latest_correction_device_type,
