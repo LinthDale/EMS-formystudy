@@ -2,8 +2,19 @@
 import json
 import os
 
+import asyncpg
 import pytest
 from httpx import ASGITransport, AsyncClient
+
+
+async def _su():
+    """Superuser connection — INSERT/DELETE measurement rows (OPS has SELECT-only on them)."""
+    try:
+        return await asyncpg.connect(
+            host=os.getenv("EMS_DB_HOST", "timescaledb"), database="ems",
+            user="postgres", password=os.getenv("POSTGRES_PASSWORD", "postgres"))
+    except Exception as exc:  # noqa: BLE001
+        pytest.skip(f"superuser DB connection unavailable: {exc}")
 
 pytestmark = pytest.mark.integration
 
@@ -131,6 +142,32 @@ async def test_ai_feedback_rerun_classification_records_and_triggers_reclassify(
     async with db.ops_pool.acquire() as conn:
         assert await conn.fetchval(
             "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 1
+
+
+async def test_ai_feedback_rerun_actually_reclassifies_device_with_samples(api):
+    """End-to-end: rerun_classification on a CANDIDATE with recent measurement samples really
+    re-classifies it (device gets ai_* written). Proves the REST rerun -> reclassify path,
+    not just the no-op case."""
+    client, db = api
+    dev = "itest-corr-rerun"
+    # candidate on the electricity gateway so reclassify can find its measurement table
+    assert (await client.post("/devices", json={"device_id": dev, "device_type": "electricity",
+                                                 "gateway_id": "ems-gateway"}, headers=_OPS)).status_code == 201
+    su = await _su()
+    try:
+        for i in range(3):
+            await su.execute(
+                "INSERT INTO public.electricity_measurements (time, device_id, voltage, current, power_kw, energy_kwh) "
+                "VALUES (now() - ($2||' seconds')::interval, $1, 220, 1.1, 0.2, 10.0)", dev, str(i))
+        r = await client.post(f"/devices/{dev}/ai-feedback",
+                              json=_body(rerun_classification=True), headers=_OPS)
+        assert r.status_code == 201
+        row = await su.fetchrow(
+            "SELECT ai_confidence, classified_by FROM public.devices WHERE device_id=$1", dev)
+        assert row["ai_confidence"] is not None and row["classified_by"] == "ai"  # actually re-classified
+    finally:
+        await su.execute("DELETE FROM public.electricity_measurements WHERE device_id=$1", dev)
+        await su.close()
 
 
 async def test_ai_feedback_demote_only_valid_for_confirmed(api):

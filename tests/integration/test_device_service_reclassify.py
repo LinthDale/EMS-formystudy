@@ -104,3 +104,19 @@ async def test_reclassify_unknown_device_returns_none(ctx):
     from device_service.discovery_pipeline import reclassify_device
     settings, db, classifier, su = ctx
     assert await reclassify_device(db, classifier, settings, device_id=f"{_PREFIX}ghost") is None
+
+
+async def test_reclassify_non_candidate_skipped_even_with_samples(ctx):
+    """A confirmed/frozen device is skipped (returns None) BEFORE any LLM call — even with
+    samples present — so rerun never burns budget on a guaranteed apply_outcome no-op. Operator
+    must demote_to_candidate first (FR-330 / §900)."""
+    from device_service.discovery_pipeline import reclassify_device
+    settings, db, classifier, su = ctx
+    dev = f"{_PREFIX}confirmed"
+    await su.execute(
+        "INSERT INTO public.devices (device_id, status, gateway_id, classified_by) "
+        "VALUES ($1,'confirmed','ems-gateway','human')", dev)
+    await su.execute(
+        "INSERT INTO public.electricity_measurements (time, device_id, voltage, current, power_kw, energy_kwh) "
+        "VALUES (now(), $1, 220, 1.1, 0.2, 10.0)", dev)
+    assert await reclassify_device(db, classifier, settings, device_id=dev) is None

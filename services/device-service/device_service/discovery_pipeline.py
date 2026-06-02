@@ -141,9 +141,16 @@ async def reclassify_device(db, classifier, settings, *, device_id: str, force: 
     has no known sample source, or has no recent samples (nothing to classify)."""
     async with db.ops_pool.acquire() as conn:   # OPS: measurements SELECT + devices SELECT
         row = await conn.fetchrow(
-            "SELECT gateway_id, device_type, created_at, metadata->>'source_topic' AS source_topic "
+            "SELECT status, gateway_id, device_type, created_at, metadata->>'source_topic' AS source_topic "
             "FROM public.devices WHERE device_id = $1", device_id)
         if row is None:
+            return None
+        # apply_outcome only mutates a non-frozen candidate, so classifying a confirmed/retired
+        # device would burn an LLM call for a guaranteed persistence no-op. Skip it here (no
+        # budget spend) and tell the operator to demote first (FR-330 demote_to_candidate / §900).
+        if row["status"] != "candidate":
+            _log.info("reclassify skipped device=%s: status=%r is not 'candidate' "
+                      "(demote_to_candidate=true to re-open before rerun)", device_id, row["status"])
             return None
         table = measurements_repo.table_for_gateway(row["gateway_id"])
         if table is None:
