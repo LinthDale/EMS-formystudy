@@ -112,19 +112,53 @@ async def test_ai_feedback_missing_device_404(api):
     assert r.status_code == 404
 
 
-@pytest.mark.parametrize("flag", ["rerun_classification", "demote_to_candidate"])
-async def test_ai_feedback_action_flags_deferred_to_2c(api, flag):
-    """FR-330 rerun/demote flags are not silently ignored: a true value is rejected
-    (501) until slice 2c wires the classify/lifecycle path. Default-false works."""
+async def test_ai_feedback_rerun_classification_deferred_501(api):
+    """rerun_classification needs the on-demand reclassify pipeline (MCP classify_with_context
+    primitive); a true value is rejected (501) rather than silently ignored, with no DB write."""
     client, db = api
     await _seed_device(client)
-    r = await client.post(f"/devices/itest-corr-1/ai-feedback", json=_body(**{flag: True}), headers=_OPS)
+    r = await client.post("/devices/itest-corr-1/ai-feedback",
+                          json=_body(rerun_classification=True), headers=_OPS)
     assert r.status_code == 501
-    # rejected before any DB write
+    # combined with demote, the 501 still wins (rerun checked first) and nothing is written
+    r2 = await client.post("/devices/itest-corr-1/ai-feedback",
+                           json=_body(rerun_classification=True, demote_to_candidate=True), headers=_OPS)
+    assert r2.status_code == 501
     async with db.ops_pool.acquire() as conn:
         assert await conn.fetchval(
-            "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'"
-        ) == 0
+            "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 0
+
+
+async def test_ai_feedback_demote_retired_device_409(api):
+    """A retired device must not be resurrected into the AI pipeline via demote (HIGH fix).
+    409 + no correction written."""
+    client, db = api
+    await _seed_device(client)
+    assert (await client.delete("/devices/itest-corr-1", headers=_OPS)).status_code == 204  # -> retired
+    r = await client.post("/devices/itest-corr-1/ai-feedback",
+                          json=_body(demote_to_candidate=True), headers=_OPS)
+    assert r.status_code == 409
+    async with db.ops_pool.acquire() as conn:
+        assert await conn.fetchval(
+            "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 0
+
+
+async def test_ai_feedback_demote_to_candidate_reopens_frozen_device(api):
+    """FR-330 demote_to_candidate: re-open a human-confirmed (frozen) device for review.
+    The correction is written AND the device flips confirmed->candidate (classified_by
+    cleared) via the freeze-override token, so the AI path may re-classify it later."""
+    client, db = api
+    await _seed_device(client)
+    # confirm -> frozen (classified_by=human, status=confirmed)
+    assert (await client.post("/devices/itest-corr-1/confirm", headers=_OPS)).json()["status"] == "confirmed"
+    # a plain PATCH on the frozen device is blocked (proves it is frozen)
+    assert (await client.patch("/devices/itest-corr-1", json={"device_type": "motor"}, headers=_OPS)).status_code == 409
+
+    r = await client.post("/devices/itest-corr-1/ai-feedback",
+                          json=_body(demote_to_candidate=True), headers=_OPS)
+    assert r.status_code == 201  # correction recorded
+    dev = (await client.get("/devices/itest-corr-1", headers=_OPS)).json()
+    assert dev["status"] == "candidate" and dev["classified_by"] is None and dev["confirmed_at"] is None
 
 
 async def test_list_and_deactivate_corrections(api):

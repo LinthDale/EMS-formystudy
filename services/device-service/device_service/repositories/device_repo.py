@@ -11,6 +11,8 @@ _COLS = (
 )
 # columns a plain PATCH may set (status / classified_by / lifecycle handled by dedicated endpoints)
 _UPDATABLE = ("device_type", "protocol", "vendor", "model", "location", "gateway_id")
+# classified_by values that mark a row as human-owned (frozen by the migration-010 trigger)
+FREEZE_SET = ("human", "manual_override", "migration_backfill")
 
 
 async def create(conn: asyncpg.Connection, data: dict) -> asyncpg.Record:
@@ -76,7 +78,19 @@ async def set_lifecycle(
         *args,
     )
 
-FREEZE_SET = ("human", "manual_override", "migration_backfill")
+async def demote_to_candidate(conn: asyncpg.Connection, device_id: str) -> asyncpg.Record | None:
+    """Re-open a device for review (FR-330 demote_to_candidate / §8.6 confirmed→candidate).
+    Clears classified_by so the AI path may re-classify it (apply_outcome requires a
+    non-frozen candidate); also clears confirmed_at. status/classified_by ARE frozen
+    columns, so the caller must hold a freeze_override token (ops_tx) for a frozen row;
+    confirmed_at is NOT frozen but is cleared in the same token-bearing UPDATE.
+    Returns None if the device_id no longer exists. Caller must reject status='retired'."""
+    return await conn.fetchrow(
+        f"""UPDATE public.devices
+              SET status='candidate', classified_by=NULL, confirmed_at=NULL, updated_at=now()
+            WHERE device_id=$1 RETURNING {_COLS}""",
+        device_id,
+    )
 
 
 async def create_candidate(
