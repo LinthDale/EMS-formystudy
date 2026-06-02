@@ -22,7 +22,7 @@ from .budget_ledger import (
 from .classifier import Outcome
 from .correction_context import build_context, cap_to_prompt_size, device_type_family, topic_prefix
 from .llm.types import SanitizedSample
-from .repositories import audit_repo, correction_repo, device_repo
+from .repositories import audit_repo, correction_repo, device_repo, measurements_repo
 from .sanitizer import sanitize
 
 _log = logging.getLogger("device_service.discovery")
@@ -36,19 +36,20 @@ class CorrectionContextLoad:
 
 
 async def load_correction_context(
-    db, *, device_id: str, topic: str, payload_format: str, fields: dict,
+    db, *, device_id: str, topic: str, payload_format: str, samples: list[dict],
     device_type: str | None, gateway_id: str | None,
 ) -> CorrectionContextLoad:
     """FR-331 / §8.6.4: pull relevant ACTIVE corrections (AI role has SELECT-only on
     device_corrections, migration 012) + the latest corrected type for FR-332, sanitize the
-    sample, and apply the §8.6.5a 32KB prompt cap (LRU-dropping the oldest corrections)."""
+    sample(s), and apply the §8.6.5a 32KB prompt cap (LRU-dropping the oldest corrections).
+    `samples` is the raw observation list (one dict per message / measurement row)."""
     async with db.ai_pool.acquire() as conn:
         corr_rows = await correction_repo.retrieve_relevant(
             conn, device_id=device_id, gateway_id=gateway_id,
             device_type_family=device_type_family(device_type), topic_prefix=topic_prefix(topic))
         latest = await correction_repo.latest_corrected_device_type(
             conn, device_id=device_id, gateway_id=gateway_id)
-    base_sample = sanitize(device_id, topic, payload_format, [fields])
+    base_sample = sanitize(device_id, topic, payload_format, samples)
     kept_ctx, truncated = cap_to_prompt_size(base_sample, [build_context(r) for r in corr_rows])
     if truncated:
         _log.warning("correction_truncated device=%s kept=%d of=%d (32KB prompt cap)",
@@ -84,7 +85,7 @@ async def persist_outcome(conn, *, device_id: str, outcome: Outcome, applied_ids
 async def classify_under_budget(
     db, classifier, settings, *, sanitized: SanitizedSample, default_device_type: str | None,
     latest_correction_device_type: str | None, applied_ids: tuple[int, ...],
-    device_id: str, first_seen: str,
+    device_id: str, first_seen: str, force: bool = False,
 ) -> Outcome:
     """FR-329 hard cap: reserve worst-case cost up front (under the budget advisory lock),
     classify, persist the outcome (§8.6.8 device lock), then settle the reservation to actual
@@ -110,7 +111,7 @@ async def classify_under_budget(
         outcome = await classifier.classify(
             sanitized, budget_ok=budget_ok, default_device_type=default_device_type,
             latest_correction_device_type=latest_correction_device_type,
-            first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(),
+            first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(), force=force,
         )
         async with db.ai_tx(lock=device_id) as conn:                   # §8.6.8 device advisory lock
             await persist_outcome(conn, device_id=device_id, outcome=outcome, applied_ids=applied_ids)
@@ -129,3 +130,37 @@ async def classify_under_budget(
             with contextlib.suppress(Exception):
                 async with db.ai_tx() as conn:
                     await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)
+
+
+async def reclassify_device(db, classifier, settings, *, device_id: str, force: bool = True) -> Outcome | None:
+    """On-demand reclassification of an EXISTING device (PRD §234/§761, FR-330 rerun /
+    MCP classify_with_context primitive). Reads the device's recent <=20 raw measurement
+    samples via the OPS pool (the AI role has no measurements SELECT), then runs the same
+    correction-context + budget-gated classify path as live discovery. force=True forces a
+    fresh LLM call (FR-316 cache miss). Returns the Outcome, or None if the device is unknown,
+    has no known sample source, or has no recent samples (nothing to classify)."""
+    async with db.ops_pool.acquire() as conn:   # OPS: measurements SELECT + devices SELECT
+        row = await conn.fetchrow(
+            "SELECT gateway_id, device_type, created_at, metadata->>'source_topic' AS source_topic "
+            "FROM public.devices WHERE device_id = $1", device_id)
+        if row is None:
+            return None
+        table = measurements_repo.table_for_gateway(row["gateway_id"])
+        if table is None:
+            _log.info("reclassify skipped device=%s: unknown gateway %r (no sample source)",
+                      device_id, row["gateway_id"])
+            return None
+        samples = await measurements_repo.recent_samples(conn, table=table, device_id=device_id)
+    if not samples:
+        _log.info("reclassify skipped device=%s: no recent samples in %s", device_id, table)
+        return None
+    # payload_format is informational for the prompt; best-effort by table.
+    payload_format = "ilp" if table == "electricity_measurements" else "json"
+    first_seen = row["created_at"].isoformat() if row["created_at"] is not None else ""
+    ctx = await load_correction_context(
+        db, device_id=device_id, topic=row["source_topic"] or "", payload_format=payload_format,
+        samples=samples, device_type=row["device_type"], gateway_id=row["gateway_id"])
+    return await classify_under_budget(
+        db, classifier, settings, sanitized=ctx.sanitized, default_device_type=row["device_type"],
+        latest_correction_device_type=ctx.latest_correction_device_type,
+        applied_ids=ctx.applied_ids, device_id=device_id, first_seen=first_seen, force=force)

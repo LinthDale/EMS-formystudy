@@ -13,6 +13,7 @@ from fastapi import APIRouter, Header, HTTPException, Request
 
 from ..auth import Channel, require
 from ..correction_service import CorrectionService, CorrectionServiceError
+from ..discovery_pipeline import reclassify_device
 from ..correction_validator import CorrectionRejected
 from ..key_id import hash_key_id
 from ..models import (
@@ -30,6 +31,7 @@ from ..repositories import audit_repo, device_repo, digest_repo, signal_repo
 router = APIRouter(prefix="/devices", tags=["devices"])
 _OPS = require(Channel.OPS)
 _audit = logging.getLogger("device_service.audit")
+_log = logging.getLogger("device_service.routes.devices")
 
 
 def _rid() -> str:
@@ -84,16 +86,23 @@ async def create_ai_feedback(
     x_api_key: str | None = Header(default=None, alias="X-API-Key"),
 ) -> dict:
     """OPS human feedback (FR-330). Validation, audit identity, FR-343 rate limit, persist,
-    optional demote + audit all live in CorrectionService; the router only rejects the not-yet
-    -supported rerun flag and maps domain errors to HTTP."""
+    optional demote + audit live in CorrectionService; the router maps domain errors to HTTP.
+    rerun_classification (FR-330) triggers an on-demand reclassify AFTER the correction is
+    committed, so the just-written correction is in the retrieval set (FR-331)."""
+    db = request.app.state.db
+    svc = CorrectionService(db, request.app.state.settings)
+    rec = await _call(svc.create_feedback(device_id, body, x_api_key))
     if body.rerun_classification:
-        # rerun needs the on-demand reclassify pipeline (recent raw samples via the OPS pool,
-        # §234/§761) — the MCP classify_with_context primitive; lands with that capability.
-        raise HTTPException(
-            501, "rerun_classification not yet supported (needs the on-demand reclassify "
-                 "pipeline shared with MCP classify_with_context)")
-    svc = CorrectionService(request.app.state.db, request.app.state.settings)
-    return await _call(svc.create_feedback(device_id, body, x_api_key))
+        # best-effort: re-run classification through the budget gate (FR-329) with a forced
+        # cache miss. No-op if the device has no recent samples or is frozen (apply_outcome
+        # skips a non-candidate). A failure must not undo the recorded correction — but log it
+        # (don't swallow silently) so a real bug isn't indistinguishable from a legit no-op.
+        try:
+            await reclassify_device(db, request.app.state.classifier, request.app.state.settings,
+                                    device_id=device_id, force=True)
+        except Exception:  # noqa: BLE001 — rerun is best-effort; correction is the primary write
+            _log.warning("rerun_classification failed device=%s (correction kept)", device_id, exc_info=True)
+    return rec
 
 
 @router.get("/{device_id}/corrections", response_model=list[CorrectionOut], dependencies=[_OPS])

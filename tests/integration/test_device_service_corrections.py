@@ -32,9 +32,13 @@ async def _make_app(*, audit_hash_salt: str = "itest-audit-salt"):
         await db.connect()
     except Exception as exc:  # noqa: BLE001
         pytest.skip(f"DB not reachable / roles not set: {exc}")
+    from device_service.classifier import Classifier
+    from device_service.llm.guardrail import MockGuardrail
+    from device_service.llm.mock_provider import MockProvider
     app = create_app()
     app.state.settings = settings
     app.state.db = db
+    app.state.classifier = Classifier(MockProvider(), MockGuardrail())  # for rerun_classification
     return app, db
 
 
@@ -113,21 +117,20 @@ async def test_ai_feedback_missing_device_404(api):
     assert r.status_code == 404
 
 
-async def test_ai_feedback_rerun_classification_deferred_501(api):
-    """rerun_classification needs the on-demand reclassify pipeline (MCP classify_with_context
-    primitive); a true value is rejected (501) rather than silently ignored, with no DB write."""
+async def test_ai_feedback_rerun_classification_records_and_triggers_reclassify(api):
+    """rerun_classification is now supported (no longer 501): the correction is written (201)
+    and an on-demand reclassify is triggered AFTER commit. Reclassify is best-effort — this
+    candidate has no measurement samples, so it no-ops, but the correction must still persist
+    and the request must succeed. (The reclassify primitive itself is covered end-to-end with
+    seeded samples in test_device_service_reclassify.py.)"""
     client, db = api
     await _seed_device(client)
     r = await client.post("/devices/itest-corr-1/ai-feedback",
                           json=_body(rerun_classification=True), headers=_OPS)
-    assert r.status_code == 501
-    # combined with demote, the 501 still wins (rerun checked first) and nothing is written
-    r2 = await client.post("/devices/itest-corr-1/ai-feedback",
-                           json=_body(rerun_classification=True, demote_to_candidate=True), headers=_OPS)
-    assert r2.status_code == 501
+    assert r.status_code == 201
     async with db.ops_pool.acquire() as conn:
         assert await conn.fetchval(
-            "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 0
+            "SELECT count(*) FROM public.device_corrections WHERE device_id='itest-corr-1'") == 1
 
 
 async def test_ai_feedback_demote_only_valid_for_confirmed(api):
