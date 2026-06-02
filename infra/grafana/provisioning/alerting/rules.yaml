@@ -226,8 +226,14 @@ groups:
   # Group 3: 設備分類安全告警 (PRD-0003 device_audit_log)
   # 來源 = device_audit_log rows (audit Slice A-C2)。低基數設計：用 SQL
   # GROUP BY ... HAVING 算出「跨閾值的 device/key 數量」當單一指標，device_id /
-  # actor_key_id 不進 Prometheus label。noData/execErr = OK：沒有 audit row 或
-  # 查詢暫時失敗都不應誤觸安全告警。
+  # actor_key_id 不進 Prometheus label。
+  # FR-339 語意：採「1h 內同 device BLOCK count >= 5」的 WINDOW-COUNT（爆量），
+  #   非嚴格 consecutive；對齊 PRD 驗收「6 次 injection -> 第 5 次後 alert」。嚴格
+  #   consecutive 若有需求須走 ADR。
+  # 測試隔離：device_id LIKE 'itest-%' 為整合測試裝置（共享 dev DB），一律從告警
+  #   查詢排除，避免測試在 append-only audit table 累積的 rows 誤觸告警（prod 無此前綴）。
+  # noData/execErr：noData=OK（無 audit row 不誤觸）；execErr=Error（壞查詢進 Error
+  #   狀態通知，不靜默失效）— 見各 rule。
   # ============================================================
   - orgId: 1
     name: EMS-設備分類安全
@@ -254,6 +260,7 @@ groups:
                   FROM public.device_audit_log
                   WHERE event_type = 'guardrail_block'
                     AND event_time > now() - interval '1 hour'
+                    AND device_id NOT LIKE 'itest-%'   -- exclude integration-test devices (shared dev DB)
                   GROUP BY device_id
                   HAVING count(*) >= 5
                 ) t
@@ -326,6 +333,7 @@ groups:
                   WHERE event_type = 'deactivate'
                     AND actor_key_id IS NOT NULL
                     AND event_time > now() - interval '1 hour'
+                    AND device_id IS NOT NULL AND device_id NOT LIKE 'itest-%'  -- exclude test rows
                   GROUP BY actor_key_id
                   HAVING count(*) >= 5
                 ) t
@@ -398,6 +406,7 @@ groups:
                   WHERE event_type = 'deactivate'
                     AND actor_key_id IS NOT NULL
                     AND event_time > now() - interval '24 hours'
+                    AND device_id IS NOT NULL AND device_id NOT LIKE 'itest-%'  -- exclude test rows
                   GROUP BY actor_key_id
                   HAVING count(*) >= 20
                 ) t

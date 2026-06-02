@@ -98,8 +98,15 @@ async def create_ai_feedback(
         # skips a non-candidate). A failure must not undo the recorded correction — but log it
         # (don't swallow silently) so a real bug isn't indistinguishable from a legit no-op.
         try:
-            await reclassify_device(db, request.app.state.classifier, request.app.state.settings,
-                                    device_id=device_id, force=True)
+            outcome = await reclassify_device(db, request.app.state.classifier, request.app.state.settings,
+                                              device_id=device_id, force=True)
+            # transparency: tell the operator (via log) whether the rerun actually re-classified.
+            # None = skipped (not a candidate / no samples / unknown gateway — see reclassify logs).
+            if outcome is None:
+                _log.info("rerun_classification device=%s: no-op (not re-classified; see reclassify log)", device_id)
+            else:
+                _log.info("rerun_classification device=%s: re-classified -> status=%s source=%s",
+                          device_id, outcome.new_status, outcome.summary_source)
         except Exception:  # noqa: BLE001 — rerun is best-effort; correction is the primary write
             _log.warning("rerun_classification failed device=%s (correction kept)", device_id, exc_info=True)
     return rec
