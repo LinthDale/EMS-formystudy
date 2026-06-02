@@ -23,6 +23,9 @@ from .output_validator import validate
 
 CONFIDENCE_THRESHOLD = 0.9
 DEFAULT_RETRIES = 3
+# guardrail reasoning is stored in the audit detail; cap it so a future LLM-based guardrail
+# can't echo a large attacker-controlled payload into the audit row (sec-review LOW-1).
+_MAX_REASON_LEN = 200
 
 
 def signal_shape_hash(sanitized: SanitizedSample) -> str:
@@ -37,6 +40,26 @@ def cache_key(sanitized: SanitizedSample, provider: str, model: str, prompt_vers
 
 
 @dataclass(frozen=True)
+class GuardrailBlock:
+    """L2 guardrail BLOCK details for the audit trail (FR-339 / §8.7.5). Hashes fingerprint
+    the L1 input/output for correlation without persisting their content."""
+    phase: str                       # 'pre' | 'post'
+    threat_category: str | None
+    reasoning: str
+    l1_input_hash: str
+    l1_output_hash: str | None = None
+
+
+def _sha(text: str) -> str:
+    return hashlib.sha256((text or "").encode("utf-8")).hexdigest()
+
+
+def _output_fingerprint(result: ClassificationResult) -> str:
+    sigs = sorted((s.signal_name, s.unit, s.datatype, s.direction) for s in result.suggested_signals)
+    return _sha(f"{result.device_type}|{round(result.confidence, 4)}|{result.reasoning}|{sigs}")
+
+
+@dataclass(frozen=True)
 class Outcome:
     result: ClassificationResult
     digest: dict
@@ -45,6 +68,7 @@ class Outcome:
     correction_conflict: bool
     last_error: str | None
     from_cache: bool = False
+    guardrail_block: GuardrailBlock | None = None   # set only when L2 BLOCKED (FR-339 audit)
 
 
 class Classifier:
@@ -66,6 +90,7 @@ class Classifier:
     def _fallback(
         self, sanitized: SanitizedSample, default_device_type: str, *,
         first_seen_at: str, generated_at: str, last_error: str,
+        guardrail_block: GuardrailBlock | None = None,
     ) -> Outcome:
         signals = tuple(
             SignalSuggestion(f.field_name, "", "", "read") for f in sanitized.fields
@@ -76,7 +101,8 @@ class Classifier:
             first_seen_at=first_seen_at, generated_at=generated_at, prompt_version=self._prompt_version,
         )
         # fallback never caches (transient) and never auto-confirms
-        return Outcome(result, digest, "system_fallback", "candidate", False, last_error)
+        return Outcome(result, digest, "system_fallback", "candidate", False, last_error,
+                       guardrail_block=guardrail_block)
 
     async def classify(
         self, sanitized: SanitizedSample, *, budget_ok: bool = True,
@@ -97,16 +123,17 @@ class Classifier:
             return replace(self._cache[key], from_cache=True)
 
         rendered = render_sample(sanitized)
-        fb = lambda err: self._fallback(                            # noqa: E731
+        fb = lambda err, gb=None: self._fallback(                   # noqa: E731
             sanitized, default_device_type,
-            first_seen_at=first_seen_at, generated_at=generated_at, last_error=err)
+            first_seen_at=first_seen_at, generated_at=generated_at, last_error=err, guardrail_block=gb)
 
         if not budget_ok:                                          # FR-329
             return fb("budget_exhausted")
 
         pre = await self._guardrail.check_input(sanitized, rendered)   # FR-336
         if pre.blocked:
-            return fb("guardrail_blocked_input")
+            return fb("guardrail_blocked_input", GuardrailBlock(   # FR-339 audit: pre-check, no L1 output
+                "pre", pre.threat_category, pre.reasoning[:_MAX_REASON_LEN], _sha(rendered)))
 
         result = None
         for _ in range(self._retries):                             # FR-312
@@ -120,7 +147,9 @@ class Classifier:
 
         post = await self._guardrail.check_output(sanitized, result, rendered)   # FR-337
         if post.blocked:
-            return fb("guardrail_blocked_output")
+            return fb("guardrail_blocked_output", GuardrailBlock(  # FR-339 audit: post-check, L1 ran
+                "post", post.threat_category, post.reasoning[:_MAX_REASON_LEN],
+                _sha(rendered), _output_fingerprint(result)))
 
         ok, reason, cleaned = validate(result)                     # FR-333
         if not ok:
