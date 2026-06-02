@@ -1,8 +1,9 @@
 """Integration: device-service REST API against TimescaleDB (PRD-0003 Slice 3).
 
-Needs migrations 003-011 applied + roles with passwords (set_role_passwords.sh).
+Needs migrations 003-014 applied + roles with passwords (set_role_passwords.sh).
 Connects as device_service_ai/ops over the ems_default network.
 """
+import json
 import os
 
 import pytest
@@ -28,6 +29,7 @@ async def _make_app():
         db_ai_password=os.getenv("DB_AI_PASSWORD", "devAI_rotate_in_prod_7x2k"),
         db_ops_password=os.getenv("DB_OPS_PASSWORD", "devOPS_rotate_in_prod_9q4m"),
         ops_api_key="ops-k", ingest_api_key="ing-k", ai_api_key="ai-k",
+        audit_hash_salt="itest-api-salt", audit_salt_version="itest-v1",
     )
     db = Database(host=settings.db_host, port=settings.db_port, name=settings.db_name,
                   ai_password=settings.db_ai_password, ops_password=settings.db_ops_password)
@@ -44,6 +46,8 @@ async def _make_app():
 async def _cleanup(db):
     async with db.ops_pool.acquire() as conn:
         await conn.execute("DELETE FROM public.devices WHERE device_id LIKE 'itest-%'")
+        # device_audit_log is append-only (OPS role has no DELETE grant — tamper resistance),
+        # so rows are NOT cleaned here; audit assertions must be robust to accumulation.
 
 
 @pytest.fixture
@@ -182,6 +186,33 @@ async def test_duplicate_active_signal_409(api):
     await client.post("/devices", json={"device_id": "itest-dup"}, headers=_OPS)
     assert (await client.post("/devices/itest-dup/signals", json={"signal_name": "voltage"}, headers=_OPS)).status_code == 201
     assert (await client.post("/devices/itest-dup/signals", json={"signal_name": "voltage"}, headers=_OPS)).status_code == 409
+
+async def test_override_and_reject_write_audit_rows(api):
+    """override and reject persist a freeze_override audit row (device_audit_log), atomic
+    with the lifecycle mutation — not just a structured log line."""
+    client, db = api
+    await client.post("/devices", json={"device_id": "itest-audit-1", "device_type": "unknown"}, headers=_OPS)
+    await client.post("/devices/itest-audit-1/confirm", headers=_OPS)  # -> frozen (human)
+    r = await client.post("/devices/itest-audit-1/override",
+                          json={"device_type": "electricity", "signals": [{"signal_name": "current", "unit": "A"}]},
+                          headers=_OPS)
+    assert r.status_code == 200
+    await client.post("/devices/itest-audit-1/reject", headers=_OPS)
+    # device_audit_log is append-only (no DELETE) so prior runs may leave rows; assert on
+    # the two MOST RECENT freeze_override rows for this device.
+    async with db.ops_pool.acquire() as conn:
+        rows = await conn.fetch(
+            "SELECT actor, actor_key_id, salt_version, request_id, outcome, detail "
+            "FROM public.device_audit_log "
+            "WHERE device_id='itest-audit-1' AND event_type='freeze_override' ORDER BY id DESC LIMIT 2")
+    rows = list(reversed(rows))
+    actions = [json.loads(r["detail"])["action"] for r in rows]  # JSONB returned as text
+    assert actions == ["override", "reject"]
+    assert all(r["actor"] == "ops" and r["request_id"] and r["outcome"] == "success" for r in rows)
+    # actor_key_id is the HMAC of the OPS key (not the raw key), salt_version recorded
+    assert all(r["actor_key_id"] and r["actor_key_id"] != "ops-k" and r["salt_version"] == "itest-v1"
+               for r in rows)
+
 
 async def test_signal_mutation_on_frozen_device_blocked(api):
     """sim-001 is migration_backfill (frozen); adding/deleting signals via OPS without
