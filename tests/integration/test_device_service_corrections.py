@@ -228,6 +228,34 @@ async def test_corrections_list_and_deactivate_missing_device_404(api):
     assert r.status_code == 404
 
 
+async def test_mass_deactivate_marks_audit_row_suspicious(api):
+    """FR-344: when a single OPS key crosses the 1h>=5 deactivate window, the deactivate
+    audit row is marked suspicious. Robust to append-only accumulation (count only grows)."""
+    from device_service.key_id import hash_key_id
+    client, db = api
+    real_key_id = hash_key_id("ops-k", "itest-audit-salt", "itest-v1")
+    # seed 4 prior deactivate audit rows for this key (within the 1h window)
+    async with db.ops_pool.acquire() as conn:
+        for i in range(4):
+            await conn.execute(
+                "INSERT INTO public.device_audit_log "
+                "(event_type, actor, device_id, actor_key_id, salt_version, correction_id, outcome) "
+                "VALUES ('deactivate','ops','itest-corr-seed',$1,'itest-v1',$2,'success')", real_key_id, i)
+    # the 5th deactivate (a real one, same OPS key) crosses the threshold
+    await _seed_device(client)
+    cid = (await client.post("/devices/itest-corr-1/ai-feedback", json=_body(), headers=_OPS)).json()["id"]
+    reason = "this correction is being retired after a broader operator audit of the gateway here"
+    assert (await client.post(f"/devices/itest-corr-1/corrections/{cid}/deactivate",
+                              json={"reason": reason}, headers=_OPS)).status_code == 200
+    async with db.ops_pool.acquire() as conn:
+        row = await conn.fetchrow(
+            "SELECT detail FROM public.device_audit_log WHERE device_id='itest-corr-1' "
+            "AND event_type='deactivate' ORDER BY id DESC LIMIT 1")
+    detail = json.loads(row["detail"])
+    assert detail.get("suspicious") is True and detail["count_1h"] >= 5
+    assert detail["count_24h"] >= detail["count_1h"]  # 24h window is a superset of 1h
+
+
 async def test_deactivate_without_audit_salt_degrades_gracefully():
     """A correction WRITE 503s without AUDIT_HASH_SALT, but deactivate must NOT — its audit
     attribution is best-effort (actor_key_id NULL), the action still succeeds."""
