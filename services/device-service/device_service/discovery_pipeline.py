@@ -21,7 +21,7 @@ from .budget_ledger import (
 )
 from .classifier import Outcome
 from .correction_context import build_context, cap_to_prompt_size, device_type_family, topic_prefix
-from .llm.types import SanitizedSample
+from .llm.types import CorrectionContext, SanitizedSample
 from .repositories import audit_repo, correction_repo, device_repo, measurements_repo
 from .sanitizer import sanitize
 
@@ -132,13 +132,17 @@ async def classify_under_budget(
                     await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)
 
 
-async def reclassify_device(db, classifier, settings, *, device_id: str, force: bool = True) -> Outcome | None:
+async def reclassify_device(
+    db, classifier, settings, *, device_id: str, force: bool = True, hint: str | None = None,
+) -> Outcome | None:
     """On-demand reclassification of an EXISTING device (PRD §234/§761, FR-330 rerun /
     MCP classify_with_context primitive). Reads the device's recent <=20 raw measurement
     samples via the OPS pool (the AI role has no measurements SELECT), then runs the same
     correction-context + budget-gated classify path as live discovery. force=True forces a
-    fresh LLM call (FR-316 cache miss). Returns the Outcome, or None if the device is unknown,
-    has no known sample source, or has no recent samples (nothing to classify)."""
+    fresh LLM call (FR-316 cache miss). `hint` (MCP classify_with_context) is injected as a
+    synthetic most-recent correction context to steer the LLM — caller MUST pre-validate it
+    (§7.3a) since it enters the prompt. Returns the Outcome, or None if the device is unknown,
+    not a candidate, has no known sample source, or has no recent samples."""
     async with db.ops_pool.acquire() as conn:   # OPS: measurements SELECT + devices SELECT
         row = await conn.fetchrow(
             "SELECT status, gateway_id, device_type, created_at, metadata->>'source_topic' AS source_topic "
@@ -167,7 +171,13 @@ async def reclassify_device(db, classifier, settings, *, device_id: str, force: 
     ctx = await load_correction_context(
         db, device_id=device_id, topic=row["source_topic"] or "", payload_format=payload_format,
         samples=samples, device_type=row["device_type"], gateway_id=row["gateway_id"])
+    sanitized = ctx.sanitized
+    if hint:
+        # inject the (pre-validated) hint as the MOST-RECENT correction context so the LLM
+        # weighs it first. Not a persisted correction -> no applied_count / not in applied_ids.
+        hint_ctx = CorrectionContext("hint", None, hint, datetime.now(timezone.utc).isoformat())
+        sanitized = replace(sanitized, human_corrections=(hint_ctx, *sanitized.human_corrections))
     return await classify_under_budget(
-        db, classifier, settings, sanitized=ctx.sanitized, default_device_type=row["device_type"],
+        db, classifier, settings, sanitized=sanitized, default_device_type=row["device_type"],
         latest_correction_device_type=ctx.latest_correction_device_type,
         applied_ids=ctx.applied_ids, device_id=device_id, first_seen=first_seen, force=force)
