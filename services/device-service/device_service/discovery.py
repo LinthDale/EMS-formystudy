@@ -6,21 +6,14 @@ persist under advisory lock. The MQTT transport lives in mqtt_subscriber.py.
 """
 from __future__ import annotations
 
-import contextlib
 import json
 import logging
 from collections import deque
 from collections.abc import Mapping
-from dataclasses import replace
 from datetime import datetime, timezone
 
-from .budget_ledger import (
-    RESERVE_INPUT_TOKENS, RESERVE_OUTPUT_TOKENS,
-    budget_reserve, budget_settle, current_period, reserve_estimate, resolve_pricing,
-)
-from .correction_context import build_context, cap_to_prompt_size, device_type_family, topic_prefix
-from .repositories import audit_repo, correction_repo, device_repo
-from .sanitizer import sanitize
+from .discovery_pipeline import classify_under_budget, load_correction_context
+from .repositories import device_repo
 from .topic_parser import MAX_PAYLOAD_BYTES, parse
 
 _log = logging.getLogger("device_service.discovery")
@@ -141,83 +134,13 @@ async def process_message(topic, payload, *, db, classifier, gate, settings, now
     gate.record_candidate(topic, now)
 
     first_seen = created_at.isoformat() if created_at is not None else datetime.now(timezone.utc).isoformat()
-    gateway_id = _gateway_for(topic)
-    # FR-331 / §8.6.4: retrieve relevant ACTIVE corrections (AI role has SELECT-only on
-    # device_corrections, migration 012) + the latest corrected type for FR-332 conflict.
-    async with db.ai_pool.acquire() as conn:
-        corr_rows = await correction_repo.retrieve_relevant(
-            conn, device_id=pr.device_id, gateway_id=gateway_id,
-            device_type_family=device_type_family(pr.device_type), topic_prefix=topic_prefix(topic))
-        latest_corr_type = await correction_repo.latest_corrected_device_type(
-            conn, device_id=pr.device_id, gateway_id=gateway_id)
-    base_sample = sanitize(pr.device_id, topic, pr.payload_format, [fields])
-    # §8.6.5a: cap the rendered user_message at 32KB, LRU-dropping the oldest corrections.
-    kept_ctx, truncated = cap_to_prompt_size(base_sample, [build_context(r) for r in corr_rows])
-    if truncated:
-        _log.warning("correction_truncated device=%s kept=%d of=%d (32KB prompt cap)",
-                     pr.device_id, len(kept_ctx), len(corr_rows))
-    sanitized = replace(base_sample, human_corrections=tuple(kept_ctx))
-    # kept is a prefix of corr_rows (oldest dropped from the tail) -> map back by position
-    applied_ids = [corr_rows[i]["id"] for i in range(len(kept_ctx))]
-    period_start, period_end = current_period()
-    is_mock = settings.llm_provider == "mock"
-    pricing = resolve_pricing(getattr(settings, "llm_pricing_json", ""))
-    est = reserve_estimate(
-        settings.llm_model,
-        getattr(settings, "llm_reserve_input_tokens", RESERVE_INPUT_TOKENS),
-        getattr(settings, "llm_max_output_tokens", RESERVE_OUTPUT_TOKENS),
-        pricing,
-    )
-    if is_mock:
-        budget_ok = True                                               # mock is free
-    else:
-        # FR-329 hard cap: reserve the worst-case cost up front under the budget advisory
-        # lock; a near-budget or concurrent call that would cross is denied here (ADR-014).
-        async with db.ai_tx() as conn:
-            budget_ok = await budget_reserve(
-                conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
-    settled = False
-    try:
-        outcome = await classifier.classify(
-            sanitized, budget_ok=budget_ok, default_device_type=pr.device_type,
-            latest_correction_device_type=latest_corr_type,                # FR-332 conflict source
-            first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(),
-        )
-        async with db.ai_tx(lock=pr.device_id) as conn:               # §8.6.8 device advisory lock
-            await device_repo.apply_outcome(conn, pr.device_id, outcome)
-            # §7.3a applied_count bump, in the SAME tx as apply_outcome so the two cannot
-            # diverge (no partial-success window). Only when the LLM actually ran — a
-            # budget/guardrail fallback never reached the prompt, so nothing was injected.
-            if outcome.summary_source == "llm" and applied_ids:
-                await correction_repo.mark_applied(conn, applied_ids)
-            # FR-339 / §8.7.5: persist every L2 guardrail BLOCK to the audit trail (AI role
-            # has INSERT-only on device_audit_log). The consecutive-BLOCK alert is a Grafana
-            # window query over these rows. Atomic with the fallback-persist above.
-            gb = outcome.guardrail_block
-            if gb is not None:
-                await audit_repo.record(
-                    conn, event_type="guardrail_block", actor="ai", device_id=pr.device_id,
-                    outcome="blocked", detail={
-                        "phase": gb.phase, "threat_category": gb.threat_category,
-                        "reasoning": gb.reasoning, "l1_input_hash": gb.l1_input_hash,
-                        "l1_output_hash": gb.l1_output_hash})
-        if not is_mock and budget_ok:
-            # settle the reservation to actual cost (refund the over-reservation; a fallback
-            # with no real call refunds the full reservation)
-            usage = (outcome.result.raw_response or {}).get("usage") or {}
-            if outcome.summary_source == "llm":
-                tin, tout = int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0))
-            else:
-                tin = tout = 0
-            async with db.ai_tx() as conn:
-                await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout, pricing)
-            settled = True
-        return f"created:{outcome.new_status}"
-    finally:
-        # never leak a reservation: if classify/apply/settle raised after a successful
-        # reservation, refund the full reservation (no usage accounted) so a transient
-        # crash does not permanently consume the budget.
-        if not is_mock and budget_ok and not settled:
-            with contextlib.suppress(Exception):
-                async with db.ai_tx() as conn:
-                    await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)
+
+    # correction-context loader -> classifier runner (which persists the outcome + settles budget).
+    ctx = await load_correction_context(
+        db, device_id=pr.device_id, topic=topic, payload_format=pr.payload_format,
+        fields=fields, device_type=pr.device_type, gateway_id=_gateway_for(topic))
+    outcome = await classify_under_budget(
+        db, classifier, settings, sanitized=ctx.sanitized, default_device_type=pr.device_type,
+        latest_correction_device_type=ctx.latest_correction_device_type,
+        applied_ids=ctx.applied_ids, device_id=pr.device_id, first_seen=first_seen)
+    return f"created:{outcome.new_status}"

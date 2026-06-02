@@ -40,6 +40,10 @@
 - **真實跨 provider L2 guardrail E2E**（§8.7.3，production 強制跨 provider，Promotion P-1）。
 - **§15.C 文件同步**：`api/openapi.yml`、`doc/operations/容器速查表.md`（容器數 12→13，加 ems-device-service）、操作手冊 — 見 [[feedback_ems_doc_sync]]。
 
+## 重構紀錄
+- ✅ **discovery.py 解耦（review #5，DONE）**：`process_message` 原本混 admission/retrieval/cap/budget/classify/persist；抽出 `discovery_pipeline.py` 三段——`load_correction_context`（FR-331 retrieval + sanitize + §8.6.5a 32KB cap）/ `persist_outcome`（同 tx apply_outcome + applied_count + FR-339 guardrail audit）/ `classify_under_budget`（FR-329 reserve→classify→persist→settle→leak-safe finally）。`process_message` 留 admission + 編排。**純行為保留重構**（code-review 逐點驗證等價、無 import cycle、282 tests 不變全綠）。discovery.py 211→~100 行。
+- ⏳ 其餘臃肿檔（test_migrations.py 600+ 行、test_device_service_corrections.py 350+ 行）為測試檔，低優先；待需要時再分檔。
+
 ## 流程（不變）
 每批 TDD + **合併前 code review agent**（[[feedback_review_before_merge]]）；計畫/決策落 repo 記錄（[[feedback_plans_need_record_doc]]）；測試在 throwaway 容器跑（[[reference_ems_test_runtime]]）。
 
