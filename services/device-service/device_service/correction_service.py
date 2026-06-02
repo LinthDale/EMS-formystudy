@@ -20,6 +20,15 @@ _audit = logging.getLogger("device_service.audit")
 
 KEY_LIMIT_PER_HOUR = 30      # FR-343
 DEVICE_LIMIT_PER_HOUR = 10   # FR-343
+DEACTIVATE_ALERT_1H = 5      # FR-344 (WARN-6): per-key mass-deactivate sliding window
+DEACTIVATE_ALERT_24H = 20
+
+
+def mass_deactivate_suspicious(count_1h: int, count_24h: int) -> bool:
+    """FR-344: one OPS key deactivating many corrections in a short window is a poisoning /
+    tampering signal. Counts INCLUDE the current deactivate. The Telegram alert itself is a
+    Grafana SQL alert over device_audit_log; here we mark the row + log the crossing."""
+    return count_1h >= DEACTIVATE_ALERT_1H or count_24h >= DEACTIVATE_ALERT_24H
 
 
 class CorrectionServiceError(Exception):
@@ -121,17 +130,33 @@ class CorrectionService:
     async def deactivate(self, device_id: str, correction_id: int, reason_raw: str, raw_key: str | None) -> dict:
         reason = validate_correction_text(reason_raw)  # CorrectionRejected -> 400
         key_id, salt_ver = self._optional_identity(raw_key)  # best-effort (no 503 for a deactivate)
+        detail: dict = {}
+        suspicious = False
         async with self._db.ops_tx() as conn:
             if await device_repo.get(conn, device_id) is None:
                 raise CorrectionServiceError(404, "device not found")
             rec = await correction_repo.deactivate(conn, device_id, correction_id, reason)
             if rec is None:
                 raise CorrectionServiceError(409, "correction not active or not found")
+            if key_id:  # FR-344 per-key window. Counted BEFORE this row is inserted (append-only:
+                now = datetime.now(timezone.utc)  # the row can't be marked afterwards), so the
+                # `+ 1` below accounts for the current deactivate which is not yet in the table.
+                c1h = await audit_repo.count_recent(
+                    conn, event_type="deactivate", since=now - timedelta(hours=1), actor_key_id=key_id) + 1
+                c24h = await audit_repo.count_recent(
+                    conn, event_type="deactivate", since=now - timedelta(hours=24), actor_key_id=key_id) + 1
+                suspicious = mass_deactivate_suspicious(c1h, c24h)
+                if suspicious:
+                    detail = {"suspicious": True, "count_1h": c1h, "count_24h": c24h}
             await audit_repo.record(
                 conn, event_type="deactivate", actor="ops", device_id=device_id,
                 actor_key_id=key_id, salt_version=salt_ver, correction_id=correction_id,
-                outcome="success", detail={})
-        _audit.info("correction_deactivated correction_id=%s device=%s actor=ops", correction_id, device_id)
+                outcome="success", detail=detail)
+        if suspicious:
+            _audit.warning("mass_deactivate_alert key_id=%s device=%s count_1h=%s count_24h=%s (FR-344)",
+                           key_id, device_id, detail["count_1h"], detail["count_24h"])
+        else:
+            _audit.info("correction_deactivated correction_id=%s device=%s actor=ops", correction_id, device_id)
         return rec
 
 
