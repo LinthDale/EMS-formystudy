@@ -133,6 +133,14 @@ class CorrectionService:
         detail: dict = {}
         suspicious = False
         async with self._db.ops_tx() as conn:
+            # FR-344 is a SECURITY signal -> make the per-key count exact, not a heuristic:
+            # serialise same-key deactivates on the same 'correction-key:' lock as create_feedback
+            # so two concurrent deactivates can't both read a pre-threshold count and slip the
+            # crossing. No device lock is taken here, and no path takes correction-key before a
+            # device lock, so the fixed order cannot deadlock.
+            if key_id:
+                await conn.execute(
+                    "SELECT pg_advisory_xact_lock(hashtextextended('correction-key:'||$1, 0))", key_id)
             if await device_repo.get(conn, device_id) is None:
                 raise CorrectionServiceError(404, "device not found")
             rec = await correction_repo.deactivate(conn, device_id, correction_id, reason)
