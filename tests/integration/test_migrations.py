@@ -21,6 +21,7 @@ _REGISTRY_MIGRATIONS = [
     "011_extend_freeze_protected_columns.sql",
     "012_grant_ai_correction_read.sql",
     "013_index_corrections_key_time.sql",
+    "014_create_device_audit_log.sql",
 ]
 
 _BACKFILLED_DEVICES = ("sim-001", "plc-001", "sensor-001")
@@ -523,8 +524,76 @@ class TestMigration013KeyTimeIndex:
             assert cur.fetchone() is not None
 
 
+class TestMigration014AuditLog:
+    """014 — append-only device_audit_log; AI+OPS may INSERT/SELECT but not UPDATE/DELETE."""
+
+    def test_table_and_indexes_exist(self, registry_migrated):
+        with registry_migrated.cursor() as cur:
+            cur.execute("SELECT to_regclass('public.device_audit_log')")
+            assert cur.fetchone()[0] is not None
+            cur.execute("SELECT indexname FROM pg_indexes WHERE tablename='device_audit_log'")
+            idx = {r[0] for r in cur.fetchall()}
+            assert {"device_audit_device_event_time", "device_audit_key_event_time"} <= idx
+
+    def test_event_type_check_matches_python_set(self, registry_migrated):
+        """The DB CHECK and audit_repo.EVENT_TYPES must list the same event types
+        (else a value passes one layer and 500s at the other)."""
+        import re
+
+        from device_service.repositories.audit_repo import EVENT_TYPES
+        with registry_migrated.cursor() as cur:
+            cur.execute(
+                "SELECT pg_get_constraintdef(oid) FROM pg_constraint WHERE conname='device_audit_event_type_chk'")
+            defn = cur.fetchone()[0]
+        db_types = set(re.findall(r"'([a-z_]+)'", defn))
+        assert db_types == set(EVENT_TYPES)
+
+    def test_event_type_check_rejects_unknown(self, registry_migrated):
+        c = registry_migrated
+        with c.cursor() as cur:
+            raised = False
+            try:
+                cur.execute("INSERT INTO public.device_audit_log (event_type, actor) VALUES ('bogus','ops')")
+            except psycopg2.Error:
+                raised = True
+            c.rollback()
+            assert raised
+
+    def test_both_roles_insert_select_but_not_update_delete(self, registry_migrated):
+        c = registry_migrated
+        for role in ("device_service_ai", "device_service_ops"):
+            cur = c.cursor()
+            try:
+                cur.execute(f"SET ROLE {role}")
+                cur.execute(
+                    "INSERT INTO public.device_audit_log (event_type, actor, device_id) "
+                    "VALUES ('guardrail_block', %s, 'itest-audit-x') RETURNING id",
+                    (role.split("_")[-1] if role.endswith("ops") else "ai",))
+                rid = cur.fetchone()[0]
+                cur.execute("SELECT count(*) FROM public.device_audit_log WHERE id=%s", (rid,))
+                assert cur.fetchone()[0] == 1
+                c.commit()
+                # append-only: UPDATE and DELETE must be denied
+                for sql in ("UPDATE public.device_audit_log SET outcome='x' WHERE id=%s",
+                            "DELETE FROM public.device_audit_log WHERE id=%s"):
+                    denied = False
+                    try:
+                        cur.execute(sql, (rid,))
+                    except psycopg2.Error:
+                        denied = True
+                    c.rollback()
+                    assert denied, f"{role} must be denied: {sql[:30]}"
+            finally:
+                c.rollback()
+                cur.execute("RESET ROLE")
+                cur.close()
+        with c.cursor() as cur2:
+            cur2.execute("DELETE FROM public.device_audit_log WHERE device_id='itest-audit-x'")
+        c.commit()
+
+
 class TestDeviceRegistryChainIdempotent:
-    """Full 003-013 chain must be safe to apply twice (project_rules §13)."""
+    """Full 003-014 chain must be safe to apply twice (project_rules §13)."""
 
     def test_chain_runs_twice(self, db_conn):
         _apply_registry_chain(db_conn)

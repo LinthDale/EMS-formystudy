@@ -26,7 +26,7 @@ from ..models import (
     DigestOut,
     OverrideRequest,
 )
-from ..repositories import correction_repo, device_repo, digest_repo, signal_repo
+from ..repositories import audit_repo, correction_repo, device_repo, digest_repo, signal_repo
 
 router = APIRouter(prefix="/devices", tags=["devices"])
 _OPS = require(Channel.OPS)
@@ -54,6 +54,19 @@ def _created_by_key_id(raw_key: str | None, request: Request) -> str:
         return hash_key_id(raw_key or "", settings.audit_hash_salt, settings.audit_salt_version)
     except ValueError as exc:
         raise HTTPException(status_code=503, detail=f"audit identity unavailable: {exc}") from exc
+
+
+def _optional_key_id(raw_key: str | None, request: Request) -> tuple[str | None, str | None]:
+    """Best-effort (key_id, salt_version) for AUDIT ATTRIBUTION on lifecycle actions
+    (override/reject). Unlike a correction write, a lifecycle op must NOT fail just
+    because AUDIT_HASH_SALT is unset (that salt is a corrections concern) — so a missing
+    salt yields (None, None) and the audit row records actor='ops' without a key id."""
+    settings = request.app.state.settings
+    try:
+        kid = hash_key_id(raw_key or "", settings.audit_hash_salt, settings.audit_salt_version)
+        return kid, settings.audit_salt_version
+    except ValueError:
+        return None, None
 
 
 @router.post("", response_model=DeviceOut, status_code=201, dependencies=[_OPS])
@@ -241,9 +254,13 @@ async def confirm_device(device_id: str, request: Request) -> dict:
 
 
 @router.post("/{device_id}/override", response_model=DeviceOut, dependencies=[_OPS])
-async def override_device(device_id: str, body: OverrideRequest, request: Request) -> dict:
+async def override_device(
+    device_id: str, body: OverrideRequest, request: Request,
+    x_api_key: str | None = Header(default=None, alias="X-API-Key"),
+) -> dict:
     db = request.app.state.db
     rid = _rid()
+    key_id, salt_ver = _optional_key_id(x_api_key, request)
     async with db.ops_tx(freeze_override=rid, lock=device_id) as conn:
         if await device_repo.get(conn, device_id) is None:
             raise HTTPException(404, "device not found")
@@ -255,17 +272,29 @@ async def override_device(device_id: str, body: OverrideRequest, request: Reques
             await signal_repo.retire(conn, device_id, s["signal_name"])
         for sig in body.signals:
             await signal_repo.add(conn, device_id, sig.model_dump())
+        await audit_repo.record(  # atomic with the freeze-override mutation (§554 / §8.7.5)
+            conn, event_type="freeze_override", actor="ops", device_id=device_id,
+            actor_key_id=key_id, salt_version=salt_ver, request_id=rid, outcome="success",
+            detail={"action": "override", "new_device_type": body.device_type})
     _audit.info("freeze_override action=override device=%s request_id=%s actor=ops", device_id, rid)
     return dict(row)
 
 
 @router.post("/{device_id}/reject", response_model=DeviceOut, dependencies=[_OPS])
-async def reject_device(device_id: str, request: Request) -> dict:
+async def reject_device(
+    device_id: str, request: Request,
+    x_api_key: str | None = Header(default=None, alias="X-API-Key"),
+) -> dict:
     db = request.app.state.db
     rid = _rid()
+    key_id, salt_ver = _optional_key_id(x_api_key, request)
     async with db.ops_tx(freeze_override=rid, lock=device_id) as conn:
         row = await device_repo.set_lifecycle(conn, device_id, status="retired")
-    if row is None:
-        raise HTTPException(404, "device not found")
+        if row is None:
+            raise HTTPException(404, "device not found")  # rolls back (nothing was updated)
+        await audit_repo.record(
+            conn, event_type="freeze_override", actor="ops", device_id=device_id,
+            actor_key_id=key_id, salt_version=salt_ver, request_id=rid, outcome="success",
+            detail={"action": "reject"})
     _audit.info("freeze_override action=reject device=%s request_id=%s actor=ops", device_id, rid)
     return dict(row)
