@@ -88,43 +88,48 @@ def _audit_call(tool: str, device_id: str, status: str, t0: float, ip: str, extr
                 tool, ip, device_id, status, int((time.monotonic() - t0) * 1000), extra)
 
 
+async def _run_tool(tool: str, device_id: str, ctx: Context, coro):
+    """Run a tool body, audit it, and ensure the CLIENT only ever sees a safe message: a
+    ToolError carries a stable code + a message built from client-supplied values only; any
+    UNEXPECTED exception (DB error, bug, ...) is logged in full but surfaced to the MCP client
+    as a generic 'internal error' so no internal/DB detail leaks across the transport."""
+    t0, ip = time.monotonic(), _caller_ip(ctx)
+    try:
+        result = await coro
+    except mcp_tools.ToolError as exc:
+        _audit_call(tool, device_id, exc.code, t0, ip)
+        raise
+    except Exception:  # noqa: BLE001 — never leak internals to the client
+        _log.exception("mcp_tool_internal_error tool=%s device=%s", tool, device_id)
+        _audit_call(tool, device_id, "internal_error", t0, ip)
+        raise mcp_tools.ToolError("internal_error", "internal error") from None
+    _audit_call(tool, device_id, "ok", t0, ip)
+    return result
+
+
 @mcp.tool()
 async def list_low_confidence_candidates(ctx: Context, limit: int = 20) -> list[dict]:
     """List candidate devices with ai_confidence <= 0.9 as human-review digests (§8.2)."""
     app: AppCtx = ctx.request_context.lifespan_context
-    t0 = time.monotonic()
-    rows = await mcp_tools.list_low_confidence_candidates(app.db, limit=limit)
-    _audit_call("list_low_confidence_candidates", "-", "ok", t0, _caller_ip(ctx), f"count={len(rows)}")
-    return rows
+    return await _run_tool("list_low_confidence_candidates", "-", ctx,
+                           mcp_tools.list_low_confidence_candidates(app.db, limit=limit))
 
 
 @mcp.tool()
 async def get_device_digest(ctx: Context, device_id: str) -> dict:
     """Get one device's human-review digest (§8.2)."""
     app: AppCtx = ctx.request_context.lifespan_context
-    t0, ip = time.monotonic(), _caller_ip(ctx)
-    try:
-        digest = await mcp_tools.get_device_digest(app.db, device_id=device_id)
-    except mcp_tools.ToolError as exc:
-        _audit_call("get_device_digest", device_id, exc.code, t0, ip)
-        raise
-    _audit_call("get_device_digest", device_id, "ok", t0, ip)
-    return digest
+    return await _run_tool("get_device_digest", device_id, ctx,
+                           mcp_tools.get_device_digest(app.db, device_id=device_id))
 
 
 @mcp.tool()
 async def classify_with_context(ctx: Context, device_id: str, hint: str) -> dict:
     """Re-classify a CANDIDATE device with a human hint — fresh LLM call, budget-gated (§8.2)."""
     app: AppCtx = ctx.request_context.lifespan_context
-    t0, ip = time.monotonic(), _caller_ip(ctx)
-    try:
-        digest = await mcp_tools.classify_with_context(
-            app.db, app.classifier, app.settings, device_id=device_id, hint=hint)
-    except mcp_tools.ToolError as exc:
-        _audit_call("classify_with_context", device_id, exc.code, t0, ip)
-        raise
-    _audit_call("classify_with_context", device_id, "ok", t0, ip)
-    return digest
+    return await _run_tool("classify_with_context", device_id, ctx,
+                           mcp_tools.classify_with_context(
+                               app.db, app.classifier, app.settings, device_id=device_id, hint=hint))
 
 
 class AuthRateLimitMiddleware:
@@ -150,6 +155,10 @@ class AuthRateLimitMiddleware:
     async def __call__(self, scope, receive, send):
         if scope["type"] != "http":
             await self._app(scope, receive, send)
+            return
+        # unauthenticated liveness probe for the container healthcheck (no secrets, no DB touch)
+        if scope.get("path") == "/healthz":
+            await JSONResponse({"status": "ok"})(scope, receive, send)
             return
         request = Request(scope, receive)
         # auth: timing-safe compare (hmac.compare_digest); empty configured key -> deny all

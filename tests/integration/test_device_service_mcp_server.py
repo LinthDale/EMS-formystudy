@@ -124,8 +124,20 @@ async def test_get_device_digest_happy_and_not_found(mcp_server):
                 assert ok.isError is False
                 missing = await s.call_tool("get_device_digest", {"device_id": f"{_PREFIX}ghost"})
                 assert missing.isError is True  # ToolError surfaced as an error result
+                # no-leak: the client sees the stable safe message, not a stack trace / DB internals
+                text = " ".join(getattr(c, "text", "") for c in (missing.content or []))
+                assert "no review digest" in text
+                assert not any(s in text for s in ("Traceback", "asyncpg", "psycopg", "/app/", "File \""))
     finally:
         await _cleanup()
+
+
+async def test_healthz_is_unauthenticated_200(mcp_server):
+    import httpx
+    base = mcp_server.rsplit("/mcp", 1)[0]
+    async with httpx.AsyncClient() as c:
+        r = await c.get(f"{base}/healthz")  # no X-API-Key
+    assert r.status_code == 200 and r.json()["status"] == "ok"
 
 
 async def test_classify_with_context_rejects_injection_hint(mcp_server):
