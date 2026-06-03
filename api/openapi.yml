@@ -8,8 +8,12 @@ info:
     - **Simulator API** (port 8001): 模擬電表控制
     - **Query API** (port 3001): 歷史資料查詢 (PostgREST)
     - **Grafana API** (port 3000): 告警與儀表板管理
+    - **Device Service API** (port 8002): Device Registry 與 AI 自動分類 (PRD-0003)
     - **Grafana Dashboard**: 已新增 KC 工廠環境與設備狀態 panels
-  version: 1.1.0
+
+    注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
+    而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
+  version: 1.2.0
   contact:
     name: EMS Development Team
   license:
@@ -22,6 +26,8 @@ servers:
     description: Query API - PostgREST (歷史資料查詢)
   - url: http://localhost:3000
     description: Grafana API (告警與儀表板)
+  - url: http://localhost:8002
+    description: Device Service API (Device Registry + AI 自動分類, PRD-0003)
 
 tags:
   - name: Simulator
@@ -30,6 +36,8 @@ tags:
     description: 歷史資料查詢 API (PostgREST)
   - name: Grafana
     description: Grafana 告警與儀表板管理 API
+  - name: Device Service
+    description: Device Registry 與 AI 自動分類 API (PRD-0003, port 8002)
 
 paths:
   # ============================================================
@@ -533,14 +541,270 @@ paths:
         '400':
           description: 請求格式錯誤
 
+  # ============================================================
+  # Device Service API (port 8002, PRD-0003) — Registry + 自動分類
+  # 認證：X-API-Key（OPS / INGEST / AI 三通道，FR-310）。
+  # 內容違規回 400（§7.3a），凍結紀錄非經 lifecycle endpoint 回 409。
+  # 注意：MCP 端點（127.0.0.1:8766）走 MCP Streamable-HTTP 協定，非 REST，不在本 OpenAPI；
+  #       見 doc/operations/容器速查表 2-14。
+  # ============================================================
+  /healthz:
+    get:
+      tags: [Device Service]
+      summary: device-service 健康檢查（雙 pool 狀態）
+      operationId: deviceHealthz
+      responses:
+        '200':
+          description: pools ok
+  /devices:
+    post:
+      tags: [Device Service]
+      summary: 建立 candidate 裝置（OPS）
+      operationId: createDevice
+      security: [{ deviceServiceApiKey: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/DeviceCreate' } } }
+      responses:
+        '201': { description: 已建立, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '401': { description: 缺/錯 X-API-Key }
+        '403': { description: 通道不允許 }
+        '409': { description: 裝置已存在 }
+    get:
+      tags: [Device Service]
+      summary: 列出裝置（OPS；可依 status / stale 過濾）
+      operationId: listDevices
+      security: [{ deviceServiceApiKey: [] }]
+      parameters:
+        - { name: status, in: query, schema: { type: string } }
+        - { name: stale, in: query, schema: { type: boolean } }
+      responses:
+        '200': { description: 裝置清單, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/DeviceOut' } } } } }
+  /devices/{device_id}:
+    parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+    get:
+      tags: [Device Service]
+      summary: 讀取單一裝置（OPS）
+      operationId: getDevice
+      security: [{ deviceServiceApiKey: [] }]
+      responses:
+        '200': { description: 裝置, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '404': { description: 不存在 }
+    patch:
+      tags: [Device Service]
+      summary: 更新裝置中繼資料（OPS；凍結欄位須走 /override）
+      operationId: updateDevice
+      security: [{ deviceServiceApiKey: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/DeviceUpdate' } } }
+      responses:
+        '200': { description: 已更新, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '404': { description: 不存在 }
+        '409': { description: 凍結紀錄，請用 /override }
+    delete:
+      tags: [Device Service]
+      summary: 退役裝置（OPS；凍結裝置回 409，改用 /reject）
+      operationId: deleteDevice
+      security: [{ deviceServiceApiKey: [] }]
+      responses:
+        '204': { description: 已退役 }
+        '404': { description: 不存在 }
+        '409': { description: 凍結裝置，請用 /reject }
+  /devices/{device_id}/confirm:
+    post:
+      tags: [Device Service]
+      summary: 接受 AI 推論 → confirmed（OPS）
+      operationId: confirmDevice
+      security: [{ deviceServiceApiKey: [] }]
+      parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+      responses:
+        '200': { description: confirmed, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '404': { description: 不存在 }
+        '409': { description: 非 candidate 狀態 }
+  /devices/{device_id}/override:
+    post:
+      tags: [Device Service]
+      summary: 人工修正後接受（OPS；帶 freeze-override token）
+      operationId: overrideDevice
+      security: [{ deviceServiceApiKey: [] }]
+      parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/OverrideRequest' } } }
+      responses:
+        '200': { description: confirmed (manual_override), content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '404': { description: 不存在 }
+  /devices/{device_id}/reject:
+    post:
+      tags: [Device Service]
+      summary: 拒絕 → retired（OPS）
+      operationId: rejectDevice
+      security: [{ deviceServiceApiKey: [] }]
+      parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+      responses:
+        '200': { description: retired, content: { application/json: { schema: { $ref: '#/components/schemas/DeviceOut' } } } }
+        '404': { description: 不存在 }
+  /devices/{device_id}/ai-feedback:
+    post:
+      tags: [Device Service]
+      summary: 提交人類修正回饋（OPS，FR-330）
+      description: |
+        寫入 device_corrections（永久保留，注入後續分類 prompt）。內容違規回 400。
+        rerun_classification=true → commit 後觸發 on-demand reclassify（best-effort）。
+        demote_to_candidate=true → confirmed→candidate（其他狀態回 409）。
+      operationId: createAiFeedback
+      security: [{ deviceServiceApiKey: [] }]
+      parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/CorrectionCreate' } } }
+      responses:
+        '201': { description: 已記錄, content: { application/json: { schema: { $ref: '#/components/schemas/CorrectionOut' } } } }
+        '400': { description: 內容違規（length/structural/secret/injection/format） }
+        '404': { description: 裝置不存在 }
+        '409': { description: demote 對非 confirmed 裝置 }
+        '429': { description: 速率限制（per-key 30/h、per-device 10/h，FR-343） }
+        '503': { description: AUDIT_HASH_SALT 未設（audit identity 不可用） }
+  /devices/{device_id}/corrections:
+    get:
+      tags: [Device Service]
+      summary: 列出該裝置歷史 corrections（OPS，內部用）
+      operationId: listCorrections
+      security: [{ deviceServiceApiKey: [] }]
+      parameters:
+        - { name: device_id, in: path, required: true, schema: { type: string } }
+        - { name: active_only, in: query, schema: { type: boolean, default: false } }
+      responses:
+        '200': { description: corrections, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/CorrectionOut' } } } } }
+        '404': { description: 裝置不存在 }
+  /devices/{device_id}/corrections/{correction_id}/deactivate:
+    post:
+      tags: [Device Service]
+      summary: 失效一筆 correction（OPS，FR-341；之後不再注入 prompt）
+      operationId: deactivateCorrection
+      security: [{ deviceServiceApiKey: [] }]
+      parameters:
+        - { name: device_id, in: path, required: true, schema: { type: string } }
+        - { name: correction_id, in: path, required: true, schema: { type: integer } }
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [reason], properties: { reason: { type: string, description: '30–500 字，§7.3a 檢查' } } } } }
+      responses:
+        '200': { description: 已失效, content: { application/json: { schema: { $ref: '#/components/schemas/CorrectionOut' } } } }
+        '400': { description: reason 內容違規 }
+        '404': { description: 裝置不存在 }
+        '409': { description: correction 不存在或已失效 }
+  /devices/{device_id}/human-review:
+    get:
+      tags: [Device Service]
+      summary: 讀取人工審查 digest（OPS，§8.4；不現呼 LLM）
+      operationId: humanReview
+      security: [{ deviceServiceApiKey: [] }]
+      parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+      responses:
+        '200': { description: digest（llm 或 system_fallback）, content: { application/json: { schema: { $ref: '#/components/schemas/DigestOut' } } } }
+        '404': { description: 裝置不存在或尚無 digest }
+
 components:
   securitySchemes:
     basicAuth:
       type: http
       scheme: basic
       description: Grafana admin 帳號密碼 (預設 admin:admin)
+    deviceServiceApiKey:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: |
+        device-service 三通道金鑰（FR-310）。OPS 通道用於人工 lifecycle/feedback；
+        INGEST 通道供 gateway 寫遙測來源；AI 通道供分類/MCP。金鑰存於 .env
+        （OPS_API_KEY / INGEST_API_KEY / AI_API_KEY），缺值該通道 fail-closed。
+        AI 金鑰輪替後需 `docker compose up -d device-service-mcp` 重啟（L-3）。
 
   schemas:
+    # ===== Device Service (PRD-0003) =====
+    DeviceCreate:
+      type: object
+      required: [device_id, gateway_id]
+      properties:
+        device_id: { type: string, example: sim-002 }
+        gateway_id: { type: string, description: 來源 gateway（決定遙測表）, example: ems-gateway }
+        protocol: { type: string, example: modbus_tcp }
+        source_ref: { type: string, description: 連線/位址參照 }
+        metadata: { type: object, additionalProperties: true }
+    DeviceUpdate:
+      type: object
+      description: 非凍結欄位的部分更新；凍結欄位（device_type 等）須走 /override。
+      properties:
+        gateway_id: { type: string }
+        protocol: { type: string }
+        source_ref: { type: string }
+        metadata: { type: object, additionalProperties: true }
+    DeviceOut:
+      type: object
+      properties:
+        device_id: { type: string }
+        device_type: { type: string, description: 'electricity / temperature / unknown ...' }
+        status:
+          type: string
+          enum: [candidate, confirmed, retired]
+        classified_by:
+          type: string
+          enum: [ai, human, manual_override, migration_backfill]
+        ai_confidence: { type: number, format: float, nullable: true }
+        gateway_id: { type: string, nullable: true }
+        protocol: { type: string, nullable: true }
+        stale: { type: boolean }
+        metadata: { type: object, additionalProperties: true, nullable: true }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    OverrideRequest:
+      type: object
+      required: [device_type]
+      properties:
+        device_type: { type: string, description: 人工指定的正確型別（凍結欄位） }
+        reason: { type: string, description: '30–500 字理由（§7.3a 內容檢查）' }
+        metadata: { type: object, additionalProperties: true }
+    CorrectionCreate:
+      type: object
+      required: [correction_text]
+      properties:
+        correction_text:
+          type: string
+          minLength: 30
+          maxLength: 500
+          description: 人類修正文字；NFKC + 結構/秘密/注入字串檢查（§7.3a），永久保留並注入後續分類 prompt。
+        rerun_classification:
+          type: boolean
+          default: false
+          description: commit 後觸發 on-demand reclassify（best-effort，失敗只記 warning）。
+        demote_to_candidate:
+          type: boolean
+          default: false
+          description: confirmed→candidate（其他狀態回 409）。
+    CorrectionOut:
+      type: object
+      properties:
+        id: { type: integer }
+        device_id: { type: string }
+        correction_text: { type: string }
+        active: { type: boolean }
+        applied_count: { type: integer }
+        last_applied_at: { type: string, format: date-time, nullable: true }
+        created_at: { type: string, format: date-time }
+    DigestOut:
+      type: object
+      description: 人工審查 digest（§8.4）；不現呼 LLM，讀既有快取。
+      properties:
+        device_id: { type: string }
+        digest: { type: object, additionalProperties: true, description: 結構化審查摘要 }
+        summary_source:
+          type: string
+          enum: [llm, system_fallback]
+        ai_confidence: { type: number, format: float, nullable: true }
+        generated_at: { type: string, format: date-time, nullable: true }
+
     HealthResponse:
       type: object
       required:
