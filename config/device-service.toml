@@ -1,0 +1,106 @@
+# =============================================================================
+# device-service 參數設定檔（單一可調來源） — PRD-0003 / project_rules §19
+# =============================================================================
+# 用法：
+#   - 這是「人類調參的主檔」。改這裡 → 重啟 device-service（或 `docker compose
+#     restart device-service`）即生效。
+#   - 載入優先序（高 → 低）：環境變數 > .env > 本檔 > 程式內建 default。
+#     亦即：本檔覆寫程式 default；部署時若要臨時覆寫本檔，設同名環境變數即可。
+#   - **機密不放這裡**（本檔會進 git）。DB 密碼 / API keys 一律放 .env：
+#       DB_AI_PASSWORD, DB_OPS_PASSWORD, OPS_API_KEY, INGEST_API_KEY, AI_API_KEY,
+#       LLM_API_KEY, GUARDRAIL_API_KEY
+#   - 路徑可用環境變數 DEVICE_SERVICE_CONFIG_FILE 覆寫（預設 config/device-service.toml）。
+#   - 每個值的對應環境變數名 = 該欄位大寫（例 llm_provider → LLM_PROVIDER）。
+#   - 欄位定義與型別見 services/device-service/device_service/config.py；
+#     總表見 doc/governance/tunable-parameters.md。
+# =============================================================================
+
+[llm]
+# 分類用的 LLM 後端：mock | anthropic | openai | local（FR-305）
+llm_provider = "mock"
+# 指定 model；留空 "" → 由 factory 套用下方 per-provider 預設（llm_default_model_*）
+llm_model = ""
+# OpenAI 相容端點（None 表用 SDK 預設）；https 須在 allowlist、http 僅限本機（FR-342）
+# llm_base_url = ""
+# https provider 網域白名單（逗號分隔，FR-342）
+llm_provider_domain_allowlist = "api.anthropic.com,api.openai.com,localhost,127.0.0.1,host.docker.internal"
+# per-provider 預設 model（llm_model 留空時採用；FR-305）
+llm_default_model_anthropic = "claude-haiku-4-5"
+llm_default_model_openai = "gpt-4o-mini"
+llm_default_model_local = "qwen2.5"
+# local provider（Ollama 等）OpenAI 相容端點
+llm_local_base_url = "http://host.docker.internal:11434/v1"
+
+[guardrail]
+# L2 守衛 provider（FR-338，§8.7.3）：mock | openai | local。獨立於 L1 provider。
+# mock = deterministic 規則（免費、無模型，預設不變行為）。
+# ⚠️ 設成真實 provider 時，L2 token 成本「尚未」納入 budget gate（FR-340 follow-up）→ 成本未設上限；
+#    啟動會印 WARNING。跨-provider（L1 OpenAI + L2 Anthropic）為後續 follow-up。
+guardrail_provider = "mock"
+# 指定 L2 model；留空 "" → 套用 guardrail_default_model_openai
+guardrail_model = ""
+# L2 OpenAI 相容端點（None=SDK 預設；同 FR-342 驗證）；獨立 key 放 .env GUARDRAIL_API_KEY（空則沿用 LLM_API_KEY）
+# guardrail_base_url = ""
+# L2 預設 model（guardrail_model 留空時採用）：injection 判斷用最便宜 model 即可
+guardrail_default_model_openai = "gpt-4o-mini"
+# L2 verdict JSON 很小，輸出 token 上限壓低省成本
+guardrail_max_output_tokens = 256
+
+[llm_tuning]
+# 【耦合】provider 輸出 max_tokens，同時也是 budget reservation 的輸出上界。
+# 改這個值兩處一起動 — 不要分開設，否則 hard cap 失效（FR-329）。
+llm_max_output_tokens = 1024
+# budget reservation 的輸入 token 估算（FR-329）
+llm_reserve_input_tokens = 4000
+# 信心門檻：> 此值 → 自動 confirmed；否則留 candidate 待人工（FR-303，PRD 規定 > 0.9）
+llm_confidence_threshold = 0.9
+# LLM 呼叫失敗重試次數（FR-312）
+llm_retries = 3
+# classifier 結果 cache 上限（entries，FR-316）
+llm_cache_max = 4096
+# 選填：model 定價覆寫 JSON，{model: [輸入_per_1M, 輸出_per_1M]}，合併於內建表之上。
+# 留空用內建表；設了非定價 model 才需要。例：'{"my-model": [1.0, 2.0]}'
+llm_pricing_json = ""
+
+[budget]
+# 月預算（USD）；達 100% fail-closed 走 fallback（FR-319 / NFR）
+llm_monthly_budget_usd = 20.0
+# 預算告警比例（0–1）；達此比例發 alert。注意：80% Telegram 告警串接屬 Phase 1.4，尚未接線。
+budget_warn_ratio = 0.8
+
+[discovery]
+# 同一 source_topic 去重視窗（秒，FR-326）
+dedupe_window_s = 60.0
+# candidate 建立速率上限（每分鐘，FR-325）
+rate_limit_per_min = 60
+# 速率視窗（秒）
+rate_window_s = 60.0
+
+[mqtt]
+mqtt_host = "mosquitto"
+mqtt_port = 1883
+# 是否啟動 MQTT auto-discovery 背景訂閱（Phase 1.3）
+mqtt_enabled = false
+# 訂閱 topic（逗號分隔）。注意：放寬範圍仍受 topic_parser deny-by-default 約束；
+# 勿設過寬 wildcard（如 '#'）以免灌爆 handler。
+mqtt_subscriptions = "ems/+/+/measurements,factory/sensor/+"
+# broker 斷線重連延遲（秒）
+mqtt_reconnect_delay_s = 5.0
+
+[db]
+# DB 連線（ADR-017 雙連線池）；**密碼放 .env**，不放這裡
+db_host = "timescaledb"
+db_port = 5432
+db_name = "ems"
+
+[audit]
+# 人類修正 created_by_key_id 的 salt 版本標籤（§7.3a / FR-345）；rotation 後改版號。
+# 注意：salt 本體 AUDIT_HASH_SALT 是機密，放 .env，不放這裡。
+audit_salt_version = "v1"
+
+# -----------------------------------------------------------------------------
+# 不在本檔（spec-locked，放寬須走 ADR；見 tunable-parameters.md B 區）：
+#   MQTT payload 上限 16KB(FR-323)、欄位上限 64(FR-324/328)、樣本上限 20(FR-328)、
+#   reasoning 上限 500(FR-333)、device_id/signal_name regex(FR-322)
+# 不在本檔（機密，放 .env）：DB_*_PASSWORD、*_API_KEY、LLM_API_KEY
+# -----------------------------------------------------------------------------

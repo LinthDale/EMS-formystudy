@@ -14,6 +14,7 @@ build/
 .claude/
 *.log
 external.bak/
+doc/presentation/
 
 # Editor swap files
 *.swp
@@ -21,3 +22,6 @@ external.bak/
 
 # Third-party installer artifacts (download via wget per ops docs)
 cloudflared-linux-amd64.deb*
+
+# Internal AI agent deliberation log — for owner/agent reference only, not for public repo
+doc/governance/decision-log.md
