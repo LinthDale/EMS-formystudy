@@ -111,7 +111,7 @@ class Classifier:
                        guardrail_block=guardrail_block, guardrail_usage=guardrail_usage)
 
     async def classify(
-        self, sanitized: SanitizedSample, *, budget_ok: bool = True,
+        self, sanitized: SanitizedSample, *, budget_ok: bool = True, guardrail_ok: bool = True,
         default_device_type: str = "unknown", latest_correction_device_type: str | None = None,
         first_seen_at: str = "", generated_at: str = "", force: bool = False,
     ) -> Outcome:
@@ -145,6 +145,8 @@ class Classifier:
 
         if not budget_ok:                                          # FR-329
             return fb("budget_exhausted")
+        if not guardrail_ok:                                       # FR-340: L2 budget exhausted ->
+            return fb("guardrail_budget_exhausted")                # L1 ALSO stops, all fallback
 
         pre = await self._guardrail.check_input(sanitized, rendered)   # FR-336
         _meter(pre)

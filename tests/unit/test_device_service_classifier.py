@@ -159,6 +159,15 @@ async def test_budget_block_records_zero_guardrail_usage():
     assert o.guardrail_usage == {"input_tokens": 0, "output_tokens": 0}  # guardrail never ran
 
 
+async def test_guardrail_budget_exhausted_falls_back_and_stops_l1():
+    # FR-340: guardrail budget 100% -> classify stops entirely (L1 also) -> fallback
+    p = _CountingProvider(_res())
+    o = await Classifier(p, _PASS).classify(_elec(), guardrail_ok=False)
+    assert o.summary_source == "system_fallback" and o.last_error == "guardrail_budget_exhausted"
+    assert p.calls == 0   # L1 NOT called
+    assert o.guardrail_usage == {"input_tokens": 0, "output_tokens": 0}
+
+
 async def test_provider_failure_after_retries_falls_back():
     o = await Classifier(_RaisingProvider(), _PASS).classify(_elec())
     assert o.summary_source == "system_fallback" and o.last_error == "llm_failed_after_retries"

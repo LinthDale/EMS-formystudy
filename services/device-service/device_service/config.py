@@ -126,6 +126,9 @@ class Settings(BaseSettings):
     guardrail_base_url: str | None = None
     guardrail_default_model_openai: str = "gpt-4o-mini"  # cheapest model adequate for injection judging
     guardrail_max_output_tokens: int = 256  # L2 verdict JSON is small; keep the call cheap
+    # FR-340 L2 budget metering: the guardrail gets its OWN llm_budget_ledger row (provider='guardrail').
+    guardrail_monthly_budget_usd: float = 10.0  # separate cap; 100% -> classify stops (L1 too) -> fallback
+    guardrail_reserve_input_tokens: int = 8000  # per-call worst-case input (pre-check embeds the §8.6.5a-capped prompt)
 
     # LLM tuning (single source; project_rules §19 / tunable-parameters.md)
     llm_max_output_tokens: int = 1024       # provider max_tokens AND budget reservation output bound (COUPLED)

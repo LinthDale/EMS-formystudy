@@ -45,6 +45,12 @@ guardrail_model = ""
 guardrail_default_model_openai = "gpt-4o-mini"
 # L2 verdict JSON 很小，輸出 token 上限壓低省成本
 guardrail_max_output_tokens = 256
+# FR-340 L2 budget metering：guardrail 自己的月預算（USD，獨立 provider='guardrail' ledger row）；
+# 達 100% → 分類全停（連 L1 一起）走 system_fallback。
+guardrail_monthly_budget_usd = 10.0
+# 每次 guardrail 呼叫的最壞情況輸入 token 估算（pre-check 內嵌 §8.6.5a 上限後的 prompt）；
+# reserve 以此 × 2（pre+post）為上界。
+guardrail_reserve_input_tokens = 8000
 
 [llm_tuning]
 # 【耦合】provider 輸出 max_tokens，同時也是 budget reservation 的輸出上界。
