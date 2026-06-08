@@ -62,7 +62,12 @@ async def _classify(clf, sample):
 
 
 def _no_leak(outcome):
-    return not any(t in (outcome.result.reasoning or "") for t in _LEAK_TOKENS)
+    # scan both the fallback reasoning AND the guardrail block reasoning (either could carry
+    # internal detail on an error path) for stack-trace / internal markers.
+    blob = (outcome.result.reasoning or "")
+    if outcome.guardrail_block is not None:
+        blob += " " + (outcome.guardrail_block.reasoning or "")
+    return not any(t in blob for t in _LEAK_TOKENS)
 
 
 @_SKIP

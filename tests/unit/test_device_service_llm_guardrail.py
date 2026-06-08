@@ -132,8 +132,12 @@ async def test_output_summary_has_no_shell_metachar_separators():
         0.95, "clean reading", {})
     await g.check_output(_sample(), res, "clean prompt")
     user_msg = g._client.calls[0]["messages"][1]["content"]
-    assert "voltage" in user_msg and "current" in user_msg   # the signals are still conveyed
-    assert "|" not in user_msg and "; " not in user_msg      # but not via shell-metachar separators
+    # positive shape: signals are conveyed as structured JSON dict entries (not bare strings)...
+    data = json.loads(user_msg[user_msg.index("{"):])
+    names = [s["name"] for s in data["untrusted_data"]["signals"]]
+    assert names == ["voltage", "current"]
+    # ...and NOT via shell-metachar separators that the guardrail would self-block on
+    assert "|" not in user_msg and "; " not in user_msg
 
 
 # --- fail-closed paths: ANY ambiguity / error -> BLOCK ---
