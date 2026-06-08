@@ -168,6 +168,17 @@ async def test_guardrail_budget_exhausted_falls_back_and_stops_l1():
     assert o.guardrail_usage == {"input_tokens": 0, "output_tokens": 0}
 
 
+async def test_guardrail_budget_exhausted_bypasses_cache():
+    # a cached clean result must NOT slip through when the L2 budget is exhausted (FR-340:
+    # classification stops entirely) — guardrail_ok must gate the cache read, not just the model.
+    c = Classifier(_CountingProvider(_res(conf=0.99)), _PASS)
+    first = await c.classify(_elec())
+    assert first.summary_source == "llm" and not first.from_cache       # primes the cache
+    second = await c.classify(_elec(), guardrail_ok=False)
+    assert second.summary_source == "system_fallback"
+    assert second.last_error == "guardrail_budget_exhausted" and not second.from_cache
+
+
 async def test_provider_failure_after_retries_falls_back():
     o = await Classifier(_RaisingProvider(), _PASS).classify(_elec())
     assert o.summary_source == "system_fallback" and o.last_error == "llm_failed_after_retries"

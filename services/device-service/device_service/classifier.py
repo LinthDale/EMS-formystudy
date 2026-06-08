@@ -120,9 +120,9 @@ class Classifier:
         # budget block, or force) bypasses the cache entirely so the gates always run —
         # FR-316 (token saving) must never defeat FR-329 budget / FR-332 conflict / §8.7 guardrail.
         cacheable = (
-            not force and budget_ok
-            and not sanitized.human_corrections
-            and latest_correction_device_type is None
+            not force and budget_ok and guardrail_ok    # guardrail_ok: a budget-exhausted L2 must
+            and not sanitized.human_corrections          # fall back even if a clean result is cached
+            and latest_correction_device_type is None    # (FR-340: classification stops entirely)
         )
         key = cache_key(sanitized, self._provider.name, self._model, self._prompt_version)
         if cacheable and key in self._cache:                       # FR-316

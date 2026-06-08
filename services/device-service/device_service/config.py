@@ -118,8 +118,8 @@ class Settings(BaseSettings):
 
     # L2 guardrail (FR-338, §8.7.3): independent provider/model/key from L1.
     # Default 'mock' keeps the deterministic guardrail (no behaviour change, no LLM cost).
-    # NOTE: a real guardrail provider's L2 token cost is NOT yet budget-metered (FR-340 follow-up)
-    # -> L2 cost is UNCAPPED when enabled; main.py warns at startup.
+    # A real provider's L2 token cost IS budget-metered (FR-340) via guardrail_monthly_budget_usd
+    # below — its own llm_budget_ledger row (provider='guardrail'); 100% -> classify stops, fallback.
     guardrail_provider: str = "mock"
     guardrail_model: str = ""               # blank -> factory per-provider default
     guardrail_api_key: str = ""             # blank -> reuse llm_api_key (§8.7.3)

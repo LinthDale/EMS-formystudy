@@ -105,8 +105,10 @@ async def classify_under_budget(
 ) -> Outcome:
     """FR-329 hard cap: reserve worst-case cost up front (under the budget advisory lock),
     classify, persist the outcome (§8.6.8 device lock), then settle the reservation to actual
-    cost. The reservation NEVER leaks: any exception after a successful reserve refunds the
-    full reservation in the finally block.
+    cost. Any exception during classify/persist/settle refunds the full reservation in the finally
+    block. (Known narrow gap, pre-existing: a DB error in the guardrail reserve itself — after the
+    L1 reserve committed but before the try — can leak the L1 reservation; reserves run before the
+    try. Tracked as hardening debt; a single combined reserve tx would close it.)
 
     FR-340: the L2 guardrail runs up to 2 model calls (pre + post) and is metered on a SEPARATE
     provider='guardrail' ledger row with its own monthly cap. If the guardrail budget is
