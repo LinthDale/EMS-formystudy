@@ -551,11 +551,11 @@ paths:
   /healthz:
     get:
       tags: [Device Service]
-      summary: device-service 健康檢查（雙 pool 狀態）
+      summary: device-service 健康檢查（雙 pool 狀態，FR-314）
       operationId: deviceHealthz
       responses:
-        '200':
-          description: pools ok
+        '200': { description: 所有 pool ok, content: { application/json: { schema: { $ref: '#/components/schemas/HealthOut' } } } }
+        '503': { description: 至少一個 pool degraded, content: { application/json: { schema: { $ref: '#/components/schemas/HealthOut' } } } }
   /devices:
     post:
       tags: [Device Service]
@@ -689,7 +689,7 @@ paths:
         - { name: correction_id, in: path, required: true, schema: { type: integer } }
       requestBody:
         required: true
-        content: { application/json: { schema: { type: object, required: [reason], properties: { reason: { type: string, description: '30–500 字，§7.3a 檢查' } } } } }
+        content: { application/json: { schema: { $ref: '#/components/schemas/CorrectionDeactivateRequest' } } }
       responses:
         '200': { description: 已失效, content: { application/json: { schema: { $ref: '#/components/schemas/CorrectionOut' } } } }
         '400': { description: reason 內容違規 }
@@ -705,6 +705,40 @@ paths:
       responses:
         '200': { description: digest（llm 或 system_fallback）, content: { application/json: { schema: { $ref: '#/components/schemas/DigestOut' } } } }
         '404': { description: 裝置不存在或尚無 digest }
+  /devices/{device_id}/signals:
+    parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
+    get:
+      tags: [Device Service]
+      summary: 列出裝置 signals（OPS）
+      operationId: listSignals
+      security: [{ deviceServiceApiKey: [] }]
+      responses:
+        '200': { description: signals, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/SignalOut' } } } } }
+    post:
+      tags: [Device Service]
+      summary: 新增一個 active signal（OPS；凍結裝置須走 /override）
+      operationId: addSignal
+      security: [{ deviceServiceApiKey: [] }]
+      requestBody:
+        required: true
+        content: { application/json: { schema: { $ref: '#/components/schemas/SignalCreate' } } }
+      responses:
+        '201': { description: 已新增, content: { application/json: { schema: { $ref: '#/components/schemas/SignalOut' } } } }
+        '404': { description: 裝置不存在 }
+        '409': { description: signal 已 active，或凍結紀錄（請用 /override） }
+  /devices/{device_id}/signals/{signal_name}:
+    delete:
+      tags: [Device Service]
+      summary: 退役一個 active signal（OPS；凍結紀錄須走 /override）
+      operationId: deleteSignal
+      security: [{ deviceServiceApiKey: [] }]
+      parameters:
+        - { name: device_id, in: path, required: true, schema: { type: string } }
+        - { name: signal_name, in: path, required: true, schema: { type: string } }
+      responses:
+        '204': { description: 已退役 }
+        '404': { description: 查無 active signal }
+        '409': { description: 凍結紀錄，請用 /override }
 
 components:
   securitySchemes:
@@ -723,58 +757,90 @@ components:
         AI 金鑰輪替後需 `docker compose up -d device-service-mcp` 重啟（L-3）。
 
   schemas:
-    # ===== Device Service (PRD-0003) =====
+    # ===== Device Service (PRD-0003) — 對齊 services/device-service/device_service/models.py =====
     DeviceCreate:
       type: object
-      required: [device_id, gateway_id]
+      required: [device_id]
       properties:
-        device_id: { type: string, example: sim-002 }
-        gateway_id: { type: string, description: 來源 gateway（決定遙測表）, example: ems-gateway }
-        protocol: { type: string, example: modbus_tcp }
-        source_ref: { type: string, description: 連線/位址參照 }
-        metadata: { type: object, additionalProperties: true }
+        device_id: { type: string, pattern: '^[a-zA-Z0-9_-]{1,64}$', example: sim-002 }
+        device_type: { type: string, nullable: true, description: 'electricity / temperature / unknown ...' }
+        protocol: { type: string, nullable: true, example: modbus_tcp }
+        vendor: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        location: { type: string, nullable: true }
+        gateway_id: { type: string, nullable: true, description: 來源 gateway, example: ems-gateway }
     DeviceUpdate:
       type: object
-      description: 非凍結欄位的部分更新；凍結欄位（device_type 等）須走 /override。
+      description: 非凍結欄位的部分更新；凍結欄位須走 /override。所有欄位皆選填。
       properties:
-        gateway_id: { type: string }
-        protocol: { type: string }
-        source_ref: { type: string }
-        metadata: { type: object, additionalProperties: true }
+        device_type: { type: string, nullable: true }
+        protocol: { type: string, nullable: true }
+        vendor: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        location: { type: string, nullable: true }
+        gateway_id: { type: string, nullable: true }
     DeviceOut:
       type: object
+      required: [device_id, status]
       properties:
         device_id: { type: string }
-        device_type: { type: string, description: 'electricity / temperature / unknown ...' }
-        status:
-          type: string
-          enum: [candidate, confirmed, retired]
-        classified_by:
-          type: string
-          enum: [ai, human, manual_override, migration_backfill]
-        ai_confidence: { type: number, format: float, nullable: true }
-        gateway_id: { type: string, nullable: true }
+        device_type: { type: string, nullable: true }
+        status: { type: string, description: 'candidate / confirmed / retired' }
         protocol: { type: string, nullable: true }
-        stale: { type: boolean }
-        metadata: { type: object, additionalProperties: true, nullable: true }
-        created_at: { type: string, format: date-time }
-        updated_at: { type: string, format: date-time }
+        vendor: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        location: { type: string, nullable: true }
+        gateway_id: { type: string, nullable: true }
+        classified_by: { type: string, nullable: true, description: 'ai / human / manual_override / migration_backfill' }
+        created_at: { type: string, format: date-time, nullable: true }
+        updated_at: { type: string, format: date-time, nullable: true }
+        last_seen_at: { type: string, format: date-time, nullable: true }
+        confirmed_at: { type: string, format: date-time, nullable: true }
+    SignalCreate:
+      type: object
+      required: [signal_name]
+      properties:
+        signal_name: { type: string, pattern: '^[a-zA-Z0-9_-]{1,64}$' }
+        unit: { type: string, nullable: true }
+        datatype: { type: string, nullable: true, description: 'float / int / bool / string / enum' }
+        direction: { type: string, nullable: true, description: 'read / write / read_write' }
+        source_ref: { type: string, nullable: true }
+    SignalOut:
+      type: object
+      required: [id, device_id, signal_name, status]
+      properties:
+        id: { type: integer }
+        device_id: { type: string }
+        signal_name: { type: string }
+        unit: { type: string, nullable: true }
+        datatype: { type: string, nullable: true }
+        direction: { type: string, nullable: true }
+        status: { type: string, description: 'active / retired' }
     OverrideRequest:
       type: object
       required: [device_type]
       properties:
         device_type: { type: string, description: 人工指定的正確型別（凍結欄位） }
-        reason: { type: string, description: '30–500 字理由（§7.3a 內容檢查）' }
-        metadata: { type: object, additionalProperties: true }
+        signals:
+          type: array
+          default: []
+          items: { $ref: '#/components/schemas/SignalCreate' }
+          description: 人工指定的 signals（覆寫 AI 推論）
     CorrectionCreate:
       type: object
-      required: [correction_text]
+      required: [verdict, human_explanation]
       properties:
-        correction_text:
+        verdict:
           type: string
-          minLength: 30
-          maxLength: 500
-          description: 人類修正文字；NFKC + 結構/秘密/注入字串檢查（§7.3a），永久保留並注入後續分類 prompt。
+          enum: [wrong_classification, wrong_signals, wrong_unit, missed_signal, good_with_note]
+        corrected_device_type: { type: string, nullable: true }
+        corrected_signals:
+          type: array
+          nullable: true
+          items: { $ref: '#/components/schemas/SignalCreate' }
+        human_explanation:
+          type: string
+          description: 人類修正說明；NFKC + 長度(30–500) + 結構/秘密/注入字串檢查（§7.3a），永久保留並注入後續分類 prompt。
         rerun_classification:
           type: boolean
           default: false
@@ -783,27 +849,60 @@ components:
           type: boolean
           default: false
           description: confirmed→candidate（其他狀態回 409）。
+      description: |
+        provenance（prompt_version_at_correction、created_by_key_id、salt_version）由伺服端
+        stamp，非 client 欄位。
+    CorrectionDeactivateRequest:
+      type: object
+      required: [reason]
+      properties:
+        reason:
+          type: string
+          description: 失效理由；同 human_explanation 走 §7.3a 檢查（長度 30–500、結構/秘密/注入）。
     CorrectionOut:
       type: object
+      required: [id, device_id, verdict, human_explanation, created_by_key_id, salt_version, applied_count, is_active]
       properties:
         id: { type: integer }
         device_id: { type: string }
-        correction_text: { type: string }
-        active: { type: boolean }
+        verdict: { type: string }
+        corrected_device_type: { type: string, nullable: true }
+        corrected_signals:
+          type: array
+          nullable: true
+          items: { type: object, additionalProperties: true }
+        human_explanation: { type: string }
+        created_at: { type: string, format: date-time, nullable: true }
+        created_by_key_id: { type: string, description: HMAC key id（非原始金鑰） }
+        salt_version: { type: string }
+        prompt_version_at_correction: { type: string, nullable: true }
         applied_count: { type: integer }
         last_applied_at: { type: string, format: date-time, nullable: true }
-        created_at: { type: string, format: date-time }
+        is_active: { type: boolean }
+        deactivated_at: { type: string, format: date-time, nullable: true }
+        deactivation_reason: { type: string, nullable: true }
     DigestOut:
       type: object
+      required: [device_id, digest, summary_source]
       description: 人工審查 digest（§8.4）；不現呼 LLM，讀既有快取。
       properties:
         device_id: { type: string }
-        digest: { type: object, additionalProperties: true, description: 結構化審查摘要 }
-        summary_source:
-          type: string
-          enum: [llm, system_fallback]
-        ai_confidence: { type: number, format: float, nullable: true }
+        digest: { type: object, additionalProperties: true, description: digest.py 建的固定形狀 JSON }
+        summary_source: { type: string, description: 'llm / system_fallback' }
         generated_at: { type: string, format: date-time, nullable: true }
+        provider: { type: string, nullable: true }
+        model: { type: string, nullable: true }
+        prompt_version: { type: string, nullable: true }
+    HealthOut:
+      type: object
+      required: [status, pools]
+      description: device-service /healthz（FR-314）；degraded 時回 503。
+      properties:
+        status: { type: string, description: 'ok / degraded' }
+        pools:
+          type: object
+          additionalProperties: { type: string }
+          description: 各 DB pool 狀態（ai / ops → ok|...）
 
     HealthResponse:
       type: object
