@@ -129,3 +129,30 @@ async def test_guardrail_reserve_is_two_calls_worth(patched):
     # reserve == 2 * estimate(gpt-4o-mini, 8000 in, 256 out): pricing 0.15/0.60 per 1M
     expected = 2 * ((8000 / 1_000_000) * 0.15 + (256 / 1_000_000) * 0.60)
     assert abs(g_reserve - expected) < 1e-9
+
+
+async def test_l1_reserve_refunded_if_guardrail_reserve_errors(monkeypatch):
+    # hardening: a DB error in the guardrail reserve (AFTER L1 reserved) must NOT leak the L1
+    # reservation — the finally block refunds it (settle 0). The error still propagates.
+    settles = []
+
+    async def fake_reserve(conn, provider, ps, pe, est, budget):
+        if provider == "guardrail":
+            raise RuntimeError("db blip during guardrail reserve")
+        return True                                   # L1 reserved + committed
+
+    async def fake_settle(conn, provider, ps, est, model, tin, tout, pricing=None):
+        settles.append((provider, tin, tout))
+        return 0.0
+
+    async def fake_persist(conn, *, device_id, outcome, applied_ids):
+        return None
+
+    monkeypatch.setattr(dp, "budget_reserve", fake_reserve)
+    monkeypatch.setattr(dp, "budget_settle", fake_settle)
+    monkeypatch.setattr(dp, "persist_outcome", fake_persist)
+
+    with pytest.raises(RuntimeError):
+        await _classify(_Prov(), _Guard())
+    assert ("openai", 0, 0) in settles                # L1 reserve was refunded, not leaked
+    assert not any(p == "guardrail" for p, _, _ in settles)  # guardrail never committed -> no refund

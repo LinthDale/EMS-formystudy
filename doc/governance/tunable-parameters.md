@@ -31,7 +31,7 @@
 | **MQTT 訂閱 topic** | `MQTT_SUBSCRIPTIONS` | ems/+/+/measurements,factory/sensor/+ | csv | config → mqtt_subscriber | §8.5 | ✅ | 逗號分隔；放寬訂閱範圍仍受 parser deny-by-default 約束 |
 | **Provider 預設 model（anthropic/openai/local）** | `LLM_DEFAULT_MODEL_ANTHROPIC` / `LLM_DEFAULT_MODEL_OPENAI` / `LLM_DEFAULT_MODEL_LOCAL` | claude-haiku-4-5 / gpt-4o-mini / qwen2.5 | — | config → factory | FR-305 | ✅ | factory 不再是第二 config source；LLM_MODEL 設定時覆寫 |
 | **Local provider base URL** | `LLM_LOCAL_BASE_URL` | http://host.docker.internal:11434/v1 | — | config → factory | FR-305 | ✅ | Ollama 端點 |
-| **L2 guardrail provider** | `GUARDRAIL_PROVIDER` | mock | — | config → factory → classifier | FR-338 | ✅ | mock/openai/local；獨立於 L1。⚠️ 非 mock 時 L2 成本未納 budget（FR-340 待做） |
+| **L2 guardrail provider** | `GUARDRAIL_PROVIDER` | mock | — | config → factory → classifier | FR-338 | ✅ | mock/openai/local；獨立於 L1。非 mock 時 L2 成本由 `GUARDRAIL_MONTHLY_BUDGET_USD` 計量（FR-340） |
 | **L2 guardrail model** | `GUARDRAIL_MODEL` | (guardrail default) | — | config → factory | FR-338 | ✅ | 留空套 `GUARDRAIL_DEFAULT_MODEL_OPENAI` |
 | **L2 guardrail API key** | `GUARDRAIL_API_KEY` | "" | — | config → factory | FR-338 | ✅ | secret；空則沿用 `LLM_API_KEY` |
 | **L2 guardrail base URL** | `GUARDRAIL_BASE_URL` | None | — | config → factory | FR-342 | ✅ | allowlist 驗證（同 L1） |

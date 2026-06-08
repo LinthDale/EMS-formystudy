@@ -104,11 +104,11 @@ async def classify_under_budget(
     device_id: str, first_seen: str, force: bool = False,
 ) -> Outcome:
     """FR-329 hard cap: reserve worst-case cost up front (under the budget advisory lock),
-    classify, persist the outcome (§8.6.8 device lock), then settle the reservation to actual
-    cost. Any exception during classify/persist/settle refunds the full reservation in the finally
-    block. (Known narrow gap, pre-existing: a DB error in the guardrail reserve itself — after the
-    L1 reserve committed but before the try — can leak the L1 reservation; reserves run before the
-    try. Tracked as hardening debt; a single combined reserve tx would close it.)
+    classify, persist the outcome (§8.6.8 device lock), then settle the reservation to actual cost.
+
+    Both reserves (L1 + L2 guardrail) are taken INSIDE the try and tracked by reserved_l1 /
+    reserved_g, so ANY exception — including a DB error in the second reserve after the first one
+    committed — refunds every reservation that actually committed in the finally block. No leak.
 
     FR-340: the L2 guardrail runs up to 2 model calls (pre + post) and is metered on a SEPARATE
     provider='guardrail' ledger row with its own monthly cap. If the guardrail budget is
@@ -134,22 +134,24 @@ async def classify_under_budget(
         getattr(settings, "guardrail_max_output_tokens", RESERVE_OUTPUT_TOKENS), pricing,
     )
 
-    if is_mock:
-        budget_ok = True                                               # mock is free
-    else:
-        async with db.ai_tx() as conn:                                 # ADR-014 budget-namespace lock
-            budget_ok = await budget_reserve(
-                conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
-    if g_is_mock:
-        guardrail_ok = True                                            # mock guardrail is free
-    else:
-        async with db.ai_tx() as conn:
-            guardrail_ok = await budget_reserve(
-                conn, GUARDRAIL_PROVIDER_KEY, period_start, period_end, g_est,
-                getattr(settings, "guardrail_monthly_budget_usd", 0.0))
-
+    budget_ok = guardrail_ok = True              # mock defaults (free); set by the reserves below
     settled = g_settled = False
+    reserved_l1 = reserved_g = False             # True only once a reserve actually committed
     try:
+        # Reserve both BEFORE classify but INSIDE the try (each in its own budget-lock tx, ADR-014)
+        # so a failure of the second reserve refunds the first via the finally block.
+        if not is_mock:
+            async with db.ai_tx() as conn:
+                budget_ok = await budget_reserve(
+                    conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
+            reserved_l1 = budget_ok
+        if not g_is_mock:
+            async with db.ai_tx() as conn:
+                guardrail_ok = await budget_reserve(
+                    conn, GUARDRAIL_PROVIDER_KEY, period_start, period_end, g_est,
+                    getattr(settings, "guardrail_monthly_budget_usd", 0.0))
+            reserved_g = guardrail_ok
+
         outcome = await classifier.classify(
             sanitized, budget_ok=budget_ok, guardrail_ok=guardrail_ok,
             default_device_type=default_device_type,
@@ -159,7 +161,7 @@ async def classify_under_budget(
         async with db.ai_tx(lock=device_id) as conn:                   # §8.6.8 device advisory lock
             await persist_outcome(conn, device_id=device_id, outcome=outcome, applied_ids=applied_ids)
         # settle L1: a cache hit spent no tokens this call -> full refund (tin/tout = 0).
-        if not is_mock and budget_ok:
+        if reserved_l1:
             usage = (outcome.result.raw_response or {}).get("usage") or {}
             if outcome.summary_source == "llm" and not outcome.from_cache:
                 tin, tout = int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0))
@@ -169,7 +171,7 @@ async def classify_under_budget(
                 await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout, pricing)
             settled = True
         # settle L2 guardrail (FR-340): actual pre+post usage, 0 on a cache hit (no L2 call ran).
-        if not g_is_mock and guardrail_ok:
+        if reserved_g:
             g_usage = (outcome.guardrail_usage or {}) if not outcome.from_cache else {}
             g_tin, g_tout = int(g_usage.get("input_tokens", 0)), int(g_usage.get("output_tokens", 0))
             async with db.ai_tx() as conn:
@@ -177,11 +179,13 @@ async def classify_under_budget(
             g_settled = True
         return outcome
     finally:
-        if not is_mock and budget_ok and not settled:
+        # refund any reservation that committed but was not settled (exception before/at settle).
+        # reserved_* (not budget_ok) is the guard: a DENIED reserve added nothing, so never refund it.
+        if reserved_l1 and not settled:
             with contextlib.suppress(Exception):
                 async with db.ai_tx() as conn:
                     await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)
-        if not g_is_mock and guardrail_ok and not g_settled:
+        if reserved_g and not g_settled:
             with contextlib.suppress(Exception):
                 async with db.ai_tx() as conn:
                     await budget_settle(conn, GUARDRAIL_PROVIDER_KEY, period_start, g_est, g_model, 0, 0, pricing)

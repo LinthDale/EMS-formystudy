@@ -31,7 +31,7 @@
    - **可切換的 LLM 服務介面**自動分類裝置類型與訊號定義，支援雲端服務與離線本地部署，依成本 / 隱私需求自由切換
    - **信心分流**：高信心結果自動納管；低信心進入人工確認佇列，並以 MCP 工具讓 AI Agent 與運維協作補充上下文
    - **三層分權**（運維 / 採集端 / AI）的 API 鑑別，防止偽造裝置灌爆系統與越權修改主資料
-   - **目前狀態**：本方向已於 PRD-0003（Phase 1.1–1.4）實作為 `device-service`，含可切換 LLM 分類、MQTT 自動發現、雙層 AI 守衛、預算硬上限、append-only 稽核與 AI 通道 MCP，已合併於 `dev`。預設使用 mock LLM（零成本、不外連）；真實 provider 的雙層守衛已具備並通過實機 E2E，惟 L2 成本計量（budget metering）仍在收尾，故尚未宣稱可直接以真實 provider 上線。
+   - **目前狀態**：本方向已於 PRD-0003（Phase 1.1–1.4）實作為 `device-service`，含可切換 LLM 分類、MQTT 自動發現、雙層 AI 守衛、L1/L2 各自的預算硬上限（FR-329/FR-340）、append-only 稽核與 AI 通道 MCP，已合併於 `dev`。預設使用 mock LLM（零成本、不外連）；真實 provider 的雙層守衛已通過實機 E2E、L2 成本亦已納入獨立預算計量並 fail-closed。production 上線前的後續項：跨-provider（L1/L2 不同廠商）defense-in-depth、Grafana 監控 panel、預算告警投遞。
 
 3. **設備管理與控制面**：提供裝置 CRUD、設定下發、採集服務動態 reload；MCP 控制面從「讀寫模擬器」進化為具備權限邊界的正式控制流程。
 

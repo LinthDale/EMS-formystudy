@@ -34,8 +34,9 @@ llm_local_base_url = "http://host.docker.internal:11434/v1"
 [guardrail]
 # L2 守衛 provider（FR-338，§8.7.3）：mock | openai | local。獨立於 L1 provider。
 # mock = deterministic 規則（免費、無模型，預設不變行為）。
-# ⚠️ 設成真實 provider 時，L2 token 成本「尚未」納入 budget gate（FR-340 follow-up）→ 成本未設上限；
-#    啟動會印 WARNING。跨-provider（L1 OpenAI + L2 Anthropic）為後續 follow-up。
+# 設成真實 provider 時，L2 token 成本由 guardrail_monthly_budget_usd 計量（FR-340，獨立
+#    provider='guardrail' ledger row）；達 100% → 分類全停（連 L1）走 fallback。
+#    跨-provider（L1 OpenAI + L2 Anthropic）為後續 follow-up。
 guardrail_provider = "mock"
 # 指定 L2 model；留空 "" → 套用 guardrail_default_model_openai
 guardrail_model = ""
