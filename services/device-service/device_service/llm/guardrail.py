@@ -44,6 +44,10 @@ class GuardrailVerdict:
     threat_category: str | None = None
     reasoning: str = ""
     confidence: float = 1.0
+    # L2 token usage for this check ({input_tokens, output_tokens}); None for a token-free
+    # decision (MockGuardrail, the deterministic backstop, or a fail-closed error). Summed
+    # across pre+post by the classifier into Outcome.guardrail_usage for FR-340 budget metering.
+    usage: dict | None = None
 
     @property
     def blocked(self) -> bool:
