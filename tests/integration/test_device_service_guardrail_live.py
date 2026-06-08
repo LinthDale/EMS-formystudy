@@ -72,11 +72,14 @@ def _no_leak(outcome):
 
 @_SKIP
 async def test_clean_sample_passes_both_real_models():
-    from device_service.llm.prompt import DEVICE_TYPES
     out = await _classify(_classifier(), _clean_sample())
     assert out.summary_source == "llm"            # real L1 ran AND real L2 pre+post both PASSED
     assert out.guardrail_block is None
-    assert out.result.device_type in DEVICE_TYPES  # real classification, from the closed set
+    # unambiguous electricity readings: a working L1 + a non-false-positive L2 must produce a
+    # confident, correct classification — NOT a fallback to 'unknown' (DEVICE_TYPES includes
+    # 'unknown', so a mere "in the closed set" check would pass even on a regression).
+    assert out.result.device_type == "electricity"
+    assert out.new_status == "confirmed"          # => confidence > threshold AND not blocked/conflict
     assert _no_leak(out)
 
 

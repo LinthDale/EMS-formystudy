@@ -42,6 +42,26 @@
 - **FR-340 L2 budget metering**：`Outcome` 加 `guardrail_usage`、classifier 收集 pre+post token、`classify_under_budget` 對 `provider='guardrail'` reserve/settle + budget 100% fail-closed（L1 也停、全 fallback）。
 - **跨-provider**：`make_guardrail` 支援 `anthropic`，L1 OpenAI + L2 Anthropic 真·defense-in-depth E2E（需 Anthropic key）。
 
+## G2 live E2E — 執行證據 / promotion gate
+
+live 測試是 **opt-in**（無真 key 自動 skip），故不在一般 CI 跑。要作為 promotion gate（宣稱「最新程式仍過真模型測試」）時，在 repo root 跑下列指令並保留輸出：
+
+```bash
+set -a && . ./.env && set +a   # 需 .env: LLM_PROVIDER=openai / GUARDRAIL_PROVIDER=openai / LLM_API_KEY=sk-...
+docker run --rm -e LLM_PROVIDER -e LLM_API_KEY -e LLM_MODEL -e GUARDRAIL_PROVIDER \
+  -e GUARDRAIL_MODEL -e GUARDRAIL_API_KEY -v "$PWD":/app -w /app ems-device-service:latest \
+  bash -c "pip install -q pytest pytest-asyncio psycopg2-binary && \
+    python -m pytest tests/integration/test_device_service_guardrail_live.py -v"
+```
+
+最新通過證據（2026-06-08，commit 上承 d688f6d + 本輪 review 修正）：
+- `test_clean_sample_passes_both_real_models` PASSED — 真 L1 分類 `electricity`、`new_status=confirmed`（confidence > threshold）、L2 pre+post PASS、no-leak。
+- `test_obvious_injection_blocked_to_fallback` PASSED — 後盾 pre-block → system_fallback、攻擊目標 `motor` 未漏出。
+- `test_semantic_injection_caught_by_real_model` PASSED — 規避 regex 的語意攻擊由真 L2 模型擋下（`instruction_hijack`）。
+- 連同 16 條 guardrail 單測，共 **19 passed**（真 OpenAI，gpt-4o-mini×2，成本約數美分）。
+
+> 註：promotion 到 production 前仍需 **FR-340 L2 budget metering**（見 Follow-up）。目前 real guardrail 的 L2 成本 uncapped，故僅宣稱「G2 live E2E 完成」，**不**宣稱 guardrail production-ready。
+
 ## 流程（不變）
 每片 TDD + **合併前 code-review agent**（[[feedback_review_before_merge]]）；記錄落本檔（[[feedback_plans_need_record_doc]]）；測試在 throwaway 容器（[[reference_ems_test_runtime]]）；可調參數集中（[[feedback_tunable_params_registry]]）。
 
