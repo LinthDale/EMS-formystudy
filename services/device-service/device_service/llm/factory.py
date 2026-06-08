@@ -54,7 +54,7 @@ def make_guardrail(
     """Select the L2 guardrail by config (FR-338). 'mock' = deterministic, free, no model.
     'openai'/'local' = real model-backed LLMGuardrail (independent of the L1 provider).
     'anthropic' is reserved for the cross-provider follow-up and not yet wired."""
-    p = (provider or "mock").lower()
+    p = (provider or "mock").strip().lower()
     if p == "mock":
         return MockGuardrail()
     if p == "openai":

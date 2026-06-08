@@ -188,6 +188,16 @@ class Settings(BaseSettings):
             raise ValueError("LLM_PRICING_JSON must be a JSON object {model: [in_per_1M, out_per_1M]}")
         return v
 
+    @field_validator("guardrail_provider")
+    @classmethod
+    def _check_guardrail_provider(cls, v: str) -> str:
+        # fail-fast at config load (cleaner than a lifespan crash) — keep in sync with make_guardrail
+        allowed = {"mock", "openai", "local"}
+        p = (v or "mock").strip().lower()
+        if p not in allowed:
+            raise ValueError(f"GUARDRAIL_PROVIDER must be one of {sorted(allowed)}, got {v!r}")
+        return p
+
     @model_validator(mode="after")
     def _check_base_url(self) -> "Settings":
         validate_base_url(self.llm_base_url, self.allowlist)        # FR-342

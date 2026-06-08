@@ -56,6 +56,10 @@ async def _lifespan(_server: FastMCP):
         _log.warning(
             "GUARDRAIL_PROVIDER=%r: real L2 guardrail token cost is NOT budget-metered yet "
             "(FR-340 pending) -> L2 cost is UNCAPPED", settings.guardrail_provider)
+        if not settings.guardrail_api_key:
+            _log.warning(
+                "GUARDRAIL_API_KEY not set -> L2 falls back to LLM_API_KEY; set it explicitly "
+                "to isolate L2 billing and avoid silent failures if the L1 key rotates")
     guardrail = make_guardrail(
         settings.guardrail_provider, api_key=settings.guardrail_api_key or settings.llm_api_key,
         model=settings.guardrail_model, base_url=settings.guardrail_base_url,
