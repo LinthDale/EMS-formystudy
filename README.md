@@ -1,6 +1,6 @@
 # synaiq EMS
 
-自主研發的商用 **EMS（Energy Management System）** —— 從電力資料採集、可視化、告警，一路延伸到工廠環境監測與 AI 控制面（MCP）。
+自主研發的商用 **EMS（Energy Management System）** —— 從電力資料採集、可視化、告警，一路延伸到工廠環境監測、**裝置自動登錄與 AI 輔助分類**，以及 AI 控制面（MCP）。
 
 > 對標 Schneider PME、研華 WebAccess/EMS 等國際成熟產品，差異化定位在**台灣在地化**（台電費率、需量管理）、**AI 主動控制**（MCP 協定原生支援）、與**可深度客製**的整體架構。
 
@@ -13,7 +13,9 @@
 | **即時可視化** | 整合儀表板涵蓋電力曲線、工廠環境趨勢、設備狀態時間軸 |
 | **告警鏈路** | 自訂閾值 / 持續時間規則 → Telegram 即時通知，附事件時間、設備、超限值 |
 | **工廠環境整合** | 工廠 PLC 與環境感測器與電表共用同一條管線，單一資料平台統一管理 |
-| **AI 控制面（MCP）** | 原生 MCP 介面，讓 Claude / 其他 AI Agent 用自然語言讀寫 PLC 暫存器 |
+| **裝置自動登錄 + AI 分類** | 新裝置 MQTT 上線即自動偵測，可切換 LLM（mock / 雲端 / 本地）分類裝置型別與訊號定義；高信心自動納管、低信心進人工確認佇列（PRD-0003） |
+| **雙層 AI 安全防護** | 分類路徑經兩層 AI 守衛（L1 分類 + L2 guardrail）＋輸入淨化＋輸出驗證＋預算硬上限＋三層 API 分權；所有 AI 決策寫入 append-only 稽核紀錄 |
+| **AI 控制面（MCP）** | 原生 MCP 介面，讓 Claude / 其他 AI Agent 用自然語言讀寫 PLC 暫存器，並以 AI 通道工具讀取 / 重跑裝置分類 |
 | **故障注入測試** | 模擬器提供故障注入 API，方便驗證告警鏈路與恢復流程 |
 | **一鍵部署 / 重建** | 容器化部署，單一指令啟動整套系統；可在不影響規格的情況下完整重建 |
 
@@ -29,6 +31,7 @@
    - **可切換的 LLM 服務介面**自動分類裝置類型與訊號定義，支援雲端服務與離線本地部署，依成本 / 隱私需求自由切換
    - **信心分流**：高信心結果自動納管；低信心進入人工確認佇列，並以 MCP 工具讓 AI Agent 與運維協作補充上下文
    - **三層分權**（運維 / 採集端 / AI）的 API 鑑別，防止偽造裝置灌爆系統與越權修改主資料
+   - **目前狀態**：本方向已於 PRD-0003（Phase 1.1–1.4）實作為 `device-service`，含可切換 LLM 分類、MQTT 自動發現、雙層 AI 守衛、預算硬上限、append-only 稽核與 AI 通道 MCP，已合併於 `dev`。預設使用 mock LLM（零成本、不外連）；真實 provider 的雙層守衛已具備並通過實機 E2E，惟 L2 成本計量（budget metering）仍在收尾，故尚未宣稱可直接以真實 provider 上線。
 
 3. **設備管理與控制面**：提供裝置 CRUD、設定下發、採集服務動態 reload；MCP 控制面從「讀寫模擬器」進化為具備權限邊界的正式控制流程。
 
@@ -80,6 +83,23 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 
 工廠資料的可視化依工廠環境監測常見做法分成：即時狀態 gauge、環境趨勢 time series、設備狀態 state timeline、最新資料 table。
 
+### 裝置登錄與 AI 輔助分類（PRD-0003）
+
+新裝置經 MQTT 上線即被自動偵測，進入裝置登錄服務的分類管線；結果依信心分流（高信心自動納管、低信心進人工確認佇列）。分類路徑全程受多層防護：
+
+```text
+┌─────────────┐  MQTT 訂閱  ┌──────────────────────────────────────────────────────┐
+│ 新裝置上線  │ ──────────▶ │ 裝置登錄服務 device-service (:8002)                    │
+└─────────────┘             │  淨化 → 預算閘 → L2 守衛(pre) → L1 分類(可切換 provider) │
+                            │  → L2 守衛(post) → 輸出驗證 → 信心分流                  │
+┌─────────────┐  X-API-Key  │  雙 DB 連線池最小權限 · DB 凍結觸發器 · append-only 稽核 │
+│ 運維 / AI   │ ──────────▶ └──────────────────────────────────────────────────────┘
+└─────────────┘                         │ AI 通道 MCP endpoint（本機）
+                                         ▼  http://127.0.0.1:8766/mcp（讀取 / 重跑分類工具）
+```
+
+裝置中繼資料集中於單一 source of truth；運維可經 REST 確認 / 修正 / 退役裝置，或提交修正回饋（correction）讓後續分類參考。設計取捨見 `doc/prd/PRD-0003-Device-Registry-Auto-Discovery.md` 與 `doc/adr/`（ADR-009～018）。
+
 ## 服務組成
 
 | 服務 | 對外 Port | 用途 |
@@ -95,7 +115,9 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | 工廠感測器模擬器 | — | POC 階段模擬 JSON 感測器 |
 | 工廠採集閘道 | — | PLC → MQTT |
 | 工廠寫入服務 | — | MQTT → 工廠量測資料表 |
-| AI 控制面 (MCP Server) | 8765 (本機) | MCP client 讀寫設備暫存器 |
+| AI 控制面 (kc-mcp-server) | 8765 (本機) | MCP client 讀寫設備暫存器 |
+| 裝置登錄服務 (device-service) | 8002 (REST) | 裝置 CRUD / 自動分類 / 人機確認 / 修正回饋 / 稽核（PRD-0003） |
+| 裝置登錄 MCP (device-service-mcp) | 127.0.0.1:8766 (本機) | device-service 的 MCP endpoint，AI 通道讀取 / 重跑分類工具 |
 
 ## 快速入口
 
@@ -105,7 +127,9 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | 電力資料查詢 API | <http://localhost:3001/electricity_measurements?order=time.desc&limit=10> | 查詢歷史電力資料 |
 | 工廠資料查詢 API | <http://localhost:3001/factory_measurements?order=time.desc&limit=10> | 查詢溫度、濕度、壓力、馬達、Pump、Valve |
 | 模擬器健康檢查 | <http://localhost:8001/health> | 電表模擬器健康狀態 |
-| MCP endpoint | `http://localhost:8765/mcp` | 供 MCP client 連線（非瀏覽器頁面） |
+| 裝置登錄服務健康檢查 | `curl http://localhost:8002/healthz` | device-service 雙 DB 連線池狀態 |
+| kc MCP endpoint | `http://localhost:8765/mcp` | 工廠 PLC MCP client 連線（非瀏覽器頁面） |
+| 裝置登錄 MCP endpoint | `http://127.0.0.1:8766/mcp`（需 X-API-Key） | device-service AI 通道工具（非瀏覽器頁面） |
 
 MCP endpoint 用瀏覽器直接打開會看到 `Not Acceptable: Client must accept text/event-stream`，這是正常的；它需要 MCP client 以 `Accept: application/json, text/event-stream` 連線。
 
@@ -207,7 +231,7 @@ docker compose down -v && docker compose up -d
 │   ├── operations/          # 操作手冊、容器速查表、對外公開指南
 │   └── archive/             # 已被 PRD 取代的歷史規劃
 ├── infra/                   # 資料庫初始化、broker、儀表板 provisioning
-└── services/                # 自有服務模組（電表 / 採集 / 寫入 / 工廠 / MCP）
+└── services/                # 自有服務模組（電表 / 採集 / 寫入 / 工廠 / MCP / 裝置登錄 device-service）
 ```
 
 ## 文件索引
@@ -249,4 +273,4 @@ docker compose down -v && docker compose up -d
 
 | 文件 | 用途 |
 |------|------|
-| `api/openapi.yml` | 對外 API schema（查詢 API + 模擬器 + 儀表板管理 API） |
+| `api/openapi.yml` | 對外 API schema（查詢 API + 模擬器 + 儀表板管理 + 裝置登錄 device-service REST API） |
