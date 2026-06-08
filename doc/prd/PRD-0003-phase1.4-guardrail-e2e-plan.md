@@ -26,7 +26,9 @@
 - 驗收：classifier 行為不變（預設 mock）；新模組高覆蓋；code-review 0 CRIT/HIGH 後 merge dev。
 </details>
 
-### G2 — 真模型 live E2E（**需 GPT key**，NEXT）
+### ✅ G2 — 真模型 live E2E（DONE，merged dev d688f6d）
+**完成**：opt-in 整合測試 `tests/integration/test_device_service_guardrail_live.py`（無真 key 自動 skip），對真 OpenAI（L1 gpt-4o-mini + L2 gpt-4o-mini）過實際 Classifier pipeline 三情境**實跑通過**：(1) 乾淨電力樣本→真 L1 分類 electricity@0.95、L2 pre+post PASS→summary_source=llm；(2) 明顯 injection→deterministic 後盾 pre-block→system_fallback、攻擊目標 motor 沒漏出；(3) **語意 injection（規避靜態 marker）→真 L2 模型擋下（instruction_hijack）**→證明 model-backed L2 擋得住 regex 漏接的攻擊。**live E2E 抓到並修掉真實 bug**：`_summarize_output` 用 `|`/`;` 當分隔符（本身是 shell metachar）→ guardrail 自己的「output 含 shell metachar」規則誤判、把每筆乾淨分類都 post-block→改回傳結構化 dict（JSON 嵌入，真 metachar 仍逐字可偵測）。fake-client 單測沒抓到、真模型才現形。加 regression 單測鎖死。code-review APPROVE（0 CRIT/HIGH，MED/LOW 已修）。device_service unit 251 passed + live 3 條。成本約數美分。
+<details><summary>原計畫</summary>
 - key 放 `.env`（gitignored）：`LLM_PROVIDER=openai` + `LLM_API_KEY=sk-...` + `GUARDRAIL_PROVIDER=openai`（共用 `LLM_API_KEY`）。
 - E2E（throwaway 容器或本機，連真 OpenAI）：
   - injection prompt → **L2 pre BLOCK** → L1 不被呼叫 → digest `summary_source='system_fallback'` → device 不 confirmed、不寫越權內容（FR-336）。
@@ -34,6 +36,7 @@
   - 乾淨樣本 → L2 pass → 正常分類。
   - no-leak：client/digest 不含 stack trace / 內部細節。
 - 成本：每筆分類多 2 次 L2 call、小模型短 prompt，E2E 只跑少量樣本，預估 < $0.05。
+</details>
 
 ### Follow-up（本計畫後，production enable 前必做）
 - **FR-340 L2 budget metering**：`Outcome` 加 `guardrail_usage`、classifier 收集 pre+post token、`classify_under_budget` 對 `provider='guardrail'` reserve/settle + budget 100% fail-closed（L1 也停、全 fallback）。
