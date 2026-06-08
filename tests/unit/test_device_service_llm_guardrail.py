@@ -121,6 +121,21 @@ async def test_output_check_sends_l1_summary_to_model():
     assert "electricity" in user_msg and "L1_OUTPUT" in user_msg
 
 
+async def test_output_summary_has_no_shell_metachar_separators():
+    # live-E2E regression: a clean L1 output must NOT be described with '|' or ';' separators —
+    # those are shell metacharacters and the guardrail's own "shell metachar in output" rule
+    # would false-positive on them and block every clean classification.
+    g = _guard(_Resp('{"decision":"pass"}'))
+    res = ClassificationResult(
+        "electricity",
+        (SignalSuggestion("voltage", "V", "float", "read"), SignalSuggestion("current", "A", "float", "read")),
+        0.95, "clean reading", {})
+    await g.check_output(_sample(), res, "clean prompt")
+    user_msg = g._client.calls[0]["messages"][1]["content"]
+    assert "voltage" in user_msg and "current" in user_msg   # the signals are still conveyed
+    assert "|" not in user_msg and "; " not in user_msg      # but not via shell-metachar separators
+
+
 # --- fail-closed paths: ANY ambiguity / error -> BLOCK ---
 async def test_bad_json_fails_closed():
     v = await _guard(_Resp("not json at all")).check_input(_sample(), "clean prompt")
