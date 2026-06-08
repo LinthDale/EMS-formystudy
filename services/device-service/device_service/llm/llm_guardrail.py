@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import logging
+from dataclasses import replace
 
 from .guardrail import GuardrailVerdict, MockGuardrail
 from .types import ClassificationResult, SanitizedSample
@@ -64,6 +65,18 @@ def _summarize_output(result: ClassificationResult) -> dict:
             {"name": s.signal_name, "unit": s.unit, "datatype": s.datatype, "direction": s.direction}
             for s in result.suggested_signals
         ],
+    }
+
+
+def _extract_usage(resp) -> dict | None:
+    """Pull token usage off an OpenAI-compatible response for FR-340 L2 budget metering.
+    None if the server did not report usage."""
+    usage = getattr(resp, "usage", None)
+    if usage is None:
+        return None
+    return {
+        "input_tokens": int(getattr(usage, "prompt_tokens", 0) or 0),
+        "output_tokens": int(getattr(usage, "completion_tokens", 0) or 0),
     }
 
 
@@ -149,7 +162,8 @@ class LLMGuardrail:
             choices = getattr(resp, "choices", None) or []
             msg = getattr(choices[0], "message", None) if choices else None
             text = (getattr(msg, "content", None) or "") if msg else ""
-            return _parse_verdict(text)
+            # this call consumed tokens regardless of the verdict -> meter it (FR-340)
+            return replace(_parse_verdict(text), usage=_extract_usage(resp))
         except Exception as exc:  # noqa: BLE001 — guardrail must fail CLOSED, never pass on error
             _log.warning("guardrail model unavailable/unparseable (%s) -> fail-closed BLOCK", type(exc).__name__)
             return GuardrailVerdict("block", "other", "guardrail unavailable (fail-closed)")

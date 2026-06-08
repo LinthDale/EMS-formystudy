@@ -69,6 +69,11 @@ class Outcome:
     last_error: str | None
     from_cache: bool = False
     guardrail_block: GuardrailBlock | None = None   # set only when L2 BLOCKED (FR-339 audit)
+    # L2 token usage actually consumed THIS classification (pre + post), for FR-340 budget
+    # settle. {input_tokens, output_tokens}; zeros when the guardrail is free (mock / backstop)
+    # or did not run. On a cache hit this carries the original call's usage — the budget settle
+    # must ignore it when from_cache is True (no tokens were spent this time).
+    guardrail_usage: dict | None = None
 
 
 class Classifier:
@@ -90,7 +95,7 @@ class Classifier:
     def _fallback(
         self, sanitized: SanitizedSample, default_device_type: str, *,
         first_seen_at: str, generated_at: str, last_error: str,
-        guardrail_block: GuardrailBlock | None = None,
+        guardrail_block: GuardrailBlock | None = None, guardrail_usage: dict | None = None,
     ) -> Outcome:
         signals = tuple(
             SignalSuggestion(f.field_name, "", "", "read") for f in sanitized.fields
@@ -100,9 +105,10 @@ class Classifier:
             sanitized, default_device_type,
             first_seen_at=first_seen_at, generated_at=generated_at, prompt_version=self._prompt_version,
         )
-        # fallback never caches (transient) and never auto-confirms
+        # fallback never caches (transient) and never auto-confirms. guardrail_usage still carries
+        # any L2 tokens spent before the block (e.g. a pre-check that ran the model then blocked).
         return Outcome(result, digest, "system_fallback", "candidate", False, last_error,
-                       guardrail_block=guardrail_block)
+                       guardrail_block=guardrail_block, guardrail_usage=guardrail_usage)
 
     async def classify(
         self, sanitized: SanitizedSample, *, budget_ok: bool = True,
@@ -123,14 +129,25 @@ class Classifier:
             return replace(self._cache[key], from_cache=True)
 
         rendered = render_sample(sanitized)
+        # accumulate L2 token usage across the pre + post checks (FR-340). fb snapshots whatever
+        # has been spent so far, so a pre-check that ran the model then blocked is still metered.
+        g_usage = {"input_tokens": 0, "output_tokens": 0}
+
+        def _meter(verdict) -> None:
+            if verdict is not None and verdict.usage is not None:
+                g_usage["input_tokens"] += int(verdict.usage.get("input_tokens", 0))
+                g_usage["output_tokens"] += int(verdict.usage.get("output_tokens", 0))
+
         fb = lambda err, gb=None: self._fallback(                   # noqa: E731
             sanitized, default_device_type,
-            first_seen_at=first_seen_at, generated_at=generated_at, last_error=err, guardrail_block=gb)
+            first_seen_at=first_seen_at, generated_at=generated_at, last_error=err,
+            guardrail_block=gb, guardrail_usage=dict(g_usage))
 
         if not budget_ok:                                          # FR-329
             return fb("budget_exhausted")
 
         pre = await self._guardrail.check_input(sanitized, rendered)   # FR-336
+        _meter(pre)
         if pre.blocked:
             return fb("guardrail_blocked_input", GuardrailBlock(   # FR-339 audit: pre-check, no L1 output
                 "pre", pre.threat_category, pre.reasoning[:_MAX_REASON_LEN], _sha(rendered)))
@@ -146,6 +163,7 @@ class Classifier:
             return fb("llm_failed_after_retries")
 
         post = await self._guardrail.check_output(sanitized, result, rendered)   # FR-337
+        _meter(post)
         if post.blocked:
             return fb("guardrail_blocked_output", GuardrailBlock(  # FR-339 audit: post-check, L1 ran
                 "post", post.threat_category, post.reasoning[:_MAX_REASON_LEN],
@@ -166,7 +184,8 @@ class Classifier:
             sanitized, cleaned, provider=self._provider.name, model=self._model,
             first_seen_at=first_seen_at, generated_at=generated_at, prompt_version=self._prompt_version,
         )
-        outcome = Outcome(cleaned, digest, "llm", new_status, conflict, None)
+        outcome = Outcome(cleaned, digest, "llm", new_status, conflict, None,
+                          guardrail_usage=dict(g_usage))
         if cacheable:  # only clean, context-free results are cached (see above)
             if len(self._cache) >= self._cache_max:
                 self._cache.pop(next(iter(self._cache)))  # bound memory: drop oldest entry

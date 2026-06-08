@@ -112,6 +112,53 @@ async def test_guardrail_block_output_falls_back():
     assert gb.l1_input_hash and gb.l1_output_hash
 
 
+# ---- FR-340: L2 token usage metering (Slice 1 — plumbing into Outcome.guardrail_usage) ----
+class _MeteredGuardrail:
+    """Guardrail whose pre/post checks each report token usage (real-model stand-in)."""
+    name = "metered"
+
+    def __init__(self, *, pre, post, block_pre=False, block_post=False):
+        self._pre, self._post = pre, post
+        self._block_pre, self._block_post = block_pre, block_post
+
+    async def check_input(self, sanitized, rendered):
+        return GuardrailVerdict("block" if self._block_pre else "pass",
+                                "other" if self._block_pre else None, "", 1.0, self._pre)
+
+    async def check_output(self, sanitized, l1, rendered):
+        return GuardrailVerdict("block" if self._block_post else "pass",
+                                "other" if self._block_post else None, "", 1.0, self._post)
+
+
+async def test_guardrail_usage_sums_pre_and_post():
+    g = _MeteredGuardrail(pre={"input_tokens": 10, "output_tokens": 4},
+                          post={"input_tokens": 8, "output_tokens": 3})
+    o = await Classifier(_CountingProvider(_res()), g).classify(_elec())
+    assert o.summary_source == "llm"
+    assert o.guardrail_usage == {"input_tokens": 18, "output_tokens": 7}
+
+
+async def test_guardrail_usage_pre_block_counts_pre_only_and_skips_l1():
+    g = _MeteredGuardrail(pre={"input_tokens": 10, "output_tokens": 4},
+                          post={"input_tokens": 99, "output_tokens": 99}, block_pre=True)
+    p = _CountingProvider(_res())
+    o = await Classifier(p, g).classify(_elec())
+    assert o.summary_source == "system_fallback"
+    assert o.guardrail_usage == {"input_tokens": 10, "output_tokens": 4}  # post never ran
+    assert p.calls == 0   # FR-336/340: L1 not called after a pre-block
+
+
+async def test_mock_guardrail_usage_is_zero():
+    o = await Classifier(_CountingProvider(_res()), MockGuardrail()).classify(_elec())
+    assert o.guardrail_usage == {"input_tokens": 0, "output_tokens": 0}
+
+
+async def test_budget_block_records_zero_guardrail_usage():
+    o = await Classifier(MockProvider(), _PASS).classify(_elec(), budget_ok=False)
+    assert o.summary_source == "system_fallback"
+    assert o.guardrail_usage == {"input_tokens": 0, "output_tokens": 0}  # guardrail never ran
+
+
 async def test_provider_failure_after_retries_falls_back():
     o = await Classifier(_RaisingProvider(), _PASS).classify(_elec())
     assert o.summary_source == "system_fallback" and o.last_error == "llm_failed_after_retries"
