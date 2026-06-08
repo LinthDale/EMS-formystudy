@@ -134,7 +134,7 @@ class Classifier:
         g_usage = {"input_tokens": 0, "output_tokens": 0}
 
         def _meter(verdict) -> None:
-            if verdict is not None and verdict.usage:
+            if verdict is not None and verdict.usage is not None:
                 g_usage["input_tokens"] += int(verdict.usage.get("input_tokens", 0))
                 g_usage["output_tokens"] += int(verdict.usage.get("output_tokens", 0))
 
