@@ -26,7 +26,7 @@ _cfg_log = logging.getLogger("device_service.config")
 DEFAULT_CONFIG_FILE = "config/device-service.toml"
 # secrets must come from env/.env only; ignored if present in the (committed) TOML
 SECRET_FIELDS = frozenset({
-    "llm_api_key", "db_ai_password", "db_ops_password",
+    "llm_api_key", "guardrail_api_key", "db_ai_password", "db_ops_password",
     "ops_api_key", "ingest_api_key", "ai_api_key", "audit_hash_salt",
 })
 
@@ -116,6 +116,17 @@ class Settings(BaseSettings):
     llm_base_url: str | None = None
     llm_provider_domain_allowlist: str = DEFAULT_ALLOWLIST
 
+    # L2 guardrail (FR-338, §8.7.3): independent provider/model/key from L1.
+    # Default 'mock' keeps the deterministic guardrail (no behaviour change, no LLM cost).
+    # NOTE: a real guardrail provider's L2 token cost is NOT yet budget-metered (FR-340 follow-up)
+    # -> L2 cost is UNCAPPED when enabled; main.py warns at startup.
+    guardrail_provider: str = "mock"
+    guardrail_model: str = ""               # blank -> factory per-provider default
+    guardrail_api_key: str = ""             # blank -> reuse llm_api_key (§8.7.3)
+    guardrail_base_url: str | None = None
+    guardrail_default_model_openai: str = "gpt-4o-mini"  # cheapest model adequate for injection judging
+    guardrail_max_output_tokens: int = 256  # L2 verdict JSON is small; keep the call cheap
+
     # LLM tuning (single source; project_rules §19 / tunable-parameters.md)
     llm_max_output_tokens: int = 1024       # provider max_tokens AND budget reservation output bound (COUPLED)
     llm_reserve_input_tokens: int = 4000    # budget reservation input estimate
@@ -179,7 +190,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _check_base_url(self) -> "Settings":
-        validate_base_url(self.llm_base_url, self.allowlist)
+        validate_base_url(self.llm_base_url, self.allowlist)        # FR-342
+        validate_base_url(self.guardrail_base_url, self.allowlist)  # FR-342 (L2 same rule)
         return self
 
     @classmethod

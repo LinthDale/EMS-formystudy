@@ -155,7 +155,8 @@ def test_committed_toml_mirrors_code_defaults(monkeypatch):
     # Secrets are derived from SECRET_FIELDS so the two can never drift.
     from device_service.config import SECRET_FIELDS
     excluded = set(SECRET_FIELDS) | {
-        "llm_base_url",  # optional, commented out in TOML
+        "llm_base_url",        # optional, commented out in TOML
+        "guardrail_base_url",  # optional, commented out in TOML
     }
     for key in fields:
         if key not in excluded:
