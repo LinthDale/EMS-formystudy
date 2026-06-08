@@ -39,8 +39,29 @@
 </details>
 
 ### Follow-up（本計畫後，production enable 前必做）
-- **FR-340 L2 budget metering**：`Outcome` 加 `guardrail_usage`、classifier 收集 pre+post token、`classify_under_budget` 對 `provider='guardrail'` reserve/settle + budget 100% fail-closed（L1 也停、全 fallback）。
+- **FR-340 L2 budget metering**：見下方「## FR-340 實作計畫」（進行中）。
 - **跨-provider**：`make_guardrail` 支援 `anthropic`，L1 OpenAI + L2 Anthropic 真·defense-in-depth E2E（需 Anthropic key）。
+
+## FR-340 L2 budget metering — 實作計畫
+
+> PRD §8.7.4 / FR-340：L2 token 用量寫入 `llm_budget_ledger` 獨立 `provider='guardrail'` row；budget gate fail-closed 同套 L2；**L2 budget 100% → 不可繼續 classify（L1 也停）→ 全走 system_fallback**。這是 real-provider guardrail 上線的最後 blocker。
+
+### Slice 1 — usage plumbing（不動 budget，純接線）
+- `GuardrailVerdict` 加 `usage: dict|None`（{input_tokens, output_tokens}）。
+- `LLMGuardrail._judge` 從回應抽 usage（mirror openai_provider._extract_usage）並掛到 verdict；deterministic 後盾擋下 / MockGuardrail → usage None（免費）；fail-closed 例外路徑 usage None。
+- `Classifier`：累加 pre+post 的 usage → 新 `Outcome.guardrail_usage`（含各 fallback 路徑，pre 擋下也帶已花的 pre usage）。
+- unit tests（fake client 帶 usage）；預設 mock → guardrail_usage None，行為不變。
+
+### Slice 2 — budget gate + ledger（fail-closed）
+- config 加 `guardrail_monthly_budget_usd` + `guardrail_reserve_input_tokens`（可調，入 TOML/registry）。
+- `classify_under_budget`：對 `provider='guardrail'` reserve 最壞情況（pre+post 共 2 call）→ 傳 `guardrail_ok` 給 classifier；classify 後依 `Outcome.guardrail_usage` settle（cache hit → 不重複計、全額退；leak-safe finally 退 reserve）。pricing 以 guardrail_model 查表。
+- `Classifier.classify` 加 `guardrail_ok`：False → `fb("guardrail_budget_exhausted")` **在 pre/L1 之前**（FR-340：L1 也停）。
+- 整合測試（DB）：guardrail ledger row 寫入、budget 100% → 全 fallback、fallback/cache → 退款；L1 與 guardrail 兩 row 獨立。
+- docs：tunable-parameters + TOML + 操作手冊（guardrail budget 與 alert 說明）。
+- 註：guardrail budget 100% 的 Telegram alert 投遞與既有 L1 80% alert 一樣走 Grafana-over-ledger，屬 observability 批次（與現有未接線狀態一致），本片只保證 **fail-closed 行為 + ledger 記錄**。
+
+### 流程
+每片 TDD + 合併前 code-review；fail-closed 一律往 fallback；不破壞既有 L1 budget 路徑（純加 guardrail 平行軌）。
 
 ## G2 live E2E — 執行證據 / promotion gate
 
