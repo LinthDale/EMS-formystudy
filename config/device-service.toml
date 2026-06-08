@@ -8,7 +8,7 @@
 #     亦即：本檔覆寫程式 default；部署時若要臨時覆寫本檔，設同名環境變數即可。
 #   - **機密不放這裡**（本檔會進 git）。DB 密碼 / API keys 一律放 .env：
 #       DB_AI_PASSWORD, DB_OPS_PASSWORD, OPS_API_KEY, INGEST_API_KEY, AI_API_KEY,
-#       LLM_API_KEY
+#       LLM_API_KEY, GUARDRAIL_API_KEY
 #   - 路徑可用環境變數 DEVICE_SERVICE_CONFIG_FILE 覆寫（預設 config/device-service.toml）。
 #   - 每個值的對應環境變數名 = 該欄位大寫（例 llm_provider → LLM_PROVIDER）。
 #   - 欄位定義與型別見 services/device-service/device_service/config.py；
@@ -30,6 +30,21 @@ llm_default_model_openai = "gpt-4o-mini"
 llm_default_model_local = "qwen2.5"
 # local provider（Ollama 等）OpenAI 相容端點
 llm_local_base_url = "http://host.docker.internal:11434/v1"
+
+[guardrail]
+# L2 守衛 provider（FR-338，§8.7.3）：mock | openai | local。獨立於 L1 provider。
+# mock = deterministic 規則（免費、無模型，預設不變行為）。
+# ⚠️ 設成真實 provider 時，L2 token 成本「尚未」納入 budget gate（FR-340 follow-up）→ 成本未設上限；
+#    啟動會印 WARNING。跨-provider（L1 OpenAI + L2 Anthropic）為後續 follow-up。
+guardrail_provider = "mock"
+# 指定 L2 model；留空 "" → 套用 guardrail_default_model_openai
+guardrail_model = ""
+# L2 OpenAI 相容端點（None=SDK 預設；同 FR-342 驗證）；獨立 key 放 .env GUARDRAIL_API_KEY（空則沿用 LLM_API_KEY）
+# guardrail_base_url = ""
+# L2 預設 model（guardrail_model 留空時採用）：injection 判斷用最便宜 model 即可
+guardrail_default_model_openai = "gpt-4o-mini"
+# L2 verdict JSON 很小，輸出 token 上限壓低省成本
+guardrail_max_output_tokens = 256
 
 [llm_tuning]
 # 【耦合】provider 輸出 max_tokens，同時也是 budget reservation 的輸出上界。
