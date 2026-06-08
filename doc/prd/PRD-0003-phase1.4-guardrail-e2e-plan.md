@@ -83,7 +83,7 @@ docker run --rm -e LLM_PROVIDER -e LLM_API_KEY -e LLM_MODEL -e GUARDRAIL_PROVIDE
 - `test_semantic_injection_caught_by_real_model` PASSED — 規避 regex 的語意攻擊由真 L2 模型擋下（`instruction_hijack`）。
 - 連同 16 條 guardrail 單測，共 **19 passed**（真 OpenAI，gpt-4o-mini×2，成本約數美分）。
 
-> 註：promotion 到 production 前仍需 **FR-340 L2 budget metering**（見 Follow-up）。目前 real guardrail 的 L2 成本 uncapped，故僅宣稱「G2 live E2E 完成」，**不**宣稱 guardrail production-ready。
+> 註：G2 完成時 L2 成本尚未計量；**FR-340 L2 budget metering 已於其後完成**（見上方 Follow-up，merged dev）。L2 成本現已納入獨立預算並 fail-closed。production 上線前的剩餘項為跨-provider defense-in-depth、Grafana panel、預算告警投遞（非 guardrail 計量問題）。
 
 ## 流程（不變）
 每片 TDD + **合併前 code-review agent**（[[feedback_review_before_merge]]）；記錄落本檔（[[feedback_plans_need_record_doc]]）；測試在 throwaway 容器（[[reference_ems_test_runtime]]）；可調參數集中（[[feedback_tunable_params_registry]]）。
