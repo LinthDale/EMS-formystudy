@@ -39,10 +39,12 @@
 </details>
 
 ### Follow-up（本計畫後，production enable 前必做）
-- **FR-340 L2 budget metering**：見下方「## FR-340 實作計畫」（進行中）。
+- ✅ **FR-340 L2 budget metering — DONE**（Slice 1 merged cb3b586、Slice 2 merged 593d682）。見下方計畫。
 - **跨-provider**：`make_guardrail` 支援 `anthropic`，L1 OpenAI + L2 Anthropic 真·defense-in-depth E2E（需 Anthropic key）。
 
-## FR-340 L2 budget metering — 實作計畫
+## FR-340 L2 budget metering — 實作計畫（✅ DONE）
+
+> **完成**：L2 guardrail token 成本進獨立 `provider='guardrail'` ledger row（自有月預算 cap），fail-closed 同套 L2——budget 100% → 分類全停（L1 也停）→ system_fallback。Slice 1（usage plumbing，cb3b586）+ Slice 2（budget gate/ledger，593d682）。device_service unit 265 + 整合 71 passed。code-review 兩片各一輪（0 CRIT/HIGH；Slice 2 修 cache fail-closed + 清過時 UNCAPPED 文案）。剩 hardening debt：two-reserve 之間 DB error 的窄縫漏 reserve（docstring 已標）、guardrail budget 100% 的 Telegram alert 投遞走 Grafana-over-ledger（同 L1 80% 未接線狀態）。
 
 > PRD §8.7.4 / FR-340：L2 token 用量寫入 `llm_budget_ledger` 獨立 `provider='guardrail'` row；budget gate fail-closed 同套 L2；**L2 budget 100% → 不可繼續 classify（L1 也停）→ 全走 system_fallback**。這是 real-provider guardrail 上線的最後 blocker。
 
