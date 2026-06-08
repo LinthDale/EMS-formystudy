@@ -51,11 +51,11 @@ async def lifespan(app: FastAPI):
     )
     app.state.provider = provider
     if settings.guardrail_provider != "mock":
-        # FR-340 (L2 budget metering) is a follow-up: a real guardrail's L2 token cost is
-        # NOT yet capped by the budget gate. Make that explicit at boot.
-        _log.warning(
-            "GUARDRAIL_PROVIDER=%r: L2 guardrail uses a real model but its token cost is NOT "
-            "budget-metered yet (FR-340 pending) -> L2 cost is UNCAPPED", settings.guardrail_provider)
+        # FR-340: a real guardrail's L2 token cost IS budget-metered (provider='guardrail' row,
+        # cap = guardrail_monthly_budget_usd; 100% -> classify stops & falls back). Inform at boot.
+        _log.info(
+            "GUARDRAIL_PROVIDER=%r: real L2 guardrail active; L2 cost metered under budget %.2f USD/mo",
+            settings.guardrail_provider, settings.guardrail_monthly_budget_usd)
         if not settings.guardrail_api_key:
             _log.warning(
                 "GUARDRAIL_API_KEY not set -> L2 falls back to LLM_API_KEY; set it explicitly "

@@ -27,6 +27,10 @@ from .sanitizer import sanitize
 
 _log = logging.getLogger("device_service.discovery")
 
+# FR-340: the L2 guardrail is metered on its OWN llm_budget_ledger row under this fixed provider
+# key, separate from the L1 provider's row, so the two budgets are tracked and capped independently.
+GUARDRAIL_PROVIDER_KEY = "guardrail"
+
 
 @dataclass(frozen=True)
 class CorrectionContextLoad:
@@ -101,47 +105,86 @@ async def classify_under_budget(
 ) -> Outcome:
     """FR-329 hard cap: reserve worst-case cost up front (under the budget advisory lock),
     classify, persist the outcome (§8.6.8 device lock), then settle the reservation to actual
-    cost. The reservation NEVER leaks: any exception after a successful reserve refunds the
-    full reservation in the finally block."""
+    cost. Any exception during classify/persist/settle refunds the full reservation in the finally
+    block. (Known narrow gap, pre-existing: a DB error in the guardrail reserve itself — after the
+    L1 reserve committed but before the try — can leak the L1 reservation; reserves run before the
+    try. Tracked as hardening debt; a single combined reserve tx would close it.)
+
+    FR-340: the L2 guardrail runs up to 2 model calls (pre + post) and is metered on a SEPARATE
+    provider='guardrail' ledger row with its own monthly cap. If the guardrail budget is
+    exhausted, classification stops entirely (L1 too) and falls back. A cache hit (from_cache)
+    spends no tokens for either layer, so both reservations are fully refunded."""
     period_start, period_end = current_period()
-    is_mock = settings.llm_provider == "mock"
     pricing = resolve_pricing(getattr(settings, "llm_pricing_json", ""))
+    is_mock = settings.llm_provider == "mock"
     est = reserve_estimate(
         settings.llm_model,
         getattr(settings, "llm_reserve_input_tokens", RESERVE_INPUT_TOKENS),
         getattr(settings, "llm_max_output_tokens", RESERVE_OUTPUT_TOKENS),
         pricing,
     )
+    # FR-340 guardrail track: worst case is 2 model calls (pre + post). Defensive getattr keeps a
+    # minimal settings object (no guardrail_* fields) safely on the free mock path.
+    g_is_mock = getattr(settings, "guardrail_provider", "mock") == "mock"
+    g_model = (getattr(settings, "guardrail_model", "")
+               or getattr(settings, "guardrail_default_model_openai", "gpt-4o-mini"))
+    g_est = 2 * reserve_estimate(
+        g_model,
+        getattr(settings, "guardrail_reserve_input_tokens", RESERVE_INPUT_TOKENS),
+        getattr(settings, "guardrail_max_output_tokens", RESERVE_OUTPUT_TOKENS), pricing,
+    )
+
     if is_mock:
         budget_ok = True                                               # mock is free
     else:
         async with db.ai_tx() as conn:                                 # ADR-014 budget-namespace lock
             budget_ok = await budget_reserve(
                 conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
-    settled = False
+    if g_is_mock:
+        guardrail_ok = True                                            # mock guardrail is free
+    else:
+        async with db.ai_tx() as conn:
+            guardrail_ok = await budget_reserve(
+                conn, GUARDRAIL_PROVIDER_KEY, period_start, period_end, g_est,
+                getattr(settings, "guardrail_monthly_budget_usd", 0.0))
+
+    settled = g_settled = False
     try:
         outcome = await classifier.classify(
-            sanitized, budget_ok=budget_ok, default_device_type=default_device_type,
+            sanitized, budget_ok=budget_ok, guardrail_ok=guardrail_ok,
+            default_device_type=default_device_type,
             latest_correction_device_type=latest_correction_device_type,
             first_seen_at=first_seen, generated_at=datetime.now(timezone.utc).isoformat(), force=force,
         )
         async with db.ai_tx(lock=device_id) as conn:                   # §8.6.8 device advisory lock
             await persist_outcome(conn, device_id=device_id, outcome=outcome, applied_ids=applied_ids)
+        # settle L1: a cache hit spent no tokens this call -> full refund (tin/tout = 0).
         if not is_mock and budget_ok:
             usage = (outcome.result.raw_response or {}).get("usage") or {}
-            if outcome.summary_source == "llm":
+            if outcome.summary_source == "llm" and not outcome.from_cache:
                 tin, tout = int(usage.get("input_tokens", 0)), int(usage.get("output_tokens", 0))
             else:
                 tin = tout = 0
             async with db.ai_tx() as conn:
                 await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, tin, tout, pricing)
             settled = True
+        # settle L2 guardrail (FR-340): actual pre+post usage, 0 on a cache hit (no L2 call ran).
+        if not g_is_mock and guardrail_ok:
+            g_usage = (outcome.guardrail_usage or {}) if not outcome.from_cache else {}
+            g_tin, g_tout = int(g_usage.get("input_tokens", 0)), int(g_usage.get("output_tokens", 0))
+            async with db.ai_tx() as conn:
+                await budget_settle(conn, GUARDRAIL_PROVIDER_KEY, period_start, g_est, g_model, g_tin, g_tout, pricing)
+            g_settled = True
         return outcome
     finally:
         if not is_mock and budget_ok and not settled:
             with contextlib.suppress(Exception):
                 async with db.ai_tx() as conn:
                     await budget_settle(conn, settings.llm_provider, period_start, est, settings.llm_model, 0, 0, pricing)
+        if not g_is_mock and guardrail_ok and not g_settled:
+            with contextlib.suppress(Exception):
+                async with db.ai_tx() as conn:
+                    await budget_settle(conn, GUARDRAIL_PROVIDER_KEY, period_start, g_est, g_model, 0, 0, pricing)
 
 
 async def reclassify_device(

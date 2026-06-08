@@ -111,7 +111,7 @@ class Classifier:
                        guardrail_block=guardrail_block, guardrail_usage=guardrail_usage)
 
     async def classify(
-        self, sanitized: SanitizedSample, *, budget_ok: bool = True,
+        self, sanitized: SanitizedSample, *, budget_ok: bool = True, guardrail_ok: bool = True,
         default_device_type: str = "unknown", latest_correction_device_type: str | None = None,
         first_seen_at: str = "", generated_at: str = "", force: bool = False,
     ) -> Outcome:
@@ -120,9 +120,9 @@ class Classifier:
         # budget block, or force) bypasses the cache entirely so the gates always run —
         # FR-316 (token saving) must never defeat FR-329 budget / FR-332 conflict / §8.7 guardrail.
         cacheable = (
-            not force and budget_ok
-            and not sanitized.human_corrections
-            and latest_correction_device_type is None
+            not force and budget_ok and guardrail_ok    # guardrail_ok: a budget-exhausted L2 must
+            and not sanitized.human_corrections          # fall back even if a clean result is cached
+            and latest_correction_device_type is None    # (FR-340: classification stops entirely)
         )
         key = cache_key(sanitized, self._provider.name, self._model, self._prompt_version)
         if cacheable and key in self._cache:                       # FR-316
@@ -145,6 +145,8 @@ class Classifier:
 
         if not budget_ok:                                          # FR-329
             return fb("budget_exhausted")
+        if not guardrail_ok:                                       # FR-340: L2 budget exhausted ->
+            return fb("guardrail_budget_exhausted")                # L1 ALSO stops, all fallback
 
         pre = await self._guardrail.check_input(sanitized, rendered)   # FR-336
         _meter(pre)
