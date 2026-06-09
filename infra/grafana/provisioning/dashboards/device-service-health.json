@@ -1,0 +1,308 @@
+{
+  "uid": "ems-device-health",
+  "title": "EMS Device-Service 健康度 (PRD-0004)",
+  "description": "PRD-0004 FR-406~410。由 infra/grafana/_build_device_health.py 生成——請勿手改本 JSON，改 builder 後重跑。註：FR-409 的「月內累積斜率時序」未做——llm_budget_ledger 每月每 provider 僅單列當期累計值、無逐時歷史，斜率需 cost 快照表（同 FR-408 latency，列 PRD-0004 §14 Open Q）；本 dashboard 交付 gauge + 成本明細表。",
+  "tags": [
+    "ems",
+    "device-service",
+    "prd-0004"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "30s",
+  "time": {
+    "from": "now-7d",
+    "to": "now"
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "待人工確認佇列 (candidate)",
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 6,
+        "h": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "justifyMode": "center",
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "textMode": "auto"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 5
+              },
+              {
+                "color": "red",
+                "value": 20
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT count(*) AS \"待確認\" FROM public.devices WHERE status = 'candidate'",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "piechart",
+      "title": "裝置狀態分布 (FR-407)",
+      "gridPos": {
+        "x": 6,
+        "y": 0,
+        "w": 9,
+        "h": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "pieType": "donut",
+        "legend": {
+          "displayMode": "table",
+          "placement": "right",
+          "values": [
+            "value",
+            "percent"
+          ]
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "none",
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT status, count(*) AS n FROM public.devices GROUP BY status ORDER BY status",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "type": "gauge",
+      "title": "LLM 預算用量 % (當期，per provider)",
+      "gridPos": {
+        "x": 15,
+        "y": 0,
+        "w": 9,
+        "h": 6
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": true
+        },
+        "orientation": "auto",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "decimals": 1,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 80
+              },
+              {
+                "color": "red",
+                "value": 100
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT provider, round(cost_usd / NULLIF(budget_usd,0) * 100, 1) AS pct FROM public.llm_budget_ledger WHERE period_start <= now() AND period_end > now() ORDER BY provider",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "table",
+      "title": "LLM 成本明細 (當期 ledger)",
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "options": {
+        "showHeader": true
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "table",
+          "rawQuery": true,
+          "rawSql": "SELECT provider, cost_usd AS \"已花費(USD)\", budget_usd AS \"預算(USD)\", round(cost_usd / NULLIF(budget_usd,0) * 100, 1) AS \"用量%\" FROM public.llm_budget_ledger WHERE period_start <= now() AND period_end > now() ORDER BY provider",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "type": "timeseries",
+      "title": "分類管線負面事件 / 小時 (FR-408)",
+      "gridPos": {
+        "x": 12,
+        "y": 6,
+        "w": 12,
+        "h": 8
+      },
+      "datasource": {
+        "type": "postgres",
+        "uid": "timescaledb-ems"
+      },
+      "description": "只計 guardrail_block 與 rate_limit_exceeded——這兩者是分類管線的「失敗 / 被擋」訊號。其餘 audit 事件（deactivate / demote / freeze_override / ai_feedback_create）屬正常 ops 動作，非錯誤，刻意不計入。排除 itest-% 測試裝置。latency 無量測欄位故不納（PRD-0004 §14 Q6）。",
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "calcs": []
+        },
+        "tooltip": {
+          "mode": "multi"
+        }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 60,
+            "lineWidth": 1,
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            }
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "postgres",
+            "uid": "timescaledb-ems"
+          },
+          "format": "time_series",
+          "rawQuery": true,
+          "rawSql": "SELECT date_trunc('hour', event_time) AS \"time\", count(*) FILTER (WHERE event_type = 'guardrail_block') AS \"guardrail BLOCK\", count(*) FILTER (WHERE event_type = 'rate_limit_exceeded') AS \"rate-limit 命中\" FROM public.device_audit_log WHERE event_time > now() - interval '7 days' AND COALESCE(device_id, '') NOT LIKE 'itest-%' GROUP BY 1 ORDER BY 1",
+          "refId": "A"
+        }
+      ]
+    }
+  ]
+}

@@ -11,7 +11,10 @@
 
 ---
 
-> **實作進度（2026-06-09）**：**FR-400~405 預算告警已實作並驗證**（`rules.yaml` alert group `EMS-預算告警`，4 條 rule：L1/guardrail × warn/exhausted）——對 dev DB 實跑 4 條 SQL 回 scalar、seed 85%→warn / 100%→exhausted 證實 band 互斥、Grafana reload 後 4 條 rule `health=ok state=inactive`、無 provisioning error；code-review APPROVE（0 CRIT/HIGH）。**FR-406~410 dashboards 尚未實作（下一步）。**
+> **實作進度（2026-06-09）**：
+> - **FR-400~405 預算告警 DONE**（`rules.yaml` alert group `EMS-預算告警`，4 rule）——dev DB 實跑 + seed band 驗證 + Grafana reload `health=ok state=inactive` 無 error；code-review APPROVE。SOP 見操作手冊 §3.7。
+> - **FR-406~410 dashboards DONE（部分）**（`infra/grafana/provisioning/dashboards/device-service-health.json`，由 `infra/grafana/_build_device_health.py` 生成，5 panel：待確認佇列 / 狀態分布 / 預算 gauge / 成本明細表 / 負面事件時序）——panel SQL 實跑 + Grafana reload 載入（uid `ems-device-health`）無 error；code-review WARNING→已處置：**FR-409 月內累積斜率時序未做**（ledger 無逐時歷史，移 §14 Q7）、FR-408 latency 同因素僅做負面事件率（§14 Q6）。
+> - **carried backlog**：FR-334 `/admin/budget/extend` 未實作（risk-register R-014）；告警比例分母依賴它就地改 budget。
 
 ## 1. Overview & Context
 
@@ -90,7 +93,7 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 - **FR-406 待人工佇列 panel**：`devices` 中 `status='candidate'`（或 `ai_confidence < LLM_CONFIDENCE_THRESHOLD`）之計數時序，含當前值 stat。
 - **FR-407 裝置狀態分布 panel**：`devices` 依 `status`（candidate/confirmed/retired）分組計數（pie / bar）。
 - **FR-408 分類 error rate panel**：以 `device_audit_log`（分類 / guardrail BLOCK / fallback 事件）近窗計 error rate。**latency 暫不納入**——PRD-0003 §7 未確立 per-classification latency 欄位，無資料來源；latency 移至 §14 Open Questions（待確認是否新增量測欄位，否則此 panel 僅 error rate）。
-- **FR-409 成本 vs 預算 panel**：`llm_budget_ledger` 當期 L1 與 guardrail 兩條 `cost_usd` vs 各自上限的 % gauge + 月內累積斜率時序。
+- **FR-409 成本 vs 預算 panel**：`llm_budget_ledger` 當期 L1 與 guardrail 兩條 `cost_usd` vs 各自上限的 **% gauge + 成本明細表**（已做）。**「月內累積斜率時序」暫不做**——ledger 每月每 provider 僅單列、存當期累計值（就地更新），**無逐時歷史**，斜率需另建 cost 快照/時序表（與 FR-408 latency 同類缺口）→ 移 §14 Open Questions。
 - **FR-410 provisioned dashboard**：以 JSON 置於 `infra/grafana/provisioning/dashboards/`，與既有 dashboard 一致載入；datasource 用 `timescaledb-ems`。
 
 ---
@@ -247,7 +250,8 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 3. Telegram 投遞失敗的**備援 channel**（email / 第二 bot）是否納入？（暫不，R2 緩解）
 4. 跨-provider L2（Non-Goal）何時排程？卡 **Anthropic key** → 待 **ADR-019** 決議。
 5. ~~是否為 dashboard 另立 `api.*` view？~~ **已定案（§7）：直查 `public.*`，不新增 view。**
-6. **分類 latency 是否要計量**（FR-408）？PRD-0003 §7 無 per-classification latency 欄位 → 若要 latency panel，須先在 device-service 落一個 latency 量測欄位 / audit detail；否則 FR-408 僅做 error rate。
+6. **分類 latency 是否要計量**（FR-408）？PRD-0003 §7 無 per-classification latency 欄位 → 若要 latency panel，須先在 device-service 落一個 latency 量測欄位 / audit detail；否則 FR-408 僅做負面事件率（已做）。
+7. **成本斜率時序是否要做**（FR-409）？`llm_budget_ledger` 每月每 provider 單列累計、無逐時歷史 → 月內花費軌跡需另建 cost 快照表（如每日 settle 後寫一筆 snapshot）或 audit detail 累積；屬後端 schema 工項，未做。目前以 gauge + 明細表呈現當期狀態。
 
 ---
 
