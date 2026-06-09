@@ -2,9 +2,9 @@
 
 | 欄位 | 內容 |
 |------|------|
-| 狀態 | **Draft**（2026-06-09 起案） |
+| 狀態 | **Draft v2**（2026-06-09；已過 architect + security 審視，APPROVE-WITH-CHANGES 修正完成）|
 | 起案日期 | 2026-06-09 |
-| 最後修訂 | 2026-06-09（v1 初稿） |
+| 最後修訂 | 2026-06-09（v2：比例分母改取 ledger `budget_usd`、index/receiver 更正、FR-408 latency 移 Open Q、Telegram 揭露界線 + chatid 殘留風險）|
 | 對應決策紀錄 | 承接 PRD-0003 Phase 1.4 carried follow-ups（budget alert / Grafana panels） |
 | 取代 / 補充 | **補充** PRD-0003；不修改其主體（已 Implemented，依 Guideline §9 變更走新 PRD/ADR） |
 | 相依 ADR | ADR-019（跨-provider L2 guardrail；本 PRD 之 Non-Goal，另案處理） |
@@ -74,18 +74,20 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 
 ### 告警（Alerting）
 
-- **FR-400 L1 預算 80% warn**：對 `llm_budget_ledger` 當期 `provider != 'guardrail'` 的 `cost_usd` 加總，相對 `LLM_MONTHLY_BUDGET_USD` ≥ `BUDGET_WARN_RATIO`(0.8) 且 < 1.0 時，發 Telegram warn。
-- **FR-401 L1 預算 100% exhausted**：同上比例 ≥ 1.0 時，發**高優先**告警，訊息標明「分類已 fail-closed 降級為 system_fallback」。
-- **FR-402 guardrail 預算告警**：對 `provider='guardrail'` row 比例 `GUARDRAIL_MONTHLY_BUDGET_USD`(10.0)，同樣 80% warn / 100% exhausted（100% 時連 L1 一起停，訊息載明）。
-- **FR-403 低基數聚合**：告警 SQL 以 `GROUP BY period_start, provider … HAVING` 取得「跨閾值之 provider 數」單一 scalar；`provider` / 金額**不進 Grafana label**（沿用 FR-339 樣式）。
-- **FR-404 noData/execErr 韌性**：`noDataState=OK`、`execErrState=Error`、`for=0s`（達門檻即報）；ledger 無當期 row（月初）視為 0% 不誤觸。
-- **FR-405 provisioned**：新增 alert group `EMS-預算告警` 於 `infra/grafana/provisioning/alerting/rules.yaml`，contact point 沿用 `telegram-main`，可重啟重建、無 provisioning error。
+> **比例分母來源（architect HIGH-1，關鍵）**：所有預算比例一律取 ledger **row 自身的 `budget_usd`** 欄位（`SUM(cost_usd) / budget_usd`），**不**用 env 常數 `LLM_MONTHLY_BUDGET_USD` / `GUARDRAIL_MONTHLY_BUDGET_USD`。原因：`llm_budget_ledger`（migration 006）每 `(period_start, provider)` row 存 `budget_usd`，且 PRD-0003 FR-334 `/admin/budget/extend` 會**就地調高該 row 的 budget**；若用 env 常數，緊急加額度後常數與真實上限漂移，告警門檻即算錯。以 ledger 為單一真相，使告警與 `evaluate_budget`（fail-closed gate）定義一致。
+
+- **FR-400 L1 預算 80% warn**：對 `llm_budget_ledger` 當期 `provider != 'guardrail'` row，`SUM(cost_usd) / budget_usd` ≥ `BUDGET_WARN_RATIO`(0.8) 且 < 1.0 時，發 Telegram warn。
+- **FR-401 L1 預算 100% exhausted**：同比例 ≥ 1.0 時，發**高優先**告警，訊息標明「分類已 fail-closed 降級為 system_fallback」。warn 與 exhausted 為**互斥區間**（[0.8,1.0) vs [1.0,∞)），同一時點僅一條成立，不重複發。
+- **FR-402 guardrail 預算告警**：對 `provider='guardrail'` row，`SUM(cost_usd) / budget_usd`，同樣 80% warn / 100% exhausted（100% 時連 L1 一起停，訊息載明）。**相依**：本 FR 的正確性依賴 guardrail row 的 `cost_usd` 被正確計量；若日後 ADR-019 啟用 Anthropic L2 而未補定價（cost=0），此告警將永不觸發 → 見 ADR-019 之 pricing 前置條件。
+- **FR-403 低基數聚合**：告警 SQL 以 `GROUP BY period_start, provider … HAVING` 取得「跨閾值之 provider 數」單一 scalar；`provider` / 金額**不進 Grafana label**（沿用 FR-339 樣式；訊息 body 的揭露見 §8/§9）。
+- **FR-404 noData/execErr 韌性**：`noDataState=OK`、`execErrState=Error`；ledger 無當期 row（月初）視為 0% 不誤觸。**`for` 視窗**：warn 用 `for=5m`（避免邊界抖動重發；cost 當期單調遞增，5m 去抖足夠），exhausted 用 `for=0s`（觸頂即報，比照既有安全規則）。
+- **FR-405 provisioned**：新增 alert group `EMS-預算告警` 於 `infra/grafana/provisioning/alerting/rules.yaml`，`receiver: Telegram`（沿用既有 contact point，名稱即 `Telegram`），可重啟重建、無 provisioning error。
 
 ### Dashboards（Panels）
 
 - **FR-406 待人工佇列 panel**：`devices` 中 `status='candidate'`（或 `ai_confidence < LLM_CONFIDENCE_THRESHOLD`）之計數時序，含當前值 stat。
 - **FR-407 裝置狀態分布 panel**：`devices` 依 `status`（candidate/confirmed/retired）分組計數（pie / bar）。
-- **FR-408 分類 error & latency panel**：以 `device_audit_log`（分類事件）/ `device_review_digests.generated_at` 推導近窗 error rate 與處理延遲。
+- **FR-408 分類 error rate panel**：以 `device_audit_log`（分類 / guardrail BLOCK / fallback 事件）近窗計 error rate。**latency 暫不納入**——PRD-0003 §7 未確立 per-classification latency 欄位，無資料來源；latency 移至 §14 Open Questions（待確認是否新增量測欄位，否則此 panel 僅 error rate）。
 - **FR-409 成本 vs 預算 panel**：`llm_budget_ledger` 當期 L1 與 guardrail 兩條 `cost_usd` vs 各自上限的 % gauge + 月內累積斜率時序。
 - **FR-410 provisioned dashboard**：以 JSON 置於 `infra/grafana/provisioning/dashboards/`，與既有 dashboard 一致載入；datasource 用 `timescaledb-ems`。
 
@@ -99,7 +101,7 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 | 熱路徑零影響 | 對分類 p99 latency 影響 | 0（純 read-only over ledger/views，不經 device-service）|
 | 低基數 | Grafana active series 增量 | 維度不進 label，alert series 數 = O(1) per rule |
 | 可重建性 | 重啟 grafana 後 | 告警 + dashboard 100% 由 provisioning 重建，無手動步驟 |
-| 查詢成本 | 單次 alert SQL | 走當期 `(period_start, provider)` 索引；< 50 ms on dev DB |
+| 查詢成本 | 單次 alert SQL | 以 `period_start = 當期` 選 row，命中 `UNIQUE (period_start, provider)`（migration 006）；表極小，< 50 ms on dev DB（注意：另有 `(active, provider)` 索引供 active 過濾，alert 以 period_start 為主述詞）|
 | 安全 | 告警內容 | 不外洩 device_id / key 內容（僅聚合數量與比例）|
 
 ---
@@ -129,6 +131,8 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 
 無新增 container。沿用既有 `ems-grafana` + `timescaledb`。Provisioning 檔新增：`rules.yaml` 一個 group、`dashboards/` 一個 JSON。
 
+> Guideline §3.1 要求 C4 L1/L2 + Data Flow 三圖；本 PRD 為**單一容器之上的 read-only 變更（零新元件）**，故 C4-L2 容器圖以例外省略，僅保留 §6.1 context + §6.3 data flow。
+
 ### 6.3 Data Flow
 
 1. device-service 分類時 reserve/settle 寫 `llm_budget_ledger`（既有）。
@@ -148,7 +152,9 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 | `device_review_digests` | `device_id, generated_at` | FR-408 |
 | `device_audit_log` | `event_type, event_time` | FR-408 |
 
-> Dashboard 若需，可加唯讀 `api.*` view（白名單欄位），但優先直查；如新增 view 走 idempotent `CREATE OR REPLACE`，不破壞 PRD-0003 §7.4 白名單原則。
+**決策（原 Open Q5，已定案）**：dashboard **直查** `public.*` 內部表，**不**新增 `api.*` view —— Grafana 走 `timescaledb-ems` datasource（唯讀帳號）讀內部表，是既有樣式；保持 `api.*` 白名單面不變、`web_anon` 權限不擴張。
+
+**DB 權限界線（security LOW）**：Grafana datasource 帳號對 `llm_budget_ledger` / `device_review_digests` / `device_audit_log` / `devices` 僅唯讀 SELECT；**本 PRD 不新增任何 GRANT 給 `web_anon`**，且 `device_review_digests` / `device_audit_log` **永不**經 `api.*` 對外曝露（僅內部 Grafana 可見）。
 
 ---
 
@@ -159,14 +165,16 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
   - warn：`⚠️ [EMS] {provider} 月預算達 {pct}%（{spent}/{cap} USD）`
   - exhausted：`🛑 [EMS] {provider} 月預算 100% — 分類已 fail-closed 降級 system_fallback，請加額度或切 mock`
 - 不含 device_id / 個別裝置資料（低基數 + 隱私）。
+- **揭露界線（security MED）**：訊息 body 含 `{provider}`（揭露 L1/guardrail 內部架構）與 `{spent}/{cap}` 金額——屬**內部 ops 資訊**，故 **Telegram 頻道必須為私有**（非公開群/頻道），不得轉發外部。若未來頻道對客戶開放，template 須改為**只給百分比**、移除 `{provider}` 與絕對金額。
 
 ---
 
 ## 9. Security & Privacy
 
 - 告警與 panel 僅輸出**聚合數量與比例**，不外洩 `device_id`、`key_id`、correction 內容。
-- Telegram bot token 為機密，置於 provisioning secret / `.env`，**不進 git**（沿用 FR-339/344 既有 contact point）。
-- Grafana datasource 為唯讀帳號；本 PRD 不擴張任何 DB 權限。
+- **Telegram bot token** 為機密，已以 `${TELEGRAM_BOT_TOKEN}` env 注入 contact-points.yaml，**不進 git**（沿用 FR-339/344）；若曾誤 commit，須立即經 BotFather 輪替。
+- **`chatid` 硬編於 git（accepted residual risk）**：`contact-points.yaml` 的 `chatid: "7171144544"` 為硬編——因 Grafana 把 numeric 欄位當 JSON number 解析、無法用 env var。chat ID **非憑證**（沒有 bot token 無法發訊），但會在 repo 揭露特定 chat ID（社交工程目標面）；列為已知可接受殘留風險，頻道遷移時舊 ID 留 git 史無獨立風險。
+- Grafana datasource 為唯讀帳號（見 §7 權限界線）；本 PRD 不擴張任何 DB 權限、不新增 `web_anon` GRANT。
 - Threat：告警 SQL 注入面 = 0（rawSql 為固定 provisioned 字串，無使用者輸入）。
 
 ---
@@ -185,7 +193,7 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 
 | # | 風險 | 等級 | 對策 |
 |---|------|------|------|
-| R1 | **告警抖動**（比例在門檻附近震盪重複發）| 中 | warn 用 `for=` 視窗或 ledger 月聚合單調遞增特性（cost 只增不減於當期）降低抖動 |
+| R1 | **告警抖動**（比例在門檻附近震盪重複發）| 中 | 已定案（FR-404）：warn `for=5m` 去抖 + cost 當期單調遞增 + warn/exhausted 互斥區間（FR-401），三者使同點僅一條成立、不重複發 |
 | R2 | **Telegram 投遞失敗**（網路 / token 失效）| 中 | contact point 重試；後續可加備援 channel（Open Question）|
 | R3 | （承接 tech-debt）**MQTT subscriber 連續重連失敗後僅 log、不重啟** | 中 | 本 PRD 不解，登錄於此；建議後續以 supervisor / healthcheck 重啟（工程 backlog）|
 | R4 | （承接 tech-debt）**`resolve_pricing` 每訊息呼叫**（應移 lifespan）| 低 | 效能清理，非告警範圍；登錄為 backlog |
@@ -236,7 +244,8 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 2. cost panel 取樣 / refresh 頻率？（暫 30s；月聚合資料不需更密）
 3. Telegram 投遞失敗的**備援 channel**（email / 第二 bot）是否納入？（暫不，R2 緩解）
 4. 跨-provider L2（Non-Goal）何時排程？卡 **Anthropic key** → 待 **ADR-019** 決議。
-5. 是否為 dashboard 另立 `api.*` 唯讀 view，或直查？（暫直查，需要再加 view）
+5. ~~是否為 dashboard 另立 `api.*` view？~~ **已定案（§7）：直查 `public.*`，不新增 view。**
+6. **分類 latency 是否要計量**（FR-408）？PRD-0003 §7 無 per-classification latency 欄位 → 若要 latency panel，須先在 device-service 落一個 latency 量測欄位 / audit detail；否則 FR-408 僅做 error rate。
 
 ---
 
