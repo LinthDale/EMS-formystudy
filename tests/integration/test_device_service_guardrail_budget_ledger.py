@@ -9,8 +9,9 @@ ledger:
                     L2 is called) and falls back; the L1 reservation is taken then refunded (no
                     net spend). FR-340 fail-closed.
 
-Skips if the DB / roles are unreachable. Snapshots and restores every touched ledger row so the
-shared monthly ledger is left exactly as found.
+Skips if the DB / roles are unreachable. Snapshots and restores the ACCOUNTING fields
+(tokens_in/tokens_out/cost_usd) of every touched ledger row so the shared monthly budget is left
+as found; bookkeeping columns (updated_at) are not rewound — they don't affect budget arithmetic.
 """
 import os
 
@@ -106,7 +107,8 @@ async def _connect(settings):
 
 
 async def _restore(su, period_start, snapshots):
-    """Put every touched (provider -> row|None) back exactly as it was."""
+    """Restore the accounting fields (tokens_in/out, cost_usd) of every touched row, or delete it
+    if it did not exist before. updated_at is intentionally not rewound (irrelevant to budgeting)."""
     for provider, before in snapshots.items():
         if before is None:
             await su.execute("DELETE FROM public.llm_budget_ledger WHERE provider=$1 AND period_start=$2",
