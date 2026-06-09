@@ -185,7 +185,7 @@
 
 - **本 PRD 不新增後端 API**；上表 gap（D1 特權讀面、D2 量測契約、D3 分頁/排序）需以 PRD-0003 後續或新後端 PRD 補齊，前端不擅改。
 - 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
-- 由 `api/openapi.yml` 生成 TS client，做契約測試防漂移（§13 / R2）。
+- 由 `api/openapi.yml` 生成 TS client，做契約測試 + runtime drift test 防漂移（§13.2 / R2）；open-ended enum 須有 unknown/default handling（§13.2）。
 
 ---
 
@@ -266,7 +266,7 @@
 
 ### 分階段
 
-1. **P1 設備管理 + 人工確認工作流**（FR-500~513）— 對接最成熟的 device-service REST，OPS 內部先用。**前置 GATE-1 + GATE-2(D1/D3)**。
+1. **P1 設備管理 + 人工確認工作流**（FR-500~513）— 對接最成熟的 device-service REST，OPS 內部先用。**前置 GATE-1 + GATE-2(D1/D3)**。**P1 同批落地 API 契約治理 enforcement**（§13.2：openapi↔runtime drift test + lint/diff/contract + `api/CHANGELOG.md`）—— 把治理從 policy 升為 enforced。
 2. **P2 量測呈現**（FR-520~521）— 即時卡片 + 歷史曲線。**前置 D2（量測契約）**；即時預設輪詢。
 3. **P3 角色化 / i18n / 商業化門面**（FR-530~532）。
 4. **（後續 PRD）控制下發** — 待 control-service 立案。
@@ -307,11 +307,15 @@
 
 ### 13.2 API 契約治理（前端可信賴 openapi.yml 的前提）
 
-> 前端最需要回答的是「**我能相信 `api/openapi.yml` 嗎？**」——治理規則集中於 **[`doc/governance/api-contract-governance.md`](../governance/api-contract-governance.md)**（單一真相），本節僅列前端相關落地點：
+> 前端最需要回答的是「**我能相信 `api/openapi.yml` 嗎？**」——治理規則集中於 **[`doc/governance/api-contract-governance.md`](../governance/api-contract-governance.md)**（單一真相）。
+>
+> ⚠️ **現況：該治理目前為 POLICY，非 ENFORCEMENT**——`api/CHANGELOG.md` 未建、CI gate / drift test 未實作。**本 PRD 的 P1 批次負責把它從 policy 升為 enforced**（下列即 P1 工項）：
 
 - **`api/openapi.yml` 為 REST 唯一真相**；前端 **TS client 一律由它生成，禁止手刻**型別。
 - `info.version` 採 **semver**；API 改動須 bump，breaking → MAJOR。
-- **CI gate**（與 P1 契約測試同批落地）：openapi **lint**（spectral/redocly）+ **diff**（oasdiff，breaking 但未 bump MAJOR → fail）+ **contract test**（生成 client 對服務/mock 驗）+ version-bump check。
+- **[P1 task — drift test，必做]**：CI 自動比對 committed `api/openapi.yml` vs device-service 執行期 `create_app().openapi()`（route/Pydantic 自動產出）→ 不一致 fail。**這是「openapi 是真相」能成立的關鍵**；沒有它，真相宣稱會退回人工維護（PRD-0003 d0f71e6 曾手動比對，此處自動化）。
+- **CI gate**（P1 同批）：openapi **lint**（spectral/redocly）+ **diff**（oasdiff，breaking 但未 bump MAJOR → fail）+ **contract test**（生成 client 對服務/mock 驗）+ version-bump check。
+- **enum 新增的前端前提**：spec 新增 enum 值在治理上為 non-breaking，但**僅當前端 generated client 對 open-ended enum 有 unknown/default 分支時**才成立；TS exhaustive switch（無 default）會被新 enum 實務破壞 → 前端**必須**有 unknown handling，否則該 enum 變更視為 migration-needed（見 governance §3）。
 - 新增 **`api/CHANGELOG.md`** 記每次 API 變更（版本/級別/PR/PRD）。
 - **DB schema 遷移治理另屬** [ADR-020](../adr/ADR-020-db-migration-governance.md)，不在前端範圍（避免在前端 PRD 順手換 migration 工具）。
 
@@ -335,7 +339,7 @@
 
 - **原始前端設計**：`doc/archive/plan/EMS實作計畫.md`（§9 frontend React SPA；Stage 2~6 前端頁清單；決策 4「前端」）。
 - **降為待決策的紀錄**：`doc/archive/stage_2/README.md`（Grafana 取代 frontend；設備管理頁待決策）、`PRD-0001`（❌ 前端 SPA，Stage 2 用 Grafana 取代）、簡報（前端形式待定）。
-- **可消費後端**：PRD-0003 device-service REST/MCP、PostgREST `api.*`、migrations 009 的 `api.devices`/`api.device_signals` 白名單 view。
+- **可消費後端（前端視角）**：**device-service REST :8002（經 BFF，主）** + PostgREST `api.*`（僅公開 confirmed 唯讀面）+ migrations 009 的 `api.devices`/`api.device_signals` 白名單 view。**MCP :8766 不是前端可消費面**——loopback、AI agent 通道、帶 AI key；**瀏覽器不得直連**，僅允許 server-side / BFF / agent bridge 在伺服器側使用（見 §1 / §6.1 圖 / §9）。
 - **分工對照**：[PRD-0004](PRD-0004-device-service-observability-alerting.md)（Grafana 內部 ops 觀測/告警）；本 PRD（產品級操作 UI）。
 
 ---
