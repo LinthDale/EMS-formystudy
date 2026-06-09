@@ -26,9 +26,11 @@
 | ADR-016 | Two-Layer AI Guardrail + DB Freeze Trigger | Accepted | 2026-05-29 |
 | ADR-017 | DB Connection Pool & Role Switching | Accepted | 2026-05-29 |
 | ADR-018 | 擴充 Freeze Trigger 保護欄位集 + metadata 局部 merge | Accepted | 2026-05-29 |
+| ADR-019 | 跨-provider L2 Guardrail（L1/L2 不同廠商 defense-in-depth）| Proposed | 2026-06-09 |
 
 > ADR-009 ~ ADR-017 源自 PRD-0003（Device Registry & Auto-Discovery，Approved 2026-05-08 / DL-007），將 PRD §6.4 鎖定之 9 項架構決策正式化。
 > ADR-018 源自 PRD-0003 Phase 1.1 實作前弱點掃描 Finding B，擴充 ADR-016 的 freeze trigger 保護欄位集。
+> ADR-019 源自 PRD-0003 §8.7.3 follow-up，為 [PRD-0004](../prd/PRD-0004-device-service-observability-alerting.md) 排除之 Non-Goal；**Proposed，卡 Anthropic key**。
 
 ## 撰寫規則
 
