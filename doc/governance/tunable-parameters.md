@@ -31,12 +31,14 @@
 | **MQTT 訂閱 topic** | `MQTT_SUBSCRIPTIONS` | ems/+/+/measurements,factory/sensor/+ | csv | config → mqtt_subscriber | §8.5 | ✅ | 逗號分隔；放寬訂閱範圍仍受 parser deny-by-default 約束 |
 | **Provider 預設 model（anthropic/openai/local）** | `LLM_DEFAULT_MODEL_ANTHROPIC` / `LLM_DEFAULT_MODEL_OPENAI` / `LLM_DEFAULT_MODEL_LOCAL` | claude-haiku-4-5 / gpt-4o-mini / qwen2.5 | — | config → factory | FR-305 | ✅ | factory 不再是第二 config source；LLM_MODEL 設定時覆寫 |
 | **Local provider base URL** | `LLM_LOCAL_BASE_URL` | http://host.docker.internal:11434/v1 | — | config → factory | FR-305 | ✅ | Ollama 端點 |
-| **L2 guardrail provider** | `GUARDRAIL_PROVIDER` | mock | — | config → factory → classifier | FR-338 | ✅ | mock/openai/local；獨立於 L1。⚠️ 非 mock 時 L2 成本未納 budget（FR-340 待做） |
+| **L2 guardrail provider** | `GUARDRAIL_PROVIDER` | mock | — | config → factory → classifier | FR-338 | ✅ | mock/openai/local；獨立於 L1。非 mock 時 L2 成本由 `GUARDRAIL_MONTHLY_BUDGET_USD` 計量（FR-340） |
 | **L2 guardrail model** | `GUARDRAIL_MODEL` | (guardrail default) | — | config → factory | FR-338 | ✅ | 留空套 `GUARDRAIL_DEFAULT_MODEL_OPENAI` |
 | **L2 guardrail API key** | `GUARDRAIL_API_KEY` | "" | — | config → factory | FR-338 | ✅ | secret；空則沿用 `LLM_API_KEY` |
 | **L2 guardrail base URL** | `GUARDRAIL_BASE_URL` | None | — | config → factory | FR-342 | ✅ | allowlist 驗證（同 L1） |
 | **L2 guardrail 預設 model** | `GUARDRAIL_DEFAULT_MODEL_OPENAI` | gpt-4o-mini | — | config → factory | FR-338 | ✅ | injection 判斷用最便宜 model |
 | **L2 guardrail 輸出 max_tokens** | `GUARDRAIL_MAX_OUTPUT_TOKENS` | 256 | tokens | config → factory → LLMGuardrail | FR-338 | ✅ | verdict JSON 短 |
+| **L2 guardrail 月預算** | `GUARDRAIL_MONTHLY_BUDGET_USD` | 10.0 | USD | config → discovery_pipeline → budget_ledger(provider='guardrail') | FR-340 | ✅ | 達 100% → 分類全停（連 L1）走 fallback |
+| **L2 guardrail reserve 輸入估算** | `GUARDRAIL_RESERVE_INPUT_TOKENS` | 8000 | tokens | config → discovery_pipeline → budget_ledger | FR-340 | ✅ | 每 call 上界；reserve = ×2（pre+post） |
 | MQTT host/port/enabled | `MQTT_HOST`/`MQTT_PORT`/`MQTT_ENABLED` | mosquitto/1883/false | — | config | §8.5 | ✅ | |
 | DB host/port/name/passwords | `DB_HOST`/`DB_PORT`/`DB_NAME`/`DB_AI_PASSWORD`/`DB_OPS_PASSWORD` | timescaledb/5432/ems | — | config | ADR-017 | ✅ | |
 | API keys (OPS/INGEST/AI) | `OPS_API_KEY`/`INGEST_API_KEY`/`AI_API_KEY` | "" | — | config | FR-310 | ✅ | secret |

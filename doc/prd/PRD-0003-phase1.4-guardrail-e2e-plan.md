@@ -21,7 +21,7 @@
 - **新檔 `llm/llm_guardrail.py`**：`LLMGuardrail`，雙階段防護——(1) 先跑 `MockGuardrail` deterministic 規則當免 token 後盾（known injection/command 直接擋）；(2) 通過才呼叫**獨立的 guardrail 模型**判語意層攻擊（§8.7.2 hardcoded security prompt，user/input 不可改）。**fail-closed**：任何 model/parse/network error → BLOCK（→ system_fallback），守衛掛掉絕不放行未檢查的分類。
 - **`llm/factory.py` 加 `make_guardrail(provider, ...)`**：`mock` → MockGuardrail；`openai`/`local` → LLMGuardrail（OpenAI-compatible client，可注入測試 client）。`anthropic` 守衛 = 跨-provider follow-up。
 - **`config.py`**：加 `guardrail_provider="mock"`（預設不變行為）、`guardrail_model`、`guardrail_api_key`（空→沿用 `llm_api_key`）、`guardrail_base_url`、`guardrail_default_model_openai="gpt-4o-mini"`、`guardrail_max_output_tokens=256`。`SECRET_FIELDS += guardrail_api_key`；FR-342 base_url 驗證同樣套 `guardrail_base_url`。
-- **`main.py` / `mcp_server.py`**：改用 `make_guardrail` 注入；若 `guardrail_provider != mock` 啟動印 WARNING：「L2 budget metering 尚未實作（FR-340），真實 guardrail 的 L2 成本目前 UNCAPPED」。
+- **`main.py` / `mcp_server.py`**：改用 `make_guardrail` 注入；若 `guardrail_provider != mock` 啟動印 WARNING。（註：此 WARNING 文案在 FR-340 完成後已改為「L2 成本已納入獨立預算計量」的 INFO，不再是 UNCAPPED。）
 - **unit tests** `tests/unit/test_device_service_llm_guardrail.py`：注入 fake OpenAI client，驗 deterministic 後盾先擋（不呼叫模型）/ 模型回 block→BLOCK / 模型回 pass→PASS / 壞 JSON→fail-closed BLOCK / network error→fail-closed BLOCK / output phase summary 正確。**不打真 API**。
 - 驗收：classifier 行為不變（預設 mock）；新模組高覆蓋；code-review 0 CRIT/HIGH 後 merge dev。
 </details>
@@ -39,8 +39,31 @@
 </details>
 
 ### Follow-up（本計畫後，production enable 前必做）
-- **FR-340 L2 budget metering**：`Outcome` 加 `guardrail_usage`、classifier 收集 pre+post token、`classify_under_budget` 對 `provider='guardrail'` reserve/settle + budget 100% fail-closed（L1 也停、全 fallback）。
+- ✅ **FR-340 L2 budget metering — DONE**（Slice 1 merged cb3b586、Slice 2 merged 593d682）。見下方計畫。
 - **跨-provider**：`make_guardrail` 支援 `anthropic`，L1 OpenAI + L2 Anthropic 真·defense-in-depth E2E（需 Anthropic key）。
+
+## FR-340 L2 budget metering — 實作計畫（✅ DONE）
+
+> **完成**：L2 guardrail token 成本進獨立 `provider='guardrail'` ledger row（自有月預算 cap），fail-closed 同套 L2——budget 100% → 分類全停（L1 也停）→ system_fallback。Slice 1（usage plumbing，cb3b586）+ Slice 2（budget gate/ledger，593d682）。device_service unit 265 + 整合 71 passed。code-review 兩片各一輪（0 CRIT/HIGH；Slice 2 修 cache fail-closed + 清過時 UNCAPPED 文案）。剩 hardening debt：two-reserve 之間 DB error 的窄縫漏 reserve（docstring 已標）、guardrail budget 100% 的 Telegram alert 投遞走 Grafana-over-ledger（同 L1 80% 未接線狀態）。
+
+> PRD §8.7.4 / FR-340：L2 token 用量寫入 `llm_budget_ledger` 獨立 `provider='guardrail'` row；budget gate fail-closed 同套 L2；**L2 budget 100% → 不可繼續 classify（L1 也停）→ 全走 system_fallback**。這是 real-provider guardrail 上線的最後 blocker。
+
+### Slice 1 — usage plumbing（不動 budget，純接線）
+- `GuardrailVerdict` 加 `usage: dict|None`（{input_tokens, output_tokens}）。
+- `LLMGuardrail._judge` 從回應抽 usage（mirror openai_provider._extract_usage）並掛到 verdict；deterministic 後盾擋下 / MockGuardrail → usage None（免費）；fail-closed 例外路徑 usage None。
+- `Classifier`：累加 pre+post 的 usage → 新 `Outcome.guardrail_usage`（含各 fallback 路徑，pre 擋下也帶已花的 pre usage）。
+- unit tests（fake client 帶 usage）；預設 mock → guardrail_usage None，行為不變。
+
+### Slice 2 — budget gate + ledger（fail-closed）
+- config 加 `guardrail_monthly_budget_usd` + `guardrail_reserve_input_tokens`（可調，入 TOML/registry）。
+- `classify_under_budget`：對 `provider='guardrail'` reserve 最壞情況（pre+post 共 2 call）→ 傳 `guardrail_ok` 給 classifier；classify 後依 `Outcome.guardrail_usage` settle（cache hit → 不重複計、全額退；leak-safe finally 退 reserve）。pricing 以 guardrail_model 查表。
+- `Classifier.classify` 加 `guardrail_ok`：False → `fb("guardrail_budget_exhausted")` **在 pre/L1 之前**（FR-340：L1 也停）。
+- 整合測試（DB）：guardrail ledger row 寫入、budget 100% → 全 fallback、fallback/cache → 退款；L1 與 guardrail 兩 row 獨立。
+- docs：tunable-parameters + TOML + 操作手冊（guardrail budget 與 alert 說明）。
+- 註：guardrail budget 100% 的 Telegram alert 投遞與既有 L1 80% alert 一樣走 Grafana-over-ledger，屬 observability 批次（與現有未接線狀態一致），本片只保證 **fail-closed 行為 + ledger 記錄**。
+
+### 流程
+每片 TDD + 合併前 code-review；fail-closed 一律往 fallback；不破壞既有 L1 budget 路徑（純加 guardrail 平行軌）。
 
 ## G2 live E2E — 執行證據 / promotion gate
 
@@ -60,7 +83,7 @@ docker run --rm -e LLM_PROVIDER -e LLM_API_KEY -e LLM_MODEL -e GUARDRAIL_PROVIDE
 - `test_semantic_injection_caught_by_real_model` PASSED — 規避 regex 的語意攻擊由真 L2 模型擋下（`instruction_hijack`）。
 - 連同 16 條 guardrail 單測，共 **19 passed**（真 OpenAI，gpt-4o-mini×2，成本約數美分）。
 
-> 註：promotion 到 production 前仍需 **FR-340 L2 budget metering**（見 Follow-up）。目前 real guardrail 的 L2 成本 uncapped，故僅宣稱「G2 live E2E 完成」，**不**宣稱 guardrail production-ready。
+> 註：G2 完成時 L2 成本尚未計量；**FR-340 L2 budget metering 已於其後完成**（見上方 Follow-up，merged dev）。L2 成本現已納入獨立預算並 fail-closed。production 上線前的剩餘項為跨-provider defense-in-depth、Grafana panel、預算告警投遞（非 guardrail 計量問題）。
 
 ## 流程（不變）
 每片 TDD + **合併前 code-review agent**（[[feedback_review_before_merge]]）；記錄落本檔（[[feedback_plans_need_record_doc]]）；測試在 throwaway 容器（[[reference_ems_test_runtime]]）；可調參數集中（[[feedback_tunable_params_registry]]）。

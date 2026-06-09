@@ -118,14 +118,17 @@ class Settings(BaseSettings):
 
     # L2 guardrail (FR-338, §8.7.3): independent provider/model/key from L1.
     # Default 'mock' keeps the deterministic guardrail (no behaviour change, no LLM cost).
-    # NOTE: a real guardrail provider's L2 token cost is NOT yet budget-metered (FR-340 follow-up)
-    # -> L2 cost is UNCAPPED when enabled; main.py warns at startup.
+    # A real provider's L2 token cost IS budget-metered (FR-340) via guardrail_monthly_budget_usd
+    # below — its own llm_budget_ledger row (provider='guardrail'); 100% -> classify stops, fallback.
     guardrail_provider: str = "mock"
     guardrail_model: str = ""               # blank -> factory per-provider default
     guardrail_api_key: str = ""             # blank -> reuse llm_api_key (§8.7.3)
     guardrail_base_url: str | None = None
     guardrail_default_model_openai: str = "gpt-4o-mini"  # cheapest model adequate for injection judging
     guardrail_max_output_tokens: int = 256  # L2 verdict JSON is small; keep the call cheap
+    # FR-340 L2 budget metering: the guardrail gets its OWN llm_budget_ledger row (provider='guardrail').
+    guardrail_monthly_budget_usd: float = 10.0  # separate cap; 100% -> classify stops (L1 too) -> fallback
+    guardrail_reserve_input_tokens: int = 8000  # per-call worst-case input (pre-check embeds the §8.6.5a-capped prompt)
 
     # LLM tuning (single source; project_rules §19 / tunable-parameters.md)
     llm_max_output_tokens: int = 1024       # provider max_tokens AND budget reservation output bound (COUPLED)
