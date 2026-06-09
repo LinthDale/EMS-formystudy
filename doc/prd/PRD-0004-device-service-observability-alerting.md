@@ -220,7 +220,7 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 
 ### EMS 同步義務（Guideline §11.2，實作完成後）
 
-- `doc/API.yaml`：本 PRD 無新 REST，註明告警/儀表板為 Grafana provisioning（非 REST）。
+- `api/openapi.yml`（實際路徑；非 `doc/API.yaml`）：本 PRD 無新 REST，註明告警/儀表板為 Grafana provisioning（非 REST）。
 - Container Cheat Sheet：無新容器，補 Grafana 告警/儀表板說明。
 - Operations Manual：新增「預算告警與健康度儀表板」操作節（門檻意義、收到 100% 告警的處置 SOP：加額度 / 切 mock）。
 

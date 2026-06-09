@@ -38,7 +38,7 @@
 | PostgREST `api.*` views | `api.devices` / `api.device_signals`（**僅 confirmed/active 白名單欄位**）| 僅「公開唯讀的已確認設備」唯讀面（若有此需求）| 見 §9（公開性 / CORS 決策）|
 | 量測資料 | **契約待確認**（見下「後端相依」）| 即時卡片 / 歷史曲線 | BFF or PostgREST |
 
-> **MCP `:8766` 不在前端可消費面**（architect MED-6 / security HIGH）：MCP 綁 `127.0.0.1:8766`、是 **AI agent（Claude Code）通道**、需 `AI_API_KEY`，非產品 API。同樣資料以 REST `/devices?status=candidate` + `/human-review` 取得。前端 / BFF **不得**直連 MCP。
+> **MCP `:8766` 不是前端 / 瀏覽器 API**（architect MED-6 / security HIGH）：MCP 綁 `127.0.0.1:8766`（loopback）、是 **AI agent（Claude Code）通道**、帶 `AI_API_KEY`，非產品 UI API。**前端絕不得直接呼叫 MCP**（否則與「API key 不入 bundle」原則直接衝突）。人工確認所需資料一律以 REST `/devices?status=candidate` + `/human-review` 取得；**若日後確有 AI 協作需求，只能透過 BFF / server-side bridge 在伺服器側中介**（MCP 維持 loopback、key 留伺服器側），不開瀏覽器直連路徑。
 
 ### 1.5 後端相依 / 前置條件（architect MED-5 — 誠實列出，非「零後端」）
 
@@ -161,15 +161,31 @@
 
 ## 7. Data Model
 
-**前端不擁有資料模型**，全部消費後端既有 schema（`api.devices` / `api.device_signals` / 量測 views / device-service DTO）。前端僅有 client-side view-model / 狀態管理（不持久化於 DB）。若需新唯讀 view，走 idempotent `CREATE OR REPLACE`、遵 PRD-0003 §7.4 白名單，不破壞既有契約。
+**前端不擁有資料模型**，全部消費後端既有契約：**主**為 device-service REST DTO（特權讀寫；含 status/ai_confidence 等 `api.*` 白名單藏起來的欄位 — 見 §8.1），`api.*` view 僅供「公開 confirmed 設備唯讀」面。前端僅有 client-side view-model / 狀態管理（不持久化於 DB）。若需新唯讀 view，走 idempotent `CREATE OR REPLACE`、遵 PRD-0003 §7.4 白名單，不破壞既有契約。
 
 ---
 
-## 8. API Contract
+### 8.1 Per-page 資料來源對照（哪些頁吃 REST、哪些吃 PostgREST read view）
 
-- **消費既有契約**，不新增後端 API（骨架階段假設現有端點足夠；review 時逐 FR 核對缺口）。
-- 已知可能缺口（列 Open Question / 後端後續）：即時推播端點、前端用聚合查詢、分頁/排序參數完整度。
-- 前端對後端的呼叫經 BFF/proxy 統一加 X-API-Key（不在前端明碼）。
+> 規則：**任何需要 status / classified_by / ai_confidence / metadata / signal 狀態 / candidate / retired 的頁面，一律走 device-service REST（經 BFF）**；PostgREST `api.*` 只能服務「公開的 confirmed 設備唯讀」需求。
+
+| 頁面 / FR | 資料來源 | 端點 | Contract gap（PRD-0003 line 387 白名單刻意隱藏）|
+|-----------|---------|------|------|
+| 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&page=&sort=` | **gap D3**：分頁 / 排序參數完整度待確認；`api.devices` 給不了 candidate/retired |
+| 設備詳情 FR-501 | **REST** | `GET /devices/{id}` + `/signals` | `api.device_signals` 隱藏 signal `status`/`source_ref`/`confirmed_by_ai` → 詳情需 REST |
+| 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| **gap D1**：`api.devices` 隱藏 status/classified_by/ai_confidence/metadata/stale → **白名單不足以支撐**，須特權 REST 讀面 |
+| 信心佇列 FR-510 | **REST** | `GET /devices?status=candidate` + `/human-review` | `api.devices` 只露 confirmed/active → **完全看不到 candidate**，必走 REST |
+| 審閱 digest FR-511 | **REST** | `/devices/{id}/human-review`（digest）| 純文字渲染（§9.5）|
+| 確認/override/reject FR-512 | **REST**（mutating）| `/confirm` `/override` `/reject` | 需 X-API-Key（OPS 通道）→ 強制 BFF |
+| Correction FR-513 | **REST**（mutating）| `/ai-feedback` `/corrections` | §7.3a 後端驗證 |
+| 量測即時/歷史 FR-520/521 | **待確認** | — | **gap D2**：`api.electricity_measurements`/`api.factory_measurements` **不存在**（migration 000/001 只 GRANT `public.*` 給 web_anon）→ 須確認 PostgREST 曝露或另立後端 view |
+| （若有）公開 confirmed 設備唯讀 | PostgREST | `api.devices` / `api.device_signals` | 僅白名單欄位；公開性/CORS 見 §9.3 |
+
+### 8.2 契約原則
+
+- **本 PRD 不新增後端 API**；上表 gap（D1 特權讀面、D2 量測契約、D3 分頁/排序）需以 PRD-0003 後續或新後端 PRD 補齊，前端不擅改。
+- 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
+- 由 `api/openapi.yml` 生成 TS client，做契約測試防漂移（§13 / R2）。
 
 ---
 
@@ -241,20 +257,38 @@
 
 ---
 
-## 12. Rollout & Migration Plan（骨架）
+## 12. Rollout & Migration Plan
 
-分階段（對齊原始 Stage 思路，但聚焦現有後端能力）：
+### Architecture gates（進實作前必須先定案，否則不開工）
 
-1. **P1 設備管理 + 人工確認工作流**（FR-500~513）— 對接最成熟的 device-service REST，OPS 內部先用。
-2. **P2 量測呈現**（FR-520~521）— 即時卡片 + 歷史曲線。
+- **GATE-1 BFF 設計定案**：BFF 技術選型 + session 機制 + role→channel-key 映射 + CSRF 策略（§9.1/9.2/9.4）**必須先拍板**。理由：device-service mutating API（confirm/override/reject）需 X-API-Key、SPA 不可持 key → P1 的核心工作流**沒有 BFF 就無法安全實作**。**BFF 未定案前，P1 不進實作。**
+- **GATE-2 後端相依 D1~D4 結清**（§1.5 / §8.1）：至少 D1（特權設備讀面）、D3（分頁/排序）須確認 device-service REST 已支援或排定後端工項；否則 FR-500/503/510 無法估算。
+
+### 分階段
+
+1. **P1 設備管理 + 人工確認工作流**（FR-500~513）— 對接最成熟的 device-service REST，OPS 內部先用。**前置 GATE-1 + GATE-2(D1/D3)**。
+2. **P2 量測呈現**（FR-520~521）— 即時卡片 + 歷史曲線。**前置 D2（量測契約）**；即時預設輪詢。
 3. **P3 角色化 / i18n / 商業化門面**（FR-530~532）。
 4. **（後續 PRD）控制下發** — 待 control-service 立案。
 
 每階段：可獨立部署、Grafana 並行不下線（漸進取代而非斷崖切換）。回滾 = 前端容器下線，後端與 Grafana 不受影響。
 
+### P1 驗收條件（可給工程實作與 QA；非僅功能清單）
+
+| # | 驗收項 | 準則 |
+|---|--------|------|
+| AC-1 | 候選清單來源 | 佇列只來自 `GET /devices?status=candidate`（經 BFF）；非 candidate 不入佇列；空佇列有明確 empty state |
+| AC-2 | 排序 / 篩選 | 依 status / type / 信心 / 最後上線時間排序與篩選；參數對應後端（D3 結清後鎖定）|
+| AC-3 | 狀態轉移 | confirm：candidate→confirmed；override：改 device_type+signals 並記 classified_by；reject：依後端語義；UI 即時反映新狀態且**以後端回應為準**（樂觀更新失敗要回滾）|
+| AC-4 | correction 輸入限制 | 前端即時提示長度 30–500、NFKC、禁控制字元（§7.3a）；**實質驗證在後端**，前端錯誤訊息對應後端 4xx |
+| AC-5 | 失敗 / 重試 | 後端 5xx / 網路失敗：明確錯誤態 + 可重試；mutating 重試須**冪等防重複**（避免重複 confirm）|
+| AC-6 | audit log 顯示 | 設備詳情可看該裝置的 append-only 稽核事件（override/reject/correction/guardrail BLOCK 時間軸）|
+| AC-7 | rate-limit / error UX | 命中後端 429（/ai-feedback per-key 30/h、per-device 10/h；correction 速率）時，UI 顯示「稍後再試 + 剩餘時間」，不靜默失敗 |
+| AC-8 | 權限 UX | 依 role 隱藏/禁用無權操作；**且**越權請求被 BFF/後端擋（前端隱藏非安全邊界，§9.1）|
+
 ### EMS 同步義務（實作完成後）
-- `doc/API.yaml`：若前端促成任何新後端端點才更新（本 PRD 預設不新增）。
-- Container Cheat Sheet：新增前端（+ 可能 BFF）容器。
+- **`api/openapi.yml`**（**更正**：專案實際路徑為 `api/openapi.yml`，非 `doc/API.yaml`）：若前端促成任何新後端端點才更新（本 PRD 預設不新增）。
+- Container Cheat Sheet：新增前端（+ BFF）容器。
 - Operations Manual：前端部署/登入/角色操作節。
 
 ---
