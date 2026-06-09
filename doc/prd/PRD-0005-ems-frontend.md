@@ -293,15 +293,27 @@
 
 ---
 
-## 13. Test Strategy（骨架）
+## 13. Test Strategy
+
+### 13.1 測試層級
 
 | 層級 | 內容 |
 |------|------|
 | 單元 | 元件 / view-model（Vitest + Testing Library）|
 | 整合 | 對 mock 後端契約（MSW）驗工作流 |
 | E2E | 關鍵流程：新增設備、確認候選、override、查歷史（Playwright）|
-| 契約 | 由 openapi.yml 生成 client，契約測試防漂移 |
+| 契約 | 由 `api/openapi.yml` 生成 client，契約測試防漂移（見 §13.2）|
 | 覆蓋率 | 沿用專案 80% 門檻 |
+
+### 13.2 API 契約治理（前端可信賴 openapi.yml 的前提）
+
+> 前端最需要回答的是「**我能相信 `api/openapi.yml` 嗎？**」——治理規則集中於 **[`doc/governance/api-contract-governance.md`](../governance/api-contract-governance.md)**（單一真相），本節僅列前端相關落地點：
+
+- **`api/openapi.yml` 為 REST 唯一真相**；前端 **TS client 一律由它生成，禁止手刻**型別。
+- `info.version` 採 **semver**；API 改動須 bump，breaking → MAJOR。
+- **CI gate**（與 P1 契約測試同批落地）：openapi **lint**（spectral/redocly）+ **diff**（oasdiff，breaking 但未 bump MAJOR → fail）+ **contract test**（生成 client 對服務/mock 驗）+ version-bump check。
+- 新增 **`api/CHANGELOG.md`** 記每次 API 變更（版本/級別/PR/PRD）。
+- **DB schema 遷移治理另屬** [ADR-020](../adr/ADR-020-db-migration-governance.md)，不在前端範圍（避免在前端 PRD 順手換 migration 工具）。
 
 ---
 
