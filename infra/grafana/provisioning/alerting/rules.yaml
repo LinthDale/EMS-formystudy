@@ -457,3 +457,300 @@ groups:
         isPaused: false
         notification_settings:
           receiver: Telegram
+
+  # ============================================================
+  # Group 3: EMS-預算告警 (PRD-0004 FR-400~405)
+  #   比例分母一律取 ledger row 自身的 budget_usd（cost_usd/budget_usd），
+  #   非 env 常數 —— FR-334 /admin/budget/extend 會就地調高 budget_usd，
+  #   用 env 常數會在加額度後算錯門檻（PRD-0004 §4 / FR-400~402）。
+  #   當期 row 以 now() ∈ [period_start, period_end) 選取（UNIQUE(period_start,provider) 保證唯一）。
+  #   刻意不加 active=TRUE：budget_reserve/settle（gate）選取也不看 active，告警須與 gate 同條件，
+  #   否則未來若有 rollover 把舊 row 設 active=FALSE，會在換期間隙誤判 noData→OK 而靜默漏報。
+  #   低基數：SQL 取「跨閾值的 provider 數」單一 scalar，provider/金額不進 label (FR-403)。
+  #   warn=[0.8,1.0) 與 exhausted=[1.0,∞) 為互斥區間，同點僅一條成立 (FR-401)。
+  #   warn 用 for=5m 去抖（cost 當期單調遞增）；exhausted 用 for=0s 即報 (FR-404)。
+  #   注意：0.8 = BUDGET_WARN_RATIO 預設，Grafana SQL 無法讀 env 故硬編；改 env 須同步此處。
+  #   注意：shared dev DB 上整合測試會暫時觸碰這些 row 但會 restore（非生產問題）。
+  # ============================================================
+  - orgId: 1
+    name: EMS-預算告警
+    folder: EMS
+    interval: 1m
+    rules:
+      # ----- FR-400：L1 (非 guardrail) 月預算 warn 80%~<100% -----
+      - uid: ems-l1-budget-warn
+        title: "L1 LLM 月預算達 80% (warn)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS over_warn FROM (
+                  SELECT provider
+                  FROM public.llm_budget_ledger
+                  WHERE provider <> 'guardrail'
+                    AND period_start <= now() AND period_end > now()
+                    AND budget_usd > 0
+                    AND cost_usd / budget_usd >= 0.8
+                    AND cost_usd / budget_usd < 1.0
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        labels:
+          severity: warning
+          component: llm-budget
+        annotations:
+          summary: "L1 LLM 月預算達 80% (FR-400)"
+          description: "L1 分類 LLM 當期花費已達月預算 80%~<100%。請評估加額度或切 mock。查 SELECT provider, cost_usd, budget_usd, round(cost_usd/budget_usd*100) AS pct FROM llm_budget_ledger WHERE provider<>'guardrail' AND period_start<=now() AND period_end>now()。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- FR-401：L1 月預算 100% exhausted (fail-closed 降級) -----
+      - uid: ems-l1-budget-exhausted
+        title: "L1 LLM 月預算 100% (exhausted, fail-closed)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS over_cap FROM (
+                  SELECT provider
+                  FROM public.llm_budget_ledger
+                  WHERE provider <> 'guardrail'
+                    AND period_start <= now() AND period_end > now()
+                    AND budget_usd > 0
+                    AND cost_usd / budget_usd >= 1.0
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        execErrState: Error
+        for: 0s
+        labels:
+          severity: critical
+          component: llm-budget
+        annotations:
+          summary: "L1 LLM 月預算 100% — 分類已 fail-closed 降級 (FR-401)"
+          description: "L1 當期花費達月預算 100%，分類已 fail-closed 降級為 system_fallback（改用預設值，AI 分類停用）。請立即加額度或切 mock。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- FR-402：guardrail (L2) 月預算 warn 80%~<100% -----
+      - uid: ems-guardrail-budget-warn
+        title: "L2 guardrail 月預算達 80% (warn)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS over_warn FROM (
+                  SELECT provider
+                  FROM public.llm_budget_ledger
+                  WHERE provider = 'guardrail'
+                    AND period_start <= now() AND period_end > now()
+                    AND budget_usd > 0
+                    AND cost_usd / budget_usd >= 0.8
+                    AND cost_usd / budget_usd < 1.0
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        execErrState: Error
+        for: 5m
+        labels:
+          severity: warning
+          component: guardrail-budget
+        annotations:
+          summary: "L2 guardrail 月預算達 80% (FR-402)"
+          description: "L2 guardrail (provider='guardrail') 當期花費達月預算 80%~<100%。達 100% 時連 L1 一起停（分類全停走 fallback）。請評估加額度。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram
+
+      # ----- FR-402：guardrail (L2) 月預算 100% exhausted (連 L1 一起停) -----
+      - uid: ems-guardrail-budget-exhausted
+        title: "L2 guardrail 月預算 100% (exhausted, 連 L1 全停)"
+        condition: C
+        data:
+          - refId: A
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: timescaledb-ems
+            model:
+              editorMode: code
+              format: table
+              rawQuery: true
+              rawSql: |
+                SELECT count(*)::float8 AS over_cap FROM (
+                  SELECT provider
+                  FROM public.llm_budget_ledger
+                  WHERE provider = 'guardrail'
+                    AND period_start <= now() AND period_end > now()
+                    AND budget_usd > 0
+                    AND cost_usd / budget_usd >= 1.0
+                ) t
+              refId: A
+          - refId: B
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: B
+              type: reduce
+              expression: A
+              reducer: last
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+          - refId: C
+            relativeTimeRange:
+              from: 600
+              to: 0
+            datasourceUid: "-100"
+            model:
+              refId: C
+              type: threshold
+              expression: B
+              conditions:
+                - evaluator:
+                    type: gt
+                    params:
+                      - 0
+              datasource:
+                name: Expression
+                type: __expr__
+                uid: "-100"
+        noDataState: OK
+        execErrState: Error
+        for: 0s
+        labels:
+          severity: critical
+          component: guardrail-budget
+        annotations:
+          summary: "L2 guardrail 月預算 100% — 分類全停 fail-closed (FR-402)"
+          description: "L2 guardrail 當期花費達月預算 100%，依 FR-340 fail-closed：分類全停（連 L1）走 system_fallback。請立即加額度或將 guardrail 切回 mock。"
+        isPaused: false
+        notification_settings:
+          receiver: Telegram

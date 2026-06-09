@@ -11,6 +11,8 @@
 
 ---
 
+> **實作進度（2026-06-09）**：**FR-400~405 預算告警已實作並驗證**（`rules.yaml` alert group `EMS-預算告警`，4 條 rule：L1/guardrail × warn/exhausted）——對 dev DB 實跑 4 條 SQL 回 scalar、seed 85%→warn / 100%→exhausted 證實 band 互斥、Grafana reload 後 4 條 rule `health=ok state=inactive`、無 provisioning error；code-review APPROVE（0 CRIT/HIGH）。**FR-406~410 dashboards 尚未實作（下一步）。**
+
 ## 1. Overview & Context
 
 ### 業務背景
