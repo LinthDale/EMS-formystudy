@@ -21,7 +21,7 @@
 - **新檔 `llm/llm_guardrail.py`**：`LLMGuardrail`，雙階段防護——(1) 先跑 `MockGuardrail` deterministic 規則當免 token 後盾（known injection/command 直接擋）；(2) 通過才呼叫**獨立的 guardrail 模型**判語意層攻擊（§8.7.2 hardcoded security prompt，user/input 不可改）。**fail-closed**：任何 model/parse/network error → BLOCK（→ system_fallback），守衛掛掉絕不放行未檢查的分類。
 - **`llm/factory.py` 加 `make_guardrail(provider, ...)`**：`mock` → MockGuardrail；`openai`/`local` → LLMGuardrail（OpenAI-compatible client，可注入測試 client）。`anthropic` 守衛 = 跨-provider follow-up。
 - **`config.py`**：加 `guardrail_provider="mock"`（預設不變行為）、`guardrail_model`、`guardrail_api_key`（空→沿用 `llm_api_key`）、`guardrail_base_url`、`guardrail_default_model_openai="gpt-4o-mini"`、`guardrail_max_output_tokens=256`。`SECRET_FIELDS += guardrail_api_key`；FR-342 base_url 驗證同樣套 `guardrail_base_url`。
-- **`main.py` / `mcp_server.py`**：改用 `make_guardrail` 注入；若 `guardrail_provider != mock` 啟動印 WARNING：「L2 budget metering 尚未實作（FR-340），真實 guardrail 的 L2 成本目前 UNCAPPED」。
+- **`main.py` / `mcp_server.py`**：改用 `make_guardrail` 注入；若 `guardrail_provider != mock` 啟動印 WARNING。（註：此 WARNING 文案在 FR-340 完成後已改為「L2 成本已納入獨立預算計量」的 INFO，不再是 UNCAPPED。）
 - **unit tests** `tests/unit/test_device_service_llm_guardrail.py`：注入 fake OpenAI client，驗 deterministic 後盾先擋（不呼叫模型）/ 模型回 block→BLOCK / 模型回 pass→PASS / 壞 JSON→fail-closed BLOCK / network error→fail-closed BLOCK / output phase summary 正確。**不打真 API**。
 - 驗收：classifier 行為不變（預設 mock）；新模組高覆蓋；code-review 0 CRIT/HIGH 後 merge dev。
 </details>
