@@ -2,9 +2,9 @@
 
 | 欄位 | 內容 |
 |------|------|
-| 狀態 | **Draft v2**（2026-06-09；已過 architect + security 審視，NEEDS-REWORK 修正完成；Approved 前需解 §1.5 後端相依）|
+| 狀態 | **Draft v3**（2026-06-10；決策齊備——GATE-1/GATE-2 關閉、P2 路由與技術棧/Design System 已定案；**待 Approved**）|
 | 起案日期 | 2026-06-09 |
-| 最後修訂 | 2026-06-09（v2：資料路由改 REST、BFF 強制、§9 完整威脅模型、§11 瀏覽器威脅、§1.5 後端相依）|
+| 最後修訂 | 2026-06-10 **v3**（owner 拍板）：§9.3 量測路由=**全部經 BFF**（零瀏覽器 CORS 面）；GATE-1 關閉=**FastAPI BFF** + session/CSRF 定案；§6.4 新增=**EMS Design System**（Tailwind v4+Radix+shadcn 種子、Precise/Industrial/Alive、domain components、Motion 範圍；視覺執行交 Claude Design）；§14 Q1/Q2/Q7/Q9 全解。v2（06-09）：資料路由改 REST、BFF 強制、§9 威脅模型、§1.5 後端相依 |
 | 對應決策紀錄 | 還原原始計畫 `doc/archive/plan/EMS實作計畫.md` 之自寫前端（Stage 2~6 React SPA），當時因 ADR-001 開源優先暫以 Grafana 取代、降為「待決策」 |
 | 取代 / 補充 | **補充**全線 PRD；消費 PRD-0001/0002/0003 既有後端契約；與 [PRD-0004](PRD-0004-device-service-observability-alerting.md)（Grafana 內部 ops 觀測）**分工並存，非替代** |
 | 邊界釐清 | Grafana = 運維內部可觀測性 / 告警；本 PRD = 客戶 / 操作人員的產品 UI |
@@ -61,7 +61,7 @@
 
 - **G1 設備管理 UI**：設備清單、詳情、CRUD、狀態流轉（candidate→confirmed→retired）視覺化，消費 `api.devices` + device-service REST。
 - **G2 人工確認工作流**：低信心候選佇列 → 審閱 digest → 確認 / override / reject / 補 correction（FR-336/330/332），對接 `/human-review` + `/ai-feedback`。（佇列**計數**在 Grafana（PRD-0004 FR-406）給 on-call 看；本 PRD 給的是**可操作的佇列工作流**，兩者鏡像不重工。）
-- **G3 即時與歷史量測呈現**：量測即時卡片 + 歷史曲線（消費 PostgREST views / 量測 API；即時機制見 Open Question）。
+- **G3 即時與歷史量測呈現**：量測即時卡片 + 歷史曲線（**經 BFF** 消費量測契約，§9.3 已決策；即時機制 P2 輪詢）。
 - **G4 角色化權限 UI**：依 OPS/INGEST/AI 通道差異化操作面與權限邊界。
 - **G5 商業級 UX**：對標商用 EMS 的產品門面（品牌、i18n 中文在地化、響應式）。
 
@@ -156,8 +156,53 @@
 ### 6.3 Data Flow
 
 - 全部讀寫**經 BFF**：BFF 先驗 session → 依 role 選 channel key → 轉發 device-service。
-- `api.*` PostgREST 公開唯讀面（若採用）的可達性與 CORS 由 §9 決策（須非公網可達 + CORS 限定來源）。
+- **量測資料亦經 BFF**（§9.3 已決策）：瀏覽器零直連 PostgREST、零 CORS 面；PostgREST 留內網（legacy/demo）。
 - 即時量測：P2 預設**輪詢**（現有後端唯一可行）；WebSocket/SSE 為獨立 spike，依賴未實作的 realtime-service，排在 P1/P2 之後（§14 Open Q3）。
+
+
+### 6.4 前端技術棧與 EMS Design System（2026-06-10 owner 定案）
+
+> **產品定位**：**工業級能源控制台，帶商業產品質感**——不是 Grafana clone、不是一般 SaaS 後台。視覺方向：**Precise / Industrial / Alive**。本節為**計畫規格**；視覺設計執行交 **Claude Design**（以本節 + design tokens 為輸入）。
+
+**UI library strategy（owner 原文）**：採 Tailwind CSS + Radix UI primitives + shadcn/ui open-code components，建立 **EMS Design System**。shadcn/ui 僅作為**可修改元件種子**，不作為視覺模板。所有 typography、color、spacing、radius、motion、chart theme 與 domain components 由本專案 design tokens 管理。避免 generic admin template、Grafana clone、AntD/MUI default aesthetic。
+
+**技術棧（定案）**：
+
+| 層 | 選型 |
+|----|------|
+| 框架 | React + TypeScript + Vite |
+| 樣式 | Tailwind CSS v4 + Radix UI primitives + shadcn/ui（元件種子）|
+| 動畫 | Motion for React |
+| 資料 | TanStack Query（伺服器狀態）+ TanStack Table |
+| 表單 | React Hook Form + Zod |
+| 圖表 | Apache ECharts（自建 theme）|
+| Icon | lucide-react |
+| 明確不採 | AntD（中國式後台感）/ MUI（Material 味重）/ Mantine / Chakra（自訂美術自由度不足）|
+
+**目錄結構（規格）**：
+
+```
+components/ui        基礎元件（shadcn/radix 種子，自改 tokens）
+components/ems       domain components（下表）
+styles/tokens.css    色彩、字體、spacing、radius、shadow、motion
+charts/theme.ts      ECharts theme
+```
+
+**EMS domain components（自建，P1 起逐步交付）**：
+
+| 元件 | 用途（對應 FR）|
+|------|------|
+| `DeviceStatusPill` | candidate/confirmed/retired/stale 狀態徽章（FR-503）|
+| `ConfidenceMeter` | ai_confidence 視覺化（FR-510 信心佇列）|
+| `SignalSparkline` | signal 迷你趨勢（FR-501/520）|
+| `MeasurementCard` | 即時量測卡片（FR-520）|
+| `PowerFlowMiniMap` | 能流小地圖（P3 門面）|
+| `AuditTimeline` | append-only 稽核時間軸（AC-6）|
+| `ReviewDigestPanel` | AI digest 審閱（FR-511；純文字渲染 §9.5）|
+| `DeviceInspector` | 設備詳情側欄（FR-501）|
+| `AlarmStrip` | 告警帶（橋接 Grafana 告警狀態）|
+
+**Motion 使用範圍（限定，避免過度動畫）**：數值更新、狀態切換、drawer/dialog、timeline 展開、告警進入、圖表 panel refresh——僅此六類。
 
 ---
 
@@ -214,7 +259,13 @@
 - **[必過] session token 性質**：以 `HttpOnly; Secure; SameSite=Strict` cookie 簽發（或伺服器側 bearer、僅存記憶體）；**禁用 `localStorage` / `sessionStorage` 存 session 或任何 key 衍生物**。
 - **[必過]** 定義最大存活時間 + idle timeout；BFF **每請求**驗 session 後才注入 key。
 
-### 9.3 PostgREST 公開面（CRITICAL）
+### 9.3 PostgREST 公開面 —— ✅ 已決策（2026-06-10，owner 拍板）：**前端一律經 BFF，瀏覽器不直連 PostgREST**
+
+- **決策**：前端所有讀寫（**含量測資料**）一律 session 驗證後由 BFF 轉發——單一 origin、**零瀏覽器 CORS 面**、PostgREST 不暴露於瀏覽器網路，與 PRD-0006 窄表「曝露面 deny-by-default」哲學一致。
+- PostgREST 本身保留（legacy/demo 用途），但**不得公網可達**（限內網/防火牆後）；既有 `api.*` view 的 `web_anon` GRANT 維持現狀（內網工具用），前端不依賴它。
+- 原 CRITICAL 兩擇一問題（公開+網路隔離 vs 一律 BFF）就此關閉：採後者。
+
+#### 9.3.1 原問題紀錄（已解）
 
 - `api.devices` / `api.device_signals` GRANT 給 `web_anon` → PostgREST 對**任何未認證 HTTP 請求**回傳。本 PRD 必須**明確定調**其一：
   - **(預設採此) 視為「公開唯讀的 confirmed 設備」面**：接受 unauthenticated 讀，但**[必過]** 以網路層緩解——PostgREST **不對公網開放**（限內網 / 防火牆後），且 **[必過]** `PGRST_SERVER_CORS_ALLOWED_ORIGINS` 僅限前端來源；或
@@ -271,7 +322,7 @@
 
 ### Architecture gates（進實作前必須先定案，否則不開工）
 
-- **GATE-1 BFF 設計定案**：BFF 技術選型 + session 機制 + role→channel-key 映射 + CSRF 策略（§9.1/9.2/9.4）**必須先拍板**。理由：device-service mutating API（confirm/override/reject）需 X-API-Key、SPA 不可持 key → P1 的核心工作流**沒有 BFF 就無法安全實作**。**BFF 未定案前，P1 不進實作。**
+- **GATE-1 BFF 設計定案 —— ✅ 已關閉（2026-06-10）**：技術選型 = **Python / FastAPI**（與 device-service 同棧：同一套測試/容器/依賴慣例，session+role→key 映射沿用既有 auth 模式）；session 機制 = `HttpOnly; Secure; SameSite=Strict` cookie + 伺服器側 session store（P1 單機 in-process，水平擴展再 Redis）（§9.2）；role→channel-key 映射 + endpoint 級授權（§9.1）；CSRF = SameSite=Strict + origin-header 驗證（§9.4）。**P1 可進實作。**
 - **GATE-2 後端相依結清 — ✅ 已關閉（2026-06-10 實作完成）**：(a) `ai_confidence` 入 `_COLS`+`DeviceOut`、(b) `GET /devices` `limit/offset/sort/order`（allowlist+NULLS LAST）、(c) `type` filter——openapi 1.3.0（MINOR）+ `api/CHANGELOG.md` 首建，14/14 整合測試綠、267 unit 無回歸。**P2 留決策**：量測資料路由策略（BFF vs 直連 PostgREST + CORS/網路隔離/權限，§1.5 D2 / §9.3）——契約已存在、策略未決，非 REST 工項。
 
 ### 分階段
@@ -333,15 +384,15 @@
 
 ## 14. Open Questions（骨架階段重點）
 
-1. **技術選型**：React+TS+Vite（原始計畫）vs 其他？UI library（MUI / Ant / shadcn）？狀態管理（TanStack Query + Zustand）？
-2. ~~是否需要 BFF？~~ **已定案：BFF 強制（§9.1）。** 殘留：BFF 技術選型（Node/Fastify vs Python/FastAPI BFF）+ session store。
+1. ~~技術選型~~ **已定案（2026-06-10，owner）**：React + TypeScript + Vite；**Tailwind CSS v4 + Radix UI primitives + shadcn/ui（僅作可修改元件種子）+ 自建 EMS Design System**（§6.4）；Motion for React；TanStack Query + TanStack Table；React Hook Form + Zod；Apache ECharts（自建 theme）；lucide-react。**明確不採** AntD / MUI / Mantine / Chakra（generic admin 美學吃掉品牌辨識度）。
+2. ~~是否需要 BFF / 技術選型~~ **全部定案**：BFF 強制（§9.1）；**Python / FastAPI**（同棧）；session store P1 in-process、擴展再 Redis（GATE-1，§12）。
 3. **即時量測機制**：**P2 預設純輪詢**（現有後端唯一可行，無新服務）；WebSocket（依原計畫未實作的 realtime-service）/ SSE 為獨立 spike，排 P1/P2 之後。
 4. **程式碼位置**：**暫定 monorepo `services/frontend`**（契約測試 openapi→TS client 就近），除非有 stakeholder 理由改獨立 repo。
 5. **控制下發何時做**：依賴 control-service + gateway write API（原始 Stage 6，未實作）→ **另立 PRD**（Non-Goal）。
 6. **量測 PostgREST 契約（§1 D2）**：`api.electricity_measurements` 等是否存在，或需新後端 view PRD？
-7. **PostgREST 公開性（§9.3）**：confirmed 設備唯讀面是「可接受未認證 + 網路隔離」還是「一律走 BFF」？（預設前者 + CORS 限定）
+7. ~~PostgREST 公開性~~ **已定案（§9.3）：前端一律經 BFF**；PostgREST 留內網不公開。
 8. **i18n 範圍**：僅中文，或中英雙語（商業外銷考量）？
-9. 設計系統 / 品牌規範來源？
+9. ~~設計系統 / 品牌規範來源~~ **已定案：自建 EMS Design System**（§6.4；視覺方向 Precise / Industrial / Alive）。**視覺設計執行交 Claude Design**，以本 PRD §6.4 為輸入規格。
 
 ---
 
@@ -354,4 +405,4 @@
 
 ---
 
-> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Approved 前剩餘 blocker（2026-06-10 更新）**：GATE-2 REST 增量**已實作關閉**（ai_confidence / 分頁排序 / type filter，openapi 1.3.0）。剩餘：**P2 量測資料路由策略決策**（BFF vs 直連 PostgREST + CORS/網路隔離/權限——契約已存在）+ §14 技術選型（BFF 選型 / 即時機制）。控制下發仍為 Non-Goal（待 control-service PRD）。
+> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Draft v3（2026-06-10）：Approved 前 blocker 全數清空**——GATE-2 已實作關閉（openapi 1.3.0）；**P2 路由已決策**（全部經 BFF，§9.3）；**技術棧/Design System 已定案**（FastAPI BFF + Tailwind/Radix/shadcn 種子 + 自建 EMS Design System，§6.4；視覺執行交 Claude Design）。控制下發仍為 Non-Goal（待 control-service PRD）。**本 PRD 已達可 Approve / P1 可開工狀態。**
