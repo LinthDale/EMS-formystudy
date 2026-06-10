@@ -7,9 +7,10 @@ from __future__ import annotations
 
 import logging
 import uuid
+from typing import Literal
 
 import asyncpg
-from fastapi import APIRouter, Header, HTTPException, Request
+from fastapi import APIRouter, Header, HTTPException, Query, Request
 
 from ..auth import Channel, require
 from ..correction_service import CorrectionService, CorrectionServiceError
@@ -73,9 +74,21 @@ async def create_device(body: DeviceCreate, request: Request) -> dict:
 
 
 @router.get("", response_model=list[DeviceOut], dependencies=[_OPS])
-async def list_devices(request: Request, status: str | None = None, stale: bool | None = None) -> list[dict]:
+async def list_devices(
+    request: Request,
+    status: str | None = None,
+    stale: bool | None = None,
+    type_: str | None = Query(default=None, alias="type"),  # device_type filter (PRD-0005 GATE-2)
+    limit: int | None = Query(default=None, ge=1, le=500),
+    offset: int = Query(default=0, ge=0),
+    sort: Literal["device_id", "device_type", "status", "ai_confidence",
+                  "created_at", "updated_at", "last_seen_at"] = "device_id",
+    order: Literal["asc", "desc"] = "asc",
+) -> list[dict]:
     async with request.app.state.db.ops_pool.acquire() as conn:
-        return [dict(r) for r in await device_repo.list_(conn, status, stale)]
+        rows = await device_repo.list_(
+            conn, status, stale, device_type=type_, limit=limit, offset=offset, sort=sort, order=order)
+    return [dict(r) for r in rows]
 
 
 @router.post("/{device_id}/ai-feedback", response_model=CorrectionOut, status_code=201, dependencies=[_OPS])

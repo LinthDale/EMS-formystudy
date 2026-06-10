@@ -8,9 +8,10 @@
 |---|------|------|---------|
 | [PRD-0001](PRD-0001-Stage1-Stage2-Foundation.md) | EMS Stage 1 / Stage 2 基礎管線與儀表板 | Implemented | services/{simulator,gateway,ingest}, infra/{mosquitto,timescaledb,grafana} |
 | [PRD-0002](PRD-0002-KC-Factory-Integration.md) | KC Factory 工廠 PLC 整合 | Implemented (Phase 1-6) | services/{kc-gateway,kc-ingest}, external/{kc_iot_gateway,kc_modbus_mcp} |
-| [PRD-0003](PRD-0003-Device-Registry-Auto-Discovery.md) | Device Registry & Auto-Discovery — 裝置自動登錄與 AI 輔助分類 | Implemented (Phase 1.1–1.4 + FR-340 L2 budget metering) | services/device-service（REST :8002 + device-service-mcp :8766）, infra/timescaledb/migrations 003–018, api/openapi.yml |
+| [PRD-0003](PRD-0003-Device-Registry-Auto-Discovery.md) | Device Registry & Auto-Discovery — 裝置自動登錄與 AI 輔助分類 | Implemented (Phase 1.1–1.4 + FR-340 L2 budget metering) | services/device-service（REST :8002 + device-service-mcp :8766）, infra/timescaledb/migrations 003–015, api/openapi.yml |
 | [PRD-0004](PRD-0004-device-service-observability-alerting.md) | Device-Service 營運可觀測性 — 預算告警與分類健康度 Dashboards | Draft | infra/grafana/provisioning（alerting + dashboards，承接 PRD-0003 follow-ups；跨-provider L2 另見 ADR-019） |
 | [PRD-0005](PRD-0005-ems-frontend.md) | EMS 自建前端 — 產品級操作介面（Web App）| Draft（骨架）| 還原原始計畫自寫前端；消費 device-service REST/MCP + PostgREST；與 PRD-0004 Grafana 內部 ops 觀測分工並存 |
+| [PRD-0006](PRD-0006-Generic-Measurement-Pipeline-Dynamic-Visualization.md) | 通用量測管線與動態可視化 — 窄表儲存、AI 識別升格、Registry 驅動儀表板 | Draft | infra/timescaledb（migration 019，ADR-020/021/022）+ services/ingest-generic + device-service 升格/路由 config 化 + infra/grafana Device Explorer；採集端 codegen → PRD-0007 |
 
 > 既有 `doc/archive/plan/EMS實作計畫.md` 與 `doc/archive/plan/kc_integration_plan.md` 為**原始規劃文件**（過程紀錄、取捨討論），保留於 archive 下不刪除；PRD-0001 / PRD-0002 為對應的**正式 PRD 形式**，提供 Guideline 15 章節結構。兩者衝突時以 PRD 為準。
 

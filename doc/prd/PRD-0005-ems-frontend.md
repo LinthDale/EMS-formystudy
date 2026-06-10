@@ -36,20 +36,22 @@
 |----|------|------|------|
 | **device-service REST `:8002`**（主）| `GET /devices?status=&type=`、`/devices/{id}`、`/signals`、`/devices/{id}/human-review`、CRUD、`/confirm`/`/override`/`/reject`、`/ai-feedback`、`/corrections` | **全部特權讀寫 + 人工確認工作流**（含 candidate/retired/信心/狀態）| **BFF**（注入 channel key）|
 | PostgREST `api.*` views | `api.devices` / `api.device_signals`（**僅 confirmed/active 白名單欄位**）| 僅「公開唯讀的已確認設備」唯讀面（若有此需求）| 見 §9（公開性 / CORS 決策）|
-| 量測資料 | **契約待確認**（見下「後端相依」）| 即時卡片 / 歷史曲線 | BFF or PostgREST |
+| 量測資料 | PostgREST :3001（契約已存在；§1.5 D2）| 即時卡片 / 歷史曲線 | **路由策略待決（P2）**：BFF or 直連 + CORS（§9.3）|
 
 > **MCP `:8766` 不是前端 / 瀏覽器 API**（architect MED-6 / security HIGH）：MCP 綁 `127.0.0.1:8766`（loopback）、是 **AI agent（Claude Code）通道**、帶 `AI_API_KEY`，非產品 UI API。**前端絕不得直接呼叫 MCP**（否則與「API key 不入 bundle」原則直接衝突）。人工確認所需資料一律以 REST `/devices?status=candidate` + `/human-review` 取得；**若日後確有 AI 協作需求，只能透過 BFF / server-side bridge 在伺服器側中介**（MCP 維持 loopback、key 留伺服器側），不開瀏覽器直連路徑。
 
 ### 1.5 後端相依 / 前置條件（architect MED-5 — 誠實列出，非「零後端」）
 
-本 PRD 雖以「消費既有契約」為原則，但 review 揭露數項**真實後端相依**，逐項標記為「已存在 / 需先確認 / 需前置 PRD」：
+本 PRD 雖以「消費既有契約」為原則，但 review 揭露數項**真實後端相依**。**2026-06-10 已查 device-service 實作（`routes/devices.py` + `repositories/device_repo.py` + `models.py`）逐項定論**：
 
-| # | 相依 | 狀態 |
+| # | 相依 | 調查結論（2026-06-10）|
 |---|------|------|
-| D1 | **特權營運讀取面**：`GET /devices` 是否回傳 candidate/retired + ai_confidence + 狀態（前端所需，非 `api.devices` 白名單）| **需確認** device-service REST 是否已涵蓋；若否，需後端補（特權 REST 讀，**不**放 `web_anon`）|
-| D2 | **量測契約**：`api.electricity_measurements` / `api.factory_measurements` view | **不存在**——migration 000/001 僅以 `public.*` 表 GRANT `web_anon`；需確認 PostgREST 曝露方式或另立後端 view PRD |
-| D3 | **分頁 / 排序參數**：`GET /devices` 的 page/sort 完整度 | **需確認** |
-| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在**——見 §14 Open Q3，P2 預設輪詢 |
+| D1 | **特權營運讀取面**：`GET /devices` 回傳 candidate/retired + ai_confidence + 狀態 | **已關閉（GATE-2 實作 2026-06-10）**。`GET /devices`（OPS-keyed，走 ops_pool 特權，**非** `api.devices` 白名單）原本 `DeviceOut`/`_COLS` 不含 `ai_confidence`（信心佇列只能 N+1 打 human-review）——本批已補：`ai_confidence` 入 `_COLS`+`DeviceOut`，並可 `sort=ai_confidence&order=desc`（NULLS LAST）直接做信心佇列排序。仍未曝露（刻意）：metadata / ai_provider / stale_marked_at |
+| D2 | **量測契約**：PostgREST 量測唯讀面 | **已存在（更正 2026-06-10；先前誤判不存在）**——migration 000/001 建 `api.electricity_measurements` / `api.factory_measurements` view、GRANT `web_anon`，PostgREST :3001 即 `/electricity_measurements`、`/factory_measurements`（openapi.yml 已記載）。→ **P2 真正待決的是「量測資料路由策略」**（非 REST 小增量）：前端經 **BFF** 還是**直連 PostgREST**，並補 CORS / 網路隔離 / 權限策略（§9.3 的決策落到量測面）|
+| D3 | **分頁 / 排序 / type filter**：`GET /devices` | **已補（GATE-2 實作 2026-06-10）**。原僅 `status`+`stale` filter、無分頁、排序硬編——本批已加 `limit/offset/sort/order`（7 欄位 allowlist、NULLS LAST）+ `type` filter + `ai_confidence` 入 DeviceOut（openapi 1.3.0 MINOR + `api/CHANGELOG.md` 首建）|
+| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在（確認）**——無 WebSocket/SSE 服務。→ P2 預設**輪詢** REST/PostgREST（§14 Q3）；WebSocket 需另立 realtime-service |
+
+> **D1~D4 結論對 P1 的影響（2026-06-10 更新）**：**P1 必補的後端增量已全數實作完成（GATE-2 關閉）**——(a) `ai_confidence` 進 device list 回應、(b) `limit/offset/sort/order` 分頁排序、(c) `type` filter（openapi 1.3.0 + api/CHANGELOG.md，14/14 整合測試綠）。**P2 必補的不是 REST 增量而是「量測資料路由策略」決策**：量測契約已存在（D2），待決的是前端經 BFF 還是直連 PostgREST + CORS/網路隔離/權限（§9.3）。P1 現在可估算。
 
 ---
 
@@ -100,8 +102,8 @@
 - **FR-513** Correction 補充：填人工修正（§7.3a 驗證在後端，前端做即時提示），觸發重分類。
 
 ### 量測呈現
-- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約待確認**（§1 D2：`api.*` 量測 view 不存在；P2 預設輪詢，§14 Q3）。
-- **FR-521** 歷史曲線：時間範圍查詢，消費量測契約（同 D2 待確認）。
+- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約已存在**（§1.5 D2：PostgREST :3001 `/electricity_measurements`、`/factory_measurements`）；**P2 待決的是路由策略**（BFF vs 直連 + CORS/網路隔離/權限，§9.3）。即時機制 P2 預設輪詢（§14 Q3）。
+- **FR-521** 歷史曲線：時間範圍查詢，消費同一量測契約（路由策略同 FR-520，D2/P2）。
 
 ### 平台
 - **FR-530** 角色化登入與權限 UI：OPS/INGEST/AI 差異化（金鑰管理見 §9）。
@@ -171,19 +173,27 @@
 
 | 頁面 / FR | 資料來源 | 端點 | Contract gap（PRD-0003 line 387 白名單刻意隱藏）|
 |-----------|---------|------|------|
-| 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&page=&sort=` | **gap D3**：分頁 / 排序參數完整度待確認；`api.devices` 給不了 candidate/retired |
+| 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&limit=&offset=&sort=&order=`（**實際契約，openapi 1.3.0**；無 `page` 參數）| ~~gap D3~~ **已關閉（GATE-2）**；回應為 **bare array**（無 total/cursor envelope，分頁模式見本節底部決策）；`api.devices` 仍給不了 candidate/retired → 必走 REST |
 | 設備詳情 FR-501 | **REST** | `GET /devices/{id}` + `/signals` | `api.device_signals` 隱藏 signal `status`/`source_ref`/`confirmed_by_ai` → 詳情需 REST |
-| 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| **gap D1**：`api.devices` 隱藏 status/classified_by/ai_confidence/metadata/stale → **白名單不足以支撐**，須特權 REST 讀面 |
+| 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| ~~gap D1~~ **已關閉（GATE-2）**；`api.devices` 白名單**永久**不含 status/classified_by/ai_confidence（設計使然非待辦）→ 一律走特權 REST |
 | 信心佇列 FR-510 | **REST** | `GET /devices?status=candidate` + `/human-review` | `api.devices` 只露 confirmed/active → **完全看不到 candidate**，必走 REST |
 | 審閱 digest FR-511 | **REST** | `/devices/{id}/human-review`（digest）| 純文字渲染（§9.5）|
 | 確認/override/reject FR-512 | **REST**（mutating）| `/confirm` `/override` `/reject` | 需 X-API-Key（OPS 通道）→ 強制 BFF |
 | Correction FR-513 | **REST**（mutating）| `/ai-feedback` `/corrections` | §7.3a 後端驗證 |
-| 量測即時/歷史 FR-520/521 | **待確認** | — | **gap D2**：`api.electricity_measurements`/`api.factory_measurements` **不存在**（migration 000/001 只 GRANT `public.*` 給 web_anon）→ 須確認 PostgREST 曝露或另立後端 view |
+| 量測即時/歷史 FR-520/521 | PostgREST（路由待決）| `/electricity_measurements` `/factory_measurements`（:3001，openapi 已載）| **契約已存在**（migration 000/001 的 `api.*` view + web_anon）；**gap = 路由策略（D2/P2）**：經 BFF 還是直連 + CORS/網路隔離/權限（§9.3）|
 | （若有）公開 confirmed 設備唯讀 | PostgREST | `api.devices` / `api.device_signals` | 僅白名單欄位；公開性/CORS 見 §9.3 |
+
+### 8.1.1 分頁模式決策（GATE-2 後明確化）
+
+`GET /devices` 目前回 **bare array**（`limit/offset` 切片，無 `total` / cursor / next-link envelope）。這是刻意的最小增量，**適合 infinite scroll / BFF 自行包裝，不適合需要總頁數的完整 page UI**。決策：
+
+- **P1 採 infinite scroll**（bare array + `limit/offset`，契約如上，不再改後端）。BFF 若需聚合可自行包 envelope。
+- 若 P1 UX 評審確定需要 `total`（完整分頁器 UI）→ 後端以 **additive 增量**補（優先 `X-Total-Count` response header，次選 envelope`{items,total}`——後者是 breaking 須 MAJOR，故傾向 header）；屆時走 api-contract-governance（MINOR + CHANGELOG）。
+- **不做** cursor-based 分頁（裝置數量級用不上，offset 足夠）。
 
 ### 8.2 契約原則
 
-- **本 PRD 不新增後端 API**；上表 gap（D1 特權讀面、D2 量測契約、D3 分頁/排序）需以 PRD-0003 後續或新後端 PRD 補齊，前端不擅改。
+- **本 PRD 不新增後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 契約已存在——剩餘為 **P2 路由策略決策**（非後端工項），前端不擅改契約。
 - 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
 - 由 `api/openapi.yml` 生成 TS client，做契約測試 + runtime drift test 防漂移（§13.2 / R2）；open-ended enum 須有 unknown/default handling（§13.2）。
 
@@ -262,7 +272,7 @@
 ### Architecture gates（進實作前必須先定案，否則不開工）
 
 - **GATE-1 BFF 設計定案**：BFF 技術選型 + session 機制 + role→channel-key 映射 + CSRF 策略（§9.1/9.2/9.4）**必須先拍板**。理由：device-service mutating API（confirm/override/reject）需 X-API-Key、SPA 不可持 key → P1 的核心工作流**沒有 BFF 就無法安全實作**。**BFF 未定案前，P1 不進實作。**
-- **GATE-2 後端相依 D1~D4 結清**（§1.5 / §8.1）：至少 D1（特權設備讀面）、D3（分頁/排序）須確認 device-service REST 已支援或排定後端工項；否則 FR-500/503/510 無法估算。
+- **GATE-2 後端相依結清 — ✅ 已關閉（2026-06-10 實作完成）**：(a) `ai_confidence` 入 `_COLS`+`DeviceOut`、(b) `GET /devices` `limit/offset/sort/order`（allowlist+NULLS LAST）、(c) `type` filter——openapi 1.3.0（MINOR）+ `api/CHANGELOG.md` 首建，14/14 整合測試綠、267 unit 無回歸。**P2 留決策**：量測資料路由策略（BFF vs 直連 PostgREST + CORS/網路隔離/權限，§1.5 D2 / §9.3）——契約已存在、策略未決，非 REST 工項。
 
 ### 分階段
 
@@ -344,4 +354,4 @@
 
 ---
 
-> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Approved 前剩餘 blocker**：D1~D4 後端相依需確認 / 立案（尤其 D2 量測契約、D1 特權讀面），及 §14 技術選型。控制下發仍為 Non-Goal（待 control-service PRD）。
+> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Approved 前剩餘 blocker（2026-06-10 更新）**：GATE-2 REST 增量**已實作關閉**（ai_confidence / 分頁排序 / type filter，openapi 1.3.0）。剩餘：**P2 量測資料路由策略決策**（BFF vs 直連 PostgREST + CORS/網路隔離/權限——契約已存在）+ §14 技術選型（BFF 選型 / 即時機制）。控制下發仍為 Non-Goal（待 control-service PRD）。

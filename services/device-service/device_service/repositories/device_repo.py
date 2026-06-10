@@ -7,8 +7,19 @@ import asyncpg
 
 _COLS = (
     "device_id, device_type, status, protocol, vendor, model, location, gateway_id, "
-    "classified_by, created_at, updated_at, last_seen_at, confirmed_at"
+    "classified_by, ai_confidence, created_at, updated_at, last_seen_at, confirmed_at"
 )
+# sort-column allowlist for list_ (PRD-0005 GATE-2). Keys are the API-facing names; values
+# are the actual columns. NEVER interpolate raw user input into ORDER BY — look up here.
+_SORT_COLS = {
+    "device_id": "device_id",
+    "device_type": "device_type",
+    "status": "status",
+    "ai_confidence": "ai_confidence",
+    "created_at": "created_at",
+    "updated_at": "updated_at",
+    "last_seen_at": "last_seen_at",
+}
 # columns a plain PATCH may set (status / classified_by / lifecycle handled by dedicated endpoints)
 _UPDATABLE = ("device_type", "protocol", "vendor", "model", "location", "gateway_id")
 # classified_by values that mark a row as human-owned (frozen by the migration-010 trigger)
@@ -30,7 +41,13 @@ async def get(conn: asyncpg.Connection, device_id: str) -> asyncpg.Record | None
     return await conn.fetchrow(f"SELECT {_COLS} FROM public.devices WHERE device_id=$1", device_id)
 
 
-async def list_(conn: asyncpg.Connection, status: str | None = None, stale: bool | None = None) -> list[asyncpg.Record]:
+async def list_(
+    conn: asyncpg.Connection, status: str | None = None, stale: bool | None = None,
+    device_type: str | None = None, limit: int | None = None, offset: int = 0,
+    sort: str = "device_id", order: str = "asc",
+) -> list[asyncpg.Record]:
+    if sort not in _SORT_COLS:  # defense-in-depth: the route Literal already guards this
+        raise ValueError(f"unsortable column: {sort!r}")
     clauses, args = [], []
     if status:
         args.append(status)
@@ -39,8 +56,22 @@ async def list_(conn: asyncpg.Connection, status: str | None = None, stale: bool
         clauses.append("stale_marked_at IS NOT NULL")
     elif stale is False:
         clauses.append("stale_marked_at IS NULL")
+    if device_type:
+        args.append(device_type)
+        clauses.append(f"device_type=${len(args)}")
     where = (" WHERE " + " AND ".join(clauses)) if clauses else ""
-    return await conn.fetch(f"SELECT {_COLS} FROM public.devices{where} ORDER BY device_id", *args)
+    # Postgres DESC puts NULLs FIRST by default -> always emit NULLS LAST explicitly;
+    # device_id is the stable secondary key for deterministic pagination.
+    direction = "DESC" if order == "desc" else "ASC"
+    order_by = f" ORDER BY {_SORT_COLS[sort]} {direction} NULLS LAST, device_id ASC"
+    paging = ""
+    if limit is not None:
+        args.append(limit)
+        paging += f" LIMIT ${len(args)}"
+    if offset:  # route enforces ge=0; 0 is a Postgres no-op -> omit (limit uses `is not None`: None=unlimited)
+        args.append(offset)
+        paging += f" OFFSET ${len(args)}"
+    return await conn.fetch(f"SELECT {_COLS} FROM public.devices{where}{order_by}{paging}", *args)
 
 
 async def update(conn: asyncpg.Connection, device_id: str, fields: dict) -> asyncpg.Record | None:
