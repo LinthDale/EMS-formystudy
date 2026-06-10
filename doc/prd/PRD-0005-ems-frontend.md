@@ -46,7 +46,7 @@
 
 | # | 相依 | 調查結論（2026-06-10）|
 |---|------|------|
-| D1 | **特權營運讀取面**：`GET /devices` 回傳 candidate/retired + ai_confidence + 狀態 | **部分滿足，有缺口**。`GET /devices`（OPS-keyed，走 ops_pool 特權，**非** `api.devices` 白名單）`?status=&stale=` 篩選 → ✅ candidate/retired/status/classified_by 都拿得到。**但 `DeviceOut`/`_COLS` 不含 `ai_confidence`**（也無 metadata/ai_provider/stale_marked_at）→ ❌ **清單 / 信心佇列無法顯示信心值**。信心值僅在 `GET /devices/{id}/human-review` 的 `digest` dict 內（per-device）。→ **後端缺口**：信心佇列（FR-510）若要按信心排序/顯示，需把 `ai_confidence` 加進 `_COLS`+`DeviceOut`，否則前端只能 N+1 打 human-review |
+| D1 | **特權營運讀取面**：`GET /devices` 回傳 candidate/retired + ai_confidence + 狀態 | **已關閉（GATE-2 實作 2026-06-10）**。`GET /devices`（OPS-keyed，走 ops_pool 特權，**非** `api.devices` 白名單）原本 `DeviceOut`/`_COLS` 不含 `ai_confidence`（信心佇列只能 N+1 打 human-review）——本批已補：`ai_confidence` 入 `_COLS`+`DeviceOut`，並可 `sort=ai_confidence&order=desc`（NULLS LAST）直接做信心佇列排序。仍未曝露（刻意）：metadata / ai_provider / stale_marked_at |
 | D2 | **量測契約**：PostgREST 量測唯讀面 | **已存在（更正 2026-06-10；先前誤判不存在）**——migration 000/001 建 `api.electricity_measurements` / `api.factory_measurements` view、GRANT `web_anon`，PostgREST :3001 即 `/electricity_measurements`、`/factory_measurements`（openapi.yml 已記載）。→ **P2 真正待決的是「量測資料路由策略」**（非 REST 小增量）：前端經 **BFF** 還是**直連 PostgREST**，並補 CORS / 網路隔離 / 權限策略（§9.3 的決策落到量測面）|
 | D3 | **分頁 / 排序 / type filter**：`GET /devices` | **已補（GATE-2 實作 2026-06-10）**。原僅 `status`+`stale` filter、無分頁、排序硬編——本批已加 `limit/offset/sort/order`（7 欄位 allowlist、NULLS LAST）+ `type` filter + `ai_confidence` 入 DeviceOut（openapi 1.3.0 MINOR + `api/CHANGELOG.md` 首建）|
 | D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在（確認）**——無 WebSocket/SSE 服務。→ P2 預設**輪詢** REST/PostgREST（§14 Q3）；WebSocket 需另立 realtime-service |
@@ -102,8 +102,8 @@
 - **FR-513** Correction 補充：填人工修正（§7.3a 驗證在後端，前端做即時提示），觸發重分類。
 
 ### 量測呈現
-- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約待確認**（§1 D2：`api.*` 量測 view 不存在；P2 預設輪詢，§14 Q3）。
-- **FR-521** 歷史曲線：時間範圍查詢，消費量測契約（同 D2 待確認）。
+- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約已存在**（§1.5 D2：PostgREST :3001 `/electricity_measurements`、`/factory_measurements`）；**P2 待決的是路由策略**（BFF vs 直連 + CORS/網路隔離/權限，§9.3）。即時機制 P2 預設輪詢（§14 Q3）。
+- **FR-521** 歷史曲線：時間範圍查詢，消費同一量測契約（路由策略同 FR-520，D2/P2）。
 
 ### 平台
 - **FR-530** 角色化登入與權限 UI：OPS/INGEST/AI 差異化（金鑰管理見 §9）。
@@ -173,7 +173,7 @@
 
 | 頁面 / FR | 資料來源 | 端點 | Contract gap（PRD-0003 line 387 白名單刻意隱藏）|
 |-----------|---------|------|------|
-| 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&page=&sort=` | **gap D3**：分頁 / 排序參數完整度待確認；`api.devices` 給不了 candidate/retired |
+| 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&limit=&offset=&sort=&order=`（**實際契約，openapi 1.3.0**；無 `page` 參數）| ~~gap D3~~ **已關閉（GATE-2）**；回應為 **bare array**（無 total/cursor envelope，分頁模式見本節底部決策）；`api.devices` 仍給不了 candidate/retired → 必走 REST |
 | 設備詳情 FR-501 | **REST** | `GET /devices/{id}` + `/signals` | `api.device_signals` 隱藏 signal `status`/`source_ref`/`confirmed_by_ai` → 詳情需 REST |
 | 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| **gap D1**：`api.devices` 隱藏 status/classified_by/ai_confidence/metadata/stale → **白名單不足以支撐**，須特權 REST 讀面 |
 | 信心佇列 FR-510 | **REST** | `GET /devices?status=candidate` + `/human-review` | `api.devices` 只露 confirmed/active → **完全看不到 candidate**，必走 REST |
@@ -182,6 +182,14 @@
 | Correction FR-513 | **REST**（mutating）| `/ai-feedback` `/corrections` | §7.3a 後端驗證 |
 | 量測即時/歷史 FR-520/521 | PostgREST（路由待決）| `/electricity_measurements` `/factory_measurements`（:3001，openapi 已載）| **契約已存在**（migration 000/001 的 `api.*` view + web_anon）；**gap = 路由策略（D2/P2）**：經 BFF 還是直連 + CORS/網路隔離/權限（§9.3）|
 | （若有）公開 confirmed 設備唯讀 | PostgREST | `api.devices` / `api.device_signals` | 僅白名單欄位；公開性/CORS 見 §9.3 |
+
+### 8.1.1 分頁模式決策（GATE-2 後明確化）
+
+`GET /devices` 目前回 **bare array**（`limit/offset` 切片，無 `total` / cursor / next-link envelope）。這是刻意的最小增量，**適合 infinite scroll / BFF 自行包裝，不適合需要總頁數的完整 page UI**。決策：
+
+- **P1 採 infinite scroll**（bare array + `limit/offset`，契約如上，不再改後端）。BFF 若需聚合可自行包 envelope。
+- 若 P1 UX 評審確定需要 `total`（完整分頁器 UI）→ 後端以 **additive 增量**補（優先 `X-Total-Count` response header，次選 envelope`{items,total}`——後者是 breaking 須 MAJOR，故傾向 header）；屆時走 api-contract-governance（MINOR + CHANGELOG）。
+- **不做** cursor-based 分頁（裝置數量級用不上，offset 足夠）。
 
 ### 8.2 契約原則
 
