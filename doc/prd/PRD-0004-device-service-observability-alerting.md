@@ -223,11 +223,11 @@ PRD-0003 已把 device-service 的核心做完：可切換 LLM 分類、MQTT 自
 - 觸發：告警誤報風暴、Grafana provisioning error、dashboard 拖慢 DB。
 - 回滾：移除新 alert group + dashboard JSON，restart grafana（無 schema 變更，零資料風險）。
 
-### EMS 同步義務（Guideline §11.2，實作完成後）
+### EMS 同步義務（Guideline §11.2，實作完成後）— ✅ 已完成
 
-- `api/openapi.yml`（實際路徑；非 `doc/API.yaml`）：本 PRD 無新 REST，註明告警/儀表板為 Grafana provisioning（非 REST）。
-- Container Cheat Sheet：無新容器，補 Grafana 告警/儀表板說明。
-- Operations Manual：新增「預算告警與健康度儀表板」操作節（門檻意義、收到 100% 告警的處置 SOP：加額度 / 切 mock）。
+- ✅ `api/openapi.yml`：本 PRD 無新 REST（告警/儀表板為 Grafana provisioning，非 REST），openapi 無需改動。
+- ✅ **Container Cheat Sheet**（`doc/operations/容器速查表.md` §2-6a）：已補第 2 個 dashboard（`device-service-health`，5 panels）+ 4 個告警群組（含 `EMS-預算告警`）+ device-health 直達連結 + builder 勿手改註記。
+- ✅ **Operations Manual**（`doc/operations/操作手冊.md`）：§3.1 告警清單補 Group 3 預算告警、§3.5 noData/execErr 四類策略對照、**§3.7 收到預算告警後處置 SOP**（triage SQL 查 provider/pct + 切 mock / 加額度 workaround）。
 
 ---
 
