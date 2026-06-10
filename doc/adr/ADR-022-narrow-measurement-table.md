@@ -15,21 +15,21 @@ Proposed（2026-06-10）
 
 **2. day-one columnstore 壓縮**：`segmentby = (device_id, signal_name)`、`orderby = time DESC`；壓縮 policy 7 天（可調，tunable-parameters 登錄）；chunk interval 可調。
 
-**3. `measurements_unified` UNION ALL view**：兩張寬表 unpivot + 窄表，讀取側統一形狀（Device Explorer 一個查詢面涵蓋新舊裝置）；是否進 PostgREST 留 PRD-0006 §14 Open Question。
+**3. `measurements_unified` UNION ALL view**：兩張寬表 unpivot + 窄表，讀取側統一形狀（Device Explorer 一個查詢面涵蓋新舊裝置）；是否進 PostgREST 留 PRD-0006 §14 Open Question。**耦合註記（architect P3-4）**：unpivot 欄位清單與寬表 schema 耦合，以 `measurements_repo._TABLE_FIELDS` allowlist 為同源真相，寬表加減欄須同步本 view。
 
 **4. 舊寬表原封不動**：無 dual-write、無回填、telegraf 寫入路徑不動；新舊並行，僅讀取側合併。
 
 **5. 新 DB role `ems_ingest`**：僅 `INSERT ON public.signal_measurements`（+ schema USAGE），無 SELECT/UPDATE/DELETE；供 ingest-generic 專用，**不對 AI role 開放**。
 
-**6. migration 編號自 019 起**（依 ADR-020 治理；PRD-0003 已用至 018）；019 同時擴充 migration 014 之 `device_audit_event_type_chk`（+= `signal_promotion`，PRD-0006 FR-614 前置）。
+**6. migration 編號自 016 起**（依 ADR-020 治理；目錄實際最大號 015——先前文件誤載已用至 018，architect review 更正）；016 同時擴充 migration 014 之 `device_audit_event_type_chk`（+= `signal_promotion`，PRD-0006 FR-614 前置）。
 
 **7. 欄位約束（owner review P1）**：`signal_name` CHECK `^[a-zA-Z0-9_-]{1,64}$`（沿用 FR-322 regex）+ 禁保留字；`value_text` CHECK `char_length<=256`（ingest 超限拒收不截斷）。cardinality 軟限：per-device 相異 signal 監看告警，不在熱路徑硬擋。
 
-**8. time 來源**：來源時戳（ILP/JSON ts）優先、`MAX_CLOCK_SKEW`（預設 7 天=壓縮窗）內有效；否則 ingest 收包時間 + fallback metric。共用 parser 須曝露 ILP timestamp（現行 parse_fields 丟棄）。
+**8. time 來源**：來源時戳（ILP/JSON ts）優先、`MAX_CLOCK_SKEW`（預設 **2 天**，**嚴格小於**壓縮 policy 7 天——遲到寫入必落未壓縮 chunk，免解壓重壓；architect review）內有效；否則 ingest 收包時間 + fallback metric。共用 parser 須曝露 ILP timestamp（現行 parse_fields 丟棄）。
 
-**9. 對外曝露預設拒絕**：`api.signal_measurements` view P1 **不 GRANT web_anon**（accept-all 內容不可未過濾公開）；公開決策與過濾規則（僅已註冊 active signals、排除 value_text、經 BFF）隨 PRD-0005 P2。
+**9. 對外曝露預設拒絕**：`api.signal_measurements` view P1 **不 GRANT web_anon**（accept-all 內容不可未過濾公開）；並於 migration 016 明文 `REVOKE SELECT ON public.signal_measurements, public.measurements_unified FROM PUBLIC`（不依賴 schema 遮蔽；security HIGH-2）。公開決策與過濾規則（僅已註冊 active signals、排除 value_text、經 BFF）隨 PRD-0005 P2。
 
-**10. TimescaleDB 版本 pin**：compose 現用 `latest-pg15` —— 落地前**必須 pin 具體版本 tag**（壓縮語法依版本而異，否則 migration 019 不可重現）+ migration smoke test。
+**10. TimescaleDB 版本 pin**：compose 現用 `latest-pg15` —— 落地前**必須 pin 具體版本 tag**（壓縮語法依版本而異，否則 migration 016 不可重現）+ migration smoke test。
 
 ### 否決方案
 - ❌ **JSONB payload 欄**（time, device_id, payload JSONB）：columnstore 壓縮效果差（無同質欄位可 segment）、無 per-signal 索引、查詢需展開——時序熱路徑不可接受。

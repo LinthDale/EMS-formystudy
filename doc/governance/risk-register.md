@@ -50,6 +50,8 @@
 | 觸發 ADR | ADR-007 |
 | 狀態 | **Open** — 已記錄於容器速查表 §2-3 production 升級清單 |
 
+
+> **暴露面更新（2026-06-10，PRD-0006）**：P1 新增 ingest-generic 訂閱後，惡意發布的影響從「AI 分類污染（candidate 佇列）」擴大為「量測 DB 直接污染」（合法 shape 訊息逐列落庫；`ems_ingest` 無 DELETE，清除須 OPS/superuser `DELETE FROM signal_measurements WHERE device_id=...`，SOP 記操作手冊）。緩解疊加：PRD-0006 FR-603 per-device 速率保護 + FR-601 欄位約束。
 ### R-004：Mosquitto 重啟期間 QoS1 佇列遺失
 
 | 欄位 | 內容 |

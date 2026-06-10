@@ -175,7 +175,7 @@
 |-----------|---------|------|------|
 | 設備清單 FR-500 | **REST**（經 BFF）| `GET /devices?status=&type=&limit=&offset=&sort=&order=`（**實際契約，openapi 1.3.0**；無 `page` 參數）| ~~gap D3~~ **已關閉（GATE-2）**；回應為 **bare array**（無 total/cursor envelope，分頁模式見本節底部決策）；`api.devices` 仍給不了 candidate/retired → 必走 REST |
 | 設備詳情 FR-501 | **REST** | `GET /devices/{id}` + `/signals` | `api.device_signals` 隱藏 signal `status`/`source_ref`/`confirmed_by_ai` → 詳情需 REST |
-| 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| **gap D1**：`api.devices` 隱藏 status/classified_by/ai_confidence/metadata/stale → **白名單不足以支撐**，須特權 REST 讀面 |
+| 狀態流轉 FR-503 | **REST** | 同上（含 status/classified_by/freeze）| ~~gap D1~~ **已關閉（GATE-2）**；`api.devices` 白名單**永久**不含 status/classified_by/ai_confidence（設計使然非待辦）→ 一律走特權 REST |
 | 信心佇列 FR-510 | **REST** | `GET /devices?status=candidate` + `/human-review` | `api.devices` 只露 confirmed/active → **完全看不到 candidate**，必走 REST |
 | 審閱 digest FR-511 | **REST** | `/devices/{id}/human-review`（digest）| 純文字渲染（§9.5）|
 | 確認/override/reject FR-512 | **REST**（mutating）| `/confirm` `/override` `/reject` | 需 X-API-Key（OPS 通道）→ 強制 BFF |
@@ -193,7 +193,7 @@
 
 ### 8.2 契約原則
 
-- **本 PRD 不新增後端 API**；上表 gap（D1 特權讀面、D2 量測契約、D3 分頁/排序）需以 PRD-0003 後續或新後端 PRD 補齊，前端不擅改。
+- **本 PRD 不新增後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 契約已存在——剩餘為 **P2 路由策略決策**（非後端工項），前端不擅改契約。
 - 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
 - 由 `api/openapi.yml` 生成 TS client，做契約測試 + runtime drift test 防漂移（§13.2 / R2）；open-ended enum 須有 unknown/default handling（§13.2）。
 
