@@ -38,6 +38,7 @@ class DeviceOut(BaseModel):
     location: str | None = None
     gateway_id: str | None = None
     classified_by: str | None = None
+    ai_confidence: float | None = None  # NUMERIC -> Decimal from asyncpg; pydantic coerces to float
     created_at: datetime | None = None
     updated_at: datetime | None = None
     last_seen_at: datetime | None = None

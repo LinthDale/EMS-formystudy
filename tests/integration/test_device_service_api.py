@@ -226,3 +226,48 @@ async def test_signal_mutation_on_frozen_device_blocked(api):
     assert r.status_code == 409
     # retiring a frozen device via plain DELETE is blocked -> use /reject
     assert (await client.delete("/devices/sim-001", headers=_OPS)).status_code == 409
+
+
+async def test_list_devices_exposes_ai_confidence(api):
+    """PRD-0005 GATE-2(a): the privileged list must carry ai_confidence so the
+    confidence queue (FR-510) can show/sort it without N+1 human-review calls."""
+    client, db = api
+    await client.post("/devices", json={"device_id": "itest-conf"}, headers=_OPS)
+    async with db.ops_pool.acquire() as conn:   # simulate an AI classification having run
+        await conn.execute("UPDATE public.devices SET ai_confidence=0.42 WHERE device_id='itest-conf'")
+    listed = (await client.get("/devices", params={"status": "candidate"}, headers=_OPS)).json()
+    row = next(d for d in listed if d["device_id"] == "itest-conf")
+    assert row["ai_confidence"] == pytest.approx(0.42)
+    got = (await client.get("/devices/itest-conf", headers=_OPS)).json()
+    assert got["ai_confidence"] == pytest.approx(0.42)
+
+
+async def test_list_devices_pagination_sort_and_type_filter(api):
+    """PRD-0005 GATE-2(b): limit/offset/sort/order + device_type filter on GET /devices."""
+    client, db = api
+    for i in (1, 2, 3):
+        await client.post("/devices", json={"device_id": f"itest-pg-{i}"}, headers=_OPS)
+    await client.post("/devices", json={"device_id": "itest-bat", "device_type": "battery"}, headers=_OPS)
+    async with db.ops_pool.acquire() as conn:
+        await conn.execute("UPDATE public.devices SET ai_confidence=0.9 WHERE device_id='itest-pg-1'")
+        await conn.execute("UPDATE public.devices SET ai_confidence=0.1 WHERE device_id='itest-pg-3'")
+    base = {"status": "candidate"}
+    # limit + offset page through a deterministic order
+    p1 = (await client.get("/devices", params={**base, "limit": 2, "sort": "device_id"}, headers=_OPS)).json()
+    p2 = (await client.get("/devices", params={**base, "limit": 2, "offset": 2, "sort": "device_id"}, headers=_OPS)).json()
+    ids = [d["device_id"] for d in p1 + p2 if d["device_id"].startswith("itest-pg-")]
+    assert ids == ["itest-pg-1", "itest-pg-2", "itest-pg-3"]
+    assert len(p1) == 2
+    # sort by ai_confidence desc: NULLs LAST, 0.9 before 0.1
+    by_conf = (await client.get(
+        "/devices", params={**base, "sort": "ai_confidence", "order": "desc"}, headers=_OPS)).json()
+    pg = [d["device_id"] for d in by_conf if d["device_id"].startswith("itest-pg-")]
+    assert pg[0] == "itest-pg-1" and pg[1] == "itest-pg-3" and pg[2] == "itest-pg-2"
+    # device_type filter
+    bytype = (await client.get("/devices", params={"type": "battery"}, headers=_OPS)).json()
+    assert [d["device_id"] for d in bytype if d["device_id"].startswith("itest-")] == ["itest-bat"]
+    assert all(d["device_type"] == "battery" for d in bytype)
+    # unknown sort column rejected by the allowlist (FastAPI Literal -> 422), not silently ignored
+    assert (await client.get("/devices", params={"sort": "evil"}, headers=_OPS)).status_code == 422
+    # no params -> legacy behavior still works
+    assert (await client.get("/devices", headers=_OPS)).status_code == 200

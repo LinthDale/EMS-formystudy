@@ -13,7 +13,7 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 1.2.0
+  version: 1.3.0
   contact:
     name: EMS Development Team
   license:
@@ -572,14 +572,20 @@ paths:
         '409': { description: 裝置已存在 }
     get:
       tags: [Device Service]
-      summary: 列出裝置（OPS；可依 status / stale 過濾）
+      summary: 列出裝置（OPS；可依 status / stale / type 過濾，支援分頁與排序）
       operationId: listDevices
       security: [{ deviceServiceApiKey: [] }]
       parameters:
         - { name: status, in: query, schema: { type: string } }
         - { name: stale, in: query, schema: { type: boolean } }
+        - { name: type, in: query, schema: { type: string }, description: '依 device_type 過濾' }
+        - { name: limit, in: query, schema: { type: integer, minimum: 1, maximum: 500 }, description: '分頁筆數上限（不給則回全部）' }
+        - { name: offset, in: query, schema: { type: integer, minimum: 0, default: 0 } }
+        - { name: sort, in: query, schema: { type: string, enum: [device_id, device_type, status, ai_confidence, created_at, updated_at, last_seen_at], default: device_id }, description: '排序欄位 allowlist；NULLS LAST，次序鍵 device_id' }
+        - { name: order, in: query, schema: { type: string, enum: [asc, desc], default: asc } }
       responses:
         '200': { description: 裝置清單, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/DeviceOut' } } } } }
+        '422': { description: 參數驗證失敗（如 sort 不在 allowlist）}
   /devices/{device_id}:
     parameters: [{ name: device_id, in: path, required: true, schema: { type: string } }]
     get:
@@ -792,6 +798,7 @@ components:
         location: { type: string, nullable: true }
         gateway_id: { type: string, nullable: true }
         classified_by: { type: string, nullable: true, description: 'ai / human / manual_override / migration_backfill' }
+        ai_confidence: { type: number, format: float, nullable: true, minimum: 0, maximum: 1, description: 'AI 分類信心值（0–1；未分類為 null）' }
         created_at: { type: string, format: date-time, nullable: true }
         updated_at: { type: string, format: date-time, nullable: true }
         last_seen_at: { type: string, format: date-time, nullable: true }
