@@ -130,4 +130,5 @@ out = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                    "provisioning", "dashboards", "device-service-health.json")
 with open(out, "w", encoding="utf-8") as f:
     json.dump(dashboard, f, ensure_ascii=False, indent=2)
+    f.write("\n")
 print("wrote", out, "| panels:", len(panels))
