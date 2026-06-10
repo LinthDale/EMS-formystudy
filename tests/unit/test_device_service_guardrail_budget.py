@@ -131,6 +131,30 @@ async def test_guardrail_reserve_is_two_calls_worth(patched):
     assert abs(g_reserve - expected) < 1e-9
 
 
+async def test_cache_hit_settles_zero_for_both_providers(patched):
+    # FR-340 (review LOW): a second classify of the SAME input hits the classifier cache and spends
+    # no tokens this call -> BOTH the L1 and the guardrail settle must be (provider, 0, 0), so a
+    # cache hit can never double-bill either budget. Exercised at the classify_under_budget level.
+    _, settles, _ = patched
+    prov, guard = _Prov(), _Guard()
+    clf = Classifier(prov, guard, model="gpt-4o-mini")   # one instance -> cache persists across calls
+
+    async def _run():
+        return await dp.classify_under_budget(
+            _FakeDB(), clf, _Settings(), sanitized=_sample(), default_device_type="unknown",
+            latest_correction_device_type=None, applied_ids=(), device_id="d1", first_seen="")
+
+    out1 = await _run()
+    assert out1.summary_source == "llm" and not out1.from_cache
+    n = len(settles)                                     # ignore the warm-up call's settles
+
+    out2 = await _run()
+    assert out2.from_cache                               # same input -> served from cache
+    assert prov.calls == 1                               # L1 model NOT called again
+    second = settles[n:]
+    assert ("openai", 0, 0) in second and ("guardrail", 0, 0) in second
+
+
 async def test_l1_reserve_refunded_if_guardrail_reserve_errors(monkeypatch):
     # hardening: a DB error in the guardrail reserve (AFTER L1 reserved) must NOT leak the L1
     # reservation — the finally block refunds it (settle 0). The error still propagates.

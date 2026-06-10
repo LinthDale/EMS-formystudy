@@ -79,7 +79,7 @@ PRD（Product Requirements Document）並非「需求堆疊清單」，而是 **
 
 ### 3.3 API Contract
 
-- REST API：以 **OpenAPI 3.1** 撰寫，放於 `doc/API.yaml`
+- REST API：以 **OpenAPI 3.1** 撰寫，放於 `api/openapi.yml`（專案實際路徑；早期文件寫的 `doc/API.yaml` 為舊路徑，已不使用）
 - 即時通訊（MQTT / WebSocket）：列出 Topic 階層、QoS、Payload schema
 - 工控協定（Modbus / OCPP / IEC 61850）：列出 register map / message type
 - **每個 API 須標註**：冪等性、重試策略、速率限制、認證方式
@@ -243,7 +243,7 @@ ADR 放於 `docs/adr/`，與 PRD 雙向連結。
 - [ ] Non-Functional Requirements 全部量化
 - [ ] 三張架構圖齊備（Context / Container / Data Flow）
 - [ ] Data Model 標註 PII 欄位與保留期
-- [ ] API Contract 已同步至 `doc/API.yaml`
+- [ ] API Contract 已同步至 `api/openapi.yml`
 - [ ] 風險登錄表至少列出 5 項
 - [ ] 上線策略與回滾條件明確
 - [ ] 測試策略涵蓋三層（Unit / Integration / E2E）
@@ -266,7 +266,7 @@ ADR 放於 `docs/adr/`，與 PRD 雙向連結。
 ### 11.2 EMS 同步義務
 
 每次重大 PRD 完成後，**必須同步更新**：
-1. `doc/API.yaml`
+1. `api/openapi.yml`（專案實際路徑；舊文件寫的 `doc/API.yaml` 已不使用）
 2. Container Cheat Sheet
 3. Operations Manual
 

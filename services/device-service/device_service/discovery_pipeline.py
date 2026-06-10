@@ -146,10 +146,13 @@ async def classify_under_budget(
                     conn, settings.llm_provider, period_start, period_end, est, settings.llm_monthly_budget_usd)
             reserved_l1 = budget_ok
         if not g_is_mock:
+            # read the budget cap DIRECTLY (not getattr-with-default): once guardrail is active a
+            # missing field must fail loudly, never silently fall back to 0.0 (= uncapped). The
+            # g_is_mock gate above already keeps a minimal mock settings object off this path.
             async with db.ai_tx() as conn:
                 guardrail_ok = await budget_reserve(
                     conn, GUARDRAIL_PROVIDER_KEY, period_start, period_end, g_est,
-                    getattr(settings, "guardrail_monthly_budget_usd", 0.0))
+                    settings.guardrail_monthly_budget_usd)
             reserved_g = guardrail_ok
 
         outcome = await classifier.classify(

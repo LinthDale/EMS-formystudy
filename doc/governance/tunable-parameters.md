@@ -23,7 +23,7 @@
 | **信心門檻** | `LLM_CONFIDENCE_THRESHOLD` | 0.9 | ratio | config → classifier | FR-303 | ✅ | PRD: >此值自動 confirmed |
 | **LLM retry 次數** | `LLM_RETRIES` | 3 | 次 | config → classifier | FR-312 | ✅ | |
 | **classifier cache 上限** | `LLM_CACHE_MAX` | 4096 | entries | config → classifier | FR-316 | ✅ | |
-| **Budget warn ratio** | `BUDGET_WARN_RATIO` | 0.8 | ratio | config; evaluate_budget | FR-319 | ✅ | 設定就位；80% Telegram alert 串接屬 Phase 1.4 告警（未接） |
+| **Budget warn ratio** | `BUDGET_WARN_RATIO` | 0.8 | ratio | config; evaluate_budget; **Grafana alert（PRD-0004 FR-400/402）** | FR-319 | ✅ | 80% Telegram 告警**已接線**（alert group `EMS-預算告警`，L1+guardrail 各 warn/exhausted）。⚠️ Grafana SQL 無法讀 env，0.8 **硬編於 `rules.yaml`**；改 env 須同步該檔 |
 | 月預算 | `LLM_MONTHLY_BUDGET_USD` | 20.0 | USD | config | FR-319/NFR | ✅ | |
 | **Dedupe 視窗** | `DEDUPE_WINDOW_S` | 60.0 | s | config → mqtt_subscriber → AdmissionGate | FR-326 | ✅ | |
 | **Rate limit / 視窗** | `RATE_LIMIT_PER_MIN` / `RATE_WINDOW_S` | 60 / 60.0 | /min, s | config → mqtt_subscriber → AdmissionGate | FR-325 | ✅ | |

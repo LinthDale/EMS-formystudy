@@ -124,6 +124,17 @@
 | 觸發 ADR | ADR-006 |
 | 狀態 | **Open**（待 EMS git init + submodule 轉換） |
 
+### R-014：FR-334「提高當期 LLM 預算」端點未實作（預算告警 remediation 缺口）
+
+| 欄位 | 內容 |
+|------|------|
+| 機率 / 衝擊 | M / M |
+| 描述 | PRD-0003 §10/FR-334 規格了 `POST /admin/budget/extend`（OPS only、必填 reason ≥30 字、audit log、per-IP 1/min），但**實際未實作**（無 route、`budget_ledger.py` 無 extend 函式）。當期 `budget_usd` 一旦該期 ledger row 建立即固定（`get_period_budget` 回現有值；改 env `*_MONTHLY_BUDGET_USD` 只影響尚未建立 row 的新期）。故 PRD-0004 預算告警（FR-401/402）達 100% fail-closed 後，**運維無 API 可提高當期預算**——只能切 mock 或手動 SQL UPDATE（後者無 audit、繞過 OPS 鑑權 / rate-limit） |
+| 緩解 | 短期：操作手冊 §3.7 已記手動 SQL workaround + 切 mock SOP（誠實標為臨時手段）<br/>中期：實作 FR-334 端點（帶 audit log / OPS 鑑權 / per-IP rate-limit，照 PRD-0003 §10 規格）<br/>長期：budget 調整全走有稽核的 API，禁手動 SQL |
+| Owner | EMS team |
+| 觸發 ADR | — （PRD-0003 FR-334 spec 既存，屬實作補齊；與 PRD-0004 告警 remediation 直接相關）|
+| 狀態 | **Open** — 缺口於 2026-06-09 寫 PRD-0004 budget-alert SOP 時發現並記錄；待排入實作 |
+
 ---
 
 ## P3（觀察）
