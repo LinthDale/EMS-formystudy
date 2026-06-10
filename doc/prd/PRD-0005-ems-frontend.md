@@ -42,14 +42,16 @@
 
 ### 1.5 後端相依 / 前置條件（architect MED-5 — 誠實列出，非「零後端」）
 
-本 PRD 雖以「消費既有契約」為原則，但 review 揭露數項**真實後端相依**，逐項標記為「已存在 / 需先確認 / 需前置 PRD」：
+本 PRD 雖以「消費既有契約」為原則，但 review 揭露數項**真實後端相依**。**2026-06-10 已查 device-service 實作（`routes/devices.py` + `repositories/device_repo.py` + `models.py`）逐項定論**：
 
-| # | 相依 | 狀態 |
+| # | 相依 | 調查結論（2026-06-10）|
 |---|------|------|
-| D1 | **特權營運讀取面**：`GET /devices` 是否回傳 candidate/retired + ai_confidence + 狀態（前端所需，非 `api.devices` 白名單）| **需確認** device-service REST 是否已涵蓋；若否，需後端補（特權 REST 讀，**不**放 `web_anon`）|
-| D2 | **量測契約**：`api.electricity_measurements` / `api.factory_measurements` view | **不存在**——migration 000/001 僅以 `public.*` 表 GRANT `web_anon`；需確認 PostgREST 曝露方式或另立後端 view PRD |
-| D3 | **分頁 / 排序參數**：`GET /devices` 的 page/sort 完整度 | **需確認** |
-| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在**——見 §14 Open Q3，P2 預設輪詢 |
+| D1 | **特權營運讀取面**：`GET /devices` 回傳 candidate/retired + ai_confidence + 狀態 | **部分滿足，有缺口**。`GET /devices`（OPS-keyed，走 ops_pool 特權，**非** `api.devices` 白名單）`?status=&stale=` 篩選 → ✅ candidate/retired/status/classified_by 都拿得到。**但 `DeviceOut`/`_COLS` 不含 `ai_confidence`**（也無 metadata/ai_provider/stale_marked_at）→ ❌ **清單 / 信心佇列無法顯示信心值**。信心值僅在 `GET /devices/{id}/human-review` 的 `digest` dict 內（per-device）。→ **後端缺口**：信心佇列（FR-510）若要按信心排序/顯示，需把 `ai_confidence` 加進 `_COLS`+`DeviceOut`，否則前端只能 N+1 打 human-review |
+| D2 | **量測契約**：`api.electricity_measurements` / `api.factory_measurements` view | **不存在（確認）**——migration 000/001 僅 `public.*` 表 GRANT `web_anon`，無 `api.*` 量測 view。→ **後端缺口**：FR-520/521 需確認直接以 PostgREST 曝露 `public.*` 量測（+CORS/網路隔離 §9.3）或另立後端 view |
+| D3 | **分頁 / 排序參數**：`GET /devices` page/sort | **不足（確認）**。`list_devices` 僅 `status` + `stale` 兩個 filter，**無分頁（page/limit/offset）**、**排序硬編 `ORDER BY device_id`**。→ **後端缺口**：產品級清單（FR-500）需後端補 `page/limit/sort` 參數（裝置數一多，無分頁不可行）|
+| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在（確認）**——無 WebSocket/SSE 服務。→ P2 預設**輪詢** REST/PostgREST（§14 Q3）；WebSocket 需另立 realtime-service |
+
+> **D1~D4 結論對 P1 的影響**：P1（設備管理 + 人工確認工作流）所需的 **特權讀取面骨架已存在**（OPS REST 給 status/candidate/retired），但有 **3 個明確後端小缺口需先補**才完整可用：(a) **`ai_confidence` 進 device list 回應**（信心佇列）、(b) **`GET /devices` 分頁 + 排序參數**、(c) 量測契約（屬 P2）。三者皆為 device-service REST 的小增量（非大改），可在 P1 前以 PRD-0003 後續工項補；補齊後 P1 即可估算。**這正是 §12 GATE-2 的具體內容。**
 
 ---
 
@@ -262,7 +264,7 @@
 ### Architecture gates（進實作前必須先定案，否則不開工）
 
 - **GATE-1 BFF 設計定案**：BFF 技術選型 + session 機制 + role→channel-key 映射 + CSRF 策略（§9.1/9.2/9.4）**必須先拍板**。理由：device-service mutating API（confirm/override/reject）需 X-API-Key、SPA 不可持 key → P1 的核心工作流**沒有 BFF 就無法安全實作**。**BFF 未定案前，P1 不進實作。**
-- **GATE-2 後端相依 D1~D4 結清**（§1.5 / §8.1）：至少 D1（特權設備讀面）、D3（分頁/排序）須確認 device-service REST 已支援或排定後端工項；否則 FR-500/503/510 無法估算。
+- **GATE-2 後端相依 D1~D4 結清**（§1.5 / §8.1）：**2026-06-10 已查明**——特權讀取面骨架已存在，但 P1 前須補 **3 個 device-service REST 小缺口**：(a) `ai_confidence` 加進 device list 回應（`_COLS`+`DeviceOut`；信心佇列 FR-510 需要）、(b) `GET /devices` 補 `page/limit/sort` 參數（FR-500）、(c) 量測契約（D2，屬 P2）。三者為小增量、以 PRD-0003 後續工項補；補齊前 FR-500/503/510 無法估算。
 
 ### 分階段
 
@@ -344,4 +346,4 @@
 
 ---
 
-> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Approved 前剩餘 blocker**：D1~D4 後端相依需確認 / 立案（尤其 D2 量測契約、D1 特權讀面），及 §14 技術選型。控制下發仍為 Non-Goal（待 control-service PRD）。
+> **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Approved 前剩餘 blocker**：D1~D4 已查明（§1.5，2026-06-10）→ 收斂為 **3 個 device-service REST 小增量**（ai_confidence 進 list / 分頁排序 / 量測契約）需以 PRD-0003 後續工項補齊（GATE-2），及 §14 技術選型（BFF/即時機制）。控制下發仍為 Non-Goal（待 control-service PRD）。
