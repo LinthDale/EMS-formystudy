@@ -36,7 +36,7 @@
 |----|------|------|------|
 | **device-service REST `:8002`**（主）| `GET /devices?status=&type=`、`/devices/{id}`、`/signals`、`/devices/{id}/human-review`、CRUD、`/confirm`/`/override`/`/reject`、`/ai-feedback`、`/corrections` | **全部特權讀寫 + 人工確認工作流**（含 candidate/retired/信心/狀態）| **BFF**（注入 channel key）|
 | PostgREST `api.*` views | `api.devices` / `api.device_signals`（**僅 confirmed/active 白名單欄位**）| 僅「公開唯讀的已確認設備」唯讀面（若有此需求）| 見 §9（公開性 / CORS 決策）|
-| 量測資料 | PostgREST :3001（契約已存在；§1.5 D2）| 即時卡片 / 歷史曲線 | **路由策略待決（P2）**：BFF or 直連 + CORS（§9.3）|
+| 量測資料 | **BFF →** PostgREST :3001（契約已存在；§1.5 D2）| 即時卡片 / 歷史曲線 | **路由已決策（§9.3）：全部經 BFF**，瀏覽器不直連、零 CORS 面 |
 
 > **MCP `:8766` 不是前端 / 瀏覽器 API**（architect MED-6 / security HIGH）：MCP 綁 `127.0.0.1:8766`（loopback）、是 **AI agent（Claude Code）通道**、帶 `AI_API_KEY`，非產品 UI API。**前端絕不得直接呼叫 MCP**（否則與「API key 不入 bundle」原則直接衝突）。人工確認所需資料一律以 REST `/devices?status=candidate` + `/human-review` 取得；**若日後確有 AI 協作需求，只能透過 BFF / server-side bridge 在伺服器側中介**（MCP 維持 loopback、key 留伺服器側），不開瀏覽器直連路徑。
 
@@ -47,11 +47,11 @@
 | # | 相依 | 調查結論（2026-06-10）|
 |---|------|------|
 | D1 | **特權營運讀取面**：`GET /devices` 回傳 candidate/retired + ai_confidence + 狀態 | **已關閉（GATE-2 實作 2026-06-10）**。`GET /devices`（OPS-keyed，走 ops_pool 特權，**非** `api.devices` 白名單）原本 `DeviceOut`/`_COLS` 不含 `ai_confidence`（信心佇列只能 N+1 打 human-review）——本批已補：`ai_confidence` 入 `_COLS`+`DeviceOut`，並可 `sort=ai_confidence&order=desc`（NULLS LAST）直接做信心佇列排序。仍未曝露（刻意）：metadata / ai_provider / stale_marked_at |
-| D2 | **量測契約**：PostgREST 量測唯讀面 | **已存在（更正 2026-06-10；先前誤判不存在）**——migration 000/001 建 `api.electricity_measurements` / `api.factory_measurements` view、GRANT `web_anon`，PostgREST :3001 即 `/electricity_measurements`、`/factory_measurements`（openapi.yml 已記載）。→ **P2 真正待決的是「量測資料路由策略」**（非 REST 小增量）：前端經 **BFF** 還是**直連 PostgREST**，並補 CORS / 網路隔離 / 權限策略（§9.3 的決策落到量測面）|
+| D2 | **量測契約**：PostgREST 量測唯讀面 | **已存在（更正 2026-06-10；先前誤判不存在）**——migration 000/001 建 `api.electricity_measurements` / `api.factory_measurements` view、GRANT `web_anon`，PostgREST :3001 即 `/electricity_measurements`、`/factory_measurements`（openapi.yml 已記載）。→ **路由策略已決策（2026-06-10，§9.3）：前端一律經 BFF 消費此契約**；PostgREST 留內網（legacy/demo），瀏覽器不直連、零 CORS 面 |
 | D3 | **分頁 / 排序 / type filter**：`GET /devices` | **已補（GATE-2 實作 2026-06-10）**。原僅 `status`+`stale` filter、無分頁、排序硬編——本批已加 `limit/offset/sort/order`（7 欄位 allowlist、NULLS LAST）+ `type` filter + `ai_confidence` 入 DeviceOut（openapi 1.3.0 MINOR + `api/CHANGELOG.md` 首建）|
-| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在（確認）**——無 WebSocket/SSE 服務。→ P2 預設**輪詢** REST/PostgREST（§14 Q3）；WebSocket 需另立 realtime-service |
+| D4 | **即時推播 transport**：realtime-service（原計畫未實作）| **不存在（確認）**——無 WebSocket/SSE 服務。→ P2 預設**輪詢**（經 BFF，§9.3；§14 Q3）；WebSocket 需另立 realtime-service |
 
-> **D1~D4 結論對 P1 的影響（2026-06-10 更新）**：**P1 必補的後端增量已全數實作完成（GATE-2 關閉）**——(a) `ai_confidence` 進 device list 回應、(b) `limit/offset/sort/order` 分頁排序、(c) `type` filter（openapi 1.3.0 + api/CHANGELOG.md，14/14 整合測試綠）。**P2 必補的不是 REST 增量而是「量測資料路由策略」決策**：量測契約已存在（D2），待決的是前端經 BFF 還是直連 PostgREST + CORS/網路隔離/權限（§9.3）。P1 現在可估算。
+> **D1~D4 結論對 P1 的影響（2026-06-10 更新）**：**P1 必補的後端增量已全數實作完成（GATE-2 關閉）**——(a) `ai_confidence` 進 device list 回應、(b) `limit/offset/sort/order` 分頁排序、(c) `type` filter（openapi 1.3.0 + api/CHANGELOG.md，14/14 整合測試綠）。**P2 的「量測資料路由策略」亦已決策（2026-06-10，§9.3）：全部經 BFF**——量測契約已存在（D2），瀏覽器不直連 PostgREST、零 CORS 面。**D1~D4 與路由全數結清，P1/P2 無未解前置。**
 
 ---
 
@@ -70,7 +70,7 @@
 - **不取代 Grafana 的內部 ops 觀測 / 告警**（PRD-0004 範圍）；兩者分工並存。
 - **不在本 PRD 做控制下發（control plane）**：原始 Stage 6 的三路徑回控（AI/直接/規則）依賴尚未實作的 `control-service` + gateway write API → **列為後續 PRD / 待 control-service 立案**（見 §14）。
 - 不自建告警引擎（沿用 Grafana / device-service 既有告警）。
-- **本 PRD 不直接實作後端**，但**不宣稱零後端相依**——§1.5 已誠實列出 D1~D4 真實相依；其中需新增的後端（量測 view、特權讀面、分頁參數）以 PRD-0003 後續或新後端 PRD 處理，前端不擅改契約。這是 P1 可估算的前提。
+- **本 PRD 不直接實作 device-service 後端**（BFF 屬本 PRD）。後端相依已全數結清（2026-06-10）：D1/D3 由 GATE-2 實作關閉（openapi 1.3.0）、D2 量測契約本就存在、路由已決策（§9.3 全經 BFF）——**P1 可估算、無未解後端前置**；前端不擅改契約。
 
 ---
 
@@ -102,8 +102,8 @@
 - **FR-513** Correction 補充：填人工修正（§7.3a 驗證在後端，前端做即時提示），觸發重分類。
 
 ### 量測呈現
-- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約已存在**（§1.5 D2：PostgREST :3001 `/electricity_measurements`、`/factory_measurements`）；**P2 待決的是路由策略**（BFF vs 直連 + CORS/網路隔離/權限，§9.3）。即時機制 P2 預設輪詢（§14 Q3）。
-- **FR-521** 歷史曲線：時間範圍查詢，消費同一量測契約（路由策略同 FR-520，D2/P2）。
+- **FR-520** 即時量測卡片：依域（electricity / factory）顯示最新值。**量測契約已存在**（§1.5 D2：PostgREST :3001 `/electricity_measurements`、`/factory_measurements`）；**路由已決策（§9.3）：經 BFF 消費**。即時機制 P2 預設輪詢（§14 Q3）。
+- **FR-521** 歷史曲線：時間範圍查詢，經 BFF 消費同一量測契約（同 FR-520）。
 
 ### 平台
 - **FR-530** 角色化登入與權限 UI：OPS/INGEST/AI 差異化（金鑰管理見 §9）。
@@ -204,6 +204,13 @@ charts/theme.ts      ECharts theme
 
 **Motion 使用範圍（限定，避免過度動畫）**：數值更新、狀態切換、drawer/dialog、timeline 展開、告警進入、圖表 panel refresh——僅此六類。
 
+**P1 Design 驗收門檻（owner review 補強——防止最後又退化成 generic dashboard）**：
+- [ ] `styles/tokens.css` 存在且為唯一視覺真相（色彩/字體/spacing/radius/shadow/motion 皆引用 token，無散落 magic value）
+- [ ] `charts/theme.ts` 存在，ECharts 全面套用（無 default 配色）
+- [ ] **至少 5 個 EMS domain components** 落地（自上表）且用於 P1 頁面
+- [ ] desktop + mobile **screenshots** 附於 P1 驗收（responsive 證據）
+- [ ] **不得保留 shadcn default visual identity**（default radius/灰階/陰影組合須被 token 覆寫；以截圖比對驗收）
+
 ---
 
 ## 7. Data Model
@@ -225,7 +232,7 @@ charts/theme.ts      ECharts theme
 | 審閱 digest FR-511 | **REST** | `/devices/{id}/human-review`（digest）| 純文字渲染（§9.5）|
 | 確認/override/reject FR-512 | **REST**（mutating）| `/confirm` `/override` `/reject` | 需 X-API-Key（OPS 通道）→ 強制 BFF |
 | Correction FR-513 | **REST**（mutating）| `/ai-feedback` `/corrections` | §7.3a 後端驗證 |
-| 量測即時/歷史 FR-520/521 | PostgREST（路由待決）| `/electricity_measurements` `/factory_measurements`（:3001，openapi 已載）| **契約已存在**（migration 000/001 的 `api.*` view + web_anon）；**gap = 路由策略（D2/P2）**：經 BFF 還是直連 + CORS/網路隔離/權限（§9.3）|
+| 量測即時/歷史 FR-520/521 | **BFF → PostgREST**（已決策 §9.3）| `/electricity_measurements` `/factory_measurements`（:3001，openapi 已載）| **契約已存在** + **路由已決策：全部經 BFF**（瀏覽器不直連、零 CORS 面；PostgREST 留內網）|
 | （若有）公開 confirmed 設備唯讀 | PostgREST | `api.devices` / `api.device_signals` | 僅白名單欄位；公開性/CORS 見 §9.3 |
 
 ### 8.1.1 分頁模式決策（GATE-2 後明確化）
@@ -313,7 +320,7 @@ charts/theme.ts      ECharts theme
 | R8 | **Clickjacking**（劫持人工確認 confirm/override 按鈕）| 中 | `X-Frame-Options: DENY`（§9.5）|
 | R9 | **Session 竊取**（網路攔截）| **高** | HTTPS 端到端 + `HttpOnly; Secure` cookie（§9.2）|
 | R10 | **IDOR**（以 device_id 列舉越權設備）| **高** | BFF/後端對每個資源 URL 重驗 session 權限（§9.4）|
-| R11 | **PostgREST 公開讀**（`web_anon` 未認證可讀 `api.devices`）| 中 | 非公網可達 + CORS 限定來源（§9.3）|
+| R11 | **PostgREST 公開讀**（`web_anon` 未認證可讀 `api.devices`）| 中 | **PostgREST 僅內網 / BFF 可達；BFF 是唯一瀏覽器讀取面（§9.3 已決策）**——零瀏覽器直連、零 CORS 面 |
 | R12 | **BFF 未實作 → key 暴露於瀏覽器** | **CRITICAL** | BFF 為不可協商前置（§9.1）；無 BFF 不得上線 |
 
 ---
@@ -323,7 +330,7 @@ charts/theme.ts      ECharts theme
 ### Architecture gates（進實作前必須先定案，否則不開工）
 
 - **GATE-1 BFF 設計定案 —— ✅ 已關閉（2026-06-10）**：技術選型 = **Python / FastAPI**（與 device-service 同棧：同一套測試/容器/依賴慣例，session+role→key 映射沿用既有 auth 模式）；session 機制 = `HttpOnly; Secure; SameSite=Strict` cookie + 伺服器側 session store（P1 單機 in-process，水平擴展再 Redis）（§9.2）；role→channel-key 映射 + endpoint 級授權（§9.1）；CSRF = SameSite=Strict + origin-header 驗證（§9.4）。**P1 可進實作。**
-- **GATE-2 後端相依結清 — ✅ 已關閉（2026-06-10 實作完成）**：(a) `ai_confidence` 入 `_COLS`+`DeviceOut`、(b) `GET /devices` `limit/offset/sort/order`（allowlist+NULLS LAST）、(c) `type` filter——openapi 1.3.0（MINOR）+ `api/CHANGELOG.md` 首建，14/14 整合測試綠、267 unit 無回歸。**P2 留決策**：量測資料路由策略（BFF vs 直連 PostgREST + CORS/網路隔離/權限，§1.5 D2 / §9.3）——契約已存在、策略未決，非 REST 工項。
+- **GATE-2 後端相依結清 — ✅ 已關閉（2026-06-10 實作完成）**：(a) `ai_confidence` 入 `_COLS`+`DeviceOut`、(b) `GET /devices` `limit/offset/sort/order`（allowlist+NULLS LAST）、(c) `type` filter——openapi 1.3.0（MINOR）+ `api/CHANGELOG.md` 首建，14/14 整合測試綠、267 unit 無回歸。量測路由亦已決策（§9.3 全經 BFF）——**GATE-2 無任何殘留**。
 
 ### 分階段
 
@@ -389,7 +396,7 @@ charts/theme.ts      ECharts theme
 3. **即時量測機制**：**P2 預設純輪詢**（現有後端唯一可行，無新服務）；WebSocket（依原計畫未實作的 realtime-service）/ SSE 為獨立 spike，排 P1/P2 之後。
 4. **程式碼位置**：**暫定 monorepo `services/frontend`**（契約測試 openapi→TS client 就近），除非有 stakeholder 理由改獨立 repo。
 5. **控制下發何時做**：依賴 control-service + gateway write API（原始 Stage 6，未實作）→ **另立 PRD**（Non-Goal）。
-6. **量測 PostgREST 契約（§1 D2）**：`api.electricity_measurements` 等是否存在，或需新後端 view PRD？
+6. ~~量測 PostgREST 契約~~ **已定案**：契約存在（migration 000/001，§1.5 D2）；前端**經 BFF** 消費（§9.3）。
 7. ~~PostgREST 公開性~~ **已定案（§9.3）：前端一律經 BFF**；PostgREST 留內網不公開。
 8. **i18n 範圍**：僅中文，或中英雙語（商業外銷考量）？
 9. ~~設計系統 / 品牌規範來源~~ **已定案：自建 EMS Design System**（§6.4；視覺方向 Precise / Industrial / Alive）。**視覺設計執行交 Claude Design**，以本 PRD §6.4 為輸入規格。
