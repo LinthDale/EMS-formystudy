@@ -245,7 +245,7 @@ charts/theme.ts      ECharts theme
 
 ### 8.2 契約原則
 
-- **本 PRD 不新增後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 契約已存在——剩餘為 **P2 路由策略決策**（非後端工項），前端不擅改契約。
+- **本 PRD 不新增 device-service 後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 量測契約已存在且路由已決策為 BFF-mediated（§9.3）。前端不擅改 device-service 契約；BFF 對外 facade 屬本 PRD 實作面。
 - 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
 - 由 `api/openapi.yml` 生成 TS client，做契約測試 + runtime drift test 防漂移（§13.2 / R2）；open-ended enum 須有 unknown/default handling（§13.2）。
 

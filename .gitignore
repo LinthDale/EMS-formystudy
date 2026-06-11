@@ -20,6 +20,9 @@ doc/presentation/
 *.swp
 *.swo
 
+# Throwaway agent/session rewrite scratch scripts (e.g. .tmp_prd5_v4.py)
+.tmp_*
+
 # Third-party installer artifacts (download via wget per ops docs)
 cloudflared-linux-amd64.deb*
 
