@@ -120,11 +120,11 @@
 | 欄位 | 內容 |
 |------|------|
 | 機率 / 衝擊 | M / M |
-| 描述 | KC 來源目前為一般 clone 置於 `external/`，**尚未轉為 git submodule**（EMS 目錄尚未為 git repo）。上游 force-push 或刪 branch、本地 clone 又不慎重新 pull，build 行為即可能不可重現 |
-| 緩解 | 短期：本地保留現有 clone 不做 `git pull`；記錄當下 commit SHA<br/>中期：將 EMS 目錄 git init 並把 `external/*` 轉為 submodule + commit pin<br/>長期：上游若停更，fork 到自己 org |
+| 描述 | KC 來源置於 `external/`，已轉為 **git submodule + commit pin**（`external/kc_iot_gateway`、`external/kc_modbus_mcp`，見 `.gitmodules`）。本地 build 可重現性已受 commit pin 保護；殘餘風險為上游 force-push / 刪 branch 致 pinned SHA 無法 fetch，或上游停更 |
+| 緩解 | 短期（已完成）：EMS 目錄 git init + `external/*` 轉 submodule 並 pin commit SHA<br/>長期：上游若停更或刪除 pinned commit，fork 到自己 org |
 | Owner | EMS team |
 | 觸發 ADR | ADR-006 |
-| 狀態 | **Open**（待 EMS git init + submodule 轉換） |
+| 狀態 | **Mitigated**（git init + submodule pin 已完成 2026-04-28；殘餘為上游可用性，待長期 fork 對策） |
 
 ### R-014：FR-334「提高當期 LLM 預算」端點未實作（預算告警 remediation 缺口）
 
@@ -147,8 +147,8 @@
 |------|------|
 | 機率 / 衝擊 | M / L |
 | 描述 | `C:\Users\User\synaiq\EMS\` 為 stage 1 殘留備份；新人或 Claude 可能誤改 |
-| 緩解 | 1) `project_rules.md §6` 已規定 WSL 為唯一真相<br/>2) 刪除 Windows 備份 |
-| 狀態 | **Open** — 計畫近期清理 |
+| 緩解 | 1) `project_rules.md §6` 已規定 WSL 為唯一真相（2026-06-11 修正權威路徑字串 emsuser→dalelin）<br/>2) 刪除 Windows 備份 |
+| 狀態 | **Open** — §6 路徑字串已校正（2026-06-11）；Windows 備份刪除待執行 |
 
 ### R-012：openapi.yml 與實際 endpoint 漂移
 
@@ -184,7 +184,7 @@
 
 | 狀態 | 數量 |
 |------|-----|
-| Open | 10 |
-| Mitigated | 2 |
+| Open | 9 |
+| Mitigated | 3 |
 | Accepted | 1 |
 | Closed | 0 |
