@@ -1,5 +1,7 @@
 # synaiq EMS
 
+[![CI](https://github.com/LinthDale/EMS-formystudy/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/LinthDale/EMS-formystudy/actions/workflows/ci.yml)
+
 自主研發的商用 **EMS（Energy Management System）** —— 從電力資料採集、可視化、告警，一路延伸到工廠環境監測、**裝置自動登錄與 AI 輔助分類**，以及 AI 控制面（MCP）。
 
 > 對標 Schneider PME、研華 WebAccess/EMS 等國際成熟產品，差異化定位在**台灣在地化**（台電費率、需量管理）、**AI 主動控制**（MCP 協定原生支援）、與**可深度客製**的整體架構。

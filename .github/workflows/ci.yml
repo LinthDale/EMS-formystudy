@@ -1,0 +1,127 @@
+# EMS CI — lint + unit tests + API contract governance enforcement
+#
+# Enforces doc/governance/api-contract-governance.md §5 (runtime drift test +
+# version check) — the PRD-0005 §13.2 P1 batch that lifts the governance file
+# from POLICY to ENFORCED. Risk register: R-012 (spec drift), PRD-0005 R2.
+#
+# Job map:
+#   lint            ruff (conservative error-class rules; no project ruff config yet)
+#   unit            project_rules §7 invocation: docker exec -w /app ems-simulator
+#                   python -m pytest tests/unit -v  (tests + device_service package
+#                   are injected into the container — the image ships only src/)
+#   contract-drift  tests/contract/test_openapi_drift.py: committed api/openapi.yml
+#                   vs device_service.main.create_app().openapi() (no Docker)
+#   api-version-gate openapi.yml changed vs merge base ⇒ info.version bumped +
+#                   api/CHANGELOG.md entry, else fail
+#
+# Integration / E2E suites (docker compose stack + TimescaleDB) are NOT run here
+# yet — they remain the dev-box pre-merge step per project_rules §7 (deferred).
+
+name: CI
+
+on:
+  push:
+    branches: [dev, main]
+  pull_request:
+    branches: [dev, main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint (ruff)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install ruff
+        run: python -m pip install --quiet ruff
+      # No committed ruff config exists yet, so only the always-wrong classes are
+      # enforced (syntax errors, undefined names, broken f-strings/comparisons).
+      # Tightening to a full style gate needs a project-level ruff config (follow-up).
+      - name: Ruff (error classes)
+        run: ruff check --select E9,F63,F7,F82 services/simulator services/device-service tests
+
+  unit:
+    name: Unit tests (ems-simulator container, project_rules §7)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build & start simulator container
+        run: docker compose up -d --build simulator
+      - name: Inject tests + device_service package into the container
+        # The simulator image ships only src/ (services/simulator/Dockerfile).
+        # tests/conftest.py resolves device_service at /app/device_service in the
+        # container layout, so the package is copied alongside the tests.
+        run: |
+          docker cp tests ems-simulator:/app/tests
+          docker cp services/device-service/device_service ems-simulator:/app/device_service
+          docker cp services/device-service/requirements.txt ems-simulator:/tmp/device-service-requirements.txt
+      - name: Install test + device-service deps in the container
+        run: >
+          docker exec ems-simulator pip install --no-cache-dir --quiet
+          -r /app/tests/requirements-test.txt
+          -r /tmp/device-service-requirements.txt
+      - name: Run unit tests (project_rules §7 invocation)
+        run: docker exec -w /app ems-simulator python -m pytest tests/unit -v
+
+  contract-drift:
+    name: API contract drift (openapi.yml ↔ device-service routes)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install device-service + test deps
+        run: >
+          python -m pip install --quiet
+          -r services/device-service/requirements.txt
+          -r tests/requirements-test.txt
+          PyYAML
+      - name: Contract drift test + version-gate unit tests
+        run: python -m pytest tests/contract -v
+
+  api-version-gate:
+    name: API version-bump gate (api-contract-governance §2/§6)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PyYAML
+        run: python -m pip install --quiet PyYAML
+      - name: Extract merge-base spec + CHANGELOG and run the gate
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            BASE_SHA="$(git merge-base "${{ github.event.pull_request.base.sha }}" HEAD)"
+          else
+            BASE_SHA="${{ github.event.before }}"
+            if [ -z "$BASE_SHA" ] \
+               || [ "$BASE_SHA" = "0000000000000000000000000000000000000000" ] \
+               || ! git cat-file -e "$BASE_SHA" 2>/dev/null; then
+              echo "No usable base commit (branch create / force push) — skipping version gate."
+              exit 0
+            fi
+          fi
+          echo "Comparing against merge base: $BASE_SHA"
+          if git cat-file -e "$BASE_SHA:api/openapi.yml" 2>/dev/null; then
+            git show "$BASE_SHA:api/openapi.yml" > /tmp/base-openapi.yml
+          fi
+          if git cat-file -e "$BASE_SHA:api/CHANGELOG.md" 2>/dev/null; then
+            git show "$BASE_SHA:api/CHANGELOG.md" > /tmp/base-CHANGELOG.md
+          fi
+          python tests/contract/check_version_bump.py \
+            --base-spec /tmp/base-openapi.yml \
+            --head-spec api/openapi.yml \
+            --base-changelog /tmp/base-CHANGELOG.md \
+            --head-changelog api/CHANGELOG.md

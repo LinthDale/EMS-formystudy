@@ -29,6 +29,17 @@ Python test/development environment.
 | Python | `>=3.12` recommended | Local tests and utility commands |
 | pip | `>=23` recommended | Install root/test Python dependencies |
 
+## CI（GitHub Actions）
+
+Workflow `.github/workflows/ci.yml`（PRD-0005 P1 起；API 契約治理機械化強制）:
+
+| 工具 / 需求 | 來源 | 用於 job |
+|---|---|---|
+| `ruff` | pip | `lint`（`--select E9,F63,F7,F82`）|
+| `PyYAML` | pip | `contract-drift` / `api-version-gate`（解析 `api/openapi.yml`）|
+| device-service runtime deps | `services/device-service/requirements.txt` | `contract-drift`（匯入 ASGI app 比對 runtime schema）|
+| Docker（runner 內建）| GitHub Actions | `unit`（`docker compose up -d --build simulator`）|
+
 ## Docker Images
 
 | Image | Version | Used by |
@@ -120,6 +131,7 @@ httpx>=0.27
 psycopg2-binary>=2.9
 pymodbus==3.6.9
 paho-mqtt>=2.0
+PyYAML>=6.0
 ```
 
 ## Optional Host Tools

@@ -1,6 +1,6 @@
 # API 契約治理（API Contract Governance）
 
-> **狀態：POLICY（規則已立，2026-06-09），尚未 ENFORCEMENT。** 規則性條款（§1 真相、§2 semver、§4 前端由 spec 生成）即時適用於人工流程；但**機械化強制尚未到位**——`api/CHANGELOG.md` 未建立、CI gate（lint/diff/contract/drift test，§5）未實作。兩者於 **PRD-0005 實作批次**落地後，本文件才從 policy 升為 enforced。在此之前，違反仍須靠 review 把關。
+> **狀態：ENFORCED（2026-06-11，PRD-0005 P1 批次）。** 機械化強制已落地：`api/CHANGELOG.md` 已建立（1.3.0 起）；CI gate 已實作於 `.github/workflows/ci.yml` —— runtime drift test（`tests/contract/test_openapi_drift.py`，committed spec ↔ `create_app().openapi()`）+ version-bump gate（`tests/contract/check_version_bump.py`，§2/§6）。spec lint（spectral/redocly）與 oasdiff breaking-diff 為後續工項（見 §5）。
 
 > 範圍：EMS 對外 / 跨服務 REST API 契約的版控紀律。**`api/openapi.yml` 為 REST API 的單一真相（source of truth）**。
 > 起因：PRD-0005 自建前端要由 OpenAPI 生成 TS client，若 spec 無紀律，前端 client / 測試 / 文件全部漂移。
@@ -62,4 +62,4 @@
 
 ---
 
-> 狀態：v1（2026-06-09 立）。規則即時生效（版控 / semver / 前端生成）；CI gate 與 `api/CHANGELOG.md` 於 PRD-0005 實作批次落地。
+> 狀態：v2（2026-06-09 立；2026-06-11 升為 enforced — drift test + version gate + CHANGELOG 落地，PRD-0005 P1）。
