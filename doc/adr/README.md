@@ -30,12 +30,14 @@
 | ADR-020 | DB Migration 治理（schema_migrations + runner 選型；排除 Alembic）| Proposed | 2026-06-09 |
 | ADR-021 | device_type 閉集政策（DB 自由 TEXT、應用層夾箝；+battery/solar_inverter/ev_charger/grid_meter）| Proposed | 2026-06-10 |
 | ADR-022 | 窄表 signal_measurements 通用量測儲存（恰一非 NULL CHECK + 壓縮 segmentby；unified view；ems_ingest INSERT-only）| Proposed | 2026-06-10 |
+| ADR-023 | BFF session 與 role→channel-key 授權（任何 role 變更即 revoke；SessionStore Protocol；上游 401/403→502；PostgREST hop 不花 key、AI key 不進 BFF）| Proposed | 2026-06-11 |
 
 > ADR-009 ~ ADR-017 源自 PRD-0003（Device Registry & Auto-Discovery，Approved 2026-05-08 / DL-007），將 PRD §6.4 鎖定之 9 項架構決策正式化。
 > ADR-018 源自 PRD-0003 Phase 1.1 實作前弱點掃描 Finding B，擴充 ADR-016 的 freeze trigger 保護欄位集。
 > ADR-019 源自 PRD-0003 §8.7.3 follow-up，為 [PRD-0004](../prd/PRD-0004-device-service-observability-alerting.md) 排除之 Non-Goal；**Proposed，卡 Anthropic key**。
 > ADR-020 源自 review 對 migration 版控之關切；與 [api-contract-governance](../governance/api-contract-governance.md) 為兩條獨立治理線（DB 遷移 vs API 契約）；**Proposed，排除 Alembic（stack 非 SQLAlchemy）**。
 > ADR-021/022 源自 [PRD-0006](../prd/PRD-0006-Generic-Measurement-Pipeline-Dynamic-Visualization.md)（通用量測管線與動態可視化，Draft 2026-06-10）；021 閉集變更須同步升 PROMPT_VERSION；022 retention 數值與 cagg 屬 PRD-0006 Open Questions。
+> ADR-023 源自 [PRD-0005](../prd/PRD-0005-ems-frontend.md) §9（GATE-1 BFF，`services/bff/`）實作層安全決策；P1 in-memory session store 限單 worker，水平擴展前換 Redis。
 
 ## 撰寫規則
 

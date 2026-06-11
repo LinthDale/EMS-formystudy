@@ -1,0 +1,49 @@
+# =============================================================================
+# EMS BFF 參數設定檔（單一可調來源）— PRD-0005 §9 GATE-1 / project_rules §19
+# =============================================================================
+# 用法：
+#   - 這是「人類調參的主檔」。改這裡 → 重啟 bff（或 `docker compose restart bff`）
+#     即生效。
+#   - 載入優先序（高 → 低）：環境變數（BFF_ 前綴）> .env > 本檔 > 程式內建 default。
+#   - **機密不放這裡**（本檔會進 git）。channel keys / 使用者表一律放 .env：
+#       BFF_OPS_API_KEY, BFF_INGEST_API_KEY, BFF_AUTH_USERS
+#     （compose 由既有 ${OPS_API_KEY}/${INGEST_API_KEY} 傳入；BFF 不持 AI key。）
+#   - 路徑可用環境變數 BFF_CONFIG_FILE 覆寫（預設 config/bff.toml）。
+#   - 每個值的對應環境變數名 = "BFF_" + 欄位大寫（例 session_idle_timeout_s →
+#     BFF_SESSION_IDLE_TIMEOUT_S）。
+#   - 欄位定義與型別見 services/bff/bff/config.py；
+#     總表見 doc/governance/tunable-parameters.md。
+# =============================================================================
+
+[upstream]
+# device-service REST（docker service DNS；瀏覽器永不可達）
+device_service_url = "http://device-service:8002"
+# PostgREST 量測唯讀面（§9.3：一律 BFF 轉發，瀏覽器零直連、零 CORS 面）
+postgrest_url = "http://query:3000"
+# 上游請求逾時（秒）
+upstream_timeout_s = 10.0
+
+[session]
+# session cookie 名稱（HttpOnly; Secure; SameSite=Strict — §9.2 [必過]，屬性不可調）
+session_cookie_name = "ems_bff_session"
+# Secure 旗標：僅本機純 http 開發時才可關（任何對外部署必須 true）
+session_cookie_secure = true
+# session 絕對最長存活（秒）— 超過即失效，活躍也不延長（§9.2 [必過]）
+session_max_lifetime_s = 28800
+# 閒置逾時（秒）— 兩請求之間超過即失效（§9.2 [必過]）；不可大於 max_lifetime
+session_idle_timeout_s = 1800
+
+[csrf]
+# CSRF Origin 白名單（逗號分隔、完整 Origin 值）— §9.4 [必過]
+# 部署時改成前端實際對外 origin（nginx 同源面）
+public_origins = "http://localhost:8003"
+
+[measurements]
+# 量測查詢未帶 limit 時的預設（防無界讀取）
+measurements_default_limit = 100
+# 量測查詢 limit 上限（超過即 422）
+measurements_max_limit = 1000
+
+[log]
+# 日誌等級：DEBUG | INFO | WARNING | ERROR（永不記錄 key / cookie 值）
+log_level = "INFO"
