@@ -2,9 +2,9 @@
 
 | 欄位 | 內容 |
 |------|------|
-| 狀態 | **Draft v3**（2026-06-10；決策齊備——GATE-1/GATE-2 關閉、P2 路由與技術棧/Design System 已定案；**待 Approved**）|
+| 狀態 | **Approved**（2026-06-11 驗收通過；GATE-1/GATE-2 關閉、§9.3 路由=全部經 BFF、技術棧/Design System 定案、§8.2 P2 路由殘留已清；鎖定後變更走 ADR）|
 | 起案日期 | 2026-06-09 |
-| 最後修訂 | 2026-06-10 **v3**（owner 拍板）：§9.3 量測路由=**全部經 BFF**（零瀏覽器 CORS 面）；GATE-1 關閉=**FastAPI BFF** + session/CSRF 定案；§6.4 新增=**EMS Design System**（Tailwind v4+Radix+shadcn 種子、Precise/Industrial/Alive、domain components、Motion 範圍；視覺執行交 Claude Design）；§14 Q1/Q2/Q7/Q9 全解。v2（06-09）：資料路由改 REST、BFF 強制、§9 威脅模型、§1.5 後端相依 |
+| 最後修訂 | 2026-06-11：驗收通過 → flip **Approved**；§8.2 P2 路由殘留清除。2026-06-10 **v3**（owner 拍板）：§9.3 量測路由=**全部經 BFF**（零瀏覽器 CORS 面）；GATE-1 關閉=**FastAPI BFF** + session/CSRF 定案；§6.4 新增=**EMS Design System**（Tailwind v4+Radix+shadcn 種子、Precise/Industrial/Alive、domain components、Motion 範圍；視覺執行交 Claude Design）；§14 Q1/Q2/Q7/Q9 全解。v2（06-09）：資料路由改 REST、BFF 強制、§9 威脅模型、§1.5 後端相依 |
 | 對應決策紀錄 | 還原原始計畫 `doc/archive/plan/EMS實作計畫.md` 之自寫前端（Stage 2~6 React SPA），當時因 ADR-001 開源優先暫以 Grafana 取代、降為「待決策」 |
 | 取代 / 補充 | **補充**全線 PRD；消費 PRD-0001/0002/0003 既有後端契約；與 [PRD-0004](PRD-0004-device-service-observability-alerting.md)（Grafana 內部 ops 觀測）**分工並存，非替代** |
 | 邊界釐清 | Grafana = 運維內部可觀測性 / 告警；本 PRD = 客戶 / 操作人員的產品 UI |
