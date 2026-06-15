@@ -44,7 +44,7 @@ jobs:
       # enforced (syntax errors, undefined names, broken f-strings/comparisons).
       # Tightening to a full style gate needs a project-level ruff config (follow-up).
       - name: Ruff (error classes)
-        run: ruff check --select E9,F63,F7,F82 services/simulator services/device-service tests
+        run: ruff check --select E9,F63,F7,F82 services/simulator services/device-service services/bff tests
 
   unit:
     name: Unit tests (ems-simulator container, project_rules §7)
@@ -68,6 +68,43 @@ jobs:
           -r /tmp/device-service-requirements.txt
       - name: Run unit tests (project_rules §7 invocation)
         run: docker exec -w /app ems-simulator python -m pytest tests/unit -v
+
+  bff-unit:
+    name: BFF tests (services/bff, PRD-0005 §9)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install BFF deps
+        run: >
+          python -m pip install --quiet
+          -r services/bff/requirements.txt
+          -r services/bff/requirements-dev.txt
+      - name: Run BFF unit + integration tests
+        working-directory: services/bff
+        run: python -m pytest tests -v
+
+  frontend-unit:
+    name: Frontend tests + build (frontend, PRD-0005 §6.4)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install deps
+        working-directory: frontend
+        run: npm ci
+      - name: Test (vitest)
+        working-directory: frontend
+        run: npm test
+      - name: Build
+        working-directory: frontend
+        run: npm run build
 
   contract-drift:
     name: API contract drift (openapi.yml ↔ device-service routes)

@@ -67,7 +67,7 @@
 | session 絕對壽命 | `BFF_SESSION_MAX_LIFETIME_S` | 28800 | s | ✅ | 8h 硬上限 |
 | session 閒置逾時 | `BFF_SESSION_IDLE_TIMEOUT_S` | 1800 | s | ✅ | 30min |
 | 量測預設 / 上限 limit | `BFF_MEASUREMENTS_DEFAULT_LIMIT` / `BFF_MEASUREMENTS_MAX_LIMIT` | 100 / 1000 | rows | ✅ | 收緊於 openapi 上限 |
-| Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單 |
+| Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單；**dev（compose）預設含 `http://localhost:5173`（前端 origin），否則 vite-proxied 的 login/POST 會被擋** |
 | log level | `BFF_LOG_LEVEL` | INFO | — | ✅ | |
 | OPS / INGEST channel key、auth users | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
 | cookie 屬性（HttpOnly/Secure/SameSite=Strict）| — | — | — | 🔒 | §9.2；放寬走 ADR-023 |
