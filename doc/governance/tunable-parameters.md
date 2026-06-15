@@ -56,3 +56,19 @@
 | device_id / signal_name regex | `^[a-zA-Z0-9_-]{1,64}$` | topic_parser / models | FR-322 | 🔒 |
 
 > spec-locked 值若未來要調整（放寬），必須開 ADR；不可隨意 env 覆寫降低安全界限。
+
+## C. BFF（PRD-0005，`config/bff.toml` / `BFF_*` env；見 ADR-023）
+
+| 參數 | env var | 預設 | 單位 | 狀態 | 備註 |
+|------|---------|------|------|------|------|
+| device-service URL | `BFF_DEVICE_SERVICE_URL` | http://device-service:8002 | — | ✅ | 上游 REST |
+| PostgREST URL | `BFF_POSTGREST_URL` | http://query:3000 | — | ✅ | 量測讀取上游（web_anon view）|
+| upstream timeout | `BFF_UPSTREAM_TIMEOUT_S` | 10.0 | s | ✅ | |
+| session 絕對壽命 | `BFF_SESSION_MAX_LIFETIME_S` | 28800 | s | ✅ | 8h 硬上限 |
+| session 閒置逾時 | `BFF_SESSION_IDLE_TIMEOUT_S` | 1800 | s | ✅ | 30min |
+| 量測預設 / 上限 limit | `BFF_MEASUREMENTS_DEFAULT_LIMIT` / `BFF_MEASUREMENTS_MAX_LIMIT` | 100 / 1000 | rows | ✅ | 收緊於 openapi 上限 |
+| Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單 |
+| log level | `BFF_LOG_LEVEL` | INFO | — | ✅ | |
+| OPS / INGEST channel key、auth users | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
+| cookie 屬性（HttpOnly/Secure/SameSite=Strict）| — | — | — | 🔒 | §9.2；放寬走 ADR-023 |
+| role→至多一 key 通道、AI 通道禁入 BFF | — | — | — | 🔒 | §9.1；放寬走 ADR-023 |

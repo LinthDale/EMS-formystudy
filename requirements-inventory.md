@@ -16,6 +16,8 @@ Python test/development environment.
 | KC IoT gateway container | `external/kc_iot_gateway/pyproject.toml` |
 | Python tests | `tests/requirements-test.txt` |
 | KC dashboard frontend | `external/kc_iot_gateway/dashboard/package.json` |
+| EMS BFF (PRD-0005) | `services/bff/requirements.txt` + `requirements-dev.txt` |
+| EMS frontend (PRD-0005) | `frontend/package.json` |
 | Docker services | `docker-compose.yml` |
 
 ## Required Host Tools
@@ -134,6 +136,18 @@ paho-mqtt>=2.0
 PyYAML>=6.0
 ```
 
+### `services/bff`（PRD-0005 GATE-1，local build `python:3.11-slim`）
+
+```text
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+httpx>=0.27,<1.0
+pydantic>=2.7,<3.0
+pydantic-settings>=2.3,<3.0
+```
+
+Dev：`pytest>=8.0`、`pytest-cov>=5.0`（`docker build --target test -t ems-bff-test services/bff`）
+
 ## Optional Host Tools
 
 | Tool | Version / constraint | Purpose |
@@ -198,3 +212,11 @@ typescript@~5.9.3
 typescript-eslint@^8.57.0
 vite@^8.0.1
 ```
+
+## EMS 自建前端（PRD-0005，`frontend/`）
+
+Node.js `>=20`（dev 機實測 v24）、npm `>=10`。`cd frontend && npm ci && npm test && npm run build`。
+
+Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@15`, `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`
+
+Dev：`vite@7`, `typescript@5.8`, `tailwindcss@4`(+`@tailwindcss/vite`), `vitest@3`(+`@vitest/coverage-v8`), `@testing-library/{react,jest-dom,user-event}`, `jsdom`, `openapi-typescript`（`npm run gen:api` 由 `api/openapi.yml` 生成型別，§13.2 禁手刻）

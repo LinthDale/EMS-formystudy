@@ -251,6 +251,38 @@ services:
       start_period: 10s
     restart: unless-stopped
 
+  # ===== PRD-0005: BFF (browser↔backend gateway) + self-built frontend =====
+  bff:
+    build: ./services/bff
+    container_name: ems-bff
+    depends_on:
+      - device-service
+      - query
+    environment:
+      BFF_CONFIG_FILE: /app/config/bff.toml
+      BFF_OPS_API_KEY: ${OPS_API_KEY:-}        # reuse device-service channel secrets
+      BFF_INGEST_API_KEY: ${INGEST_API_KEY:-}  # AI key deliberately NOT passed (PRD-0005 §1/§6.1)
+      BFF_AUTH_USERS: ${BFF_AUTH_USERS:-}      # "user:sha256hex:role,..." (.env only)
+      BFF_PUBLIC_ORIGINS: ${BFF_PUBLIC_ORIGINS:-http://localhost:8003}
+      BFF_SESSION_COOKIE_SECURE: ${BFF_SESSION_COOKIE_SECURE:-true}  # false only for plain-http local dev
+    volumes:
+      - ./services/bff/config:/app/config:ro
+    ports:
+      - "127.0.0.1:8003:8003"  # loopback-only; browser reaches BFF via frontend same-origin proxy
+    restart: unless-stopped
+
+  # frontend dev server (P1); prod serves the static build via nginx + security headers (§9.5)
+  frontend:
+    image: node:24-alpine
+    container_name: ems-frontend-dev
+    working_dir: /app
+    volumes:
+      - ./frontend:/app
+    command: sh -c "npm ci && npm run dev -- --host"
+    ports:
+      - "127.0.0.1:5173:5173"   # publish to host loopback only (security review M-3)
+    profiles: ["dev"]
+
 volumes:
   timescale_data:
   grafana_data:

@@ -104,6 +104,19 @@
 | T-20 | **Repudiation** | 操作者否認執行的操作（誰改了 dashboard / alert） | 低 | Grafana audit log 啟用；POC 階段接 Loki |
 | T-21 | **Elevation of Privilege** | `authenticator` PostgreSQL role 取得 superuser | 低 | role 權限明確：`SET ROLE web_anon`，無 BYPASSRLS / SUPERUSER（init.sql 已限）|
 
+### 3.6 BFF 與自建前端（PRD-0005，TB-6：Browser ↔ BFF session 邊界）
+
+> 新邊界 TB-6：瀏覽器是唯一後端入口；X-API-Key（OPS/INGEST）只存在 BFF 伺服器側、永不過此邊界；AI key 不在 BFF。新資產：BFF channel keys（機密性高）、server-side session store（完整性高）。見 ADR-023。
+
+| ID | 類型 | 威脅情境 | 等級 | 緩解 |
+|----|------|---------|------|------|
+| T-22 | **Spoofing** | 竊取 / 偽造 session cookie | 高 | HttpOnly+Secure+SameSite=Strict；opaque 256-bit id；idle 30min + max 8h；每請求驗證 |
+| T-23 | **Tampering (CSRF)** | 跨站觸發 mutating `/api` 路由 | 高 | SameSite=Strict + Origin allowlist middleware（deny-by-default，含 login）|
+| T-24 | **Elevation of Privilege** | INGEST/READONLY session 經 BFF 持有之 OPS key 提權 | 高 | endpoint 級 role authz（負向測試鎖定）；role 變更即 revoke；READONLY 無 key 通道 |
+| T-25 | **Information Disclosure** | 上游 401/403 / 錯誤洩漏 key 或拓樸 | 中 | upstream 401/403→502；error body 無 key/host；log 不記 key/cookie |
+
+> T-08 強化：§9.3 決策後，PostgREST 唯一瀏覽器讀取面 = BFF（:3001 維持內網）。
+
 ---
 
 ## 4. 風險矩陣（依等級分組）

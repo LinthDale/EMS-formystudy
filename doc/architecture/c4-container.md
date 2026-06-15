@@ -94,6 +94,10 @@ flowchart LR
 | ems-kc-modbus-sim | external/kc_modbus_mcp | external | 5021 | KC | dev only |
 | ems-kc-mqtt-sim | external/kc_iot_gateway | external | — | KC | dev only |
 | ems-kc-mcp-server | external/kc_modbus_mcp | external | 8765 | KC | AI 控制功能停 |
+| ems-device-service | local build | ✅ Python | 8002 | EMS team | 裝置 CRUD/分類 REST 停（PRD-0003）|
+| ems-device-service-mcp | 同 device-service image | ✅ Python | 127.0.0.1:8766 | EMS team | AI 通道 MCP 停（PRD-0003）|
+| ems-bff | local build | ✅ Python | 127.0.0.1:8003 | EMS team | 前端操作面停（PRD-0005；Grafana/管線不受影響）|
+| ems-frontend | node(dev)/nginx(prod) | ✅ React/TS | 5173(dev) | EMS team | 產品 UI 停（PRD-0005）|
 
 ## 技術選型摘要（連結 ADR）
 
@@ -117,3 +121,6 @@ flowchart LR
 | grafana | 🟢 視覺化停，資料仍寫入 | 無 |
 | query (postgrest) | 🟢 歷史查詢停 | 可重啟 |
 | simulator | 🟢 測試流斷 | 無（dev only） |
+| device-service | 🟢 裝置分類/CRUD 停，量測管線不受影響 | 可重啟（無狀態，雙 DB pool）|
+| bff | 🟢 前端操作面停；Grafana/管線/PostgREST 不受影響 | 可重啟（in-memory session 清空，需重登）|
+| frontend | 🟢 產品 UI 停 | 靜態檔，可重啟 |

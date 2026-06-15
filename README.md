@@ -120,6 +120,8 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | AI 控制面 (kc-mcp-server) | 8765 (本機) | MCP client 讀寫設備暫存器 |
 | 裝置登錄服務 (device-service) | 8002 (REST) | 裝置 CRUD / 自動分類 / 人機確認 / 修正回饋 / 稽核（PRD-0003） |
 | 裝置登錄 MCP (device-service-mcp) | 127.0.0.1:8766 (本機) | device-service 的 MCP endpoint，AI 通道讀取 / 重跑分類工具 |
+| BFF (bff) | 127.0.0.1:8003 (本機) | 瀏覽器↔後端唯一通道：session/CSRF/role→key 注入（PRD-0005 §9）|
+| 自建前端 (frontend) | 5173 (dev) | React/Vite 產品 UI；經同源 BFF /api 取數，零瀏覽器金鑰（PRD-0005）|
 
 ## 快速入口
 
