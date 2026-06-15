@@ -43,6 +43,11 @@ export const zhHant = {
     sparklineLabel: "{{name}} 趨勢",
     insufficientData: "資料不足",
   },
+  typography: {
+    fontLabel: "介面字體",
+    sectionTitle: "字體設定 FontSwitcher",
+    sectionHint: "切換介面內文字體（自託管開源字體；繁中以 Noto Sans TC 補字）",
+  },
   deviceTable: {
     caption: "設備清單",
     empty: "目前沒有符合條件的設備",
@@ -60,6 +65,7 @@ export const zhHant = {
     title: "EMS Design System 元件展示",
     subtitle: "PRD-0005 §6.4 — Precise / Industrial / Alive（P1 design 驗收 gate 截圖頁）",
     sections: {
+      typography: "字體設定 FontSwitcher",
       statusPill: "設備狀態徽章 DeviceStatusPill",
       confidenceMeter: "AI 信心量表 ConfidenceMeter",
       measurementCard: "即時量測卡片 MeasurementCard",

@@ -7,6 +7,7 @@
  */
 @import "tailwindcss";
 @import "./tokens.css";
+@import "./fonts.css"; /* 自託管 @fontsource @font-face（離線；§6.4 可擴充字體）*/
 
 @theme inline {
   /* surfaces / lines / text */
@@ -49,6 +50,7 @@
   /* typography */
   --font-sans: var(--ems-font-sans);
   --font-mono: var(--ems-font-mono);
+  --font-display: var(--ems-font-display);
 
   /* radius（覆寫 Tailwind/shadcn 預設 radius 識別） */
   --radius-sm: var(--ems-radius-sm);

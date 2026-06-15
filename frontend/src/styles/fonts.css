@@ -1,0 +1,31 @@
+/**
+ * EMS 自託管字體 @font-face（PRD-0005 §6.4：種入數種開源字體，離線無 CDN）。
+ *
+ * 來源：@fontsource/* npm 套件（woff2 隨 bundle 出貨，執行期不打外部網路）。
+ * 與 styles/fonts.ts 註冊表一一對應：新增字體時，於 fonts.ts 加條目並在此引入對應 @fontsource。
+ * 僅引入設計系統實際用到的字重（tokens.css --ems-font-weight-* = 400/500/600/700），
+ * 控制 bundle 大小（NFR LCP）。
+ *
+ * 字重對照（tokens.css）：regular 400 / medium 500 / semibold 600 / bold 700。
+ */
+
+/* Inter（預設 sans，role=sans） */
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+
+/* Space Grotesk（display / 品牌幾何，role=display） */
+@import "@fontsource/space-grotesk/400.css";
+@import "@fontsource/space-grotesk/500.css";
+@import "@fontsource/space-grotesk/600.css";
+@import "@fontsource/space-grotesk/700.css";
+
+/* Noto Sans TC（繁中 CJK 覆蓋，role=sans/cjk）— Inter 不覆蓋繁體中文字形 */
+@import "@fontsource/noto-sans-tc/400.css";
+@import "@fontsource/noto-sans-tc/500.css";
+@import "@fontsource/noto-sans-tc/700.css";
+
+/* JetBrains Mono（等寬，role=mono）— 量測值 / tooltip / 軸標 */
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";

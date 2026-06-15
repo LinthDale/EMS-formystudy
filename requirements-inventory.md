@@ -217,6 +217,6 @@ vite@^8.0.1
 
 Node.js `>=20`（dev 機實測 v24）、npm `>=10`。`cd frontend && npm ci && npm test && npm run build`。
 
-Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@15`, `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`
+Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@15`, `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `@fontsource/inter`, `@fontsource/space-grotesk`, `@fontsource/noto-sans-tc`, `@fontsource/jetbrains-mono`（自託管開源字體，離線無 CDN；§6.4 可調整/可擴充 typography）
 
 Dev：`vite@7`, `typescript@5.8`, `tailwindcss@4`(+`@tailwindcss/vite`), `vitest@3`(+`@vitest/coverage-v8`), `@testing-library/{react,jest-dom,user-event}`, `jsdom`, `openapi-typescript`（`npm run gen:api` 由 `api/openapi.yml` 生成型別，§13.2 禁手刻）

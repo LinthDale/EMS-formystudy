@@ -64,10 +64,16 @@
   --ems-color-chart-grid: #1c2530;
   --ems-color-chart-axis: #9aa7b4;
 
-  /* ── Typography（不抓外部 webfont；以系統字型疊代退化） ────── */
+  /* ── Typography（自託管 @fontsource webfont；離線無 CDN）─────────
+        字體可調整（可擴充）：堆疊與可選清單集中於 styles/fonts.ts 註冊表，
+        後臺 FontSwitcher 於執行期覆寫 --ems-font-sans（本檔為預設真相）。
+        zh-Hant 不可省 CJK fallback：sans / display 一律串接 "Noto Sans TC"
+        （Inter / Space Grotesk 不覆蓋繁體中文字形）。 */
   --ems-font-sans: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
     system-ui, -apple-system, "Segoe UI", sans-serif;
-  --ems-font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
+  --ems-font-display: "Space Grotesk", "Inter", "Noto Sans TC", "PingFang TC",
+    "Microsoft JhengHei", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ems-font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
   --ems-text-xs: 0.75rem;
   --ems-text-sm: 0.875rem;

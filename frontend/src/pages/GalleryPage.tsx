@@ -18,6 +18,7 @@ import { MeasurementCard } from "@/components/ems/MeasurementCard";
 import { SignalSparkline } from "@/components/ems/SignalSparkline";
 import { ReviewDigestPanel } from "@/components/ems/ReviewDigestPanel";
 import { DeviceTable } from "@/components/ems/DeviceTable";
+import { FontSwitcher } from "@/components/ems/FontSwitcher";
 import { PowerTrendChart } from "@/charts/PowerTrendChart";
 import { Card, CardContent } from "@/components/ui/card";
 
@@ -43,6 +44,15 @@ export function GalleryPage() {
         </h1>
         <p className="text-sm text-fg-secondary">{t("gallery.subtitle")}</p>
       </div>
+
+      <Section title={t("gallery.sections.typography")}>
+        <Card>
+          <CardContent className="flex flex-col gap-3">
+            <FontSwitcher />
+            <p className="text-xs text-fg-muted">{t("typography.sectionHint")}</p>
+          </CardContent>
+        </Card>
+      </Section>
 
       <Section title={t("gallery.sections.statusPill")}>
         <Card>
