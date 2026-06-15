@@ -86,7 +86,24 @@ class OriginCSRFMiddleware(BaseHTTPMiddleware):
         return response
 
 
+# PRD-0005 §9.5 [必過] header set appropriate for a JSON API surface. HSTS
+# (Strict-Transport-Security) is DELIBERATELY ABSENT here: it belongs on the TLS
+# terminator / nginx in front of the static SPA bundle, not on this API facade —
+# setting it per-API-response is the wrong layer and would not cover the bundle.
+# The script-src/connect-src CSP for the SPA HTML page is likewise nginx's job
+# (a sibling layer); this CSP is the tight default for a pure-JSON endpoint.
+_API_SECURITY_HEADERS = {
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "strict-origin-when-cross-origin",
+    "Content-Security-Policy": "default-src 'none'; frame-ancestors 'none'",
+}
+
+
 def _stamp(response: Response) -> Response:
-    response.headers["Cache-Control"] = "no-store"
-    response.headers["X-Content-Type-Options"] = "nosniff"
+    """Stamp the §9.5 defensive header set onto an /api response (success or
+    the 403 CSRF-deny path). New dict per call — no shared mutable state."""
+    for name, value in _API_SECURITY_HEADERS.items():
+        response.headers[name] = value
     return response

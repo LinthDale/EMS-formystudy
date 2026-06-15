@@ -11,6 +11,8 @@ facade, not a discoverable API surface.
 """
 from __future__ import annotations
 
+import asyncio
+import contextlib
 import logging
 import time
 from contextlib import asynccontextmanager
@@ -24,7 +26,7 @@ from .config import Settings
 from .credentials import parse_auth_users
 from .routes import auth, devices, health, measurements
 from .security import OriginCSRFMiddleware
-from .sessions import InMemorySessionStore, SessionManager
+from .sessions import InMemorySessionStore, SessionManager, run_sweep_loop
 
 
 def create_app(
@@ -49,9 +51,19 @@ def create_app(
         app.state.http = httpx.AsyncClient(
             timeout=settings.upstream_timeout_s, transport=upstream_transport
         )
+        # Background janitor for the in-memory session store (code-review MED):
+        # reap expired-but-never-re-accessed sessions on a fixed interval.
+        sweep_task = asyncio.create_task(
+            run_sweep_loop(
+                app.state.session_manager, settings.session_sweep_interval_s
+            )
+        )
         try:
             yield
         finally:
+            sweep_task.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await sweep_task  # await clean cancellation before teardown
             await app.state.http.aclose()
 
     app = FastAPI(

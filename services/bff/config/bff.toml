@@ -32,6 +32,9 @@ session_cookie_secure = true
 session_max_lifetime_s = 28800
 # 閒置逾時（秒）— 兩請求之間超過即失效（§9.2 [必過]）；不可大於 max_lifetime
 session_idle_timeout_s = 1800
+# in-memory session store 背景清掃間隔（秒）— validate() 僅在存取時逐筆驅逐，
+# 從未再被存取的過期 session 由此背景任務定時清掃（ADR-023 P1 store；code-review MED）
+session_sweep_interval_s = 300
 
 [csrf]
 # CSRF Origin 白名單（逗號分隔、完整 Origin 值）— §9.4 [必過]

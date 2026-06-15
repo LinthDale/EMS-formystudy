@@ -66,6 +66,7 @@
 | upstream timeout | `BFF_UPSTREAM_TIMEOUT_S` | 10.0 | s | ✅ | |
 | session 絕對壽命 | `BFF_SESSION_MAX_LIFETIME_S` | 28800 | s | ✅ | 8h 硬上限 |
 | session 閒置逾時 | `BFF_SESSION_IDLE_TIMEOUT_S` | 1800 | s | ✅ | 30min |
+| session 清掃間隔 | `BFF_SESSION_SWEEP_INTERVAL_S` | 300 | s | ✅ | in-memory store 背景清掃過期 session（ADR-023 P1 store；code-review MED）|
 | 量測預設 / 上限 limit | `BFF_MEASUREMENTS_DEFAULT_LIMIT` / `BFF_MEASUREMENTS_MAX_LIMIT` | 100 / 1000 | rows | ✅ | 收緊於 openapi 上限 |
 | Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單；**dev（compose）預設含 `http://localhost:5173`（前端 origin），否則 vite-proxied 的 login/POST 會被擋** |
 | log level | `BFF_LOG_LEVEL` | INFO | — | ✅ | |

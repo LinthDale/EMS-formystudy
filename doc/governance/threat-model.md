@@ -118,6 +118,8 @@
 
 > T-26 戰略緩解：長期改接企業 IdP / OIDC（`BFF_AUTH_MODE=oidc`，Phase-1），BFF 不再自管密碼；argon2id 為無 IdP 環境的 fallback。見 ADR-024。
 
+> M-1（已實作）：BFF `/api` 回應（含 CSRF-deny 路徑）已加 §9.5 防禦性 header — `X-Frame-Options: DENY`、`Referrer-Policy: strict-origin-when-cross-origin`、`Content-Security-Policy: default-src 'none'; frame-ancestors 'none'`（＋既有 `Cache-Control: no-store`、`X-Content-Type-Options: nosniff`）。**SPA HTML 頁的 script/connect-src CSP 與 HSTS 屬前端 nginx / TLS terminator 層**（nginx layer 另處理）；此處僅涵蓋 JSON API 面。對應 T-22 clickjacking 防護。
+
 > T-08 強化：§9.3 決策後，PostgREST 唯一瀏覽器讀取面 = BFF（:3001 維持內網）。
 
 ---

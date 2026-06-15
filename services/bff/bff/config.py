@@ -91,6 +91,10 @@ class Settings(BaseSettings):
     session_cookie_secure: bool = True  # disable only for local plain-http dev
     session_max_lifetime_s: int = 28800  # 8 h absolute cap, even with activity
     session_idle_timeout_s: int = 1800   # 30 min without a request -> invalid
+    # In-memory store janitor: validate() evicts lazily on access, but never-
+    # re-accessed sessions would otherwise accumulate; a background task sweeps
+    # them on this interval (ADR-023 in-memory P1 store; code-review MED).
+    session_sweep_interval_s: int = 300  # 5 min
 
     # --- CSRF (PRD-0005 §9.4: SameSite=Strict + Origin allowlist) ---
     public_origins: str = "http://localhost:8003"  # csv of exact Origin values
@@ -114,7 +118,9 @@ class Settings(BaseSettings):
             raise ValueError("auth_mode must be 'local' or 'oidc'")
         return mode
 
-    @field_validator("session_max_lifetime_s", "session_idle_timeout_s")
+    @field_validator(
+        "session_max_lifetime_s", "session_idle_timeout_s", "session_sweep_interval_s"
+    )
     @classmethod
     def _positive(cls, v: int) -> int:
         if v <= 0:
