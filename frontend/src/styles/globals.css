@@ -1,0 +1,87 @@
+/**
+ * EMS Design System — Tailwind v4 entry
+ * 唯一視覺真相在 tokens.css；本檔僅做兩件事：
+ *   1. @theme inline：把 --ems-* token「映射」成 Tailwind utility 名稱
+ *   2. base layer：body / focus / selection 基線（全部引用 token）
+ * 禁止在此新增任何未經 tokens.css 定義的視覺值。
+ */
+@import "tailwindcss";
+@import "./tokens.css";
+
+@theme inline {
+  /* surfaces / lines / text */
+  --color-canvas: var(--ems-color-bg);
+  --color-surface: var(--ems-color-surface);
+  --color-surface-raised: var(--ems-color-surface-raised);
+  --color-surface-sunken: var(--ems-color-surface-sunken);
+  --color-line: var(--ems-color-border);
+  --color-line-strong: var(--ems-color-border-strong);
+  --color-fg: var(--ems-color-text-primary);
+  --color-fg-secondary: var(--ems-color-text-secondary);
+  --color-fg-muted: var(--ems-color-text-muted);
+  --color-fg-inverse: var(--ems-color-text-inverse);
+
+  /* accent / semantic */
+  --color-accent: var(--ems-color-accent);
+  --color-accent-strong: var(--ems-color-accent-strong);
+  --color-ok: var(--ems-color-ok);
+  --color-warn: var(--ems-color-warn);
+  --color-danger: var(--ems-color-danger);
+  --color-info: var(--ems-color-info);
+
+  /* device status（FR-503） */
+  --color-status-candidate: var(--ems-color-status-candidate);
+  --color-status-confirmed: var(--ems-color-status-confirmed);
+  --color-status-active: var(--ems-color-status-active);
+  --color-status-retired: var(--ems-color-status-retired);
+  --color-status-unknown: var(--ems-color-status-unknown);
+  --color-status-stale: var(--ems-color-status-stale);
+
+  /* measurement domain（FR-520） */
+  --color-domain-electricity: var(--ems-color-domain-electricity);
+  --color-domain-factory: var(--ems-color-domain-factory);
+
+  /* confidence bands（FR-510） */
+  --color-confidence-low: var(--ems-color-confidence-low);
+  --color-confidence-medium: var(--ems-color-confidence-medium);
+  --color-confidence-high: var(--ems-color-confidence-high);
+
+  /* typography */
+  --font-sans: var(--ems-font-sans);
+  --font-mono: var(--ems-font-mono);
+
+  /* radius（覆寫 Tailwind/shadcn 預設 radius 識別） */
+  --radius-sm: var(--ems-radius-sm);
+  --radius-md: var(--ems-radius-md);
+  --radius-lg: var(--ems-radius-lg);
+
+  /* shadow */
+  --shadow-card: var(--ems-shadow-card);
+  --shadow-raised: var(--ems-shadow-raised);
+  --shadow-glow-accent: var(--ems-glow-accent);
+
+  /* motion */
+  --ease-standard: var(--ems-motion-ease-standard);
+  --ease-emphasized: var(--ems-motion-ease-emphasized);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+  body {
+    background-color: var(--ems-color-bg);
+    color: var(--ems-color-text-primary);
+    font-family: var(--ems-font-sans);
+    line-height: var(--ems-leading-base);
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: var(--ems-focus-ring);
+    border-radius: var(--ems-radius-sm);
+  }
+  ::selection {
+    background-color: var(--ems-color-accent-soft);
+  }
+}

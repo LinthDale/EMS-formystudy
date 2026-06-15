@@ -1,0 +1,116 @@
+/**
+ * EMS Design System — Design Tokens
+ * PRD-0005 §6.4 — 視覺方向：Precise / Industrial / Alive
+ *
+ * 本檔為「唯一視覺真相」（single source of truth）：
+ *   - Tailwind theme（globals.css @theme inline）只「映射」本檔 token
+ *   - ECharts theme（charts/theme.ts）以 token reader 讀取本檔值
+ *   - 元件一律透過 Tailwind utility 或 var(--ems-*) 消費，禁止散落 magic value
+ *
+ * 命名空間：--ems-{color|font|text|space|radius|shadow|motion|focus}-*
+ * 注意：本檔覆寫 shadcn 預設視覺識別（灰階 / 0.5rem radius / 預設陰影）。
+ */
+:root {
+  /* ── Color · 底色（石墨控制室；Industrial） ─────────────────── */
+  --ems-color-bg: #0b0f14;
+  --ems-color-surface: #11161d;
+  --ems-color-surface-raised: #161e28;
+  --ems-color-surface-sunken: #070a0e;
+  --ems-color-border: #232c38;
+  --ems-color-border-strong: #324050;
+
+  /* ── Color · 文字 ───────────────────────────────────────────── */
+  --ems-color-text-primary: #e6edf3;
+  --ems-color-text-secondary: #9aa7b4;
+  --ems-color-text-muted: #5c6b7a;
+  --ems-color-text-inverse: #0b0f14;
+
+  /* ── Color · 品牌強調（電力青；Alive） ──────────────────────── */
+  --ems-color-accent: #38bdf8;
+  --ems-color-accent-strong: #0ea5e9;
+  --ems-color-accent-soft: rgba(56, 189, 248, 0.14);
+
+  /* ── Color · 設備狀態機（FR-503：candidate/confirmed/active/retired
+        + unknown fallback（§13.2 open-ended enum）+ stale 修飾） ── */
+  --ems-color-status-candidate: #fbbf24;
+  --ems-color-status-confirmed: #34d399;
+  --ems-color-status-active: #38bdf8;
+  --ems-color-status-retired: #8b97a5;
+  --ems-color-status-unknown: #64748b;
+  --ems-color-status-stale: #fb923c;
+
+  /* ── Color · 語意 ───────────────────────────────────────────── */
+  --ems-color-ok: #34d399;
+  --ems-color-warn: #fbbf24;
+  --ems-color-danger: #f87171;
+  --ems-color-info: #38bdf8;
+
+  /* ── Color · 量測域（FR-520：electricity / factory） ────────── */
+  --ems-color-domain-electricity: #38bdf8;
+  --ems-color-domain-factory: #f59e0b;
+
+  /* ── Color · AI 信心區帶（FR-510：low < 0.5 ≤ medium < 0.8 ≤ high） */
+  --ems-color-confidence-low: #f87171;
+  --ems-color-confidence-medium: #fbbf24;
+  --ems-color-confidence-high: #34d399;
+
+  /* ── Color · 圖表（charts/theme.ts 讀取；ECharts 全面套用） ── */
+  --ems-color-chart-1: #38bdf8;
+  --ems-color-chart-2: #34d399;
+  --ems-color-chart-3: #fbbf24;
+  --ems-color-chart-4: #a78bfa;
+  --ems-color-chart-5: #fb7185;
+  --ems-color-chart-6: #2dd4bf;
+  --ems-color-chart-grid: #1c2530;
+  --ems-color-chart-axis: #9aa7b4;
+
+  /* ── Typography（不抓外部 webfont；以系統字型疊代退化） ────── */
+  --ems-font-sans: "Inter", "Noto Sans TC", "PingFang TC", "Microsoft JhengHei",
+    system-ui, -apple-system, "Segoe UI", sans-serif;
+  --ems-font-mono: "IBM Plex Mono", "JetBrains Mono", ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+  --ems-text-xs: 0.75rem;
+  --ems-text-sm: 0.875rem;
+  --ems-text-base: 1rem;
+  --ems-text-lg: 1.125rem;
+  --ems-text-xl: 1.375rem;
+  --ems-text-2xl: 1.75rem;
+  --ems-font-weight-regular: 400;
+  --ems-font-weight-medium: 500;
+  --ems-font-weight-semibold: 600;
+  --ems-font-weight-bold: 700;
+  --ems-leading-tight: 1.2;
+  --ems-leading-base: 1.5;
+  --ems-tracking-wide: 0.04em;
+
+  /* ── Spacing（4px 基準刻度） ────────────────────────────────── */
+  --ems-space-1: 0.25rem;
+  --ems-space-2: 0.5rem;
+  --ems-space-3: 0.75rem;
+  --ems-space-4: 1rem;
+  --ems-space-5: 1.5rem;
+  --ems-space-6: 2rem;
+  --ems-space-7: 3rem;
+  --ems-space-8: 4rem;
+
+  /* ── Radius（Precise：小圓角；覆寫 shadcn 預設 0.5rem） ────── */
+  --ems-radius-sm: 2px;
+  --ems-radius-md: 4px;
+  --ems-radius-lg: 8px;
+  --ems-radius-full: 9999px;
+
+  /* ── Shadow / Glow（Alive：低調發光，非 Material 浮起） ────── */
+  --ems-shadow-card: 0 1px 2px rgba(0, 0, 0, 0.5), 0 0 0 1px var(--ems-color-border);
+  --ems-shadow-raised: 0 8px 24px rgba(0, 0, 0, 0.45);
+  --ems-glow-accent: 0 0 12px rgba(56, 189, 248, 0.35);
+
+  /* ── Motion（§6.4 限定六類使用場景；duration / easing 一律引用） */
+  --ems-motion-duration-fast: 120ms;
+  --ems-motion-duration-base: 200ms;
+  --ems-motion-duration-slow: 320ms;
+  --ems-motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ems-motion-ease-emphasized: cubic-bezier(0.32, 0.72, 0, 1);
+
+  /* ── Focus ring（FR-532 a11y；鍵盤導航可視焦點） ───────────── */
+  --ems-focus-ring: 0 0 0 2px var(--ems-color-bg), 0 0 0 4px var(--ems-color-accent);
+}
