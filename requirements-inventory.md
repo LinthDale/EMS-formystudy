@@ -54,6 +54,8 @@ Workflow `.github/workflows/ci.yml`（PRD-0005 P1 起；API 契約治理機械�
 | local build | `services/simulator/Dockerfile` | `simulator` |
 | local build | `external/kc_modbus_mcp/Dockerfile` | `kc-modbus-sim`, `kc-mcp-server` |
 | local build | `external/kc_iot_gateway/Dockerfile` | `kc-mqtt-sim` |
+| `nginx` | `1.27-alpine` | `frontend-prod`（serve 階段）|
+| local build | `frontend/Dockerfile` | `frontend-prod`（多階段 node build → nginx）|
 
 ## Python Runtime Dependencies
 
@@ -221,3 +223,5 @@ Node.js `>=20`（dev 機實測 v24）、npm `>=10`。`cd frontend && npm ci && n
 Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@15`, `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `@fontsource/inter`, `@fontsource/space-grotesk`, `@fontsource/noto-sans-tc`, `@fontsource/jetbrains-mono`（自託管開源字體，離線無 CDN；§6.4 可調整/可擴充 typography）
 
 Dev：`vite@7`, `typescript@5.8`, `tailwindcss@4`(+`@tailwindcss/vite`), `vitest@3`(+`@vitest/coverage-v8`), `@testing-library/{react,jest-dom,user-event}`, `jsdom`, `openapi-typescript`（`npm run gen:api` 由 `api/openapi.yml` 生成型別，§13.2 禁手刻）
+
+Prod 服務：`frontend/Dockerfile`（多階段 node build → `nginx:1.27-alpine`）服務靜態 build，注入 §9.5 安全標頭（CSP/HSTS/X-Frame-Options/nosniff/Referrer-Policy）並同源代理 `/api`→BFF；CI `frontend-unit` job 跑 `npm run coverage`（line/stmt/branch 80% 門檻；字體 subset 收斂後 dist CSS gzip ≈ 5.6KB）。

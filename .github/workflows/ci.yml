@@ -99,9 +99,9 @@ jobs:
       - name: Install deps
         working-directory: frontend
         run: npm ci
-      - name: Test (vitest)
+      - name: Test + coverage (vitest, 80% line/stmt/branch thresholds)
         working-directory: frontend
-        run: npm test
+        run: npm run coverage
       - name: Build
         working-directory: frontend
         run: npm run build

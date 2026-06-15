@@ -42,6 +42,19 @@ export default defineConfig({
         "src/**/__tests__/**",
         "src/vite-env.d.ts",
       ],
+      // 覆蓋率下限（code review MED）：對齊 project_rules.md §10「FastAPI endpoint 80%」精神，
+      // 前端 line/statement/branch 同採 80% 為硬下限，CI 在 frontend-unit job 跑 `npm run coverage` 強制。
+      //
+      // functions 刻意「不」設 80%：src/api/client.ts 的 mutating 樁方法
+      // （createDevice/updateDevice/confirm/override/reject…）在 P1 僅以 EmsApiNotWiredError 佔位，
+      // 要等 BFF 實際接線（§8.2「BFF 對外 facade 屬本 PRD 實作面」）才會被測試行使，
+      // 故全專案 functions ≈ 74%。設一個務實下限 70% 防回歸，待 live wiring 後再升至 80%。
+      thresholds: {
+        lines: 80,
+        statements: 80,
+        branches: 80,
+        functions: 70,
+      },
     },
   },
 });

@@ -122,6 +122,7 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | 裝置登錄 MCP (device-service-mcp) | 127.0.0.1:8766 (本機) | device-service 的 MCP endpoint，AI 通道讀取 / 重跑分類工具 |
 | BFF (bff) | 127.0.0.1:8003 (本機) | 瀏覽器↔後端唯一通道：session/CSRF/role→key 注入（PRD-0005 §9）|
 | 自建前端 (frontend) | 5173 (dev) | React/Vite 產品 UI；經同源 BFF /api 取數，零瀏覽器金鑰；字體自託管 @fontsource（Inter / Space Grotesk / Noto Sans TC / JetBrains Mono，後台可切換、繁中以 Noto Sans TC 補字，離線無 CDN）（PRD-0005 §6.4）|
+| 前端正式服務 (frontend-prod) | 127.0.0.1:8080 (prod profile) | nginx 服務 SPA 靜態 build；注入 §9.5 安全標頭（CSP/HSTS/X-Frame/Referrer/nosniff）+ 同源代理 /api→BFF（PRD-0005 §9.5）|
 
 ## 快速入口
 

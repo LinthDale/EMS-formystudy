@@ -3,29 +3,57 @@
  *
  * 來源：@fontsource/* npm 套件（woff2 隨 bundle 出貨，執行期不打外部網路）。
  * 與 styles/fonts.ts 註冊表一一對應：新增字體時，於 fonts.ts 加條目並在此引入對應 @fontsource。
- * 僅引入設計系統實際用到的字重（tokens.css --ems-font-weight-* = 400/500/600/700），
- * 控制 bundle 大小（NFR LCP）。
  *
- * 字重對照（tokens.css）：regular 400 / medium 500 / semibold 600 / bold 700。
+ * ── Bundle CSS 子集優化（code review：~180KB → 小）─────────────────────────
+ * 過去採 @fontsource 的「全字集」入口（如 `noto-sans-tc/400.css`），會一次拉進
+ * latin / latin-ext / cyrillic / vietnamese 以及約 100 個切片的繁中 CJK @font-face
+ * （每字重 105 條 @font-face）→ dist CSS 約 441KB raw / 180KB gzip，絕大多數是
+ * 本 zh-Hant + 英數 UI 永遠用不到的語系（日文不存在於 TC，反而是 cyrillic/greek/越南文）。
+ *
+ * 優化策略（保留全繁中覆蓋，只砍用不到的語系與字重）：
+ *   - 改用「per-subset / per-weight」入口，僅保留 `latin`（+ `latin-ext` 給重音/歐語符號）
+ *     與 Noto 的 `chinese-traditional`；丟棄 cyrillic / greek / vietnamese。
+ *   - Noto 的 `chinese-traditional-{weight}.css` 是「單一 @font-face」（一顆完整 TC woff2，
+ *     非 ~100 切片）→ 繁中覆蓋 100% 不縮水，但 CSS 從上百條降到每字重 2 條。
+ *   - 字重只留設計系統實際用到者：
+ *       sans/display（Inter / Space Grotesk）：400/500/600/700（body 400、font-medium 500、
+ *         font-semibold 600、font-bold 700 — 皆有 component 實際使用）。
+ *       Noto Sans TC（CJK fallback）：400/500/700（每字重 woff2 ~1MB，semibold 退化為 500/700 可接受）。
+ *       JetBrains Mono（量測值 / tooltip / 軸標，無中文）：400/500。
+ *
+ * 字重對照（tokens.css --ems-font-weight-*）：regular 400 / medium 500 / semibold 600 / bold 700。
+ * 注意：執行期 woff2 仍由瀏覽器依 unicode-range / 字重「按需」載入；本檔只控制「CSS 大小 + 候選語系」。
  */
 
-/* Inter（預設 sans，role=sans） */
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
+/* Inter（預設 sans，role=sans）— latin + latin-ext（重音字），無 cyrillic/greek/vietnamese */
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-600.css";
+@import "@fontsource/inter/latin-700.css";
+@import "@fontsource/inter/latin-ext-400.css";
+@import "@fontsource/inter/latin-ext-500.css";
+@import "@fontsource/inter/latin-ext-600.css";
+@import "@fontsource/inter/latin-ext-700.css";
 
-/* Space Grotesk（display / 品牌幾何，role=display） */
-@import "@fontsource/space-grotesk/400.css";
-@import "@fontsource/space-grotesk/500.css";
-@import "@fontsource/space-grotesk/600.css";
-@import "@fontsource/space-grotesk/700.css";
+/* Space Grotesk（display / 品牌幾何，role=display）— latin + latin-ext */
+@import "@fontsource/space-grotesk/latin-400.css";
+@import "@fontsource/space-grotesk/latin-500.css";
+@import "@fontsource/space-grotesk/latin-600.css";
+@import "@fontsource/space-grotesk/latin-700.css";
+@import "@fontsource/space-grotesk/latin-ext-400.css";
+@import "@fontsource/space-grotesk/latin-ext-500.css";
+@import "@fontsource/space-grotesk/latin-ext-600.css";
+@import "@fontsource/space-grotesk/latin-ext-700.css";
 
-/* Noto Sans TC（繁中 CJK 覆蓋，role=sans/cjk）— Inter 不覆蓋繁體中文字形 */
-@import "@fontsource/noto-sans-tc/400.css";
-@import "@fontsource/noto-sans-tc/500.css";
-@import "@fontsource/noto-sans-tc/700.css";
+/* Noto Sans TC（繁中 CJK 覆蓋，role=sans/cjk）— Inter 不覆蓋繁體中文字形。
+   latin（基本英數）+ chinese-traditional（完整繁中，單一 @font-face）；丟棄 cyrillic/vietnamese。 */
+@import "@fontsource/noto-sans-tc/latin-400.css";
+@import "@fontsource/noto-sans-tc/latin-500.css";
+@import "@fontsource/noto-sans-tc/latin-700.css";
+@import "@fontsource/noto-sans-tc/chinese-traditional-400.css";
+@import "@fontsource/noto-sans-tc/chinese-traditional-500.css";
+@import "@fontsource/noto-sans-tc/chinese-traditional-700.css";
 
-/* JetBrains Mono（等寬，role=mono）— 量測值 / tooltip / 軸標 */
-@import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/500.css";
+/* JetBrains Mono（等寬，role=mono）— 量測值 / tooltip / 軸標，純英數，僅 latin */
+@import "@fontsource/jetbrains-mono/latin-400.css";
+@import "@fontsource/jetbrains-mono/latin-500.css";
