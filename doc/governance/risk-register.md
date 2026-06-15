@@ -170,6 +170,17 @@
 | 觸發 ADR | ADR-007 |
 | 狀態 | **Mitigated（文件已校正，實作改造待規劃）** |
 
+### R-015：BFF 本地憑證雜湊強度不足（已緩解）
+
+| 欄位 | 內容 |
+|------|------|
+| 機率 / 衝擊 | L / M |
+| 描述 | BFF P1 以 SHA-256（無 salt、快速雜湊）儲存本地登入密碼；env 外洩時可離線爆破 |
+| 緩解 | 已完成：改 argon2id（`argon2-cffi`，PHC 內嵌 salt+成本參數），constant-work + dummy verify 抗枚舉；密碼僅存 `.env`；提供 `python -m bff.hashpw` 產雜湊 |
+| Owner | EMS team |
+| 觸發 ADR | ADR-024 |
+| 狀態 | **Closed（緩解）** — argon2id 已上線（`services/bff/`，測試覆蓋）；長期改接 OIDC（Phase-1）徹底移除 BFF 自管密碼 |
+
 ---
 
 ## 統計摘要
@@ -179,12 +190,12 @@
 | P0 | 2 |
 | P1 | 4 |
 | P2 | 4 |
-| P3 | 3 |
-| 總計 | **13** |
+| P3 | 4 |
+| 總計 | **14** |
 
 | 狀態 | 數量 |
 |------|-----|
 | Open | 9 |
 | Mitigated | 3 |
 | Accepted | 1 |
-| Closed | 0 |
+| Closed | 1 |

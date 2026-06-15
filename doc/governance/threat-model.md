@@ -114,6 +114,9 @@
 | T-23 | **Tampering (CSRF)** | 跨站觸發 mutating `/api` 路由 | 高 | SameSite=Strict + Origin allowlist middleware（deny-by-default，含 login）|
 | T-24 | **Elevation of Privilege** | INGEST/READONLY session 經 BFF 持有之 OPS key 提權 | 高 | endpoint 級 role authz（負向測試鎖定）；role 變更即 revoke；READONLY 無 key 通道 |
 | T-25 | **Information Disclosure** | 上游 401/403 / 錯誤洩漏 key 或拓樸 | 中 | upstream 401/403→502；error body 無 key/host；log 不記 key/cookie |
+| T-26 | **Information Disclosure / Credential** | BFF 本地憑證以快速雜湊（SHA-256 無 salt）儲存，env 外洩即可離線爆破 | 中 | ✅ 已緩解：改 **argon2id**（PHC 內嵌 salt+成本參數，memory-hard）；僅存 .env；constant-work + dummy verify 抗枚舉（`bff/credentials.py`，ADR-024）|
+
+> T-26 戰略緩解：長期改接企業 IdP / OIDC（`BFF_AUTH_MODE=oidc`，Phase-1），BFF 不再自管密碼；argon2id 為無 IdP 環境的 fallback。見 ADR-024。
 
 > T-08 強化：§9.3 決策後，PostgREST 唯一瀏覽器讀取面 = BFF（:3001 維持內網）。
 

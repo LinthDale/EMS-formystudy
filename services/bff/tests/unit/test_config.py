@@ -8,7 +8,7 @@ from pydantic import ValidationError
 
 from bff.config import Settings
 from bff.main import create_app
-from tests.conftest import make_settings, sha
+from tests.conftest import make_settings, phc
 
 
 def test_idle_timeout_cannot_exceed_max_lifetime():
@@ -29,13 +29,14 @@ def test_malformed_auth_users_fails_fast_at_startup():
 
 
 def test_unknown_role_in_auth_users_fails_fast():
-    bad = f"root:{sha('pw')}:superadmin"
+    bad = f"root:{phc('pw')}:superadmin"
     with pytest.raises(ValueError):
         create_app(settings=make_settings(auth_users=bad))
 
 
 def test_bad_password_hash_in_auth_users_fails_fast():
-    bad = "ops_user:nothex:ops"
+    # a SHA-256-style hex digest is no longer an accepted hash (argon2id PHC only)
+    bad = "ops_user:" + ("a" * 64) + ":ops"
     with pytest.raises(ValueError):
         create_app(settings=make_settings(auth_users=bad))
 

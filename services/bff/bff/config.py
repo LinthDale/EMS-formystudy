@@ -83,6 +83,9 @@ class Settings(BaseSettings):
     postgrest_url: str = "http://query:3000"
     upstream_timeout_s: float = 10.0
 
+    # --- auth provider (ADR-024): local argon2id fallback (default) | oidc (P1 stub) ---
+    auth_mode: str = "local"  # "local" -> argon2id user table; "oidc" -> IdP (Phase-1)
+
     # --- session (PRD-0005 §9.2 [必過]) ---
     session_cookie_name: str = "ems_bff_session"
     session_cookie_secure: bool = True  # disable only for local plain-http dev
@@ -101,7 +104,15 @@ class Settings(BaseSettings):
     # --- secrets: env/.env ONLY (SECRET_FIELDS blocks TOML) ---
     ops_api_key: str = ""      # device-service OPS channel (FR-310)
     ingest_api_key: str = ""   # device-service INGEST channel (FR-310)
-    auth_users: str = ""       # "username:sha256hex:role" csv (skeleton credential store)
+    auth_users: str = ""       # "username:<argon2id PHC>:role" csv (local fallback, ADR-024)
+
+    @field_validator("auth_mode")
+    @classmethod
+    def _known_auth_mode(cls, v: str) -> str:
+        mode = v.strip().lower()
+        if mode not in {"local", "oidc"}:
+            raise ValueError("auth_mode must be 'local' or 'oidc'")
+        return mode
 
     @field_validator("session_max_lifetime_s", "session_idle_timeout_s")
     @classmethod

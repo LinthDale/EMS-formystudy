@@ -19,6 +19,7 @@ from typing import Callable
 import httpx
 from fastapi import FastAPI
 
+from .auth_providers import build_auth_provider
 from .config import Settings
 from .credentials import parse_auth_users
 from .routes import auth, devices, health, measurements
@@ -36,10 +37,12 @@ def create_app(
     logging.basicConfig(level=settings.log_level.upper())
 
     users = parse_auth_users(settings.auth_users)  # fail fast on malformed table
-    if not users:
+    if not users and settings.auth_mode == "local":
         logging.getLogger("bff").warning(
-            "BFF_AUTH_USERS is empty - no login possible (fail closed)"
+            "BFF_AUTH_USERS is empty - no local login possible (fail closed)"
         )
+    # Select the auth provider by config (ADR-024); fail fast on unknown mode.
+    auth_provider = build_auth_provider(settings, users)
 
     @asynccontextmanager
     async def lifespan(app: FastAPI):
@@ -61,6 +64,7 @@ def create_app(
     )
     app.state.settings = settings
     app.state.users = users
+    app.state.auth_provider = auth_provider
     app.state.session_manager = SessionManager(InMemorySessionStore(), settings, clock)
 
     app.add_middleware(OriginCSRFMiddleware, allowed_origins=settings.allowed_origins)

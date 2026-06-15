@@ -69,6 +69,8 @@
 | 量測預設 / 上限 limit | `BFF_MEASUREMENTS_DEFAULT_LIMIT` / `BFF_MEASUREMENTS_MAX_LIMIT` | 100 / 1000 | rows | ✅ | 收緊於 openapi 上限 |
 | Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單；**dev（compose）預設含 `http://localhost:5173`（前端 origin），否則 vite-proxied 的 login/POST 會被擋** |
 | log level | `BFF_LOG_LEVEL` | INFO | — | ✅ | |
+| 認證模式 | `BFF_AUTH_MODE` | local | — | ✅ | local=argon2id 本地表（fallback）/ oidc=企業 IdP（Phase-1 stub→503）；ADR-024 |
+| 本地使用者表格式 | `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；`user:<argon2id PHC>:role`，**`;` 分隔**；`python -m bff.hashpw` 產生；ADR-024 |
 | OPS / INGEST channel key、auth users | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
 | cookie 屬性（HttpOnly/Secure/SameSite=Strict）| — | — | — | 🔒 | §9.2；放寬走 ADR-023 |
 | role→至多一 key 通道、AI 通道禁入 BFF | — | — | — | 🔒 | §9.1；放寬走 ADR-023 |

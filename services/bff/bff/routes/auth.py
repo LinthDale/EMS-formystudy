@@ -11,7 +11,6 @@ from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel, Field
 
-from .. import credentials
 from ..roles import Role
 from ..security import clear_session_cookie, current_session, issue_session_cookie
 from ..sessions import Session
@@ -31,7 +30,16 @@ class RoleChangeRequest(BaseModel):
 @router.post("/login")
 async def login(body: LoginRequest, request: Request) -> Response:
     settings = request.app.state.settings
-    role = credentials.verify(request.app.state.users, body.username, body.password)
+    # Provider selected at startup by BFF_AUTH_MODE (ADR-024): local argon2id
+    # (now) or OIDC (Phase-1 stub). Everything below is provider-agnostic.
+    try:
+        role = request.app.state.auth_provider.authenticate(body.username, body.password)
+    except NotImplementedError as exc:
+        # OIDC mode selected but not yet integrated (Phase-1). Fail closed with a
+        # capability error — never silently fall back to an insecure path.
+        raise HTTPException(
+            status_code=503, detail="auth provider not available"
+        ) from exc
     if role is None:
         # identical answer for unknown user / wrong password (no enumeration)
         raise HTTPException(status_code=401, detail="invalid credentials")

@@ -6,10 +6,9 @@ injectable fake clock (session expiry without sleeps, project_rules §11).
 """
 from __future__ import annotations
 
-import hashlib
-
 import httpx
 import pytest
+from argon2 import PasswordHasher
 from fastapi.testclient import TestClient
 
 from bff.config import Settings
@@ -22,15 +21,21 @@ ORIGIN = "https://testserver"
 MAX_LIFETIME_S = 28800   # 8 h
 IDLE_TIMEOUT_S = 1800    # 30 min
 
+# Fast argon2id params FOR TESTS ONLY (real cost lives in production hashes). The
+# PHC string still embeds the algorithm id + params, so credentials.verify treats
+# these exactly like any other argon2id hash — only the work factor differs.
+_TEST_HASHER = PasswordHasher(time_cost=1, memory_cost=8, parallelism=1)
 
-def sha(pw: str) -> str:
-    return hashlib.sha256(pw.encode()).hexdigest()
+
+def phc(pw: str) -> str:
+    """Return a genuine (low-cost) argon2id PHC hash for a test password."""
+    return _TEST_HASHER.hash(pw)
 
 
-AUTH_USERS = ",".join([
-    f"ops_user:{sha('ops-pw')}:ops",
-    f"ing_user:{sha('ing-pw')}:ingest",
-    f"view_user:{sha('view-pw')}:readonly",
+AUTH_USERS = ";".join([
+    f"ops_user:{phc('ops-pw')}:ops",
+    f"ing_user:{phc('ing-pw')}:ingest",
+    f"view_user:{phc('view-pw')}:readonly",
 ])
 
 

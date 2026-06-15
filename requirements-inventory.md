@@ -144,6 +144,7 @@ uvicorn[standard]>=0.30,<1.0
 httpx>=0.27,<1.0
 pydantic>=2.7,<3.0
 pydantic-settings>=2.3,<3.0
+argon2-cffi>=23.1,<25.0
 ```
 
 Dev：`pytest>=8.0`、`pytest-cov>=5.0`（`docker build --target test -t ems-bff-test services/bff`）
