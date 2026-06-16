@@ -19,6 +19,13 @@ RUN npm ci
 COPY . .
 RUN npm run build
 
+# woff2-only prod artifact (review P2): all target browsers support woff2; the
+# @fontsource subset CSS also lists .woff as a fallback, but dropping the .woff
+# files trims several MB of dead weight (esp. ~1.4 MB/weight for the CJK font).
+# Modern browsers pick the woff2 src (listed first); the unused .woff src 404s
+# only for pre-2016 browsers we don't target.
+RUN find dist -name '*.woff' -type f -delete
+
 # ── Stage 2: serve ─────────────────────────────────────────────────────────────
 # nginx alpine：只帶靜態 dist + 我們的 nginx.conf；不含 node / 原始碼 / 金鑰。
 FROM nginx:1.27-alpine AS serve

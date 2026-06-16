@@ -181,6 +181,17 @@
 | 觸發 ADR | ADR-024 |
 | 狀態 | **Closed（緩解）** — argon2id 已上線（`services/bff/`，測試覆蓋）；長期改接 OIDC（Phase-1）徹底移除 BFF 自管密碼 |
 
+### R-016：前端 dev-toolchain npm audit high findings（dev-only，追蹤中）
+
+| 欄位 | 內容 |
+|------|------|
+| 機率 / 衝擊 | L / L |
+| 描述 | `npm audit`（含 dev）回報約 9 項 high，集中在 Vite / Vitest / esbuild / openapi 等 **dev-toolchain**；`npm audit --omit=dev` 乾淨（runtime 相依無 high）。不影響 prod artifact（nginx 只服務靜態 build，image 不含 node_modules） |
+| 緩解 | 追蹤上游修補、定期 `npm audit fix`（dev）；收緊供應鏈 gate（如 CI 加 `npm audit --omit=dev` 門檻）前先清掉或豁免 dev 項 |
+| Owner | EMS team |
+| 觸發 ADR | — |
+| 狀態 | **Open（追蹤）** — prod runtime 不受影響；dev-toolchain 待上游修補 / 升級 |
+
 ---
 
 ## 統計摘要
@@ -190,12 +201,12 @@
 | P0 | 2 |
 | P1 | 4 |
 | P2 | 4 |
-| P3 | 4 |
-| 總計 | **14** |
+| P3 | 5 |
+| 總計 | **15** |
 
 | 狀態 | 數量 |
 |------|-----|
-| Open | 9 |
+| Open | 10 |
 | Mitigated | 3 |
 | Accepted | 1 |
 | Closed | 1 |

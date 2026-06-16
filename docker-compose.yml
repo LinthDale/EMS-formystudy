@@ -263,7 +263,7 @@ services:
       BFF_OPS_API_KEY: ${OPS_API_KEY:-}        # reuse device-service channel secrets
       BFF_INGEST_API_KEY: ${INGEST_API_KEY:-}  # AI key deliberately NOT passed (PRD-0005 §1/§6.1)
       BFF_AUTH_USERS: ${BFF_AUTH_USERS:-}      # "user:sha256hex:role,..." (.env only)
-      BFF_PUBLIC_ORIGINS: ${BFF_PUBLIC_ORIGINS:-http://localhost:5173,http://localhost:8003,http://localhost:8080}  # dev:5173 (vite proxy) + prod-profile:8080 (nginx) origins for CSRF allowlist; real prod sets its domain via env
+      BFF_PUBLIC_ORIGINS: ${BFF_PUBLIC_ORIGINS:-http://localhost:5173,http://localhost:8003,http://localhost:8080,http://127.0.0.1:5173,http://127.0.0.1:8003,http://127.0.0.1:8080}  # localhost + 127.0.0.1 variants for 5173(vite)/8003(BFF)/8080(nginx); ports bind 127.0.0.1 so both hostnames reach the same service — Origin must match either. Real prod sets its domain via env
       BFF_SESSION_COOKIE_SECURE: ${BFF_SESSION_COOKIE_SECURE:-true}  # false only for plain-http local dev
     volumes:
       - ./services/bff/config:/app/config:ro
