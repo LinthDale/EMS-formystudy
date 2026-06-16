@@ -20,6 +20,29 @@ export const zhHant = {
     gallery: "元件展示",
     primary: "主導覽",
   },
+  auth: {
+    login: {
+      title: "登入 SynaIQ EMS",
+      subtitle: "請以 BFF 帳號登入（session 經同源 cookie，金鑰不進瀏覽器）",
+      username: "帳號",
+      password: "密碼",
+      submit: "登入",
+      submitting: "登入中…",
+      invalidCredentials: "帳號或密碼錯誤，請重試。",
+      unavailable: "登入服務暫時無法使用，請稍後再試。",
+      genericError: "登入失敗，請稍後再試。",
+    },
+    session: {
+      checking: "驗證登入狀態…",
+      roleLabel: "角色",
+      role: {
+        ops: "維運",
+        ingest: "資料匯入",
+        readonly: "唯讀",
+      },
+      logout: "登出",
+    },
+  },
   device: {
     status: {
       candidate: "候選",

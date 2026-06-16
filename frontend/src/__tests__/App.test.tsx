@@ -12,7 +12,8 @@ import { renderRoute } from "@/test/render-route";
 describe("App shell", () => {
   it("渲染 banner / nav / main landmark 與品牌字串（a11y FR-532）", async () => {
     renderRoute({ path: "/" });
-    expect(screen.getByRole("banner")).toBeInTheDocument();
+    // RequireAuth 守衛先解析 session（mock 已驗證）後才掛 shell — 等 banner 出現。
+    expect(await screen.findByRole("banner")).toBeInTheDocument();
     expect(screen.getByRole("navigation", { name: "主導覽" })).toBeInTheDocument();
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByText("SynaIQ EMS")).toBeInTheDocument();

@@ -2,6 +2,7 @@
  * 路由路徑常數（單一真相；頁面 / 導覽 / 測試共用，禁止散落字串）。
  */
 export const ROUTES = {
+  login: "/login",
   devices: "/devices",
   device: "/devices/:deviceId",
   queue: "/queue",
