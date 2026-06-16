@@ -17,14 +17,17 @@ import type {
   DeviceRow,
   DeviceUpdate,
   DigestOut,
-  FactoryMeasurement,
   ListDevicesQuery,
   Measurement,
-  MeasurementDomain,
   MeasurementsQuery,
   SignalOut,
 } from "./types";
-import { MOCK_DEVICES, MOCK_REVIEW_DIGEST, MOCK_SIGNALS } from "./fixtures";
+import {
+  MOCK_DEVICE_MEASUREMENTS,
+  MOCK_DEVICES,
+  MOCK_REVIEW_DIGEST,
+  MOCK_SIGNALS,
+} from "./fixtures";
 import { sortDevices } from "@/lib/device-sort";
 
 /** 同源 BFF base path（§9.3：全部讀寫經 BFF，零瀏覽器 CORS 面） */
@@ -60,18 +63,22 @@ export function buildListDevicesPath(query: ListDevicesQuery = {}): string {
   return `${BFF_BASE_PATH}/devices${qs ? `?${qs}` : ""}`;
 }
 
-/** 量測 query 組裝 — 路徑對齊 BFF route `/api/measurements/{domain}`（§9.3；BFF 轉 PostgREST
- *  api.{domain}_measurements view）。query 用 PostgREST 運算子（device_id=eq. / time=gte.），由 BFF 驗證後轉發 */
+/**
+ * 量測 query 組裝 — per-device facade（與 BFF agent 約定的對外契約）：
+ *   `GET /api/devices/{id}/measurements?since=&limit=&order=`
+ * device_id 走 path（URL-encode）；since/limit/order 為對外 facade 參數，
+ * 由 BFF 驗證後轉發至量測唯讀面（§9.3：經 BFF，瀏覽器零直連）。
+ * 鍵序固定（since→limit→order），對齊契約測試。
+ */
 export function buildMeasurementsPath(
-  domain: MeasurementDomain,
+  deviceId: string,
   query: MeasurementsQuery = {},
 ): string {
   const params = new URLSearchParams();
-  if (query.deviceId !== undefined) params.set("device_id", `eq.${query.deviceId}`);
-  if (query.since !== undefined) params.set("time", `gte.${query.since}`);
-  params.set("order", query.order ?? "time.desc");
+  if (query.since !== undefined) params.set("since", query.since);
   if (query.limit !== undefined) params.set("limit", String(query.limit));
-  return `${BFF_BASE_PATH}/measurements/${domain}?${params.toString()}`;
+  params.set("order", query.order ?? "desc");  // facade product semantics: asc|desc (ADR-025), BFF maps to PostgREST time.{asc,desc}
+  return `${devicePath(deviceId, "/measurements")}?${params.toString()}`;
 }
 
 /** device_id 進 path 前一律 URL-encode（防 path injection） */
@@ -99,8 +106,11 @@ export interface EmsApiClient {
   overrideDevice(deviceId: string, body: unknown): Promise<DeviceOut>;
   rejectDevice(deviceId: string): Promise<DeviceOut>;
   createCorrection(deviceId: string, body: CorrectionCreate): Promise<CorrectionOut>;
-  listElectricityMeasurements(query?: MeasurementsQuery): Promise<Measurement[]>;
-  listFactoryMeasurements(query?: MeasurementsQuery): Promise<FactoryMeasurement[]>;
+  /** per-device facade（§9.3）：`GET /api/devices/{id}/measurements?since=&limit=&order=` */
+  listDeviceMeasurements(
+    deviceId: string,
+    query?: MeasurementsQuery,
+  ): Promise<Measurement[]>;
 }
 
 /**
@@ -133,13 +143,9 @@ export function createEmsApiClient(fetcher: Fetcher = notWiredFetcher): EmsApiCl
       fetcher(devicePath(deviceId, "/reject"), postJson()) as Promise<DeviceOut>,
     createCorrection: (deviceId, body) =>
       fetcher(devicePath(deviceId, "/corrections"), postJson(body)) as Promise<CorrectionOut>,
-    listElectricityMeasurements: (query) =>
-      fetcher(buildMeasurementsPath("electricity", query), undefined) as Promise<
+    listDeviceMeasurements: (deviceId, query) =>
+      fetcher(buildMeasurementsPath(deviceId, query), undefined) as Promise<
         Measurement[]
-      >,
-    listFactoryMeasurements: (query) =>
-      fetcher(buildMeasurementsPath("factory", query), undefined) as Promise<
-        FactoryMeasurement[]
       >,
   };
 }
@@ -167,22 +173,50 @@ function applyDeviceQuery(
 }
 
 /**
+ * 純函數：以新狀態回傳設備的樂觀更新副本（不改變輸入；immutability）。
+ * mock 不持久化於 DB（P1 mock 唯一資料源），僅回傳「後端會回的 DeviceOut」形狀，
+ * 供 UI 樂觀更新（AC-3）。override 額外帶 classified_by=manual_override + device_type。
+ */
+export function applyDeviceTransition(
+  device: DeviceOut,
+  patch: Partial<DeviceOut>,
+): DeviceOut {
+  return { ...device, ...patch };
+}
+
+function findDeviceOrReject(deviceId: string): DeviceOut {
+  const found = MOCK_DEVICES.find((d) => d.device_id === deviceId);
+  if (!found) throw new Error(`mock: device ${deviceId} 不存在`);
+  return clone(found);
+}
+
+/**
  * Mock client（P1 唯一資料源）：固定 fixtures、零網路；
  * 語義對齊後端契約（filter / allowlist 排序 NULLS LAST / bare-array 分頁）。
  * 每次回傳深拷貝 — 呼叫端變更不汙染 fixtures（immutability）。
+ * mutating 動作（confirm/override/reject）以樂觀方式回傳「後端會回的」DeviceOut
+ * 新副本（mock 不寫回 fixtures；持久化於 live BFF 接線後交付 — §8.2）。
  */
 export function createMockEmsApiClient(): EmsApiClient {
   const notInMock = (what: string) =>
     Promise.reject(
       new EmsApiNotWiredError(`${what}（mock 未實作 mutating 持久化；P1 展示用）`),
     );
+  const resolveDevice = (deviceId: string, patch: Partial<DeviceOut>) => {
+    try {
+      return Promise.resolve(applyDeviceTransition(findDeviceOrReject(deviceId), patch));
+    } catch (err) {
+      return Promise.reject(err as Error);
+    }
+  };
   return {
     listDevices: (query = {}) => Promise.resolve(applyDeviceQuery(MOCK_DEVICES, query).map(clone)),
     getDevice: (deviceId) => {
-      const found = MOCK_DEVICES.find((d) => d.device_id === deviceId);
-      return found
-        ? Promise.resolve(clone(found))
-        : Promise.reject(new Error(`mock: device ${deviceId} 不存在`));
+      try {
+        return Promise.resolve(findDeviceOrReject(deviceId));
+      } catch (err) {
+        return Promise.reject(err as Error);
+      }
     },
     createDevice: () => notInMock("createDevice") as Promise<DeviceOut>,
     updateDevice: () => notInMock("updateDevice") as Promise<DeviceOut>,
@@ -190,11 +224,19 @@ export function createMockEmsApiClient(): EmsApiClient {
       Promise.resolve(MOCK_SIGNALS.filter((s) => s.device_id === deviceId).map(clone)),
     getHumanReview: (deviceId) =>
       Promise.resolve({ ...clone(MOCK_REVIEW_DIGEST), device_id: deviceId }),
-    confirmDevice: () => notInMock("confirmDevice") as Promise<DeviceOut>,
-    overrideDevice: () => notInMock("overrideDevice") as Promise<DeviceOut>,
-    rejectDevice: () => notInMock("rejectDevice") as Promise<DeviceOut>,
+    confirmDevice: (deviceId) =>
+      resolveDevice(deviceId, { status: "confirmed" }),
+    overrideDevice: (deviceId, body) => {
+      const proposed = (body as { device_type?: string } | undefined)?.device_type;
+      return resolveDevice(deviceId, {
+        status: "confirmed",
+        classified_by: "manual_override",
+        ...(proposed !== undefined ? { device_type: proposed } : {}),
+      });
+    },
+    rejectDevice: (deviceId) => resolveDevice(deviceId, { status: "retired" }),
     createCorrection: () => notInMock("createCorrection") as Promise<CorrectionOut>,
-    listElectricityMeasurements: () => Promise.resolve([]),
-    listFactoryMeasurements: () => Promise.resolve([]),
+    listDeviceMeasurements: (deviceId) =>
+      Promise.resolve((MOCK_DEVICE_MEASUREMENTS[deviceId] ?? []).map(clone)),
   };
 }

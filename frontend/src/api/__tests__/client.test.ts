@@ -35,22 +35,28 @@ describe("BFF 路徑組裝", () => {
     expect(buildListDevicesPath()).toBe("/api/devices");
   });
 
-  it("buildMeasurementsPath 以 PostgREST 運算子組 query（device_id=eq. / time=gte.）", () => {
-    const path = buildMeasurementsPath("electricity", {
-      deviceId: "sim-001",
+  it("buildMeasurementsPath 走 per-device facade（device_id 在 path；since/limit/order 在 query）", () => {
+    const path = buildMeasurementsPath("sim-001", {
       since: "2026-06-10T00:00:00Z",
       limit: 100,
     });
-    expect(path).toContain("/api/measurements/electricity?");
-    expect(path).toContain("device_id=eq.sim-001");
-    expect(path).toContain(`time=gte.${encodeURIComponent("2026-06-10T00:00:00Z")}`);
-    expect(path).toContain("order=time.desc");
+    expect(path).toContain("/api/devices/sim-001/measurements?");
+    expect(path).toContain(`since=${encodeURIComponent("2026-06-10T00:00:00Z")}`);
     expect(path).toContain("limit=100");
+    expect(path).toContain("order=desc");
+    // device_id 不再以 query 形式出現（已移至 path）
+    expect(path).not.toContain("device_id=");
   });
 
-  it("factory 域走 /api/measurements/factory", () => {
-    expect(buildMeasurementsPath("factory", {})).toBe(
-      "/api/measurements/factory?order=time.desc",
+  it("buildMeasurementsPath 無 query 時帶預設 order=desc", () => {
+    expect(buildMeasurementsPath("sim-001")).toBe(
+      "/api/devices/sim-001/measurements?order=desc",
+    );
+  });
+
+  it("buildMeasurementsPath device_id 進 path 前先 URL-encode（防 path injection）", () => {
+    expect(buildMeasurementsPath("a/../b")).toBe(
+      "/api/devices/a%2F..%2Fb/measurements?order=desc",
     );
   });
 });
@@ -71,6 +77,12 @@ describe("createEmsApiClient（stub，P1 不接線）", () => {
     expect(fetcher).toHaveBeenCalledWith(
       "/api/devices/mqtt-7f3a/confirm",
       expect.objectContaining({ method: "POST" }),
+    );
+
+    await client.listDeviceMeasurements("sim-001", { limit: 10 });
+    expect(fetcher).toHaveBeenCalledWith(
+      "/api/devices/sim-001/measurements?limit=10&order=desc",
+      undefined,
     );
   });
 
@@ -117,5 +129,42 @@ describe("createMockEmsApiClient（P1 mock 資料源）", () => {
     const review = await client.getHumanReview("mqtt-7f3a");
     expect(review.device_id).toBe("mqtt-7f3a");
     expect(review.summary_source).toBeTruthy();
+  });
+
+  it("confirmDevice 樂觀回傳 status=confirmed（AC-3）", async () => {
+    const client = createMockEmsApiClient();
+    const updated = await client.confirmDevice("mqtt-7f3a");
+    expect(updated.device_id).toBe("mqtt-7f3a");
+    expect(updated.status).toBe("confirmed");
+  });
+
+  it("overrideDevice 改 device_type 並記 classified_by=manual_override（AC-3）", async () => {
+    const client = createMockEmsApiClient();
+    const updated = await client.overrideDevice("mqtt-7f3a", {
+      device_type: "pressure_sensor",
+      signals: [],
+    });
+    expect(updated.status).toBe("confirmed");
+    expect(updated.device_type).toBe("pressure_sensor");
+    expect(updated.classified_by).toBe("manual_override");
+  });
+
+  it("rejectDevice 樂觀回傳 status=retired（AC-3）", async () => {
+    const client = createMockEmsApiClient();
+    const updated = await client.rejectDevice("mqtt-7f3a");
+    expect(updated.status).toBe("retired");
+  });
+
+  it("mutating 動作對不存在 device 仍回 reject（不靜默）", async () => {
+    const client = createMockEmsApiClient();
+    await expect(client.confirmDevice("does-not-exist")).rejects.toBeInstanceOf(Error);
+  });
+
+  it("listDeviceMeasurements 回對應 device 的量測副本；未知 device 回空陣列", async () => {
+    const client = createMockEmsApiClient();
+    const m = await client.listDeviceMeasurements("sim-001");
+    expect(m.length).toBeGreaterThan(0);
+    expect(m.every((row) => row.device_id === "sim-001")).toBe(true);
+    expect(await client.listDeviceMeasurements("plc-001")).toEqual([]);
   });
 });

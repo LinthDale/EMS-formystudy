@@ -53,12 +53,18 @@ export interface DeviceTableProps {
   devices: readonly DeviceRow[];
   /** 每批顯示筆數（§8.1.1 載入更多；預設 25） */
   pageSize?: number;
+  /**
+   * 自訂 device_id 儲存格渲染（例：連結至設備詳情 FR-501）。
+   * 省略時為純文字（向後相容；gallery 等純展示用途）。
+   */
+  renderDeviceId?: (deviceId: string) => React.ReactNode;
   className?: string;
 }
 
 export function DeviceTable({
   devices,
   pageSize = DEFAULT_PAGE_SIZE,
+  renderDeviceId,
   className,
 }: DeviceTableProps) {
   const { t } = useTranslation();
@@ -126,7 +132,9 @@ export function DeviceTable({
                 key={d.device_id}
                 className="border-b border-line transition-colors duration-[var(--ems-motion-duration-fast)] hover:bg-surface-raised"
               >
-                <td className="px-3 py-2 font-mono text-fg">{d.device_id}</td>
+                <td className="px-3 py-2 font-mono text-fg">
+                  {renderDeviceId ? renderDeviceId(d.device_id) : d.device_id}
+                </td>
                 <td className="px-3 py-2 text-fg-secondary">
                   {d.device_type ?? "—"}
                 </td>

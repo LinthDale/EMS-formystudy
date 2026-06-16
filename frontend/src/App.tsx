@@ -1,29 +1,18 @@
 /**
- * App shell（P1 SPA skeleton）— 目前單頁：Design System gallery。
- * P1 後續批次將以 router 掛 設備管理 / 信心佇列 頁（FR-500~513）。
+ * App — 組合根（Wave 1）。
+ * EmsApiProvider（預設 mock client，§9.3 live BFF wiring 屬 Wave 2）包住
+ * RouterProvider（react-router v7）。AppShell + 頁面由 appRoutes 掛載。
  */
-import { useTranslation } from "react-i18next";
-import { GalleryPage } from "@/pages/GalleryPage";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { EmsApiProvider } from "@/api/EmsApiContext";
+import { appRoutes } from "@/app/router";
+
+const router = createBrowserRouter(appRoutes);
 
 export function App() {
-  const { t } = useTranslation();
-
   return (
-    <div className="min-h-screen bg-canvas text-fg">
-      <header
-        role="banner"
-        className="sticky top-0 z-10 border-b border-line bg-surface/90 backdrop-blur"
-      >
-        <div className="mx-auto flex max-w-6xl items-baseline gap-3 px-4 py-3 sm:px-6">
-          <span className="text-base font-bold tracking-wide text-fg">
-            {t("common.appName")}
-          </span>
-          <span className="text-xs text-fg-muted">{t("common.appTagline")}</span>
-        </div>
-      </header>
-      <main role="main" className="mx-auto max-w-6xl px-4 py-6 sm:px-6">
-        <GalleryPage />
-      </main>
-    </div>
+    <EmsApiProvider>
+      <RouterProvider router={router} />
+    </EmsApiProvider>
   );
 }

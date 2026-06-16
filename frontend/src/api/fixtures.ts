@@ -161,3 +161,29 @@ export const MOCK_FACTORY_LATEST: FactoryMeasurement = {
   valve_open: false,
   pressure: 1013,
 };
+
+/**
+ * Per-device 量測樣本（per-device facade `GET /api/devices/{id}/measurements`）。
+ * Wave 1 不渲染量測曲線（FR-520/521 屬 Wave 2），但 mock 先備齊以對齊
+ * facade 契約；確定性 seed、零隨機（可重現）。鍵為 device_id。
+ */
+export const MOCK_DEVICE_MEASUREMENTS: Readonly<Record<string, readonly Measurement[]>> = {
+  "sim-001": [
+    {
+      time: "2026-06-11T02:59:30Z",
+      device_id: "sim-001",
+      voltage: 381.2,
+      current: 105.3,
+      power_kw: 58.7,
+      energy_kwh: 1234.56,
+    },
+    {
+      time: "2026-06-11T02:58:30Z",
+      device_id: "sim-001",
+      voltage: 380.4,
+      current: 104.1,
+      power_kw: 57.9,
+      energy_kwh: 1233.58,
+    },
+  ],
+} as const;

@@ -41,14 +41,17 @@ export interface ListDevicesQuery {
   readonly order?: SortOrder;
 }
 
-/** 量測查詢（PostgREST 契約，經 BFF 轉發 — §9.3） */
+/**
+ * 量測查詢（per-device facade，經 BFF — §9.3）。
+ * 路徑為 `GET /api/devices/{id}/measurements`（device_id 走 path，非 query）；
+ * 此 query 僅承載 since / limit / order（與 BFF 約定的對外 facade 參數）。
+ */
 export interface MeasurementsQuery {
-  readonly deviceId?: string;
-  /** ISO timestamp；轉成 `time=gte.<iso>` */
+  /** ISO timestamp 下界（含）；轉成 `since=<iso>` query */
   readonly since?: string;
   readonly limit?: number;
-  /** PostgREST order 欄位（預設 time.desc） */
-  readonly order?: string;
+  /** 排序方向（facade 產品語意 asc|desc，預設 desc；BFF 轉 PostgREST time.{asc,desc}；ADR-025） */
+  readonly order?: "asc" | "desc";
 }
 
 /**

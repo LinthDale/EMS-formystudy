@@ -1,34 +1,25 @@
 /**
- * App shell 煙霧測試：landmark（banner/main）+ 品牌字串 zh-Hant（FR-531/532）。
+ * App shell 煙霧測試（Wave 1）：landmark（banner/nav/main）+ 品牌字串 zh-Hant
+ * + 預設路由（/ → /devices，FR-500 設備清單）。
+ *
+ * 以 memory router（renderRoute helper）驗證 shell + 預設重導；createBrowserRouter
+ * 的整合佈線見 src/app/router.tsx（appRoutes 由 helper 共用，等價驗證）。
  */
-import { describe, expect, it, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
+import { screen } from "@testing-library/react";
+import { renderRoute } from "@/test/render-route";
 
-vi.mock("echarts/core", () => ({
-  use: vi.fn(),
-  registerTheme: vi.fn(),
-  init: vi.fn(() => ({ setOption: vi.fn(), resize: vi.fn(), dispose: vi.fn() })),
-}));
-vi.mock("echarts/charts", () => ({ LineChart: {} }));
-vi.mock("echarts/components", () => ({ GridComponent: {}, TooltipComponent: {} }));
-vi.mock("echarts/renderers", () => ({ CanvasRenderer: {} }));
-
-import { App } from "@/App";
-import { parseTokens } from "@/test/parse-tokens";
-
-describe("App", () => {
-  it("渲染 banner / main landmark 與品牌字串（a11y FR-532）", () => {
-    for (const [name, value] of parseTokens()) {
-      document.documentElement.style.setProperty(name, value);
-    }
-    render(<App />);
+describe("App shell", () => {
+  it("渲染 banner / nav / main landmark 與品牌字串（a11y FR-532）", async () => {
+    renderRoute({ path: "/" });
     expect(screen.getByRole("banner")).toBeInTheDocument();
+    expect(screen.getByRole("navigation", { name: "主導覽" })).toBeInTheDocument();
     expect(screen.getByRole("main")).toBeInTheDocument();
     expect(screen.getByText("SynaIQ EMS")).toBeInTheDocument();
     expect(screen.getByText("能源管理平台")).toBeInTheDocument();
-    // gallery 掛載於 main 之下
+    // 預設路由重導至設備清單（FR-500）
     expect(
-      screen.getByRole("heading", { name: "EMS Design System 元件展示" }),
+      await screen.findByRole("heading", { name: "設備清單" }),
     ).toBeInTheDocument();
   });
 });
