@@ -4,7 +4,8 @@ Covers the fallback path that replaced the SHA-256 stub:
 - argon2id verify accepts the right password and rejects the wrong one
 - only argon2id PHC strings parse (argon2i / sha256-hex / junk are rejected)
 - unknown users get a constant-work dummy verify (no enumeration shortcut)
-- provider selection by BFF_AUTH_MODE; OIDC is a documented Phase-1 stub
+- provider selection by BFF_AUTH_MODE; OIDC's password path is not used (the
+  real OIDC flow is a browser redirect, ADR-024 — see test_oidc_flow.py)
 """
 from __future__ import annotations
 
@@ -18,6 +19,7 @@ from bff.auth_providers import (
     build_auth_provider,
 )
 from bff.roles import Role
+from tests import oidc_fixtures as mock
 from tests.conftest import make_settings, phc
 
 # ---------------------------------------------------------------- parse + verify
@@ -97,13 +99,16 @@ def test_build_provider_local_is_default():
 
 
 def test_build_provider_oidc_selected_by_mode():
-    provider = build_auth_provider(make_settings(auth_mode="oidc"), {})
+    settings = make_settings(**mock.oidc_overrides())
+    provider = build_auth_provider(settings, {})
     assert isinstance(provider, OidcProvider)
     assert provider.mode == "oidc"
 
 
-def test_oidc_provider_not_implemented_in_p1():
-    provider = OidcProvider(make_settings(auth_mode="oidc"))
+def test_oidc_provider_password_path_raises_not_implemented():
+    # OIDC authenticates via the redirect flow, not username/password; the
+    # password path is deliberately unavailable (the route maps this to 503).
+    provider = OidcProvider(make_settings(**mock.oidc_overrides()))
     with pytest.raises(NotImplementedError):
         provider.authenticate("user", "pw")
 

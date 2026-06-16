@@ -22,5 +22,7 @@ PRD-0005 §9 鎖定 BFF 為瀏覽器唯一入口與 cookie session，但「使�
 - － OIDC 尚未實作：`oidc` 模式目前不可用（503）；多租戶 / 企業登入須待 Phase-1。
 - 對應：threat-model T-26、risk-register R-015、tunable-parameters（`BFF_AUTH_MODE` / `BFF_AUTH_USERS`）。
 
-## Phase-1 延後項目（OIDC）
+## Phase-1 實作狀態（OIDC，2026-06-16 已完成）
+
+> 本節原列為延後項；OIDC 已於 2026-06-16 實作（`bff/oidc.py`、`bff/oidc_state.py`、`routes/oidc.py`；`BFF_AUTH_MODE=oidc`）：discovery、Authorization-Code+PKCE、token 交換、id-token 驗證（JWKS 簽章 + iss/aud/exp/iat + nonce、alg 鎖定 RS/ES）、claim→role 映射（fail-closed）、state 單次用 + state TTL。對 mock issuer 完整 TDD（132→162 測試）；真接企業 IdP 僅需 env 提供 issuer/client_id/secret/redirect/role_map。原延後清單（供對照）：
 discovery 端點與 client 設定、Authorization-Code + PKCE 重導與回呼、token 交換與 id-token（簽章 / iss / aud / exp / nonce）驗證、claim→Role 映射策略、IdP session 與 BFF session 生命週期對齊、登出（含 IdP 端）。落地後 `OidcProvider.authenticate`（或新增 redirect 端點）取代現行 `NotImplementedError`。

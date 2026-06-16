@@ -26,7 +26,9 @@ _log = logging.getLogger("bff.config")
 
 DEFAULT_CONFIG_FILE = "config/bff.toml"
 # secrets must come from env/.env only; ignored if present in the (committed) TOML
-SECRET_FIELDS = frozenset({"ops_api_key", "ingest_api_key", "auth_users"})
+SECRET_FIELDS = frozenset(
+    {"ops_api_key", "ingest_api_key", "auth_users", "oidc_client_secret"}
+)
 
 
 class TomlConfigSource(PydanticBaseSettingsSource):
@@ -83,8 +85,24 @@ class Settings(BaseSettings):
     postgrest_url: str = "http://query:3000"
     upstream_timeout_s: float = 10.0
 
-    # --- auth provider (ADR-024): local argon2id fallback (default) | oidc (P1 stub) ---
-    auth_mode: str = "local"  # "local" -> argon2id user table; "oidc" -> IdP (Phase-1)
+    # --- auth provider (ADR-024): local argon2id fallback (default) | oidc ---
+    auth_mode: str = "local"  # "local" -> argon2id user table; "oidc" -> enterprise IdP
+
+    # --- OIDC (ADR-024 Phase-1; Authorization-Code + PKCE). Only consulted when
+    #     auth_mode == "oidc"; issuer/client_id/redirect are fail-fast required then. ---
+    oidc_issuer: str = ""          # IdP issuer URL; discovery = {issuer}/.well-known/openid-configuration
+    oidc_client_id: str = ""       # registered confidential client id
+    oidc_redirect_uri: str = ""    # absolute callback URL registered at the IdP -> /api/auth/oidc/callback
+    oidc_scopes: str = "openid profile email"  # space-separated; must include openid
+    oidc_role_claim: str = "groups"            # id-token claim carrying the role/group values
+    # claim value -> Role map, csv "claimval:role" (role = ops|ingest|readonly).
+    # Unknown/empty claim -> reject (fail closed, no default privilege).
+    oidc_role_map: str = ""
+    # transient login state (PKCE verifier / state / nonce) TTL — short by design.
+    oidc_state_ttl_s: int = 300  # 5 min to complete the redirect round-trip
+    # where the callback sends the browser after a successful login (SPA entry).
+    # Same-origin path by default so it cannot be turned into an open redirect.
+    oidc_post_login_redirect: str = "/"
 
     # --- session (PRD-0005 §9.2 [必過]) ---
     session_cookie_name: str = "ems_bff_session"
@@ -109,6 +127,7 @@ class Settings(BaseSettings):
     ops_api_key: str = ""      # device-service OPS channel (FR-310)
     ingest_api_key: str = ""   # device-service INGEST channel (FR-310)
     auth_users: str = ""       # "username:<argon2id PHC>:role" csv (local fallback, ADR-024)
+    oidc_client_secret: str = ""  # OIDC confidential client secret (ADR-024)
 
     @field_validator("auth_mode")
     @classmethod
@@ -134,17 +153,75 @@ class Settings(BaseSettings):
             raise ValueError("measurement limits must be positive")
         return v
 
+    @field_validator("oidc_state_ttl_s")
+    @classmethod
+    def _positive_ttl(cls, v: int) -> int:
+        if v <= 0:
+            raise ValueError("oidc_state_ttl_s must be a positive number of seconds")
+        return v
+
     @model_validator(mode="after")
     def _coherent(self) -> "Settings":
         if self.session_idle_timeout_s > self.session_max_lifetime_s:
             raise ValueError("session_idle_timeout_s must not exceed session_max_lifetime_s")
         if self.measurements_default_limit > self.measurements_max_limit:
             raise ValueError("measurements_default_limit must not exceed measurements_max_limit")
+        # Fail fast: oidc mode is unusable without an issuer + client id + redirect.
+        # (No silent degradation to an insecure path — mirrors ADR-024 fail-closed.)
+        if self.auth_mode == "oidc":
+            missing = [
+                name
+                for name, value in (
+                    ("BFF_OIDC_ISSUER", self.oidc_issuer),
+                    ("BFF_OIDC_CLIENT_ID", self.oidc_client_id),
+                    ("BFF_OIDC_REDIRECT_URI", self.oidc_redirect_uri),
+                )
+                if not value.strip()
+            ]
+            if missing:
+                raise ValueError(
+                    "BFF_AUTH_MODE=oidc requires " + ", ".join(missing)
+                )
+            if "openid" not in self.oidc_scope_list:
+                raise ValueError("oidc_scopes must include 'openid'")
+            if not self.oidc_role_mapping:
+                raise ValueError(
+                    "BFF_AUTH_MODE=oidc requires a non-empty BFF_OIDC_ROLE_MAP "
+                    "(claimval:role csv); unmapped claims are rejected (fail closed)"
+                )
         return self
 
     @property
     def allowed_origins(self) -> frozenset[str]:
         return frozenset(o.strip() for o in self.public_origins.split(",") if o.strip())
+
+    @property
+    def oidc_scope_list(self) -> tuple[str, ...]:
+        return tuple(s for s in self.oidc_scopes.split() if s)
+
+    @property
+    def oidc_role_mapping(self) -> dict[str, str]:
+        """Parse ``claimval:role`` csv into an immutable-style dict (fresh each call).
+
+        Returns ``{claim_value: role_str}``. A malformed entry, an unknown role, or a
+        duplicate claim value fails fast so a typo can never silently grant or drop
+        privilege. Role validity is re-checked by the OIDC provider against the Role
+        enum (this layer stays enum-agnostic to avoid an import cycle)."""
+        mapping: dict[str, str] = {}
+        for entry in self.oidc_role_map.split(","):
+            entry = entry.strip()
+            if not entry:
+                continue
+            claim_value, sep, role = entry.partition(":")
+            claim_value, role = claim_value.strip(), role.strip().lower()
+            if not sep or not claim_value or not role:
+                raise ValueError(
+                    f"oidc_role_map entry must be 'claimval:role': {entry!r}"
+                )
+            if claim_value in mapping:
+                raise ValueError(f"duplicate claim value {claim_value!r} in oidc_role_map")
+            mapping[claim_value] = role
+        return mapping
 
     @classmethod
     def settings_customise_sources(

@@ -58,13 +58,19 @@ class LocalArgon2Provider:
 
 
 class OidcProvider:
-    """OIDC / enterprise IdP provider — interface only, deferred to Phase-1.
+    """OIDC / enterprise IdP provider — the strategic primary per ADR-024.
 
-    The strategic primary per ADR-024. The full Authorization-Code + PKCE flow
-    (discovery, redirect, token exchange, id-token validation, claim→role
-    mapping) is intentionally NOT implemented in P1 because there is no IdP to
-    integrate against yet. Selecting ``BFF_AUTH_MODE=oidc`` fails loudly rather
-    than silently degrading to an insecure path (fail closed).
+    OIDC authenticates via a browser redirect round-trip (Authorization-Code +
+    PKCE), NOT a username/password POST. The real flow therefore lives in
+    ``routes/oidc.py`` + ``oidc.py`` (discovery, redirect, token exchange,
+    id-token validation, claim→role mapping); this provider only exists to keep
+    the startup seam uniform.
+
+    The password ``authenticate`` path is deliberately unavailable in OIDC mode:
+    the BFF does not collect passwords for an external IdP. The password
+    ``/api/auth/login`` route maps the resulting ``NotImplementedError`` to 503
+    (fail closed — never a silent insecure fallback), pointing callers at
+    ``GET /api/auth/oidc/login``.
     """
 
     mode = "oidc"
@@ -74,8 +80,8 @@ class OidcProvider:
 
     def authenticate(self, username: str, password: str) -> Role | None:
         raise NotImplementedError(
-            "OIDC auth provider is not implemented in Phase-1 (ADR-024): "
-            "no enterprise IdP is integrated yet. Use BFF_AUTH_MODE=local."
+            "OIDC mode authenticates via GET /api/auth/oidc/login (redirect + "
+            "PKCE), not username/password. Use the OIDC login route."
         )
 
 

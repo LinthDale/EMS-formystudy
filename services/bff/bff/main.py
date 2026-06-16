@@ -24,7 +24,9 @@ from fastapi import FastAPI
 from .auth_providers import build_auth_provider
 from .config import Settings
 from .credentials import parse_auth_users
-from .routes import auth, device_measurements, devices, health, measurements
+from .oidc import OidcClient
+from .oidc_state import InMemoryOidcStateStore, OidcStateManager
+from .routes import auth, device_measurements, devices, health, measurements, oidc
 from .security import OriginCSRFMiddleware
 from .sessions import InMemorySessionStore, SessionManager, run_sweep_loop
 
@@ -34,6 +36,7 @@ def create_app(
     *,
     upstream_transport: httpx.BaseTransport | None = None,
     clock: Callable[[], float] = time.time,
+    oidc_client: "OidcClient | None" = None,
 ) -> FastAPI:
     settings = settings if settings is not None else Settings()
     logging.basicConfig(level=settings.log_level.upper())
@@ -51,6 +54,15 @@ def create_app(
         app.state.http = httpx.AsyncClient(
             timeout=settings.upstream_timeout_s, transport=upstream_transport
         )
+        # OIDC (ADR-024): discover the IdP + cache JWKS once at startup so the
+        # login/callback round-trip is fast and discovery failures surface early.
+        # Discovery needs the async http client, so it happens here (not in the
+        # factory body). Tests inject app.state.oidc_client directly to bypass a
+        # live IdP — only auto-discover when oidc mode is selected and not preset.
+        if settings.auth_mode == "oidc" and getattr(app.state, "oidc_client", None) is None:
+            app.state.oidc_client = await OidcClient.discover(
+                settings, app.state.http, clock=clock
+            )
         # Background janitor for the in-memory session store (code-review MED):
         # reap expired-but-never-re-accessed sessions on a fixed interval.
         sweep_task = asyncio.create_task(
@@ -78,11 +90,19 @@ def create_app(
     app.state.users = users
     app.state.auth_provider = auth_provider
     app.state.session_manager = SessionManager(InMemorySessionStore(), settings, clock)
+    # OIDC transient login state (PKCE verifier / state / nonce), short-TTL,
+    # server-side (ADR-024). Present regardless of mode so the route can rely on
+    # it; only exercised in oidc mode. A pre-built client (tests) skips discovery.
+    app.state.oidc_state_manager = OidcStateManager(
+        InMemoryOidcStateStore(), settings.oidc_state_ttl_s, clock
+    )
+    app.state.oidc_client = oidc_client  # may be None -> lifespan discovers it
 
     app.add_middleware(OriginCSRFMiddleware, allowed_origins=settings.allowed_origins)
 
     app.include_router(health.router)
     app.include_router(auth.router)
+    app.include_router(oidc.router)                  # OIDC login/callback (ADR-024)
     app.include_router(devices.router)
     app.include_router(device_measurements.router)  # per-device facade (ADR-025)
     app.include_router(measurements.router)          # legacy /api/measurements/{domain}

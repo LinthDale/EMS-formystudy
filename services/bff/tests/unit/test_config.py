@@ -59,6 +59,51 @@ def test_empty_auth_users_means_no_login_possible(recorder, clock):
         assert r.status_code == 401, f"got {r.status_code}"
 
 
+def test_oidc_mode_without_issuer_fails_fast():
+    """auth_mode=oidc with no issuer/client/redirect must not boot (fail closed)."""
+    with pytest.raises(ValidationError):
+        make_settings(auth_mode="oidc")
+
+
+def test_oidc_mode_without_role_map_fails_fast():
+    with pytest.raises(ValidationError):
+        make_settings(
+            auth_mode="oidc",
+            oidc_issuer="https://idp.example.test",
+            oidc_client_id="client",
+            oidc_redirect_uri="https://app/cb",
+            oidc_role_map="",  # no mapping -> every login would be unmapped
+        )
+
+
+def test_oidc_role_map_parses_to_value_role_dict():
+    s = make_settings(
+        auth_mode="oidc",
+        oidc_issuer="https://idp.example.test",
+        oidc_client_id="client",
+        oidc_redirect_uri="https://app/cb",
+        oidc_role_map="ems-ops:ops, ems-view:readonly",
+    )
+    assert s.oidc_role_mapping == {"ems-ops": "ops", "ems-view": "readonly"}
+
+
+def test_oidc_role_map_malformed_entry_fails_fast():
+    s = make_settings(
+        auth_mode="local",  # mapping parsed lazily; local mode lets us construct
+        oidc_role_map="ems-ops",  # missing ':role'
+    )
+    with pytest.raises(ValueError):
+        _ = s.oidc_role_mapping
+
+
+def test_oidc_client_secret_is_a_secret_field_ignored_in_toml(tmp_path, monkeypatch):
+    toml = tmp_path / "bff.toml"
+    toml.write_text('oidc_client_secret = "leaked-from-toml"\n', encoding="utf-8")
+    monkeypatch.setenv("BFF_CONFIG_FILE", str(toml))
+    s = Settings(_env_file=None)
+    assert s.oidc_client_secret == "", "oidc_client_secret in TOML must be ignored"
+
+
 def test_toml_source_ignores_secret_fields(tmp_path, monkeypatch):
     """Secrets must come from env/.env only — a committed TOML cannot smuggle keys."""
     toml = tmp_path / "bff.toml"
