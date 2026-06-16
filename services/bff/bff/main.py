@@ -24,7 +24,7 @@ from fastapi import FastAPI
 from .auth_providers import build_auth_provider
 from .config import Settings
 from .credentials import parse_auth_users
-from .routes import auth, devices, health, measurements
+from .routes import auth, device_measurements, devices, health, measurements
 from .security import OriginCSRFMiddleware
 from .sessions import InMemorySessionStore, SessionManager, run_sweep_loop
 
@@ -84,7 +84,8 @@ def create_app(
     app.include_router(health.router)
     app.include_router(auth.router)
     app.include_router(devices.router)
-    app.include_router(measurements.router)
+    app.include_router(device_measurements.router)  # per-device facade (ADR-025)
+    app.include_router(measurements.router)          # legacy /api/measurements/{domain}
     return app
 
 

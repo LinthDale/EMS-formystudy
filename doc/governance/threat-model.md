@@ -74,7 +74,7 @@
 | ID | 類型 | 威脅情境 | 等級 | 緩解 |
 |----|------|---------|------|------|
 | T-07 | **Tampering** | Demo 訪客（或 Grafana RCE）打到 Mosquitto :1883 發布偽訊息汙染 DB | **高** | Mosquitto 啟用 username/password + ACL（限定 publish topic）— R-003<br/>短期：Mosquitto 不對 docker host 公開 :1883（移除 ports 對外） |
-| T-08 | **Information Disclosure** | Demo 訪客打到 PostgREST :3001 撈所有歷史資料 | 中 | PostgREST :3001 不對 docker host 公開（改 internal only）<br/>Cloudflare Tunnel 僅曝 :3000 |
+| T-08 | **Information Disclosure** | Demo 訪客打到 PostgREST :3001 撈所有歷史資料 | 中 | PostgREST :3001 不對 docker host 公開（改 internal only）<br/>Cloudflare Tunnel 僅曝 :3000<br/>per-device facade（ADR-025）：瀏覽器經 `/api/devices/{id}/measurements` 取數，零 PostgREST operator 知識 |
 | T-09 | **Tampering** | Demo 訪客打到 MCP :8765 控制 Modbus 設備 | **高** | MCP 綁 127.0.0.1（不對 docker host 公開）— **必須驗證 docker-compose 的 ports binding** |
 | T-10 | **Information Disclosure** | Grafana datasource credential 在 panel SQL 中外洩 | 中 | Grafana datasource credential 設為 admin-only 可見；query history 限制 |
 | T-11 | **DoS** | 訪客在 Grafana 建立極重 query（cross-join 整個 hypertable） | 中 | TimescaleDB query timeout（如 30s）；連線池限額 |

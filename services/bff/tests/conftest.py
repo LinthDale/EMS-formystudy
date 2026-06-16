@@ -68,18 +68,56 @@ class UpstreamRecorder:
             return httpx.Response(self.force_status, json={"detail": "forced upstream status"})
         host = request.url.host
         if host == "device-upstream":
-            if request.method == "GET" and request.url.path == "/devices":
-                return httpx.Response(200, json=[
-                    {"device_id": "sim-001", "status": "candidate", "ai_confidence": 0.42},
-                ])
-            if request.method == "POST" and request.url.path.endswith("/confirm"):
-                return httpx.Response(200, json={"device_id": "sim-001", "status": "confirmed"})
-            return httpx.Response(404, json={"detail": "not found"})
+            return self._device_service(request)
         if host == "postgrest-upstream":
             return httpx.Response(200, json=[
                 {"time": "2026-06-11T00:00:00Z", "device_id": "sim-001", "power_kw": 1.5},
             ])
         return httpx.Response(500, json={"detail": "unexpected upstream host"})
+
+    def _device_service(self, request: httpx.Request) -> httpx.Response:
+        """Stand-in for device-service :8002 (the routes the BFF proxies, openapi 1.3.0).
+
+        GET /devices/{id} returns a record whose `gateway_id` drives the per-device
+        measurement facade's device->domain resolution (ems-gateway -> electricity,
+        kc-gateway/kc-ingest -> factory)."""
+        method, path = request.method, request.url.path
+        if method == "GET" and path == "/devices":
+            return httpx.Response(200, json=[
+                {"device_id": "sim-001", "status": "candidate", "ai_confidence": 0.42},
+            ])
+        if method == "POST" and path.endswith("/confirm"):
+            return httpx.Response(200, json={"device_id": "sim-001", "status": "confirmed"})
+        if method == "GET" and path.endswith("/signals"):
+            return httpx.Response(200, json=[
+                {"id": 1, "device_id": "sim-001", "signal_name": "power", "status": "active"},
+            ])
+        if method == "GET" and path.endswith("/human-review"):
+            return httpx.Response(200, json={
+                "device_id": "sim-001", "digest": {"summary": "candidate"},
+                "summary_source": "llm",
+            })
+        if method == "POST" and path.endswith("/override"):
+            return httpx.Response(200, json={"device_id": "sim-001", "status": "confirmed",
+                                             "classified_by": "manual_override"})
+        if method == "POST" and path.endswith("/reject"):
+            return httpx.Response(200, json={"device_id": "sim-001", "status": "retired"})
+        if method == "POST" and path.endswith("/ai-feedback"):
+            return httpx.Response(201, json={"id": 7, "device_id": "sim-001",
+                                             "verdict": "wrong_classification"})
+        # GET /devices/{id} — the device record (gateway_id selects the domain)
+        if method == "GET" and path.startswith("/devices/"):
+            gateway = {
+                "sim-001": "ems-gateway",      # electricity domain
+                "plc-001": "kc-gateway",       # factory domain
+                "kc-ing-001": "kc-ingest",     # factory domain
+                "orphan-001": None,            # unresolvable domain
+            }.get(path.rsplit("/", 1)[-1], "ems-gateway")
+            return httpx.Response(200, json={
+                "device_id": path.rsplit("/", 1)[-1], "status": "confirmed",
+                "device_type": "electricity", "gateway_id": gateway,
+            })
+        return httpx.Response(404, json={"detail": "not found"})
 
 
 def make_settings(**overrides) -> Settings:

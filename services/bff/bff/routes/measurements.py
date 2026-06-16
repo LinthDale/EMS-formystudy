@@ -1,5 +1,13 @@
 """Measurement proxy -> PostgREST :3001 (PRD-0005 §9.3, BFF-mediated).
 
+DEPRECATED / INTERNAL (ADR-025): this domain-keyed route still passes PostgREST
+operator values (eq./gte./order column) through from the caller. The product
+surface is now the per-device facade GET /api/devices/{device_id}/measurements
+(routes/device_measurements.py), which exposes PRODUCT semantics only
+(since/limit/order) and translates them server-side. The frontend (FR-520/521)
+moves to the per-device facade; this route is retained for the deprecation window
+and internal/legacy callers, NOT for new SPA code. Do not extend it.
+
 The browser NEVER talks to PostgREST: zero CORS surface, PostgREST stays on the
 internal network. Reads hit the anonymous `api.*` whitelist views, so NO key
 channel is spent here — any authenticated session may read, but always through
