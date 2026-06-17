@@ -192,6 +192,17 @@
 | 觸發 ADR | — |
 | 狀態 | **Open（追蹤）** — prod runtime 不受影響；dev-toolchain 待上游修補 / 升級 |
 
+### R-017：Starlette TestClient / httpx(2) deprecation（測試環境，追蹤中）
+
+| 欄位 | 內容 |
+|------|------|
+| 機率 / 衝擊 | L / L |
+| 描述 | BFF 測試以 Starlette `TestClient` 執行，發出 deprecation warning（`Using httpx with starlette.testclient is deprecated; install httpx2 instead`）。僅警告，不影響測試結果或 runtime；但 FastAPI / Starlette / httpx / httpx2 之間的相容矩陣需先釐清，貿然升級恐破壞測試環境 |
+| 緩解 | 維持現版（warning-only，可接受）；升級前先查 FastAPI × Starlette × httpx(2) 相容矩陣，確認 TestClient 用法與版本 pin，再更新 `services/bff` 測試依賴 |
+| Owner | EMS team |
+| 觸發 ADR | — |
+| 狀態 | **Open（追蹤）** — 僅測試環境警告；待相容矩陣釐清後更新測試依賴 |
+
 ---
 
 ## 統計摘要
@@ -201,12 +212,12 @@
 | P0 | 2 |
 | P1 | 4 |
 | P2 | 4 |
-| P3 | 5 |
-| 總計 | **15** |
+| P3 | 6 |
+| 總計 | **16** |
 
 | 狀態 | 數量 |
 |------|-----|
-| Open | 10 |
+| Open | 11 |
 | Mitigated | 3 |
 | Accepted | 1 |
 | Closed | 1 |
