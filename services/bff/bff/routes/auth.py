@@ -30,13 +30,15 @@ class RoleChangeRequest(BaseModel):
 @router.post("/login")
 async def login(body: LoginRequest, request: Request) -> Response:
     settings = request.app.state.settings
-    # Provider selected at startup by BFF_AUTH_MODE (ADR-024): local argon2id
-    # (now) or OIDC (Phase-1 stub). Everything below is provider-agnostic.
+    # Provider selected at startup by BFF_AUTH_MODE (ADR-024): local argon2id.
+    # OIDC is a redirect flow (GET /api/auth/oidc/login), NOT this password path —
+    # in oidc mode the password login below fails closed (503). Provider-agnostic.
     try:
         role = request.app.state.auth_provider.authenticate(body.username, body.password)
     except NotImplementedError as exc:
-        # OIDC mode selected but not yet integrated (Phase-1). Fail closed with a
-        # capability error — never silently fall back to an insecure path.
+        # OIDC mode: password login is not the OIDC entry point (users go via
+        # GET /api/auth/oidc/login). authenticate() raises NotImplementedError →
+        # fail closed 503; never silently fall back to an insecure path.
         raise HTTPException(
             status_code=503, detail="auth provider not available"
         ) from exc

@@ -160,6 +160,20 @@ class Settings(BaseSettings):
             raise ValueError("oidc_state_ttl_s must be a positive number of seconds")
         return v
 
+    @field_validator("oidc_post_login_redirect")
+    @classmethod
+    def _safe_post_login_redirect(cls, v: str) -> str:
+        # Same-origin path ONLY (the callback hands this straight to RedirectResponse):
+        # a single leading '/', and not '//...' (protocol-relative) nor '/\...'. This
+        # is the fail-fast that backs the field's "cannot be an open redirect" intent —
+        # a misconfigured https://evil or //evil would otherwise be an open redirect
+        # after a successful OIDC login (routes/oidc.py).
+        if not v.startswith("/") or v.startswith("//") or v.startswith("/\\"):
+            raise ValueError(
+                "oidc_post_login_redirect must be a same-origin path starting with a single '/'"
+            )
+        return v
+
     @model_validator(mode="after")
     def _coherent(self) -> "Settings":
         if self.session_idle_timeout_s > self.session_max_lifetime_s:
@@ -182,6 +196,18 @@ class Settings(BaseSettings):
                 raise ValueError(
                     "BFF_AUTH_MODE=oidc requires " + ", ".join(missing)
                 )
+            # discovery / token exchange / redirect are high-sensitivity hops — require
+            # https, allowing http only for localhost/127.0.0.1 (dev). Prevents an
+            # accidental cleartext IdP endpoint or redirect URI in a real deployment.
+            from urllib.parse import urlparse
+            for _label, _url in (("BFF_OIDC_ISSUER", self.oidc_issuer),
+                                 ("BFF_OIDC_REDIRECT_URI", self.oidc_redirect_uri)):
+                _p = urlparse(_url)
+                _local = (_p.hostname or "") in {"localhost", "127.0.0.1", "::1"}
+                if not (_p.scheme == "https" or (_p.scheme == "http" and _local)):
+                    raise ValueError(
+                        f"{_label} must be https:// (http:// allowed only for localhost/127.0.0.1 dev)"
+                    )
             if "openid" not in self.oidc_scope_list:
                 raise ValueError("oidc_scopes must include 'openid'")
             if not self.oidc_role_mapping:

@@ -117,7 +117,7 @@
 | T-26 | **Information Disclosure / Credential** | BFF 本地憑證以快速雜湊（SHA-256 無 salt）儲存，env 外洩即可離線爆破 | 中 | ✅ 已緩解：改 **argon2id**（PHC 內嵌 salt+成本參數，memory-hard）；僅存 .env；constant-work + dummy verify 抗枚舉（`bff/credentials.py`，ADR-024）|
 
 > T-26 戰略緩解：長期改接企業 IdP / OIDC（`BFF_AUTH_MODE=oidc`），BFF 不再自管密碼；argon2id 為無 IdP 環境的 fallback。見 ADR-024。
-> OIDC 已實作（2026-06-16，`bff/oidc.py`）：Authorization-Code+PKCE；id-token 經 JWKS 簽章 + iss/aud/exp/iat + 顯式 nonce 驗證、**alg 鎖定 RS/ES（拒 alg:none / HMAC 混淆）**；state 單次用（此 GET flow 的 CSRF 防線）；claim→role fail-closed（無預設權限）；token/verifier/secret 不入 log。真接企業 IdP 僅需 env 提供 issuer/client。
+> OIDC 已實作（2026-06-16，`bff/oidc.py`）：Authorization-Code+PKCE；id-token 經 JWKS 簽章 + iss/aud/exp/iat + 顯式 nonce 驗證、**alg 鎖定 RS/ES（拒 alg:none / HMAC 混淆）**；state 單次用（此 GET flow 的 CSRF 防線）；claim→role fail-closed（無預設權限）；token/verifier/secret 不入 log。config fail-fast：post-login redirect 限同源 path（防 open-redirect）、issuer/redirect 強制 https（localhost 例外）。真接企業 IdP 僅需 env 提供 issuer/client。
 
 > M-1（已實作）：BFF `/api` 回應（含 CSRF-deny 路徑）已加 §9.5 防禦性 header — `X-Frame-Options: DENY`、`Referrer-Policy: strict-origin-when-cross-origin`、`Content-Security-Policy: default-src 'none'; frame-ancestors 'none'`（＋既有 `Cache-Control: no-store`、`X-Content-Type-Options: nosniff`）。**SPA HTML 頁的 script/connect-src CSP 與 HSTS 屬前端 nginx / TLS terminator 層**（nginx layer 另處理）；此處僅涵蓋 JSON API 面。對應 T-22 clickjacking 防護。
 

@@ -116,3 +116,31 @@ def test_toml_source_ignores_secret_fields(tmp_path, monkeypatch):
     s = Settings(_env_file=None)
     assert s.session_idle_timeout_s == 123, "tunables must load from TOML"
     assert s.ops_api_key == "", "secret fields in TOML must be ignored"
+
+
+def test_oidc_post_login_redirect_must_be_same_origin_path():
+    """review P2: an absolute / protocol-relative redirect would be an open redirect
+    after a successful OIDC login; only a same-origin '/path' is accepted."""
+    for bad in ("https://evil.example", "//evil.example", "/\\evil.example", "http://x"):
+        with pytest.raises(ValidationError):
+            make_settings(oidc_post_login_redirect=bad)
+    assert make_settings(oidc_post_login_redirect="/devices").oidc_post_login_redirect == "/devices"
+
+
+def test_oidc_endpoints_require_https_except_localhost():
+    """review P2: issuer/redirect must be https in real deployments (cleartext only for
+    localhost/127.0.0.1 dev)."""
+    base = dict(
+        auth_mode="oidc", oidc_client_id="client",
+        oidc_role_map="ems-ops:ops", oidc_redirect_uri="https://app.example/cb",
+    )
+    with pytest.raises(ValidationError):  # cleartext non-local issuer
+        make_settings(**{**base, "oidc_issuer": "http://idp.evil.example"})
+    with pytest.raises(ValidationError):  # cleartext non-local redirect
+        make_settings(**{**base, "oidc_issuer": "https://idp.example",
+                         "oidc_redirect_uri": "http://app.evil.example/cb"})
+    make_settings(**{**base, "oidc_issuer": "https://idp.example"})  # https -> ok
+    make_settings(  # http on localhost -> ok (dev)
+        auth_mode="oidc", oidc_client_id="client", oidc_role_map="ems-ops:ops",
+        oidc_issuer="http://localhost:9000", oidc_redirect_uri="http://localhost:8080/cb",
+    )
