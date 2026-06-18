@@ -164,26 +164,27 @@ export const MOCK_FACTORY_LATEST: FactoryMeasurement = {
 
 /**
  * Per-device 量測樣本（per-device facade `GET /api/devices/{id}/measurements`）。
- * Wave 1 不渲染量測曲線（FR-520/521 屬 Wave 2），但 mock 先備齊以對齊
- * facade 契約；確定性 seed、零隨機（可重現）。鍵為 device_id。
+ * FR-520（即時卡片，取最新點）/ FR-521（歷史曲線，整段序列）共用此資料。
+ * 確定性 seed、零隨機（可重現）；鍵為 device_id。
+ * 以 MOCK_POWER_SERIES_KW（24 點日線形）逐點合成電力量測，最新點在尾端；
+ * mock client 依 facade `order` 參數決定回傳的時間方向（asc|desc，ADR-025）。
  */
+function buildElectricitySeries(deviceId: string): readonly Measurement[] {
+  const baseEnergy = 1180;
+  return MOCK_POWER_SERIES_KW.map((powerKw, i) => {
+    const hh = String(i).padStart(2, "0");
+    const current = Math.round((powerKw * 1000) / 380 / 3) / 10;
+    return {
+      time: `2026-06-11T${hh}:00:00Z`,
+      device_id: deviceId,
+      voltage: Math.round((378 + (powerKw % 5)) * 10) / 10,
+      current,
+      power_kw: powerKw,
+      energy_kwh: Math.round((baseEnergy + i * 2.3) * 100) / 100,
+    } satisfies Measurement;
+  });
+}
+
 export const MOCK_DEVICE_MEASUREMENTS: Readonly<Record<string, readonly Measurement[]>> = {
-  "sim-001": [
-    {
-      time: "2026-06-11T02:59:30Z",
-      device_id: "sim-001",
-      voltage: 381.2,
-      current: 105.3,
-      power_kw: 58.7,
-      energy_kwh: 1234.56,
-    },
-    {
-      time: "2026-06-11T02:58:30Z",
-      device_id: "sim-001",
-      voltage: 380.4,
-      current: 104.1,
-      power_kw: 57.9,
-      energy_kwh: 1233.58,
-    },
-  ],
+  "sim-001": buildElectricitySeries("sim-001"),
 } as const;

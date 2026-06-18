@@ -13,6 +13,7 @@ import {
   createEmsApiClient,
   createMockEmsApiClient,
 } from "@/api/client";
+import type { CorrectionCreate } from "@/api/types";
 
 describe("BFF 路徑組裝", () => {
   it("base path 為同源 /api（金鑰僅存於 BFF — §9.1）", () => {
@@ -166,5 +167,91 @@ describe("createMockEmsApiClient（P1 mock 資料源）", () => {
     expect(m.length).toBeGreaterThan(0);
     expect(m.every((row) => row.device_id === "sim-001")).toBe(true);
     expect(await client.listDeviceMeasurements("plc-001")).toEqual([]);
+  });
+
+  it("listDeviceMeasurements 依 order=asc 回傳時間遞增序列（FR-521 歷史曲線）", async () => {
+    const client = createMockEmsApiClient();
+    const asc = await client.listDeviceMeasurements("sim-001", { order: "asc" });
+    expect(asc.length).toBeGreaterThan(1);
+    const times = asc.map((row) => row.time);
+    expect(times).toEqual([...times].sort());
+  });
+
+  it("listDeviceMeasurements 預設 order=desc 回傳時間遞減序列（即時卡片取最新）", async () => {
+    const client = createMockEmsApiClient();
+    const desc = await client.listDeviceMeasurements("sim-001");
+    const times = desc.map((row) => row.time);
+    expect(times).toEqual([...times].sort().reverse());
+  });
+
+  it("createDevice 樂觀回傳新設備（status=candidate；FR-502 AC-3）", async () => {
+    const client = createMockEmsApiClient();
+    const created = await client.createDevice({
+      device_id: "new-dev-1",
+      device_type: "temperature_sensor",
+      protocol: "mqtt",
+    });
+    expect(created.device_id).toBe("new-dev-1");
+    expect(created.device_type).toBe("temperature_sensor");
+    expect(created.status).toBe("candidate");
+  });
+
+  it("updateDevice 樂觀回傳套用 patch 的設備（FR-502 AC-3）", async () => {
+    const client = createMockEmsApiClient();
+    const updated = await client.updateDevice("sim-001", { location: "B2 配電室" });
+    expect(updated.device_id).toBe("sim-001");
+    expect(updated.location).toBe("B2 配電室");
+  });
+
+  it("updateDevice 對不存在 device 仍回 reject（不靜默）", async () => {
+    const client = createMockEmsApiClient();
+    await expect(
+      client.updateDevice("does-not-exist", { location: "X" }),
+    ).rejects.toBeInstanceOf(Error);
+  });
+
+  it("createCorrection 樂觀回傳 CorrectionOut（FR-513；忠實保留輸入 + 預設 active）", async () => {
+    const client = createMockEmsApiClient();
+    const input = {
+      verdict: "wrong_classification",
+      corrected_device_type: "pressure_sensor",
+      corrected_signals: [{ signal_name: "pressure_bar", unit: "bar" }],
+      human_explanation: "拓樸位置與壓力管線一致，應為壓力感測器而非溫度感測器。",
+      rerun_classification: true,
+      demote_to_candidate: false,
+    } satisfies CorrectionCreate;
+    const out = await client.createCorrection("mqtt-7f3a", input);
+    expect(out.device_id).toBe("mqtt-7f3a");
+    expect(out.verdict).toBe("wrong_classification");
+    expect(out.human_explanation).toContain("壓力");
+    // 新建 correction 預設啟用（FR-330 失效走 deactivate）
+    expect(out.is_active).toBe(true);
+    // 不靜默吞掉呼叫端傳入的修正 signals（mock 忠實回傳）
+    expect(out.corrected_signals).toEqual(input.corrected_signals);
+  });
+
+  it("createCorrection 連續呼叫回不同 id（避免列表 React key 撞）", async () => {
+    const client = createMockEmsApiClient();
+    const body = {
+      verdict: "good_with_note",
+      human_explanation: "分類正確，補記此設備位於主變電站、夏季負載偏高需留意。",
+      rerun_classification: false,
+      demote_to_candidate: false,
+    } satisfies CorrectionCreate;
+    const first = await client.createCorrection("sim-001", body);
+    const second = await client.createCorrection("sim-001", body);
+    expect(second.id).not.toBe(first.id);
+  });
+
+  it("updateDevice 不投影 DeviceUpdate 以外的欄位（mock↔live 契約對稱）", async () => {
+    const client = createMockEmsApiClient();
+    const before = await client.getDevice("sim-001");
+    // 即使呼叫端用 escape hatch 塞入特權欄位，mock 也不應吞入（live BFF 會 422）
+    const updated = await client.updateDevice("sim-001", {
+      location: "B2 配電室",
+      status: before.status === "confirmed" ? "retired" : "confirmed",
+    } as never);
+    expect(updated.location).toBe("B2 配電室");
+    expect(updated.status).toBe(before.status); // status 非 DeviceUpdate 欄位，未被投影
   });
 });

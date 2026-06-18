@@ -191,17 +191,52 @@ function findDeviceOrReject(deviceId: string): DeviceOut {
 }
 
 /**
+ * 純函數：以 facade `order` 對量測序列排序（不改變輸入；immutability）。
+ * fixtures 以時間遞增儲存；asc 原序、desc 反序（對齊 ADR-025 facade 語義
+ * → BFF 轉 PostgREST `time.asc|time.desc`）。
+ */
+export function orderMeasurements(
+  rows: readonly Measurement[],
+  order: "asc" | "desc" = "desc",
+): Measurement[] {
+  const sorted = [...rows].sort((a, b) => a.time.localeCompare(b.time));
+  return order === "asc" ? sorted : sorted.reverse();
+}
+
+/**
+ * 純函數：以 DeviceCreate 合成「後端建立後會回的」DeviceOut（樂觀）。
+ * 新設備一律進 candidate 狀態（候選 → 待人工確認 / AI 分類），ai_confidence 未知。
+ */
+export function newDeviceFromCreate(body: DeviceCreate): DeviceOut {
+  const now = new Date().toISOString();
+  return {
+    device_id: body.device_id,
+    device_type: body.device_type ?? null,
+    status: "candidate",
+    protocol: body.protocol ?? null,
+    vendor: body.vendor ?? null,
+    model: body.model ?? null,
+    location: body.location ?? null,
+    gateway_id: body.gateway_id ?? null,
+    classified_by: null,
+    ai_confidence: null,
+    created_at: now,
+    updated_at: now,
+    last_seen_at: null,
+    confirmed_at: null,
+  };
+}
+
+/**
  * Mock client（P1 唯一資料源）：固定 fixtures、零網路；
  * 語義對齊後端契約（filter / allowlist 排序 NULLS LAST / bare-array 分頁）。
  * 每次回傳深拷貝 — 呼叫端變更不汙染 fixtures（immutability）。
- * mutating 動作（confirm/override/reject）以樂觀方式回傳「後端會回的」DeviceOut
- * 新副本（mock 不寫回 fixtures；持久化於 live BFF 接線後交付 — §8.2）。
+ * mutating 動作（create/update/confirm/override/reject/correction）以樂觀方式
+ * 回傳「後端會回的」新副本（mock 不寫回 fixtures；持久化於 live BFF 接線後交付 — §8.2）。
  */
 export function createMockEmsApiClient(): EmsApiClient {
-  const notInMock = (what: string) =>
-    Promise.reject(
-      new EmsApiNotWiredError(`${what}（mock 未實作 mutating 持久化；P1 展示用）`),
-    );
+  // 樂觀 correction id：同一 client 實例內單調遞增，避免多筆 correction 撞 React key。
+  let nextCorrectionId = 1;
   const resolveDevice = (deviceId: string, patch: Partial<DeviceOut>) => {
     try {
       return Promise.resolve(applyDeviceTransition(findDeviceOrReject(deviceId), patch));
@@ -218,8 +253,20 @@ export function createMockEmsApiClient(): EmsApiClient {
         return Promise.reject(err as Error);
       }
     },
-    createDevice: () => notInMock("createDevice") as Promise<DeviceOut>,
-    updateDevice: () => notInMock("updateDevice") as Promise<DeviceOut>,
+    createDevice: (body) => Promise.resolve(newDeviceFromCreate(body)),
+    // 只投影 DeviceUpdate 的契約欄位（不用 `as Partial<DeviceOut>` 寬鬆 cast）—
+    // 避免 mock 吞下 live BFF 會拒絕的欄位（status/classified_by…），保 mock↔live 契約對稱。
+    // 未給的欄位不投影（PATCH 語意：undefined=不動；顯式 null=清空）。
+    updateDevice: (deviceId, body) =>
+      resolveDevice(deviceId, {
+        ...(body.device_type !== undefined ? { device_type: body.device_type } : {}),
+        ...(body.protocol !== undefined ? { protocol: body.protocol } : {}),
+        ...(body.vendor !== undefined ? { vendor: body.vendor } : {}),
+        ...(body.model !== undefined ? { model: body.model } : {}),
+        ...(body.location !== undefined ? { location: body.location } : {}),
+        ...(body.gateway_id !== undefined ? { gateway_id: body.gateway_id } : {}),
+        updated_at: new Date().toISOString(),
+      }),
     listSignals: (deviceId) =>
       Promise.resolve(MOCK_SIGNALS.filter((s) => s.device_id === deviceId).map(clone)),
     getHumanReview: (deviceId) =>
@@ -235,8 +282,24 @@ export function createMockEmsApiClient(): EmsApiClient {
       });
     },
     rejectDevice: (deviceId) => resolveDevice(deviceId, { status: "retired" }),
-    createCorrection: () => notInMock("createCorrection") as Promise<CorrectionOut>,
-    listDeviceMeasurements: (deviceId) =>
-      Promise.resolve((MOCK_DEVICE_MEASUREMENTS[deviceId] ?? []).map(clone)),
+    createCorrection: (deviceId, body) =>
+      Promise.resolve({
+        id: nextCorrectionId++,
+        device_id: deviceId,
+        verdict: body.verdict,
+        corrected_device_type: body.corrected_device_type ?? null,
+        corrected_signals: body.corrected_signals ?? null,
+        human_explanation: body.human_explanation,
+        created_at: new Date().toISOString(),
+        created_by_key_id: "mock-key",
+        salt_version: "v1",
+        prompt_version_at_correction: null,
+        applied_count: 0,
+        is_active: true,
+      } satisfies CorrectionOut),
+    listDeviceMeasurements: (deviceId, query) =>
+      Promise.resolve(
+        orderMeasurements(MOCK_DEVICE_MEASUREMENTS[deviceId] ?? [], query?.order).map(clone),
+      ),
   };
 }
