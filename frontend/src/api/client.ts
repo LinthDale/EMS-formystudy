@@ -288,7 +288,8 @@ export function createMockEmsApiClient(): EmsApiClient {
         device_id: deviceId,
         verdict: body.verdict,
         corrected_device_type: body.corrected_device_type ?? null,
-        corrected_signals: body.corrected_signals ?? null,
+        // 深拷貝呼叫端陣列：回傳值不得與輸入共用 reference（immutability — 與其餘 mock 回傳一致）。
+        corrected_signals: body.corrected_signals ? clone(body.corrected_signals) : null,
         human_explanation: body.human_explanation,
         created_at: new Date().toISOString(),
         created_by_key_id: "mock-key",

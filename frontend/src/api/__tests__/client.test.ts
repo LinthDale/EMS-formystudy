@@ -228,6 +228,8 @@ describe("createMockEmsApiClient（P1 mock 資料源）", () => {
     expect(out.is_active).toBe(true);
     // 不靜默吞掉呼叫端傳入的修正 signals（mock 忠實回傳）
     expect(out.corrected_signals).toEqual(input.corrected_signals);
+    // 但須深拷貝，不得與輸入共用 reference（immutability）
+    expect(out.corrected_signals).not.toBe(input.corrected_signals);
   });
 
   it("createCorrection 連續呼叫回不同 id（避免列表 React key 撞）", async () => {
