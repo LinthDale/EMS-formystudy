@@ -33,6 +33,7 @@
 | ADR-023 | BFF session 與 role→channel-key 授權（任何 role 變更即 revoke；SessionStore Protocol；上游 401/403→502；PostgREST hop 不花 key、AI key 不進 BFF）| Proposed | 2026-06-11 |
 | ADR-024 | BFF 認證：OIDC-first + argon2id 本地 fallback（可插拔 AuthProvider；SHA-256→argon2id；OIDC Phase-1 stub→503）| Proposed | 2026-06-15 |
 | ADR-025 | Per-device 量測 PRODUCT facade（產品語意 since/limit/order；device→domain 以 gateway_id 解析；取代 §8.2 operator 透傳；OPS-gated；量測 hop 不花 key）| Proposed | 2026-06-16 |
+| ADR-026 | BFF 設備 create/update facade（FR-502 人工兜底；POST /api/devices + PATCH /api/devices/{id} 鏡像 override pattern、verbatim forward；不暴露 DELETE，停用走 /reject；PATCH/frozen→/override 分工）| Accepted | 2026-06-18 |
 
 > ADR-009 ~ ADR-017 源自 PRD-0003（Device Registry & Auto-Discovery，Approved 2026-05-08 / DL-007），將 PRD §6.4 鎖定之 9 項架構決策正式化。
 > ADR-018 源自 PRD-0003 Phase 1.1 實作前弱點掃描 Finding B，擴充 ADR-016 的 freeze trigger 保護欄位集。
@@ -42,6 +43,7 @@
 > ADR-023 源自 [PRD-0005](../prd/PRD-0005-ems-frontend.md) §9（GATE-1 BFF，`services/bff/`）實作層安全決策；P1 in-memory session store 限單 worker，水平擴展前換 Redis。
 > ADR-024 精煉 ADR-023 的認證層；source PRD-0005 §9 + owner 決策（2026-06-15 OIDC 優先）；對應 threat-model T-26、risk-register R-015。SHA-256→argon2id 已上線，OIDC 全流程延 Phase-1。
 > ADR-025 源自 PRD-0005 §8.2/§9.3 review P2；per-device 量測 facade（產品語意，取代 operator 透傳）；device→domain 以 gateway_id 權威映射（鏡像 device-service `table_for_gateway`）；OPS-gated（domain 解析需特權讀），READONLY 量測暫走 legacy `/api/measurements/{domain}`；強化 threat-model T-08。鎖定後 PRD §8.2 變更以本 ADR 記錄，不改 PRD 主體。
+> ADR-026 源自 PRD-0005 §6（FR-502）/ §8.1，Wave 3 規劃時補齊 BFF facade 缺口（device-service 早有 create/update，BFF 未代理 → live client 404）；DELETE 經查為 soft-retire（set status=retired）非物理刪除、與 /reject 重複故不暴露；PATCH 對 confirmed/frozen 回 409（ADR-016 凍結），分類變更走 /override。Accepted 2026-06-18；S4 endpoint 實作後須補 `api/openapi.yml` + 四文件同步。
 
 ## 撰寫規則
 
