@@ -10,6 +10,12 @@
 | [`c4-container.md`](c4-container.md) | Level 2 — Container | 服務、資料庫、佇列、外部 API 的部署單位 |
 | [`data-flow.md`](data-flow.md) | Data Flow | 關鍵業務流程的資料流向（含同步 / 非同步標記） |
 
+## 行為 / 控制視圖
+
+| 檔案 | 類型 | 狀態 | 用途 |
+|------|------|------|------|
+| [`bess-operating-mode-state-machine.md`](bess-operating-mode-state-machine.md) | 狀態機規格 | Draft | BESS 併網 / 離網 / 故障運轉模式狀態機（控制策略討論稿；與 ADR-010 device 生命週期狀態機正交）|
+
 ## 維護規則
 
 - 所有圖採 **Mermaid**（GitHub / VS Code 可直接渲染，無需外部工具）
