@@ -28,3 +28,38 @@ cloudflared-linux-amd64.deb*
 
 # Internal AI agent deliberation log — for owner/agent reference only, not for public repo
 doc/governance/decision-log.md
+
+# Local credentials and runtime-only user files
+.local/
+
+# Local test reports, process state, and temporary working files
+.coverage
+.coverage.*
+.pytest_cache/
+.ruff_cache/
+coverage/
+htmlcov/
+*.pid
+/tmp/
+
+# Generated release copies and visual QA; retain build scripts and public sources
+/output/ems-public-local/releases/
+/output/ems-design-preview-20260923/backup-before-*/
+/output/**/qa/*.png
+/output/**/qa/*.json
+/output/delta-verification/
+/output/pdf/*.pdf
+/output/word/
+/output/ppt/
+
+# Machine-specific launch configuration (keep these files local)
+/output/ems-design-preview-20260923/server-config*.json
+/output/ems-public-local/server-config*.json
+/output/ems-public-local/staging*-config.json
+/output/ems-public-local/staging-config.json
+
+# Design handoff diagnostics and extracted raster/PDF references
+/scratch/claude-design-handoff-20260923/**/*.txt
+/scratch/claude-design-handoff-20260923/**/*.png
+/scratch/claude-design-handoff-20260923/**/*.jpg
+/scratch/claude-design-handoff-20260923/**/*.pdf

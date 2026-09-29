@@ -136,13 +136,24 @@ sequenceDiagram
 | 路徑 | 模式 | 一致性等級 | 失效行為 |
 |------|------|-----------|---------|
 | Gateway → MQTT | 非同步、QoS 1 | At-least-once | broker 重啟 → 短時暫存後續傳，重啟期間發布的訊息可能丟 |
-| MQTT → Ingest → DB | 非同步、5s flush buffer | At-least-once | ingest 強殺 → 丟最後 5 秒 buffer |
+| MQTT → Ingest → DB | 非同步、5s flush buffer | 非durable端到端保證 | ingest 強殺 → 丟最後 5 秒 buffer |
 | Query / Grafana → DB | 同步 | Read-after-write | DB 慢 → 查詢逾時 |
 | Grafana → Telegram | 非同步 | Best-effort | Telegram 不可達 → 告警丟（無重試佇列） |
 | MCP → Modbus | 同步 | Strong（單次寫） | 設備斷線 → tool call 失敗 |
 
 ## 邊界備註
 
-- 所有 ILP timestamp 採 broker 端產生（Telegraf 預設），非設備端時間
+- ILP timestamp 由採集端提供：既有Telegraf gateway使用採集時間；Delta edge使用來源UTC時間且重送不改。MQTT broker不產生或改寫ILP時間戳
 - TimescaleDB 為 hypertable，**append-only**；資料不可變更，僅可整批刪除（保留期管理）
-- 所有 measurement 表的 `time` 欄為 PRIMARY KEY 一部分，重複時間 ingest 會以最後到者為準（PostgREST 寫入路徑暫關閉，因此實務不會發生衝突）
+- 以目前init.sql為準，electricity_measurements沒有PRIMARY/UNIQUE key；重複時間可能新增重複列，不能宣稱最後到者覆寫或exactly-once
+
+## 2026-09-23 歷史查詢擴充（ADR-027）
+既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
+### 示範通知（PRD-0019）
+`POST /api/alarms/demo {request_id:UUID4}` → session/OPS/Origin/schema → 全域冷卻與 UUID 去重 → Telegram sendMessage → 驗證 HTTP 200 + ok + message_id + chat.id → 回傳 sent/固定錯誤。8 秒上限、不自動重送；GET 僅回最近十筆成功紀錄與冷卻，重啟清空。
+
+## Delta 來源時間與斷線回補（PRD-0020 / ADR-029）
+Delta→FC04 parser→來源UTC時間→SQLite→QoS1 MQTT→既有Telegraf→DB→BFF/Monitor。採集和sender分執行緒；重送保留payload與時間，只有對應PUBACK才刪除。PUBACK非資料庫commit，既有ingest buffer仍可能丟失、DB仍可能重複。僅持久化L1 V/A、總kW、累計kWh；其他decoded資料止於CLI/未ACKsnapshot。
+
+### RTU 模擬資料流（ADR-031）
+Pi主站FC04 request → USB–RS485 #2 → bus → PC USB–RS485 #1 → simulator從站 → raw registers + RTU CRC原路回應 → Pi既有parser → SQLite → MQTT → 後台 → EMS。站號1–247單一站；其他站號/廣播/錯CRC不回應，非法讀寫不能改資料。後續PUBACK/DB限制沿用ADR-029。

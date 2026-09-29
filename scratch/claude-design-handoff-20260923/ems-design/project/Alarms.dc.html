@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>警報中心 · tAIstro EMS</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Noto+Sans+TC:wght@400;500&amp;family=Noto+Serif+TC:wght@300;400&amp;display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#282825}
+a{color:#576a4a}a:hover{color:#345e40}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1120px; box-sizing: border-box; display: grid; grid-template-columns: 208px minmax(0, 1fr); grid-template-rows: 74px minmax(0, 1fr); background: #f4f4f2; color: #282825;">
+
+<header style="grid-column: 1 / 3; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 28px; background: #292a2e;">
+<div style="display: flex; align-items: center; gap: 20px;">
+<svg viewBox="235.88 409.41 370.13 72.54" role="img" aria-label="tAIstro" style="height: 26px; width: auto; display: block;">
+<path fill="#cca858" d="M587.83,430.46h-23.75c-10.03,0-18.18,8.16-18.18,18.18v14.45c0,10.03,8.16,18.18,18.18,18.18h23.75c10.03,0,18.18-8.16,18.18-18.18v-14.45c0-10.03-8.16-18.18-18.18-18.18ZM595.46,463.1c0,4.21-3.42,7.63-7.63,7.63h-23.75c-4.21,0-7.63-3.42-7.63-7.63v-14.45c0-4.21,3.42-7.63,7.63-7.63h23.75c4.21,0,7.63,3.42,7.63,7.63v14.45Z"></path>
+<path fill="#cca858" d="M253.59,419.13h-10.55v10.94h-7.16v10.55h7.16v22.47c0,4.86,1.89,9.42,5.33,12.86,3.43,3.43,8,5.33,12.86,5.33h10.97v-10.55h-10.97c-2.04,0-3.95-.79-5.39-2.23-1.44-1.44-2.23-3.36-2.23-5.4v-22.47h18.81v-10.55h-18.81v-10.94Z"></path>
+<path fill="#cca858" d="M447.16,454.25c-1.41-1.42-3.06-2.53-4.9-3.3-1.9-.81-3.93-1.21-6.01-1.21h-25c-.66,0-1.3-.13-1.9-.38-.58-.24-1.1-.6-1.55-1.04-.45-.45-.8-.97-1.05-1.55-.25-.6-.38-1.23-.38-1.9s.13-1.3.38-1.9c.25-.58.6-1.1,1.05-1.55s.97-.8,1.55-1.04c.6-.25,1.24-.38,1.9-.38h37.14v-10.55h-37.14c-2.08,0-4.1.41-6.01,1.21-1.84.78-3.49,1.89-4.9,3.3-1.42,1.41-2.53,3.06-3.3,4.9-.81,1.9-1.21,3.93-1.21,6.01s.41,4.1,1.21,6.01c.78,1.84,1.89,3.49,3.3,4.9,1.42,1.42,3.07,2.53,4.9,3.3,1.91.81,3.93,1.22,6.01,1.22h25c.66,0,1.3.13,1.9.38.58.25,1.1.6,1.55,1.05s.8.97,1.05,1.55c.25.6.38,1.24.38,1.9s-.13,1.3-.38,1.9c-.25.58-.6,1.1-1.05,1.55s-.97.8-1.55,1.05c-.6.25-1.23.38-1.9.38h-41.36v10.55h41.36c2.08,0,4.1-.41,6.01-1.21,1.84-.78,3.49-1.89,4.9-3.3,1.42-1.41,2.53-3.06,3.31-4.9.81-1.91,1.21-3.93,1.21-6.01s-.41-4.1-1.21-6.01c-.78-1.84-1.89-3.49-3.3-4.9Z"></path>
+<path fill="#cca858" d="M476.09,468.49c-1.44-1.44-2.23-3.36-2.23-5.4v-22.6h19.12v-10.55h-19.12v-10.81h-10.55v43.97c0,4.86,1.89,9.42,5.33,12.86,3.44,3.43,8,5.32,12.86,5.32h11.87v-10.55h-11.87c-2.04,0-3.95-.79-5.39-2.23Z"></path>
+<path fill="#cca858" d="M505.24,448.65v33.3h10.55v-33.3c0-4.21,3.42-7.63,7.63-7.63h17.12v-10.55h-17.12c-10.03,0-18.18,8.16-18.18,18.18Z"></path>
+<rect fill="#cca858" x="371.02" y="431.67" width="10.55" height="49.49"></rect>
+<circle fill="#cca858" cx="376.3" cy="420.6" r="6.88"></circle>
+<g>
+<polygon fill="#cca858" points="317.83 456.72 320.97 409.41 281.74 481.94 317.83 456.72"></polygon>
+<polygon fill="#cca858" points="325.48 456.72 322.35 409.41 361.58 481.94 325.48 456.72"></polygon>
+</g>
+</svg>
+<span aria-hidden="true" style="display: block; width: 1px; height: 30px; background: #5a503b;"></span>
+<span style="font-family: Newsreader, Noto Serif TC, Songti TC, serif; font-weight: 400; font-size: 24px; letter-spacing: 0.12em; color: #cca858; white-space: nowrap;">EMS 能源管理系統</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<button type="button" aria-haspopup="listbox" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 320px; height: 44px; box-sizing: border-box; padding: 0 14px; background: transparent; border: 1px solid #45474c; border-radius: 10px; color: #f4f4f2; font-family: inherit; font-size: 14px; cursor: pointer;">
+<span style="display: flex; align-items: center; gap: 10px;">
+<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16 M15 10h4a1 1 0 0 1 1 1v10 M3 21h18 M8 8h3 M8 12h3 M8 16h3"></path></svg>
+<span>台北南港展覽館專案</span>
+</span>
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<button type="button" aria-label="通知，2 則未讀" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; border-radius: 10px; color: #c4c4be; cursor: pointer;">
+<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20.5a2 2 0 0 0 4 0"></path></svg>
+<span aria-hidden="true" style="position: absolute; top: 10px; right: 11px; width: 8px; height: 8px; border-radius: 999px; background: #cca858; box-shadow: 0 0 0 2px #292a2e;"></span>
+</button>
+<button type="button" aria-haspopup="menu" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 4px; background: transparent; border: 0; border-radius: 10px; color: #f4f4f2; font-family: inherit; cursor: pointer;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #34383a; color: #c4c4be;">
+<svg viewBox="0 0 24 24" width="18" height="18" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+<span style="font-size: 14px;">使用者</span>
+<span style="font-size: 12px; color: #c4c4be;">維運</span>
+</span>
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+</div>
+</header>
+
+<nav aria-label="主選單" style="grid-column: 1; grid-row: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; box-sizing: border-box; padding: 20px 0 22px; background: #1d1e20; overflow: hidden;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 10.5 12 3l9 7.5 M5 9.5V21h14V9.5 M10 21v-6h4v6"></path></svg>
+<span>能源總覽</span>
+</a>
+<a href="Monitor.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg>
+<span>即時監控</span>
+</a>
+<a href="Demand.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4 18a8 8 0 1 1 16 0 M12 18l4-5 M3 18h18"></path></svg>
+<span>需量管理</span>
+</a>
+<a href="Storage.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 8h15a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z M22 11v2 M6 11v2 M9.5 11v2 M13 11v2"></path></svg>
+<span>儲能管理</span>
+</a>
+<a href="Alarms.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; background: #2d3229; box-shadow: inset 2px 0 0 #cca858; color: #f4f4f2; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: #cca858; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7 18v-6a5 5 0 0 1 10 0v6 M4 21h16 M5 18h14 M12 3v2 M4.2 6.2l1.4 1.4 M19.8 6.2l-1.4 1.4"></path></svg>
+<span>警報中心</span>
+</a>
+<a href="Devices.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7 7h10v10H7z M10 3v4 M14 3v4 M10 17v4 M14 17v4 M3 10h4 M3 14h4 M17 10h4 M17 14h4"></path></svg>
+<span>設備分析</span>
+</a>
+<a href="Reports.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M9 13h6 M9 17h6"></path></svg>
+<span>報表中心</span>
+</a>
+</div>
+<sc-if value="{{showSketch}}" hint-placeholder-val="{{true}}">
+<div aria-hidden="true" style="display: flex; justify-content: center; padding: 0 12px;">
+<svg viewBox="0 0 184 170" width="184" height="170" style="display: block; opacity: 0.32; fill: none; stroke: #c4c4be; stroke-width: 0.8px; stroke-linecap: round; stroke-linejoin: round;">
+<path d="M4 150H180 M14 150V104Q52 84 92 100Q132 116 170 96V150 M14 108Q52 88 92 104Q132 120 170 100 M14 128H170"></path>
+<path d="M26 150V100 M38 150V96 M50 150V94 M62 150V94 M74 150V96 M86 150V99 M98 150V103 M110 150V106 M122 150V108 M134 150V107 M146 150V104 M158 150V100"></path>
+<path d="M80 128V120H112V128 M84 128V150 M108 128V150"></path>
+<path d="M24 22L84 10L96 60L36 72Z M44 18L56 68 M64 14L76 64 M30 46L90 34"></path>
+<circle cx="150" cy="38" r="16"></circle>
+<path d="M150 26L154 38L150 35L146 38Z M150 50V54 M134 38H138 M162 38H166"></path>
+<path d="M6 92Q60 62 122 72" style="stroke-dasharray: 1 4;"></path>
+<path d="M14 160H170 M14 156V164 M170 156V164"></path>
+</svg>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 22px; font-size: 12px; line-height: 1.5; color: #c4c4be;">
+<span>星洋智能科技股份有限公司</span>
+<span style="font-family: Newsreader, serif; letter-spacing: 0.06em;">tAistro co., ltd.</span>
+</div>
+</nav>
+
+<main style="grid-column: 2; grid-row: 2; min-width: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; height: 60px;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-size: 13px; letter-spacing: 0.08em; color: #64645e;">ALARM CONSOLE</span>
+<h1 style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 300; font-size: 33px; line-height: 1.1; letter-spacing: -0.02em; color: #282825;">警報中心</h1>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; padding-bottom: 4px;">
+<span style="font-size: 14px; color: #64645e;">進行中警報、確認與擱置、歷史紀錄</span>
+<span style="font-size: 12px; color: #64645e;">通知管道 Telegram 維運群組</span>
+<span style="display: inline-flex; align-items: center; padding: 3px 10px 2px; background: #f2f0e8; border: 1px solid #afafa0; border-bottom-width: 3px; font-size: 12px; letter-spacing: 0.06em; color: #64645e; transform: rotate(-1.2deg); box-shadow: 3px 5px 0 #dedfd477;">示意資料 · SAMPLE</span>
+</div>
+</div>
+
+<section aria-label="警報等級統計" style="height: 88px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #f9e9e5; color: #96493e;">
+<svg viewBox="0 0 24 24" width="20" height="20" style="fill: none; stroke: currentColor; stroke-width: 1.7px; stroke-linecap: round; stroke-linejoin: round;"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z M12 8v5 M12 16v.5"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">P0 緊急</span>
+<span style="display: flex; align-items: baseline; gap: 8px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; font-variant-numeric: lining-nums;">{{counts.p0}}</span><span style="font-size: 12px; color: #64645e;">需立即處置並升級</span></span>
+</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #f6ecd7; color: #8a5f21;">
+<svg viewBox="0 0 24 24" width="20" height="20" style="fill: none; stroke: currentColor; stroke-width: 1.7px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 4 2.5 20h19z M12 10v4 M12 17.5v.5"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">P1 重要</span>
+<span style="display: flex; align-items: baseline; gap: 8px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; font-variant-numeric: lining-nums;">{{counts.p1}}</span><span style="font-size: 12px; color: #64645e;">附處置手冊</span></span>
+</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #f6ead1; color: #282825;">
+<svg viewBox="0 0 24 24" width="20" height="20" style="fill: none; stroke: currentColor; stroke-width: 1.7px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M12 8v5 M12 16v.5"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">P2 一般</span>
+<span style="display: flex; align-items: baseline; gap: 8px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; font-variant-numeric: lining-nums;">{{counts.p2}}</span><span style="font-size: 12px; color: #64645e;">已擱置 {{counts.shelved}}</span></span>
+</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px; padding: 0 22px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 999px; background: #e9e9e3; color: #64645e;">
+<svg viewBox="0 0 24 24" width="20" height="20" style="fill: none; stroke: currentColor; stroke-width: 1.7px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M12 11v5 M12 7.5v.5"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">資訊</span>
+<span style="display: flex; align-items: baseline; gap: 8px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; font-variant-numeric: lining-nums;">{{counts.info}}</span><span style="font-size: 12px; color: #64645e;">排程與模式事件</span></span>
+</span>
+</div>
+</section>
+
+<div style="display: flex; gap: 16px; height: 500px;">
+<section aria-labelledby="listTitle" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 500px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 38px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="listTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">警報清單</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">ALARMS</span>
+</div>
+<div role="radiogroup" aria-label="警報狀態篩選" style="display: flex; gap: 2px; padding: 3px; background: #e9e9e3; border-radius: 10px;">
+<label for="tabActive" style="position: relative; display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 8px; font-size: 13px; cursor: pointer; background: {{tabs.aBg}}; color: {{tabs.aFg}};"><input id="tabActive" type="radio" name="alarmTab" checked="{{tabs.aOn}}" onChange="{{tabs.pickA}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">進行中 {{tabs.aCount}}</label>
+<label for="tabShelved" style="position: relative; display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 8px; font-size: 13px; cursor: pointer; background: {{tabs.sBg}}; color: {{tabs.sFg}};"><input id="tabShelved" type="radio" name="alarmTab" checked="{{tabs.sOn}}" onChange="{{tabs.pickS}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">已擱置 {{tabs.sCount}}</label>
+<label for="tabAll" style="position: relative; display: flex; align-items: center; height: 32px; padding: 0 12px; border-radius: 8px; font-size: 13px; cursor: pointer; background: {{tabs.lBg}}; color: {{tabs.lFg}};"><input id="tabAll" type="radio" name="alarmTab" checked="{{tabs.lOn}}" onChange="{{tabs.pickL}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">全部 {{tabs.lCount}}</label>
+</div>
+</div>
+<div role="table" aria-label="警報清單" style="display: flex; flex-direction: column;">
+<div role="row" style="display: grid; grid-template-columns: 92px minmax(0, 1fr) 112px 92px 132px; column-gap: 14px; align-items: center; height: 34px; padding: 0 14px; background: #e9e9e3; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">
+<span role="columnheader">等級</span>
+<span role="columnheader">警報</span>
+<span role="columnheader">狀態</span>
+<span role="columnheader">持續</span>
+<span role="columnheader" style="text-align: right;">處置</span>
+</div>
+<sc-for list="{{rows}}" as="a" hint-placeholder-count="4">
+<div role="row" style="display: grid; grid-template-columns: 92px minmax(0, 1fr) 112px 92px 132px; column-gap: 14px; align-items: center; min-height: 68px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; background: {{a.rowBg}}; box-shadow: {{a.rowBar}};">
+<span role="cell"><span style="display: inline-flex; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{a.lvBg}}; color: {{a.lvFg}}; font-size: 12px; font-weight: 500; white-space: nowrap;"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" style="fill: none; stroke: {{a.lvIconColor}}; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round;"><path d="{{a.lvIcon}}"></path></svg>{{a.lvLabel}}</span></span>
+<span role="cell" style="display: flex; flex-direction: column; align-items: flex-start; gap: 4px; min-width: 0;">
+<button type="button" onClick="{{a.pick}}" style="padding: 0; background: transparent; border: 0; font-family: inherit; font-size: 14px; text-align: left; color: #282825; cursor: pointer;">{{a.title}}</button>
+<span style="font-size: 12px; color: #64645e;">{{a.source}} · {{a.first}} 起</span>
+</span>
+<span role="cell" style="display: flex; flex-direction: column; align-items: flex-start; gap: 3px;"><span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: {{a.stBg}}; border: 1px solid {{a.stBd}}; color: {{a.stFg}}; font-size: 11px; font-weight: 500; letter-spacing: 0.06em;">{{a.state}}</span><span style="font-size: 12px; color: #64645e;">{{a.stateNote}}</span></span>
+<span role="cell" style="font-size: 13px; color: #64645e; font-variant-numeric: tabular-nums;">{{a.dur}}</span>
+<span role="cell" style="display: flex; justify-content: flex-end; gap: 8px;">
+<sc-if value="{{a.canAck}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{a.ack}}" style="height: 42px; padding: 0 14px; background: #282825; border: 1px solid #282825; border-radius: 12px; color: #f4f4f2; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">確認</button>
+</sc-if>
+<sc-if value="{{a.canShelve}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{a.shelve}}" style="height: 42px; padding: 0 14px; background: transparent; border: 1px solid #282825; border-radius: 12px; color: #282825; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">擱置</button>
+</sc-if>
+<sc-if value="{{a.canResume}}" hint-placeholder-val="{{false}}">
+<button type="button" onClick="{{a.resume}}" style="height: 42px; padding: 0 14px; background: transparent; border: 1px solid #282825; border-radius: 12px; color: #282825; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">取消擱置</button>
+</sc-if>
+</span>
+</div>
+</sc-for>
+<sc-if value="{{empty}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: center; height: 120px; font-size: 14px; color: #64645e;">此分類目前沒有警報</div>
+</sc-if>
+</div>
+<span style="font-size: 12px; color: #64645e;">確認（ACKED）不等於解除（CLEARED）：條件恢復正常後才會移入歷史紀錄。</span>
+</section>
+
+<section aria-labelledby="detailTitle" style="flex: 0 0 400px; box-sizing: border-box; height: 500px; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; gap: 10px; height: 28px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="detailTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">警報詳情</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">DETAIL</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<span style="display: inline-flex; align-self: flex-start; align-items: center; gap: 5px; height: 24px; padding: 0 9px; border-radius: 999px; background: {{sel.lvBg}}; color: {{sel.lvFg}}; font-size: 12px; font-weight: 500;"><svg viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" style="fill: none; stroke: {{sel.lvIconColor}}; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round;"><path d="{{sel.lvIcon}}"></path></svg>{{sel.lvLabel}}</span>
+<span style="font-family: Newsreader, Noto Serif TC, serif; font-size: 19px; line-height: 1.35; color: #282825;">{{sel.title}}</span>
+</div>
+<div role="table" aria-label="警報屬性" style="display: flex; flex-direction: column;">
+<div role="row" style="display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid #d5d5ce; font-size: 13px;"><span role="rowheader" style="color: #64645e;">來源</span><span role="cell" style="text-align: right;">{{sel.source}}</span></div>
+<div role="row" style="display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid #d5d5ce; font-size: 13px;"><span role="rowheader" style="color: #64645e;">規則</span><span role="cell" style="text-align: right;">{{sel.rule}}</span></div>
+<div role="row" style="display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; font-size: 13px;"><span role="rowheader" style="color: #64645e;">首次發生</span><span role="cell" style="font-variant-numeric: tabular-nums;">09/23 {{sel.first}} · 持續 {{sel.dur}}</span></div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<span style="font-size: 12px; letter-spacing: 0.06em; color: #64645e;">生命週期</span>
+<div style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px;">
+<sc-for list="{{sel.steps}}" as="s" hint-placeholder-count="5">
+<div style="display: flex; flex-direction: column; gap: 5px;">
+<span aria-hidden="true" style="display: block; height: 4px; border-radius: 999px; background: {{s.bar}};"></span>
+<span style="font-size: 11px; font-weight: 500; letter-spacing: 0.04em; color: {{s.fg}};">{{s.code}}</span>
+<span style="font-size: 11px; color: #64645e; font-variant-numeric: tabular-nums;">{{s.time}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px; flex: 1 1 auto; min-height: 0;">
+<span style="font-size: 12px; letter-spacing: 0.06em; color: #64645e;">處置手冊</span>
+<sc-for list="{{sel.runbook}}" as="r" hint-placeholder-count="3">
+<div style="display: flex; gap: 10px; font-size: 13px; line-height: 1.5;"><span style="flex: 0 0 18px; font-family: Newsreader, serif; color: #576a4a;">{{r.n}}</span><span>{{r.text}}</span></div>
+</sc-for>
+<sc-if value="{{sel.noRunbook}}" hint-placeholder-val="{{false}}">
+<span style="font-size: 13px; color: #64645e;">資訊事件不需處置。</span>
+</sc-if>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; background: #f2f0e8; border-radius: 9px; font-size: 12px; line-height: 1.5; color: #64645e;">
+<span style="color: #282825;">通知與升級</span>
+<span>Telegram 維運群組 → 15 分鐘未確認升級至 [PLACEHOLDER 值班主管]</span>
+</div>
+</section>
+</div>
+
+<section aria-labelledby="histTitle" style="height: 302px; box-sizing: border-box; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="histTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">歷史紀錄</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">HISTORY · 近 7 天</span>
+</div>
+<span style="font-size: 12px; color: #64645e;">警報與稽核紀錄保存至少 12 個月</span>
+</div>
+<div role="table" aria-label="近 7 天已解除警報" style="display: flex; flex-direction: column;">
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 32px; padding: 0 14px; background: #e9e9e3; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">
+<span role="columnheader">發生時間</span><span role="columnheader">等級</span><span role="columnheader">事件</span><span role="columnheader">來源</span><span role="columnheader">解除時間</span><span role="columnheader">持續</span><span role="columnheader">處理</span>
+</div>
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 36px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; font-size: 13px; font-variant-numeric: tabular-nums;">
+<span role="cell">09/22 18:02:10</span><span role="cell" style="color: #8a5f21;">P1 重要</span><span role="cell">PCS-01 通訊逾時超過 5 秒</span><span role="cell" style="color: #64645e;">PCS-01</span><span role="cell">18:04:31</span><span role="cell" style="color: #64645e;">2 分 21 秒</span><span role="cell" style="color: #64645e;">system 自動解除</span>
+</div>
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 36px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; font-size: 13px; font-variant-numeric: tabular-nums;">
+<span role="cell">09/22 09:14:55</span><span role="cell">P2 一般</span><span role="cell">PCC 15 分鐘需量 ≥ 385 kW（本月最高 90 %）</span><span role="cell" style="color: #64645e;">M-01 台電受電點</span><span role="cell">09:30:00</span><span role="cell" style="color: #64645e;">15 分</span><span role="cell" style="color: #64645e;">維運</span>
+</div>
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 36px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; font-size: 13px; font-variant-numeric: tabular-nums;">
+<span role="cell">09/21 16:40:03</span><span role="cell" style="color: #8a5f21;">P1 重要</span><span role="cell">電芯電壓預警 3.55 V（L1 警報）</span><span role="cell" style="color: #64645e;">BMS-01</span><span role="cell">16:52:47</span><span role="cell" style="color: #64645e;">12 分 44 秒</span><span role="cell" style="color: #64645e;">維運</span>
+</div>
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 36px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; font-size: 13px; font-variant-numeric: tabular-nums;">
+<span role="cell">09/20 20:00:05</span><span role="cell" style="color: #64645e;">資訊</span><span role="cell">夜尖峰放電完成，執行率 96 %</span><span role="cell" style="color: #64645e;">BESS-01 排程</span><span role="cell">—</span><span role="cell" style="color: #64645e;">—</span><span role="cell" style="color: #64645e;">system</span>
+</div>
+<div role="row" style="display: grid; grid-template-columns: 132px 92px minmax(0, 1fr) 150px 110px 110px 120px; column-gap: 14px; align-items: center; height: 36px; padding: 0 14px; font-size: 13px; font-variant-numeric: tabular-nums;">
+<span role="cell">09/19 07:31:40</span><span role="cell">P2 一般</span><span role="cell">INV-03 資料品質 UNCERTAIN</span><span role="cell" style="color: #64645e;">INV-03</span><span role="cell">07:36:02</span><span role="cell" style="color: #64645e;">4 分 22 秒</span><span role="cell" style="color: #64645e;">system 自動解除</span>
+</div>
+</div>
+</section>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showSketch":{"editor":"boolean","default":true,"section":"質感"},"$preview":{"width":1440,"height":1120}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var props = this.props || {};
+    var st = this.state || {};
+    var self = this;
+    var showSketch = props.showSketch == null ? true : props.showSketch;
+
+    var ICON = {
+      P0: 'M8 3h8l5 5v8l-5 5H8l-5-5V8z M12 8v5 M12 16v.5',
+      P1: 'M12 4 2.5 20h19z M12 10v4 M12 17.5v.5',
+      P2: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M12 8v5 M12 16v.5',
+      INFO: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z M12 11v5 M12 7.5v.5'
+    };
+    var LEVEL = {
+      P0: { label: 'P0 緊急', bg: '#f9e9e5', fg: '#96493e', icon: '#a55445' },
+      P1: { label: 'P1 重要', bg: '#f6ecd7', fg: '#8a5f21', icon: '#a5762e' },
+      P2: { label: 'P2 一般', bg: '#f6ead1', fg: '#282825', icon: '#282825' },
+      INFO: { label: '資訊', bg: '#e9e9e3', fg: '#64645e', icon: '#64645e' }
+    };
+    // Sample alarm set (示意資料); rules follow the implemented and planned alarm vocabulary.
+    var BASE = [
+      { id: 'a1', level: 'P1', title: '空調控制器 HVAC-01 資料中斷逾 2 分鐘', source: 'HVAC-01 · 空調控制器', rule: '資料停止更新 ≥ 2 分鐘（STALE）', pending: '14:27:48', first: '14:29:48', dur: '2 分 17 秒', state: 'ACTIVE',
+        runbook: ['確認 HVAC-01 與閘道 GW-01 的網路連線', '於設備分析檢視最後上線時間與資料品質', '15 分鐘內未恢復，派員檢查控制器電源'] },
+      { id: 'a2', level: 'P2', title: 'AI 分類防護攔截 6 次／小時', source: 'ENV-02 · 溫濕度感測器', rule: '同一裝置每小時攔截 ≥ 5 次', pending: '13:58:02', first: '13:58:02', dur: '34 分', state: 'ACTIVE',
+        runbook: ['於設備分析檢視 ENV-02 的訊號與 AI 建議', '必要時凍結該裝置的 AI 自動分類'] },
+      { id: 'a3', level: 'P2', title: 'LLM 預算用量 82 %', source: 'AI 分類管線', rule: '月預算用量 ≥ 80 %', pending: '13:05:41', first: '13:05:41', dur: '1 小時 27 分', state: 'ACKED', ackNote: '維運 13:12 確認',
+        runbook: ['檢視本月 AI 分類呼叫量', '評估是否調降批次頻率'] },
+      { id: 'a4', level: 'INFO', title: '儲能排程：14:00 開始半尖峰放電 58 kW', source: 'BESS-01 · 排程', rule: '排程事件', pending: '14:00:02', first: '14:00:02', dur: '32 分', state: 'ACTIVE', runbook: [] },
+      { id: 'a5', level: 'P2', title: 'PCC 功率因數低於 0.9（5 分鐘平均）', source: 'M-01 · 台電受電點', rule: 'PF < 0.9 持續 5 分鐘', pending: '11:35:10', first: '11:40:10', dur: '2 小時 52 分', state: 'SHELVED', shelveNote: '擱置至 16:00 · 維運',
+        runbook: ['比對空調分路與動力分路的無效功率', '確認 PCS 無效功率支援是否啟用'] }
+    ];
+    var acked = st.acked || {};
+    var shelved = st.shelved || {};
+    var unshelved = st.unshelved || {};
+    var list = BASE.map(function (a) {
+      var s = a.state, note = a.ackNote || a.shelveNote || '';
+      if (a.state === 'SHELVED' && unshelved[a.id]) { s = 'ACTIVE'; note = ''; }
+      if (shelved[a.id]) { s = 'SHELVED'; note = '擱置至 16:00 · 維運'; }
+      else if (acked[a.id] && s === 'ACTIVE') { s = 'ACKED'; note = '維運 14:32 確認'; }
+      return Object.assign({}, a, { cur: s, note: note });
+    });
+    var tab = st.tab || 'active';
+    var selId = st.sel || 'a1';
+    var STATE = {
+      ACTIVE: { bg: '#f8f8f7', bd: '#282825', fg: '#282825', label: 'ACTIVE 進行中' },
+      ACKED: { bg: '#e5ebdc', bd: '#e5ebdc', fg: '#426d4b', label: 'ACKED 已確認' },
+      SHELVED: { bg: '#e9e9e3', bd: '#e9e9e3', fg: '#64645e', label: 'SHELVED 已擱置' }
+    };
+    var visible = list.filter(function (a) {
+      if (tab === 'active') { return a.cur !== 'SHELVED'; }
+      if (tab === 'shelved') { return a.cur === 'SHELVED'; }
+      return true;
+    });
+    var rows = visible.map(function (a) {
+      var lv = LEVEL[a.level], sx = STATE[a.cur];
+      var isSel = a.id === selId;
+      return {
+        id: a.id, title: a.title, source: a.source, first: a.first, dur: a.dur,
+        lvLabel: lv.label, lvBg: lv.bg, lvFg: lv.fg, lvIcon: ICON[a.level], lvIconColor: lv.icon,
+        state: sx.label, stBg: sx.bg, stBd: sx.bd, stFg: sx.fg, stateNote: a.note,
+        rowBg: isSel ? '#f2f0e8' : 'transparent', rowBar: isSel ? 'inset 2px 0 0 #cca858' : 'none',
+        canAck: a.cur === 'ACTIVE' && a.level !== 'INFO',
+        canShelve: a.cur !== 'SHELVED' && a.level !== 'INFO',
+        canResume: a.cur === 'SHELVED',
+        pick: function () { self.setState({ sel: a.id }); },
+        ack: function () { var n = Object.assign({}, acked); n[a.id] = true; self.setState({ acked: n, sel: a.id }); },
+        shelve: function () { var n = Object.assign({}, shelved); n[a.id] = true; var u = Object.assign({}, unshelved); delete u[a.id]; self.setState({ shelved: n, unshelved: u }); },
+        resume: function () { var n = Object.assign({}, shelved); delete n[a.id]; var u = Object.assign({}, unshelved); u[a.id] = true; self.setState({ shelved: n, unshelved: u }); }
+      };
+    });
+
+    var countIf = function (fn) { return list.filter(fn).length; };
+    var counts = {
+      p0: countIf(function (a) { return a.level === 'P0' && a.cur !== 'SHELVED'; }),
+      p1: countIf(function (a) { return a.level === 'P1' && a.cur !== 'SHELVED'; }),
+      p2: countIf(function (a) { return a.level === 'P2' && a.cur !== 'SHELVED'; }),
+      info: countIf(function (a) { return a.level === 'INFO'; }),
+      shelved: countIf(function (a) { return a.cur === 'SHELVED'; })
+    };
+    var seg = function (key) { var on = tab === key; return { bg: on ? '#f8f8f7' : 'transparent', fg: on ? '#282825' : '#64645e', on: on }; };
+    var tA = seg('active'), tS = seg('shelved'), tL = seg('all');
+    var tabs = {
+      aBg: tA.bg, aFg: tA.fg, aOn: tA.on, aCount: countIf(function (a) { return a.cur !== 'SHELVED'; }),
+      sBg: tS.bg, sFg: tS.fg, sOn: tS.on, sCount: counts.shelved,
+      lBg: tL.bg, lFg: tL.fg, lOn: tL.on, lCount: list.length,
+      pickA: function () { self.setState({ tab: 'active' }); },
+      pickS: function () { self.setState({ tab: 'shelved' }); },
+      pickL: function () { self.setState({ tab: 'all' }); }
+    };
+
+    var s = list.filter(function (a) { return a.id === selId; })[0] || list[0];
+    var lvS = LEVEL[s.level];
+    var order = ['NORMAL', 'PENDING', 'ACTIVE', 'ACKED', 'CLEARED'];
+    var reached = s.cur === 'ACKED' ? 3 : 2;
+    var times = { NORMAL: '—', PENDING: s.pending, ACTIVE: s.first, ACKED: s.cur === 'ACKED' ? (s.note.split(' ')[1] || '—') : '—', CLEARED: '—' };
+    var sel = {
+      title: s.title, source: s.source, rule: s.rule, first: s.first, dur: s.dur,
+      lvLabel: lvS.label, lvBg: lvS.bg, lvFg: lvS.fg, lvIcon: ICON[s.level], lvIconColor: lvS.icon,
+      steps: order.map(function (code, i) {
+        return { code: code, time: times[code], bar: i <= reached ? (i === reached ? '#cca858' : '#647956') : '#e9e9e3', fg: i <= reached ? '#282825' : '#64645e' };
+      }),
+      runbook: s.runbook.map(function (t, i) { return { n: String(i + 1), text: t }; }),
+      noRunbook: s.runbook.length === 0
+    };
+
+    return { showSketch: showSketch, counts: counts, tabs: tabs, rows: rows, empty: rows.length === 0, sel: sel };
+  }
+}
+</script>
+</body>
+</html>

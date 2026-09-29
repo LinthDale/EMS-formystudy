@@ -260,6 +260,8 @@ services:
       - query
     environment:
       BFF_CONFIG_FILE: /app/config/bff.toml
+      BFF_TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      BFF_TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
       BFF_OPS_API_KEY: ${OPS_API_KEY:-}        # reuse device-service channel secrets
       BFF_INGEST_API_KEY: ${INGEST_API_KEY:-}  # AI key deliberately NOT passed (PRD-0005 §1/§6.1)
       BFF_AUTH_USERS: ${BFF_AUTH_USERS:-}      # "user:sha256hex:role,..." (.env only)
@@ -294,6 +296,34 @@ services:
     profiles: ["prod"]
     restart: unless-stopped
 
+  # Opt-in Delta V1.35 demo: no host Modbus port; separate durable edge spool.
+  delta-simulator:
+    build: ./services/delta
+    container_name: ems-delta-simulator
+    profiles: ["delta-demo"]
+    command: ["simulator", "--host", "0.0.0.0", "--port", "5021"]
+    restart: unless-stopped
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+
+  delta-edge:
+    build: ./services/delta
+    container_name: ems-delta-edge
+    profiles: ["delta-demo"]
+    command: ["edge", "--config", "/app/config/demo.json"]
+    volumes:
+      - ./services/delta/config:/app/config:ro
+      - delta_edge_data:/data
+    depends_on:
+      - delta-simulator
+      - mosquitto
+    restart: unless-stopped
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+
 volumes:
+  delta_edge_data:
   timescale_data:
   grafana_data:

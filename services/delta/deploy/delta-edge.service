@@ -1,0 +1,28 @@
+[Unit]
+Description=Read-only Delta telemetry to EMS
+Wants=network-online.target systemd-timesyncd.service
+After=network-online.target systemd-timesyncd.service
+
+[Service]
+Type=simple
+User=delta-edge
+Group=delta-edge
+SupplementaryGroups=dialout
+WorkingDirectory=/opt/delta-edge
+EnvironmentFile=/etc/delta-edge/credentials.env
+ExecStart=/opt/delta-edge/.venv/bin/python -m delta_device edge --config /etc/delta-edge/config.json
+Restart=on-failure
+RestartSec=10
+TimeoutStopSec=30
+UMask=0077
+StateDirectory=delta-edge
+StateDirectoryMode=0700
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+# PrivateDevices must remain false so the configured RS-485 adapter is accessible.
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target

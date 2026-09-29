@@ -1,0 +1,40 @@
+{
+  "out": "contrast2.txt",
+  "pairs": [
+    { "id": "primary btn: card text on olive-700", "fg": "#FAF8F3", "bg": "#5C6332" },
+    { "id": "outlined btn: bronze-700 text on card", "fg": "#7A5A22", "bg": "#FAF8F3" },
+    { "id": "outlined btn border bronze-700 (non-text)", "fg": "#7A5A22", "bg": "#FAF8F3", "need": 3.0 },
+    { "id": "chip good text on good-50", "fg": "#3E7B45", "bg": "#E6EFE3" },
+    { "id": "chip good-text-dark on good-50", "fg": "#33663A", "bg": "#E6EFE3" },
+    { "id": "chip warning-text on warning-50", "fg": "#8C5A0E", "bg": "#F6ECD6" },
+    { "id": "chip serious on serious-50", "fg": "#B0532C", "bg": "#F6E3DA" },
+    { "id": "chip serious-text-dark on serious-50", "fg": "#954524", "bg": "#F6E3DA" },
+    { "id": "chip critical on critical-50", "fg": "#A33A30", "bg": "#F5E1DE" },
+    { "id": "TOU label ink-700 on peak tint", "fg": "#57524A", "bg": "#E3C98F" },
+    { "id": "TOU label ink-700 on mid tint", "fg": "#57524A", "bg": "#EDE1C4" },
+    { "id": "TOU label ink-700 on off tint", "fg": "#57524A", "bg": "#F3F0E6" },
+    { "id": "ink-500 on inset", "fg": "#6A6458", "bg": "#FFFEFB" },
+    { "id": "bronze-600 numerals on inset", "fg": "#8A6A2F", "bg": "#FFFEFB" },
+    { "id": "bronze-600 numerals on ground (avoid)", "fg": "#8A6A2F", "bg": "#F1EDE3" },
+    { "id": "ink-700 on sage chip", "fg": "#57524A", "bg": "#E7E8D8" },
+    { "id": "bronze-700 on sage-50", "fg": "#7A5A22", "bg": "#EEF0E3" },
+    { "id": "header muted on header", "fg": "#B9B2A2", "bg": "#262522" },
+    { "id": "gold-300 on sidebar", "fg": "#D2B274", "bg": "#2C2B27" },
+    { "id": "sidebar label cream-200 on sidebar", "fg": "#E6DFCF", "bg": "#2C2B27" },
+    { "id": "site switcher border on header (non-text)", "fg": "#6B665B", "bg": "#262522", "need": 3.0 },
+    { "id": "white text on bess charcoal (label inside segment)", "fg": "#FFFFFF", "bg": "#51504B" },
+    { "id": "white text on pv olive (label inside segment)", "fg": "#FFFFFF", "bg": "#6F7C2D" },
+    { "id": "ink-900 on grid gold (label inside segment)", "fg": "#262522", "bg": "#CB8E3E" },
+    { "id": "pv olive on inset (mark)", "fg": "#6F7C2D", "bg": "#FFFEFB", "need": 3.0 },
+    { "id": "status warning mark on card", "fg": "#A86A12", "bg": "#FAF8F3", "need": 3.0 },
+    { "id": "status good mark on sage-50", "fg": "#3E7B45", "bg": "#EEF0E3", "need": 3.0 }
+  ],
+  "colors": [
+    { "id": "pv olive final", "hex": "#6F7C2D" },
+    { "id": "grid gold final", "hex": "#CB8E3E" },
+    { "id": "bess charcoal final", "hex": "#51504B" },
+    { "id": "TOU peak tint", "hex": "#E3C98F" },
+    { "id": "TOU mid tint", "hex": "#EDE1C4" },
+    { "id": "TOU off tint", "hex": "#F3F0E6" }
+  ]
+}

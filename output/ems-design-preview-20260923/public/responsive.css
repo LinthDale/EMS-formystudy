@@ -1,0 +1,196 @@
+:root{--ems-side:208px;--ems-gap:16px;--ems-pad:clamp(16px,1.65vw,32px)}
+html,body,#dc-root,#dc-root>.sc-host{width:100%!important;height:auto!important;min-height:0!important;margin:0}
+.ems-board{width:100%!important;height:auto!important;min-height:var(--app-viewport-height,100dvh);grid-template-columns:var(--ems-side) minmax(0,1fr)!important;grid-template-rows:74px auto!important}
+.ems-board *{box-sizing:border-box}
+.ems-header{min-width:0;gap:16px!important;padding-inline:var(--ems-pad)!important}
+.ems-brand,.ems-header-actions{min-width:0}
+.ems-header-actions{gap:12px!important}
+.ems-header-actions>button[aria-haspopup=listbox]{width:clamp(210px,22vw,360px)!important;min-width:0}
+.ems-header-actions>button[aria-haspopup=listbox]>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ems-main{width:100%;max-width:none;min-width:0;padding:var(--ems-pad)!important;gap:var(--ems-gap)!important}
+.ems-sidebar{min-height:0;overflow:visible!important}
+.ems-nav-items{min-width:0}
+.ems-sidebar a{min-height:44px}
+.ems-sidebar a:focus-visible,.ems-board button:focus-visible{outline:2px solid #cca858;outline-offset:-3px}
+.ems-panel-row{display:grid!important;grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr);gap:var(--ems-gap)!important;height:auto!important;min-width:0;align-items:stretch}
+.ems-panel{height:auto!important;min-height:var(--ems-panel-min,0px);min-width:0;max-width:100%;flex-shrink:0!important}
+.ems-panel>div:first-child:not([role]){min-height:28px;height:auto!important;flex-wrap:wrap;row-gap:8px!important}
+.ems-panel h2{flex-shrink:0}
+.ems-page-heading{height:auto!important;min-height:60px;flex-wrap:wrap;align-items:center!important;gap:12px!important}
+.ems-page-heading>div:last-child{flex-wrap:wrap;gap:10px!important}
+.ems-three-panels{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.ems-summary>div{min-width:0;padding:16px!important}
+.ems-overview-top{grid-template-columns:minmax(734px,1.65fr) minmax(320px,1fr)}
+.ems-overview-bottom{grid-template-columns:minmax(0,1.8fr) minmax(280px,1fr) minmax(220px,.75fr)}
+.ems-overview-metrics{grid-template-columns:repeat(4,minmax(0,1fr));min-height:108px}
+.ems-overview-metrics>.ems-panel{min-height:108px}
+.ems-energy-flow{width:694px;max-width:100%;min-height:286px!important;flex:0 0 286px!important;margin-inline:auto}
+.ems-mode-diagram{width:428px;max-width:100%;min-height:140px;flex:0 0 140px;align-self:center}
+.ems-data-table{max-width:100%;min-width:0;width:100%;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+.ems-data-table>[role=row]{min-width:650px}
+.ems-data-table[aria-label="裝置清單"]>[role=row]{min-width:1080px}
+.ems-report-filters{flex-wrap:wrap;padding:16px 20px!important;gap:14px!important}
+.ems-report-filters>div{flex-wrap:wrap;gap:12px!important}
+.ems-report-filters button{white-space:nowrap}
+@media(max-width:1400px){
+ :root{--ems-side:184px}
+ .ems-brand{gap:12px!important}
+ .ems-brand>span:last-child{font-size:20px!important;letter-spacing:.04em!important}
+ .ems-sidebar a{padding-inline:18px!important;gap:10px!important}
+ .ems-overview-top{grid-template-columns:minmax(0,1fr)}
+ .ems-overview-top>[aria-labelledby=demandTitle]{min-height:240px}
+ .ems-demand-summary{height:auto!important;min-height:150px}
+ .ems-overview-bottom{grid-template-columns:minmax(0,1.5fr) minmax(280px,1fr)}
+ .ems-overview-bottom>[aria-labelledby=alertTitle]{grid-column:1/-1;min-height:190px}
+ .ems-summary-six{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+@media(max-width:1180px){
+ .ems-panel-row:not(.ems-overview-metrics){grid-template-columns:minmax(0,1fr)!important}
+ .ems-overview-metrics{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .ems-overview-metrics>.ems-panel:last-child{grid-column:1/-1}
+ .ems-brand>span:last-child{font-size:16px!important}
+ .ems-header-actions>button[aria-haspopup=listbox]{width:210px!important}
+ .ems-three-panels{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+@media(max-width:900px){
+ .ems-board{display:flex!important;flex-direction:column}
+ .ems-header{min-height:74px;flex-wrap:wrap;padding-block:14px!important;gap:12px!important}
+ .ems-header-actions{margin-left:auto}
+ .ems-sidebar{padding:0!important;display:block!important}
+ .ems-nav-items{display:flex;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin}
+ .ems-nav-items>a{white-space:nowrap;flex:0 0 auto;padding:12px 16px!important;height:auto!important;font-size:14px!important}
+ .ems-sidebar-footer{display:none!important}
+ .ems-main{flex:1}
+ .ems-energy-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;min-height:0!important;flex:1 0 auto!important}
+ .ems-energy-flow>svg{display:none!important}
+ .ems-energy-node{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:176px;padding:12px!important;justify-content:center!important;border:1px solid #e8e5da!important;border-radius:12px;background:#f2f0e8}
+ .ems-energy-node>svg{max-width:100%;height:84px!important}
+ .ems-energy-load{order:4;background:#e5ebdc}
+ .ems-soc-content{flex-wrap:wrap;justify-content:center;gap:18px!important}
+ .ems-soc-content>div{min-width:0;max-width:100%}
+}
+@media(max-width:650px){
+ :root{--ems-gap:14px;--ems-pad:14px}
+ .ems-header{align-items:stretch!important}
+ .ems-brand{width:100%;gap:12px!important}
+ .ems-brand>svg{height:23px!important;flex-shrink:0}
+ .ems-brand>span:last-child{font-size:16px!important;letter-spacing:.02em!important;white-space:normal!important}
+ .ems-header-actions{width:100%;margin-left:0;gap:8px!important}
+ .ems-header-actions>button[aria-haspopup=listbox]{width:auto!important;flex:1}
+ .ems-header-actions>button{flex-shrink:0}
+ .ems-header-actions>button[aria-haspopup=menu]{max-width:106px}
+ .ems-sidebar a svg{width:17px;height:17px}
+ .ems-main{padding:18px 14px!important}
+ .ems-page-heading{align-items:flex-start!important;gap:10px!important}
+ .ems-page-heading>div{max-width:100%}
+ .ems-summary{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .ems-summary>div{padding:16px 12px!important;min-height:96px}
+ .ems-summary>div:nth-child(odd){border-left:0!important}
+ .ems-summary>div:nth-child(n+3){border-top:1px solid #d5d5ce}
+ .ems-panel{padding:16px!important}
+ .ems-panel h2+span{display:none!important}
+ .ems-panel>div:first-child>div{flex-wrap:wrap;max-width:100%;gap:8px!important}
+ .ems-panel>div:first-child>span{max-width:100%;white-space:normal!important}
+ .ems-overview-metrics{display:flex!important;flex-direction:column}
+ .ems-overview-metrics>.ems-panel:first-child{grid-template-columns:1fr!important;padding:0!important}
+ .ems-overview-metrics>.ems-panel:first-child>div{padding:16px!important;border-left:0!important;border-bottom:1px solid #d5d5ce}
+ .ems-overview-metrics>.ems-panel:last-child{padding:16px!important}
+ .ems-energy-node{min-height:172px}
+ .ems-demand-summary{padding:14px!important}
+ .ems-demand-summary>div:first-child{grid-template-columns:1fr!important}
+ .ems-demand-summary>div:first-child>div{padding:10px 0!important;border-left:0!important}
+ .ems-mode-diagram{width:100%;height:auto!important;flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ems-mode-diagram>svg,.ems-mode-diagram>span{display:none!important}
+ .ems-mode-diagram>div{position:static!important;width:auto!important;min-height:44px;height:auto!important}
+ .ems-data-table{padding-bottom:6px}
+ .ems-report-filters>div{width:100%}
+ .ems-report-filters>div:first-child{align-items:stretch!important;flex-direction:column}
+ .ems-report-filters>div:last-child>button{flex:1;padding-inline:10px!important}
+ .ems-panel>div:last-child:not(.ems-energy-flow){max-width:100%}
+}
+@media(prefers-reduced-motion:reduce){.ems-board *{scroll-behavior:auto!important}}
+/* Charts keep their labels at a readable size while their geometry follows the card. */
+.ems-chart{width:100%;min-width:0}
+.ems-schedule-caption{display:none;margin:0;font-size:12px;line-height:1.8;color:#64645e}
+.ems-data-table>[role=row]{min-width:0}
+.ems-data-table>[role=row][style*="display: grid"]{min-width:780px}
+.ems-data-table[aria-label="裝置清單"]>[role=row]{min-width:1080px}
+.ems-data-table[aria-label="稽核紀錄"]>[role=row]{min-width:1050px}
+.ems-report-metrics{height:auto!important;min-height:72px;grid-template-columns:repeat(3,minmax(0,1fr))!important}
+.ems-report-metrics>div{padding:12px!important;min-width:0}
+.ems-report-metrics>div:nth-child(n+4){border-top:1px solid #d5d5ce}
+.ems-report-metrics>div:nth-child(3n+1){border-left:0!important}
+.ems-panel[aria-labelledby=touTitle]>div:last-child{flex-wrap:wrap;gap:10px!important}
+@media(min-width:1700px){.ems-report-metrics{grid-template-columns:repeat(6,minmax(0,1fr))!important}.ems-report-metrics>div{border-top:0!important}}
+@media(max-width:1180px){.ems-panel-row.ems-three-panels{grid-template-columns:repeat(2,minmax(0,1fr))!important}.ems-panel-row.ems-three-panels>.ems-panel:last-child{grid-column:1/-1}}
+@media(max-width:900px){
+ .ems-energy-node>svg{overflow:hidden!important}
+ .ems-schedule-plan>span{font-size:0!important}
+ .ems-schedule-caption{display:block}
+ .ems-schedule-now{transform:translateX(-50%)!important}
+}
+@media(max-width:650px){
+ .ems-panel-row.ems-three-panels{grid-template-columns:minmax(0,1fr)!important}
+ .ems-chart-peak{top:184px!important;right:0!important;font-size:11px!important}
+ .ems-panel[aria-labelledby=trendTitle] .ems-chart{min-height:212px!important;flex-basis:212px!important}
+ .ems-report-metrics{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+ .ems-report-metrics>div{border-left:0!important}
+ .ems-report-metrics>div:nth-child(even){border-left:1px solid #d5d5ce!important}
+ .ems-report-metrics>div:nth-child(n+3){border-top:1px solid #d5d5ce}
+ .ems-panel[aria-labelledby=repTitle]>div:nth-child(3){height:auto!important;flex-wrap:wrap;gap:10px}
+ .ems-panel[aria-labelledby=touTitle]>div:nth-child(2){grid-template-columns:92px minmax(0,1fr)!important;column-gap:8px!important}
+}
+/* Compact navigation and independently scrollable data grids. */
+.ems-data-table{display:block!important;flex:0 0 auto!important}
+.ems-data-table>[role=row]{flex-shrink:0!important}
+.ems-data-table>[role=row][style*="display: grid"]{white-space:nowrap;min-width:1040px}
+.ems-header-actions>button[aria-haspopup=menu]{white-space:nowrap}
+@media(max-width:900px){
+ .ems-nav-items{flex-direction:row!important}
+ .ems-nav-items>a{flex-shrink:0!important}
+}
+@media(max-width:650px){
+ .ems-panel{min-height:0}
+ .ems-overview-top>[aria-labelledby=demandTitle],.ems-overview-bottom>[aria-labelledby=alertTitle]{min-height:0}
+ .ems-panel[aria-labelledby=modeTitle]{min-height:0}
+ .ems-summary{padding:0!important}
+}
+.ems-data-table>[role=row][style*="display: grid"]{height:auto!important;min-height:38px;padding-block:10px!important;min-width:1120px}
+.ems-data-table>[role=row]>[role=cell],.ems-data-table>[role=row]>[role=columnheader]{min-width:0;white-space:normal;overflow-wrap:anywhere}
+.ems-data-table[aria-label="電池狀態指標"]{display:grid!important;flex:1 1 0!important;width:auto;overflow:visible}
+.ems-data-table[aria-label="電池狀態指標"]>[role=row]>[role=cell]{flex-wrap:wrap}
+@media(max-width:900px){.ems-data-table[aria-label="電池狀態指標"]{flex-basis:320px!important}}
+@media(min-width:1301px) and (max-width:1400px){
+ .ems-overview-top{grid-template-columns:minmax(734px,1.65fr) minmax(320px,1fr)}
+ .ems-overview-bottom{grid-template-columns:minmax(0,1.8fr) minmax(300px,1fr) minmax(220px,.75fr)}
+ .ems-overview-bottom>[aria-labelledby=alertTitle]{grid-column:auto;min-height:270px}
+}
+.ems-panel[aria-labelledby=queueTitle]{container-type:inline-size}
+.ems-queue-item>div{min-width:0}
+@container(max-width:720px){
+ .ems-queue-item{grid-template-columns:minmax(0,1fr)!important;gap:12px!important;padding:16px 0!important}
+ .ems-queue-item>div:last-child{width:100%!important;justify-content:flex-start!important;flex-wrap:wrap}
+ .ems-queue-item button{white-space:nowrap}
+}
+.ems-panel[aria-labelledby=modeTitle],.ems-panel[aria-labelledby=flowTitle]{container-type:inline-size}
+@container(max-width:450px){
+ .ems-mode-diagram{width:100%;height:auto!important;flex:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .ems-mode-diagram>svg,.ems-mode-diagram>span{display:none!important}
+ .ems-mode-diagram>div{position:static!important;width:auto!important;min-height:44px;height:auto!important}
+}
+@container(max-width:693px){
+ .ems-energy-flow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;width:100%;min-height:0!important;flex:1 0 auto!important}
+ .ems-energy-flow>svg{display:none!important}
+ .ems-energy-node{position:relative!important;inset:auto!important;width:100%!important;height:auto!important;min-height:176px;padding:12px!important;justify-content:center!important;border:1px solid #e8e5da!important;border-radius:12px;background:#f2f0e8}
+ .ems-energy-node>svg{max-width:100%;height:84px!important;overflow:hidden!important}
+ .ems-energy-load{order:4;background:#e5ebdc}
+}
+@media(max-width:650px){
+ .ems-demand-peak{top:308px!important;left:0!important;transform:none!important}
+ .ems-panel[aria-labelledby=barsTitle] .ems-chart{min-height:336px!important;flex-basis:336px!important}
+ .ems-panel[aria-labelledby=touTitle]>.ems-tou-schedule{grid-template-columns:minmax(0,1fr)!important;row-gap:8px!important}
+ .ems-tou-schedule>span:first-child,.ems-tou-schedule>div:nth-child(2){display:none!important}
+ .ems-tou-schedule>div{height:auto!important;min-height:28px;display:flex!important;flex-wrap:wrap;gap:6px;overflow:visible!important;box-shadow:none!important;margin-bottom:8px}
+ .ems-tou-schedule>div>span:not([aria-hidden]){position:static!important;width:auto!important;height:auto!important;min-height:28px;padding:5px 8px!important;white-space:normal!important;border:1px solid #e0d8c6!important;border-radius:4px}
+ .ems-tou-schedule>div>span[aria-hidden]{display:none!important}
+}

@@ -50,3 +50,10 @@ measurements_max_limit = 1000
 [log]
 # 日誌等級：DEBUG | INFO | WARNING | ERROR（永不記錄 key / cookie 值）
 log_level = "INFO"
+
+[demo_alarm]
+# Fixed-recipient DEMO notifications; credentials are env-only, never in TOML.
+# Global cooldown includes failed/uncertain attempts. UUID dedupe lasts 10 minutes.
+demo_alarm_cooldown_s = 30
+# Total Telegram wait cap; must stay below the public proxy timeout.
+telegram_timeout_s = 8.0

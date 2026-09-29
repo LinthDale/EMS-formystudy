@@ -279,3 +279,28 @@ docker compose down -v && docker compose up -d
 | 文件 | 用途 |
 |------|------|
 | `api/openapi.yml` | 對外 API schema（查詢 API + 模擬器 + 儀表板管理 + 裝置登錄 device-service REST API） |
+
+
+### 本機設計預覽量測驗證（2026-09-23）
+
+獨立預覽 http://127.0.0.1:4178/#Monitor 已使用既有 BFF session 與量測 API，5 秒更新。其餘六頁為示意資料；目前來源為專案模擬器。設定、啟動與驗證紀錄見 [預覽說明](output/ems-design-preview-20260923/README.md). 未新增或修改後端 API 合約。
+
+### 監控圖表與歷史紀錄（本機已部署）
+PRD-0018 / ADR-027：新增有界歷史查詢、ECharts 趨勢、布林状态與原始紀錄分頁。已經使用者批准，套用 migration 017 並重啟 BFF；三類設備與歷史查詢已通過真實資料驗證。操作細節見 [預覽說明](output/ems-design-preview-20260923/README.md)。
+### 警報中心 Telegram 示範通知
+警報中心新增「觸發警報」：以既有 OPS 登入後，透過 BFF 發送固定 DEMO／無需處置訊息到已設定的 Telegram。既有 `.env` 的 TELEGRAM_BOT_TOKEN、TELEGRAM_CHAT_ID 由 Compose 注入 BFF；不寫入前端。30 秒冷卻，最近成功十筆僅存記憶體。見 [PRD-0019](doc/prd/PRD-0019-telegram-demo-alarm.md)、[ADR-028](doc/adr/ADR-028-telegram-demo-alarm.md)。
+
+## Delta 三相模擬與 4G 邊緣採集
+已新增 [Delta simulator / parser / TCP–RTU edge](services/delta/README.md)（V1.35）；opt-in `delta-demo` profile。
+本機 [Monitor](http://127.0.0.1:4178/#Monitor) 選 `delta-sim-001`，欄位為 L1 V/A、三相總 kW、累計 kWh。
+Pi + SIM7600G-H 的 TLS、systemd 與雙介面範本見 [操作交接](doc/operations/delta-edge.md)；實體 RTU/4G 與接收端身份綁定尚待現場驗收。
+
+### Delta 現場採購與容量規格（Draft，2026-09-29）
+[SQLite 深度調研](doc/research/2026-09-29-sqlite-edge-capacity.md)與[PRD-0021](doc/prd/PRD-0021-multi-device-edge-reliability.md)提出M70A-262／RPI-M30A、每gateway 8台／10秒／斷網7天的待驗收目標。現有軟體仍為單設備與broker ACK；新多設備排程、中央committed ACK及硬體验收尚未實作。研究附隔離容量結果，不是Pi benchmark。
+
+對帳規格補充（Draft）：PRD-0021 §15.1加入每5分鐘ID／序號／hash對帳、斷線後差額補傳與缺測分類。目前尚未實作；已採但未入庫可補傳，未採到的瞬時值不能憑空補回。
+
+採樣間隔需求更新（Draft）：[PRD-0021 §15.2](doc/prd/PRD-0021-multi-device-edge-reliability.md)定義每設備1／5／10／15／30秒、預設10秒與混合頻率。EMS選單與gateway設定回報尚未實作；8台／10秒／7天是基準，較快組合須另核算bus、pending/audit容量與補傳。
+
+### Delta RTU 從站模擬（2026-09-29）
+PC 可執行 `python -m delta_device simulator --transport rtu --serial-port COM5 --baudrate 19200 --unit-id 1`，經兩顆隔離 USB–RS485 與 Pi 主站對接。從 `services/delta` 目錄執行；TCP 仍為預設。安裝、接線、Pi單次解析及4G分段驗收見 [Delta操作說明](services/delta/README.md#rtu-從站電腦模擬-delta樹莓派採集)。實體線路、Windows COM 與4G待到貨驗證。

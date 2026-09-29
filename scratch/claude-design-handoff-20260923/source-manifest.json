@@ -1,0 +1,257 @@
+[
+  {
+    "path": "API-MAPPING.md",
+    "sha256": "B2FFC3A0966BCEE100613F118395F6AC8CD09F64849B8BD20CF4229636FF8E2B",
+    "bytes": 87981
+  },
+  {
+    "path": "check-run.log",
+    "sha256": "E3B0C44298FC1C149AFBF4C8996FB92427AE41E4649B934CA495991B7852B855",
+    "bytes": 0
+  },
+  {
+    "path": "check.mjs",
+    "sha256": "CF06EE594C930A737DCF0AD6D264D5427D2A60555187B81DF544D0525F97F4A5",
+    "bytes": 17375
+  },
+  {
+    "path": "check.txt",
+    "sha256": "7AD17253E24DF463B0EB284C40EF5ED354027DE29A9E9175631365B53B5DCEFE",
+    "bytes": 6983
+  },
+  {
+    "path": "git-extra.txt",
+    "sha256": "CB79943FDF604A0EEF7D595B22703983C0C502AE571B24F1A8A81A74052E1373",
+    "bytes": 339
+  },
+  {
+    "path": "git-prd-commits.txt",
+    "sha256": "655386274D4F49B842CF457A6A190A1B928C7D73A1BE3B7F07C5E4FF06946935",
+    "bytes": 2278
+  },
+  {
+    "path": "git-prd-history.txt",
+    "sha256": "AD21D5E590321C6E67B387757C5B1FD0DA8A3CFE87B0807CE3C231BEF82AD747",
+    "bytes": 3875
+  },
+  {
+    "path": "git-status.txt",
+    "sha256": "C41314274DA4AD8F778754143D1429054096817EE05583CD3145EBC4CA5B22EE",
+    "bytes": 678
+  },
+  {
+    "path": "PLAN.md",
+    "sha256": "9C35E6DB3A215F8161DE989B82E1952AFE1363400FA45AB69166536F4E7CDBC5",
+    "bytes": 23102
+  },
+  {
+    "path": "css\\css-lint.mjs",
+    "sha256": "3D00A6A9995A083837D9B8B1BFD4FA1B52937AD1636A7514F73912572A57FBFB",
+    "bytes": 12726
+  },
+  {
+    "path": "css\\ems-app.css",
+    "sha256": "BFBB826777DD9B3494CEC7E37381BF312154D60233A6ACD1BFA3BC3466E3CD32",
+    "bytes": 41691
+  },
+  {
+    "path": "css\\ems-tokens.css",
+    "sha256": "24DD9601AA976BDEE1BBE4C420E9888C92717B1F995919910600B25F260D0894",
+    "bytes": 22452
+  },
+  {
+    "path": "css\\STYLE-GUIDE.md",
+    "sha256": "C096598D728AA233F212913DBBEB3BD4EE542B84AA36F11B77F7322D62C714FE",
+    "bytes": 18430
+  },
+  {
+    "path": "prd\\PRD-0017-console-data-api-gaps.md",
+    "sha256": "6E914D5A5A394AA306F07867DE71F1335E4BF6C28A520DF51AE7F6926C9CED31",
+    "bytes": 70947
+  },
+  {
+    "path": "project\\Alarms.dc.html",
+    "sha256": "93862C4433B4779E74956CA08F74A0A3D3F889C7E15FDDAFB530F229726491BD",
+    "bytes": 39458
+  },
+  {
+    "path": "project\\canvas.json",
+    "sha256": "7D65FE550C4737CB40D66A8E1FBF87B943A2F1EFC5B9B76619D2B44099C9356E",
+    "bytes": 1432
+  },
+  {
+    "path": "project\\Demand.dc.html",
+    "sha256": "C783C50359A44F0E3A962C31B26B74F18E649D5941225D5FA559AE07628D62B4",
+    "bytes": 40026
+  },
+  {
+    "path": "project\\Devices.dc.html",
+    "sha256": "EFED0DE284F82ED2D1409E364E35855C6FA588A2F976690032BBD348C199CBD4",
+    "bytes": 36053
+  },
+  {
+    "path": "project\\Main.dc.html",
+    "sha256": "E2C7E81264597E2F438FD33ADB75651C4E7E2FCB015F720063EF9B5E1DFBAD81",
+    "bytes": 52305
+  },
+  {
+    "path": "project\\Monitor.dc.html",
+    "sha256": "5CE26B0F29E7CD97FE6B4053BD681BF44AF13D40ECAE03D27D1BA06B92E999EB",
+    "bytes": 46214
+  },
+  {
+    "path": "project\\Reports.dc.html",
+    "sha256": "D288DFF28F9A67BD13F507EBD69B6043D82453A7B34253E6C7FA7D26AA757DED",
+    "bytes": 45028
+  },
+  {
+    "path": "project\\Storage.dc.html",
+    "sha256": "06B71E59048E96C8C35C18B610423F770DFA269F968ADE3D48BB6165C4342824",
+    "bytes": 47589
+  },
+  {
+    "path": "_tools\\contrast.mjs",
+    "sha256": "36D6F92DA5E00BE959AF780AB8026B1FA672D54B8E63D9217BB56989B6EB2705",
+    "bytes": 2449
+  },
+  {
+    "path": "_tools\\contrast.txt",
+    "sha256": "401E51F7411ACCFE3079B964DB7E0E81BD97B3FF6963C7BFCFA3D7743915628B",
+    "bytes": 4202
+  },
+  {
+    "path": "_tools\\inventory.mjs",
+    "sha256": "B81E489126420B126B9168924316B97248B0654DEF688E4AC57F9CABFE04C44A",
+    "bytes": 2682
+  },
+  {
+    "path": "_tools\\inventory.txt",
+    "sha256": "8E23A02E9A8057B17ADAAA8270E7F8803BD1A2142F09E2D8A1DE0ED525742BE7",
+    "bytes": 26903
+  },
+  {
+    "path": "_tools\\olive_nudge.mjs",
+    "sha256": "7ECE418AE46F6DAED0C4822F1BAE309BB24DFDF4CF5EEE185907A79235BBFA4E",
+    "bytes": 1970
+  },
+  {
+    "path": "_tools\\olive_nudge.txt",
+    "sha256": "39FAE4CA0A1FCC235CA7A140C4C51B951721DBD7A5435952A700C6DED155487C",
+    "bytes": 3664
+  },
+  {
+    "path": "_tools\\pairs.json",
+    "sha256": "679E804C8183BDB7B67A76A61AEBA5F9DBA025A3F7E7A65E225BDA791445D48C",
+    "bytes": 4077
+  },
+  {
+    "path": "_tools\\pairs2.json",
+    "sha256": "7CA4B80914FF6D6B11B31F8C98A082B9B7A94342A4F4591CC2669FB2D275EE73",
+    "bytes": 2665
+  },
+  {
+    "path": "_tools\\palette_search.mjs",
+    "sha256": "04D60C0B67F9B94D81692FF405C49FF7BA09A2F42BEB9716F9DB2895FA6E1528",
+    "bytes": 5704
+  },
+  {
+    "path": "_tools\\palette_search.txt",
+    "sha256": "A386B89B5259C265478EE8AFFEE3BCB7BDB6914CBE99C58387EBD7FD32067C56",
+    "bytes": 3182
+  },
+  {
+    "path": "_tools\\ramp.mjs",
+    "sha256": "C299BA7C33BEF9F4F9A942C7B0960335989D2B8AB5A1FF2F826938A1A427A5E9",
+    "bytes": 2004
+  },
+  {
+    "path": "_tools\\ramp.txt",
+    "sha256": "814D067985F8D9498AA4CC3B331A4E6E2F1718D71FBCB514614D41C48C32D6F4",
+    "bytes": 367
+  },
+  {
+    "path": "_tools\\run_contrast.txt",
+    "sha256": "535A135C63F6C7D1C2C337EBAAF9C641E513ED9836C3F452F876CE7DFFD0BEA3",
+    "bytes": 15
+  },
+  {
+    "path": "_tools\\run_inventory.txt",
+    "sha256": "DC51B8C96C2D745DF3BD5590D990230A482FD247123599548E0632FDBF97FC22",
+    "bytes": 3
+  },
+  {
+    "path": "_tools\\run_nudge.txt",
+    "sha256": "DC51B8C96C2D745DF3BD5590D990230A482FD247123599548E0632FDBF97FC22",
+    "bytes": 3
+  },
+  {
+    "path": "_tools\\run_ramp.txt",
+    "sha256": "DC51B8C96C2D745DF3BD5590D990230A482FD247123599548E0632FDBF97FC22",
+    "bytes": 3
+  },
+  {
+    "path": "_tools\\run_search.txt",
+    "sha256": "05C78E58952EFD40899BDA963F795E738BFDE38C107EE2A1107BFB1D17954EB8",
+    "bytes": 15
+  },
+  {
+    "path": "_tools\\run_tokens2.txt",
+    "sha256": "DC51B8C96C2D745DF3BD5590D990230A482FD247123599548E0632FDBF97FC22",
+    "bytes": 3
+  },
+  {
+    "path": "_tools\\run_tokens3.txt",
+    "sha256": "DC51B8C96C2D745DF3BD5590D990230A482FD247123599548E0632FDBF97FC22",
+    "bytes": 3
+  },
+  {
+    "path": "_tools\\tokens2.mjs",
+    "sha256": "D6DB17F26ADD58FF007A9B38F25DDC84B79C6C813E7BD5C5C64C0B265A40AA31",
+    "bytes": 8547
+  },
+  {
+    "path": "_tools\\tokens2.txt",
+    "sha256": "0174C33A1B323A5B3A8D6F8C117D137095EA398D12C4C83019BFE14CFA430E69",
+    "bytes": 9102
+  },
+  {
+    "path": "_tools\\tokens3.mjs",
+    "sha256": "F84352C2F78853E60D5E666182FB644B5CD8CCD6CF16883DB6797D4EB5520B10",
+    "bytes": 3084
+  },
+  {
+    "path": "_tools\\tokens3.txt",
+    "sha256": "9D94E1C6EAB61031071AB8F7B465494E10777DEF49ABB191945EAE1B7A0910ED",
+    "bytes": 860
+  },
+  {
+    "path": "_tools\\val_A3.txt",
+    "sha256": "4C4638096E00929EE918C8B4E04617411EC6F4B52C150F315F535ECA050ADFB1",
+    "bytes": 853
+  },
+  {
+    "path": "_tools\\val_A4_all.txt",
+    "sha256": "C376D20ACC5FB7D1217970626EC0B9606E3B0423A087559924CD8D780DFA026B",
+    "bytes": 888
+  },
+  {
+    "path": "_tools\\val_final_all.txt",
+    "sha256": "4819AE8B220BE0C6748BA453752C05132603ADB5FB8D43AD2B1990E0B337C4A8",
+    "bytes": 785
+  },
+  {
+    "path": "_tools\\val_final_inset.txt",
+    "sha256": "0F221FF506648355A00A81673DFBE0A735B77FB0B26F24AD7EF459A5A5BD2EB5",
+    "bytes": 783
+  },
+  {
+    "path": "_tools\\val_slate.txt",
+    "sha256": "4D6BE44837DA2C9710C7FD9A25E5E6EE024F0F15F838919DB15B8311D7B7E281",
+    "bytes": 848
+  },
+  {
+    "path": "_tools\\val_teal.txt",
+    "sha256": "512096177D539F724CFA0A4559F81F5097DBCED49640ECB41E861A5C4B83497B",
+    "bytes": 848
+  }
+]

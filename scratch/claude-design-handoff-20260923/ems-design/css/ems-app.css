@@ -1,0 +1,1788 @@
+/* =====================================================================
+   tAIstro EMS · 版面與元件（Layout & Components）
+   ---------------------------------------------------------------------
+   載入順序：ems-tokens.css → ems-app.css
+   規則：只寫版面與元件；所有數值經 var(--ems-*) 取自 ems-tokens.css。
+         本檔不得出現色碼、rgb()/hsl()、px 字級、px 長度或 s/ms 時間
+         （css-lint.mjs 檢查）。命名：.ems-<block>、.ems-<block>__<element>、
+         .ems-<block>--<modifier>。
+   區塊：BASE · SHELL · CARDS · KPI · CHARTS · TABLES · CONTROLS · STATUS · UTILITIES
+   ===================================================================== */
+
+/* ===== BEGIN BASE ===== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--ems-font-body);
+  font-size: var(--ems-font-size-md);
+  line-height: var(--ems-leading-ui);
+  color: var(--ems-color-text);
+  background: var(--ems-color-bg-page);
+}
+
+a {
+  color: var(--ems-color-text-accent);
+  transition: color var(--ems-duration-quick) var(--ems-ease-standard);
+}
+
+a:hover {
+  color: var(--ems-color-text-highlight);
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+:focus-visible {
+  outline: var(--ems-focus-width) solid currentColor;
+  outline-offset: var(--ems-focus-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: var(--ems-duration-off) !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: var(--ems-duration-off) !important;
+    scroll-behavior: auto !important;
+  }
+}
+/* ===== END BASE ===== */
+
+/* ===== BEGIN SHELL ===== */
+.ems-shell {
+  display: grid;
+  grid-template-columns: var(--ems-layout-sidebar-w) minmax(0, 1fr);
+  grid-template-rows: var(--ems-layout-header-h) minmax(0, 1fr);
+  min-height: 100vh;
+  background: var(--ems-color-bg-page);
+  color: var(--ems-color-text);
+}
+
+/* 頁首：字標 · 細線 · 系統名稱｜場域、通知、使用者 */
+.ems-header {
+  grid-column: 1 / 3;
+  grid-row: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ems-space-24);
+  padding: 0 var(--ems-space-24) 0 var(--ems-space-28);
+  background: var(--ems-color-bg-header);
+}
+
+.ems-header__brand,
+.ems-header__actions {
+  display: flex;
+  align-items: center;
+}
+
+.ems-header__brand {
+  gap: var(--ems-space-20);
+}
+
+.ems-header__actions {
+  gap: var(--ems-space-12);
+}
+
+.ems-header__logo {
+  display: block;
+  height: var(--ems-logo-h);
+  width: auto;
+  fill: var(--ems-color-accent-gold);
+}
+
+.ems-header__divider {
+  display: block;
+  width: var(--ems-border-hair);
+  height: var(--ems-layout-brand-divider-h);
+  background: var(--ems-chrome-hairline);
+}
+
+.ems-header__title {
+  font-family: var(--ems-font-display);
+  font-weight: var(--ems-weight-regular);
+  font-size: var(--ems-font-size-brand);
+  letter-spacing: var(--ems-tracking-brand);
+  color: var(--ems-color-accent-gold);
+  white-space: nowrap;
+}
+
+.ems-site-switch {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ems-space-12);
+  width: var(--ems-layout-site-switch-w);
+  height: var(--ems-control-h-lg);
+  padding: 0 var(--ems-space-14);
+  background: transparent;
+  border: var(--ems-border-hair) solid var(--ems-color-border-on-dark);
+  border-radius: var(--ems-radius-input);
+  color: var(--ems-color-text-on-dark);
+  font-size: var(--ems-font-size-md);
+  cursor: pointer;
+}
+
+.ems-icon-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ems-control-h-lg);
+  height: var(--ems-control-h-lg);
+  background: transparent;
+  border: 0;
+  border-radius: var(--ems-radius-input);
+  color: var(--ems-color-text-on-dark-muted);
+  cursor: pointer;
+}
+
+.ems-icon-button__dot {
+  position: absolute;
+  top: var(--ems-space-10);
+  right: var(--ems-space-10);
+  width: var(--ems-dot-lg);
+  height: var(--ems-dot-lg);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-accent-gold);
+  box-shadow: var(--ems-ring-on-header);
+}
+
+.ems-user-menu {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-10);
+  height: var(--ems-control-h-lg);
+  padding: 0 var(--ems-space-6) 0 var(--ems-space-4);
+  background: transparent;
+  border: 0;
+  color: var(--ems-color-text-on-dark);
+  cursor: pointer;
+}
+
+.ems-user-menu__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--ems-avatar);
+  height: var(--ems-avatar);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-slate);
+  color: var(--ems-color-text-on-dark-muted);
+}
+
+.ems-user-menu__name {
+  font-size: var(--ems-font-size-md);
+  line-height: var(--ems-leading-snug);
+}
+
+.ems-user-menu__role {
+  font-size: var(--ems-font-size-xs);
+  line-height: var(--ems-leading-snug);
+  color: var(--ems-color-text-on-dark-muted);
+}
+
+/* 側欄：導覽 · 鉛筆草圖 · 公司名 */
+.ems-sidebar {
+  grid-column: 1;
+  grid-row: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--ems-space-16);
+  padding: var(--ems-space-20) 0 var(--ems-space-22);
+  background: var(--ems-color-bg-sidebar);
+  overflow: hidden;
+}
+
+.ems-sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-4);
+}
+
+.ems-sidebar__sketch {
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--ems-space-12);
+  opacity: var(--ems-opacity-sketch);
+  stroke: var(--ems-inverse);
+  stroke-width: var(--ems-stroke-sketch);
+  fill: none;
+}
+
+.ems-sidebar__footer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-2);
+  padding: 0 var(--ems-space-22);
+  font-size: var(--ems-font-size-xs);
+  line-height: var(--ems-leading-ui);
+  color: var(--ems-color-text-on-dark-muted);
+}
+
+.ems-nav-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-14);
+  height: var(--ems-nav-item-h);
+  padding: 0 var(--ems-space-22);
+  color: var(--ems-color-text-on-dark-muted);
+  text-decoration: none;
+  font-size: var(--ems-font-size-ui);
+  letter-spacing: var(--ems-tracking-nav);
+  transition: background-color var(--ems-duration-quick) var(--ems-ease-standard);
+}
+
+.ems-nav-item:hover {
+  color: var(--ems-color-text-on-dark);
+}
+
+.ems-nav-item__icon {
+  width: var(--ems-icon-nav);
+  height: var(--ems-icon-nav);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ems-stroke-icon);
+}
+
+/* 作用中：synaiq 內嵌 2px 金條 ＋ 參考圖的橄欖提亮底帶 */
+.ems-nav-item--active,
+.ems-nav-item[aria-current="page"] {
+  background: var(--ems-color-bg-nav-active);
+  box-shadow: var(--ems-shadow-nav-active);
+  color: var(--ems-color-text-on-dark);
+}
+
+.ems-nav-item--active .ems-nav-item__icon,
+.ems-nav-item[aria-current="page"] .ems-nav-item__icon {
+  stroke: var(--ems-color-accent-gold);
+}
+
+/* 內容區 */
+.ems-main {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-layout-gap);
+  padding: var(--ems-layout-gutter);
+}
+
+.ems-page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ems-space-24);
+  min-height: var(--ems-layout-page-head-h);
+}
+
+.ems-page-head__eyebrow {
+  font-family: var(--ems-font-figure);
+  font-size: var(--ems-font-size-sm);
+  letter-spacing: var(--ems-tracking-eyebrow);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-page-head__title {
+  margin: 0;
+  font-family: var(--ems-font-heading);
+  font-weight: var(--ems-weight-light);
+  font-size: var(--ems-font-size-h1);
+  line-height: var(--ems-leading-tight);
+  letter-spacing: var(--ems-tracking-heading);
+  color: var(--ems-color-text);
+}
+
+.ems-page-head__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-18);
+  padding-bottom: var(--ems-space-4);
+  font-size: var(--ems-font-size-md);
+  color: var(--ems-color-text-muted);
+}
+
+/* 示意資料紙條：synaiq 手作紙卡語彙 */
+.ems-sample-slip {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ems-space-3) var(--ems-space-10) var(--ems-space-2);
+  background: var(--ems-color-surface-inset);
+  border: var(--ems-border-hair) solid var(--ems-slip-border);
+  border-bottom-width: var(--ems-border-slip);
+  font-size: var(--ems-font-size-xs);
+  letter-spacing: var(--ems-tracking-label);
+  color: var(--ems-color-text-muted);
+  transform: rotate(var(--ems-slip-rotate));
+  box-shadow: var(--ems-shadow-slip);
+}
+
+.ems-row {
+  display: flex;
+  gap: var(--ems-layout-gap);
+}
+
+.ems-grid {
+  display: grid;
+  gap: var(--ems-layout-gap);
+}
+
+.ems-grid--cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.ems-grid--cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.ems-grid--cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+/* ===== END SHELL ===== */
+
+/* ===== BEGIN CARDS ===== */
+.ems-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-12);
+  min-width: 0;
+  padding: var(--ems-layout-card-pad);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border);
+  border-radius: var(--ems-radius-card);
+  transition: border-color var(--ems-duration-slow) var(--ems-ease-standard);
+}
+
+.ems-card__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ems-space-12);
+  min-height: var(--ems-layout-card-head-h);
+}
+
+.ems-card__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-10);
+}
+
+/* 段落金條：參考圖的短金色直條（非卡片左框） */
+.ems-card__bar {
+  display: block;
+  width: var(--ems-layout-section-bar-w);
+  height: var(--ems-layout-section-bar-h);
+  border-radius: var(--ems-radius-hair);
+  background: var(--ems-color-accent-gold);
+}
+
+.ems-card__title {
+  margin: 0;
+  font-family: var(--ems-font-heading);
+  font-weight: var(--ems-weight-regular);
+  font-size: var(--ems-font-size-lg);
+  letter-spacing: var(--ems-tracking-title);
+  color: var(--ems-color-text);
+}
+
+.ems-card__eyebrow {
+  font-family: var(--ems-font-figure);
+  font-size: var(--ems-font-size-xs);
+  letter-spacing: var(--ems-tracking-label);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-card__meta {
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-card__note {
+  font-size: var(--ems-font-size-xs);
+  line-height: var(--ems-leading-body);
+  color: var(--ems-color-text-muted);
+}
+
+/* 內嵌面板：暖紙底 */
+.ems-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-10);
+  padding: var(--ems-space-16) var(--ems-space-18);
+  background: var(--ems-color-surface-inset);
+  border: var(--ems-border-hair) solid var(--ems-paper-warm-edge);
+  border-radius: var(--ems-radius-panel);
+}
+
+.ems-panel--plain {
+  border: 0;
+  padding: var(--ems-space-10) var(--ems-space-12);
+}
+
+/* 能源流節點（能源總覽） */
+.ems-flow {
+  position: relative;
+}
+
+.ems-flow__node {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ems-space-2);
+  padding: var(--ems-space-12) var(--ems-space-10) var(--ems-space-14);
+  background: var(--ems-color-surface-inset);
+  border: var(--ems-border-hair) solid var(--ems-paper-warm-edge);
+  border-radius: var(--ems-radius-button);
+}
+
+.ems-flow__label {
+  font-size: var(--ems-font-size-md);
+  letter-spacing: var(--ems-tracking-nav);
+  color: var(--ems-color-text);
+}
+
+.ems-flow__art {
+  display: block;
+  fill: none;
+  stroke: var(--ems-ink);
+  stroke-width: var(--ems-stroke-illustration);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ems-flow__art--strong {
+  stroke-width: var(--ems-stroke-illustration-strong);
+}
+
+.ems-flow__tagline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-6);
+  font-family: var(--ems-font-cjk-serif);
+  font-weight: var(--ems-weight-light);
+  font-size: var(--ems-font-size-sm);
+  letter-spacing: var(--ems-tracking-tagline);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-sketch {
+  fill: none;
+  stroke: var(--ems-rule);
+  stroke-width: var(--ems-stroke-sketch-card);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* ===== END CARDS ===== */
+
+/* ===== BEGIN KPI ===== */
+.ems-kpi-strip {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border);
+  border-radius: var(--ems-radius-card);
+}
+
+.ems-kpi {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-16);
+  padding: 0 var(--ems-space-24);
+}
+
+.ems-kpi + .ems-kpi {
+  border-left: var(--ems-border-hair) solid var(--ems-color-border);
+}
+
+.ems-kpi__chip {
+  display: flex;
+  flex: 0 0 var(--ems-chip-xl);
+  align-items: center;
+  justify-content: center;
+  width: var(--ems-chip-xl);
+  height: var(--ems-chip-xl);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-surface-chip);
+  color: var(--ems-color-accent);
+}
+
+.ems-kpi__chip--md {
+  flex-basis: var(--ems-chip-md);
+  width: var(--ems-chip-md);
+  height: var(--ems-chip-md);
+}
+
+.ems-kpi__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-4);
+}
+
+.ems-kpi__label {
+  font-size: var(--ems-font-size-md);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-kpi__figure {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ems-space-5);
+}
+
+/* synaiq KPI 數字：Newsreader 300、-0.055em、單位約 0.38em */
+.ems-kpi__value {
+  font-family: var(--ems-font-figure);
+  font-weight: var(--ems-weight-light);
+  font-size: var(--ems-font-size-figure-lg);
+  line-height: var(--ems-leading-none);
+  letter-spacing: var(--ems-tracking-figure);
+  font-variant-numeric: var(--ems-numeric-figure);
+}
+
+.ems-kpi__value--xs {
+  font-size: var(--ems-font-size-figure-xs);
+  letter-spacing: var(--ems-tracking-figure-sm);
+}
+
+.ems-kpi__value--flow {
+  font-size: var(--ems-font-size-figure-flow);
+}
+
+.ems-kpi__value--h1 {
+  font-size: var(--ems-font-size-h1);
+  letter-spacing: var(--ems-tracking-figure-sm);
+}
+
+.ems-kpi__value--md {
+  font-size: var(--ems-font-size-figure-md);
+}
+
+.ems-kpi__value--xl {
+  font-size: var(--ems-font-size-figure-xl);
+}
+
+.ems-kpi__value--2xl {
+  font-size: var(--ems-font-size-figure-2xl);
+}
+
+.ems-kpi__value--hero {
+  font-size: var(--ems-font-size-hero);
+}
+
+.ems-kpi__value--highlight {
+  color: var(--ems-color-text-highlight);
+}
+
+.ems-kpi__unit {
+  font-family: var(--ems-font-figure);
+  font-size: var(--ems-font-size-ui);
+}
+
+.ems-kpi__unit--sm {
+  font-size: var(--ems-font-size-sm);
+}
+
+.ems-kpi__sub {
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text-muted);
+}
+/* ===== END KPI ===== */
+
+/* ===== BEGIN CHARTS ===== */
+.ems-chart {
+  position: relative;
+  min-height: 0;
+}
+
+.ems-chart__plot {
+  position: absolute;
+  display: block;
+  overflow: visible;
+}
+
+.ems-chart__tick {
+  position: absolute;
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text-muted);
+  font-variant-numeric: var(--ems-numeric-table);
+  white-space: nowrap;
+}
+
+.ems-chart__tick--y {
+  left: 0;
+  text-align: right;
+  transform: translateY(-50%);
+}
+
+.ems-chart__tick--x {
+  transform: translateX(-50%);
+}
+
+.ems-chart__grid {
+  fill: none;
+  stroke: var(--ems-chart-grid);
+  stroke-width: var(--ems-stroke-hair);
+}
+
+.ems-chart__baseline {
+  fill: none;
+  stroke: var(--ems-chart-baseline);
+  stroke-width: var(--ems-stroke-hair);
+}
+
+.ems-chart__line {
+  fill: none;
+  stroke: var(--ems-series-measure);
+  stroke-width: var(--ems-stroke-line);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ems-chart__line--dense {
+  stroke-width: var(--ems-stroke-line-dense);
+}
+
+.ems-chart__line--spark {
+  stroke-width: var(--ems-stroke-threshold);
+}
+
+.ems-chart__line--plan {
+  stroke-width: var(--ems-stroke-threshold);
+  stroke-dasharray: var(--ems-dash-plan);
+}
+
+/* 面積：同色 24 %→2 % 淡洗（非飽和色塊） */
+.ems-chart__wash-top {
+  stop-color: var(--ems-series-measure);
+  stop-opacity: var(--ems-opacity-wash-top);
+}
+
+.ems-chart__wash-top--monitor {
+  stop-opacity: var(--ems-opacity-wash-monitor);
+}
+
+.ems-chart__wash-bottom {
+  stop-color: var(--ems-series-measure);
+  stop-opacity: var(--ems-opacity-wash-bottom);
+}
+
+.ems-chart__threshold {
+  fill: none;
+  stroke: var(--ems-chart-threshold);
+  stroke-width: var(--ems-stroke-threshold);
+  stroke-dasharray: var(--ems-dash-threshold);
+}
+
+.ems-chart__reference {
+  fill: none;
+  stroke: var(--ems-chart-reference);
+  stroke-width: var(--ems-stroke-hair);
+  stroke-dasharray: var(--ems-dash-peak);
+}
+
+.ems-chart__reference--nominal {
+  stroke: var(--ems-chart-baseline);
+  stroke-dasharray: var(--ems-dash-reference);
+}
+
+.ems-chart__now {
+  fill: none;
+  stroke: var(--ems-chart-reference);
+  stroke-width: var(--ems-stroke-hair);
+  stroke-dasharray: var(--ems-dash-now);
+}
+
+.ems-chart__marker {
+  fill: var(--ems-series-measure);
+  stroke: var(--ems-color-surface);
+  stroke-width: var(--ems-stroke-line);
+}
+
+.ems-chart__bar {
+  fill: var(--ems-series-measure);
+}
+
+.ems-chart__bar--live {
+  fill-opacity: var(--ems-opacity-live);
+  stroke: var(--ems-series-measure);
+  stroke-width: var(--ems-stroke-hair);
+  stroke-dasharray: var(--ems-dash-peak);
+}
+
+.ems-chart__bar--current {
+  fill: var(--ems-series-discharge);
+  fill-opacity: var(--ems-opacity-current);
+  stroke: var(--ems-series-discharge);
+  stroke-width: var(--ems-stroke-hair);
+  stroke-dasharray: var(--ems-dash-peak);
+}
+
+.ems-chart__bar--plan {
+  fill: none;
+  stroke: var(--ems-chart-reference);
+  stroke-width: var(--ems-stroke-hair);
+  stroke-dasharray: var(--ems-dash-plan-bar);
+}
+
+.ems-chart__bar--hover {
+  fill: var(--ems-chart-hover);
+}
+
+/* 標註：金底＋墨字（6.55:1），不用白字 */
+.ems-chart__callout {
+  position: absolute;
+  display: flex;
+  align-items: baseline;
+  gap: var(--ems-space-6);
+  padding: var(--ems-space-4) var(--ems-space-9);
+  border-radius: var(--ems-radius-callout);
+  background: var(--ems-chart-callout-bg);
+  color: var(--ems-chart-callout-fg);
+  font-size: var(--ems-font-size-xs);
+  white-space: nowrap;
+}
+
+.ems-chart__label {
+  position: absolute;
+  padding: var(--ems-space-2) var(--ems-space-8);
+  border-radius: var(--ems-radius-callout);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border);
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text);
+  white-space: nowrap;
+}
+
+.ems-chart__crosshair {
+  position: absolute;
+  width: var(--ems-border-hair);
+  background: var(--ems-chart-reference);
+  pointer-events: none;
+}
+
+.ems-chart__tooltip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-3);
+  padding: var(--ems-space-8) var(--ems-space-10);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border);
+  border-radius: var(--ems-radius-list);
+  box-shadow: var(--ems-shadow-tooltip);
+  font-size: var(--ems-font-size-xs);
+  pointer-events: none;
+}
+
+.ems-chart__tooltip-value {
+  font-family: var(--ems-font-figure);
+  font-size: var(--ems-font-size-figure-2xs);
+  line-height: var(--ems-leading-none);
+  letter-spacing: var(--ems-tracking-tooltip);
+  font-variant-numeric: var(--ems-numeric-figure);
+}
+
+/* 類別序列：固定順序 太陽能 → 電網 → 儲能，不循環 */
+.ems-series--pv {
+  fill: var(--ems-series-pv);
+  stroke: var(--ems-series-pv);
+}
+
+.ems-series--grid {
+  fill: var(--ems-series-grid);
+  stroke: var(--ems-series-grid);
+}
+
+.ems-series--bess {
+  fill: var(--ems-series-bess);
+  stroke: var(--ems-series-bess);
+}
+
+.ems-series--charge {
+  fill: var(--ems-series-charge);
+}
+
+.ems-series--discharge {
+  fill: var(--ems-series-discharge);
+}
+
+/* 能源流線：線寬 = 基數 + kW × 係數（元素上以 --ems-flow-kw 帶入 kW） */
+.ems-flow__line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: calc(var(--ems-flow-weight-base) + var(--ems-flow-kw, 0) * var(--ems-flow-weight-per-kw));
+}
+
+.ems-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-16);
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-legend__item {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-6);
+}
+
+.ems-legend__swatch {
+  display: block;
+  width: var(--ems-legend-swatch);
+  height: var(--ems-legend-swatch);
+  border-radius: var(--ems-radius-xs);
+}
+
+.ems-legend__swatch--outline {
+  box-shadow: var(--ems-outline-swatch);
+}
+
+.ems-legend__swatch--plan {
+  box-shadow: var(--ems-outline-plan);
+}
+
+.ems-legend__line {
+  display: block;
+  width: var(--ems-legend-line-w);
+  height: var(--ems-legend-line-h);
+}
+
+/* 量表：同色系淺軌＋主色填充；嚴重度 ≥ 90 % 警告、> 100 % 危險 */
+.ems-meter {
+  position: relative;
+  height: var(--ems-meter-h);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-surface-chip);
+}
+
+.ems-meter--sm {
+  height: var(--ems-meter-h-sm);
+}
+
+.ems-meter--xs {
+  height: var(--ems-meter-h-xs);
+}
+
+.ems-meter__fill {
+  height: 100%;
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-accent);
+}
+
+.ems-meter__fill--warn {
+  background: var(--ems-color-status-warn);
+}
+
+.ems-meter__fill--danger {
+  background: var(--ems-color-status-danger);
+}
+
+.ems-meter__fill--slate {
+  background: var(--ems-slate);
+}
+
+.ems-meter__tick {
+  position: absolute;
+  top: calc(var(--ems-space-4) * -1);
+  width: var(--ems-border-bar);
+  height: var(--ems-meter-tick-h);
+  background: var(--ems-color-text);
+  transform: translateX(-50%);
+}
+
+.ems-meter__tick--warn {
+  background: var(--ems-color-status-warn);
+}
+
+.ems-meter__tick--danger {
+  background: var(--ems-color-status-danger);
+}
+
+.ems-donut {
+  position: relative;
+}
+
+.ems-donut__center {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ems-space-2);
+}
+
+.ems-soc-ring__track {
+  fill: none;
+  stroke: var(--ems-color-surface-chip);
+  stroke-width: var(--ems-stroke-ring);
+}
+
+.ems-soc-ring__arc {
+  fill: none;
+  stroke: var(--ems-series-measure);
+  stroke-width: var(--ems-stroke-ring);
+}
+
+.ems-soc-ring__tick {
+  fill: none;
+  stroke: var(--ems-color-text);
+  stroke-width: var(--ems-stroke-threshold);
+  stroke-linecap: round;
+}
+
+/* 台電三段式時間電價帶 */
+.ems-tou-ribbon {
+  position: relative;
+  display: flex;
+  height: var(--ems-control-h-md);
+  border-radius: var(--ems-radius-callout);
+  overflow: hidden;
+}
+
+.ems-tou-ribbon--thin {
+  height: var(--ems-meter-h-sm);
+  border-radius: var(--ems-radius-hair);
+}
+
+.ems-tou-ribbon--today {
+  box-shadow: var(--ems-outline-today);
+}
+
+.ems-tou-ribbon__seg {
+  display: flex;
+  align-items: center;
+  padding-left: var(--ems-space-8);
+  border-right: var(--ems-border-bar) solid var(--ems-color-surface);
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-text);
+  white-space: nowrap;
+}
+
+.ems-tou-ribbon__seg--off {
+  background: var(--ems-tou-off);
+}
+
+.ems-tou-ribbon__seg--mid {
+  background: var(--ems-tou-mid);
+}
+
+.ems-tou-ribbon__seg--peak {
+  background: var(--ems-tou-peak);
+}
+
+.ems-tou-ribbon__now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: var(--ems-border-bar);
+  background: var(--ems-color-text);
+}
+
+/* 100 % 堆疊條（設備狀態分布） */
+.ems-stack-bar {
+  display: flex;
+  gap: var(--ems-border-bar);
+  height: var(--ems-space-14);
+  border-radius: var(--ems-radius-sm);
+  overflow: hidden;
+}
+/* ===== END CHARTS ===== */
+
+/* ===== BEGIN TABLES ===== */
+/* 表格以 CSS grid 實作（synaiq 圖書館表格），role="table|row|cell" 保留語意 */
+.ems-table {
+  display: flex;
+  flex-direction: column;
+}
+
+.ems-table__row {
+  display: grid;
+  align-items: center;
+  column-gap: var(--ems-space-12);
+  min-height: var(--ems-row-h);
+  padding: 0 var(--ems-space-14);
+  border-bottom: var(--ems-border-hair) solid var(--ems-color-border);
+  font-size: var(--ems-font-size-sm);
+}
+
+.ems-table__row:last-child {
+  border-bottom: 0;
+}
+
+.ems-table__row--head {
+  min-height: var(--ems-control-h-chip);
+  background: var(--ems-color-surface-head);
+  border-bottom: 0;
+  font-size: var(--ems-font-size-xs);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-label);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-table__row--compact {
+  min-height: var(--ems-row-h-compact);
+}
+
+.ems-table__row--history {
+  min-height: var(--ems-row-h-history);
+}
+
+.ems-table__row--alarm {
+  min-height: var(--ems-row-h-alarm);
+}
+
+.ems-table__row--queue {
+  min-height: var(--ems-row-h-queue);
+}
+
+/* 選取列：暖紙底＋左側 2px 金條（與導覽作用中同一語彙） */
+.ems-table__row--selected {
+  background: var(--ems-color-surface-inset);
+  box-shadow: var(--ems-shadow-nav-active);
+}
+
+.ems-table__cell--num {
+  text-align: right;
+  font-variant-numeric: var(--ems-numeric-table);
+}
+
+.ems-table__cell--muted {
+  color: var(--ems-color-text-muted);
+}
+
+.ems-table__cell--code {
+  font-size: var(--ems-font-size-xs);
+  letter-spacing: var(--ems-tracking-title);
+}
+
+/* 鍵值列（即時讀值、警報屬性、保護門檻） */
+.ems-kv {
+  display: flex;
+  flex-direction: column;
+}
+
+.ems-kv__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ems-space-12);
+  min-height: var(--ems-row-h-kv);
+  border-bottom: var(--ems-border-hair) solid var(--ems-color-border);
+  font-size: var(--ems-font-size-md);
+}
+
+.ems-kv__row:last-child {
+  border-bottom: 0;
+}
+
+.ems-kv__row--stacked {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ems-space-2);
+  padding: var(--ems-space-6) 0;
+  font-size: var(--ems-font-size-sm);
+}
+
+.ems-kv__key {
+  color: var(--ems-color-text-muted);
+}
+
+.ems-kv__value {
+  font-variant-numeric: var(--ems-numeric-table);
+}
+/* ===== END TABLES ===== */
+
+/* ===== BEGIN CONTROLS ===== */
+/* 按鈕：synaiq 墨色底、紙色字、1px 墨框、12px 圓角；懸停底色轉 muted */
+.ems-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ems-space-8);
+  height: var(--ems-control-h);
+  padding: 0 var(--ems-space-20);
+  background: var(--ems-ink);
+  border: var(--ems-border-hair) solid var(--ems-color-border-strong);
+  border-radius: var(--ems-radius-button);
+  color: var(--ems-paper);
+  font-size: var(--ems-font-size-sm);
+  font-weight: var(--ems-weight-medium);
+  cursor: pointer;
+  transition: background-color var(--ems-duration-base) var(--ems-ease-standard);
+}
+
+.ems-button:hover {
+  background: var(--ems-muted);
+}
+
+.ems-button--outline {
+  background: transparent;
+  color: var(--ems-color-text);
+}
+
+.ems-button--outline:hover {
+  background: var(--ems-color-surface-head);
+}
+
+.ems-button--ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--ems-color-text-muted);
+  padding: 0 var(--ems-space-10);
+}
+
+.ems-button--ghost:hover {
+  background: var(--ems-color-surface-head);
+}
+
+.ems-button--lg {
+  height: var(--ems-control-h-lg);
+  font-size: var(--ems-font-size-md);
+}
+
+.ems-button--quiet {
+  height: var(--ems-control-h-md);
+  padding: 0 var(--ems-space-12);
+  background: transparent;
+  border-color: var(--ems-color-border-control);
+  border-radius: var(--ems-radius-input);
+  color: var(--ems-color-text);
+  font-weight: var(--ems-weight-regular);
+}
+
+.ems-button--inverse {
+  background: var(--ems-paper);
+  color: var(--ems-ink);
+}
+
+.ems-button--icon {
+  width: var(--ems-control-h-md);
+  height: var(--ems-control-h-sm);
+  padding: 0;
+  border-radius: var(--ems-radius-list);
+}
+
+.ems-button__icon {
+  width: var(--ems-icon-lg);
+  height: var(--ems-icon-lg);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ems-stroke-icon-strong);
+}
+
+/* 分段控制：視覺隱藏的 radio ＋ label */
+.ems-segmented {
+  display: flex;
+  gap: var(--ems-space-2);
+  padding: var(--ems-space-3);
+  background: var(--ems-color-surface-head);
+  border-radius: var(--ems-radius-input);
+}
+
+.ems-segmented__option {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: var(--ems-control-h-segment);
+  padding: 0 var(--ems-space-14);
+  border-radius: var(--ems-radius-list);
+  font-size: var(--ems-font-size-sm);
+  color: var(--ems-color-text-muted);
+  cursor: pointer;
+  transition: background-color var(--ems-duration-quick) var(--ems-ease-standard);
+}
+
+.ems-segmented__option--md {
+  height: var(--ems-control-h-md);
+}
+
+.ems-segmented__option--sm {
+  height: var(--ems-control-h-sm);
+}
+
+.ems-segmented__option--selected,
+.ems-segmented__option:has(input:checked) {
+  background: var(--ems-color-surface);
+  color: var(--ems-color-text);
+  box-shadow: var(--ems-shadow-segment);
+}
+
+.ems-segmented__input {
+  position: absolute;
+  width: var(--ems-border-hair);
+  height: var(--ems-border-hair);
+  margin: 0;
+  opacity: var(--ems-opacity-hidden);
+}
+
+/* 篩選膠囊（單選）與指標膠囊（複選） */
+.ems-chip {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-8);
+  height: var(--ems-control-h-chip);
+  padding: 0 var(--ems-space-12);
+  border: var(--ems-border-hair) solid var(--ems-color-border-control);
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-sm);
+  color: var(--ems-color-text);
+  cursor: pointer;
+}
+
+.ems-chip--selected,
+.ems-chip:has(input[type="radio"]:checked) {
+  background: var(--ems-ink);
+  border-color: var(--ems-ink);
+  color: var(--ems-paper);
+}
+
+.ems-chip__check {
+  width: var(--ems-control-check);
+  height: var(--ems-control-check);
+  margin: 0;
+  accent-color: var(--ems-color-accent);
+}
+
+.ems-field {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-10);
+}
+
+.ems-field__label {
+  font-size: var(--ems-font-size-sm);
+  color: var(--ems-color-text-muted);
+}
+
+/* 選擇器按鈕（量測點、期間） */
+.ems-select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ems-space-10);
+  height: var(--ems-control-h-lg);
+  padding: 0 var(--ems-space-12);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border-control);
+  border-radius: var(--ems-radius-input);
+  color: var(--ems-color-text);
+  font-size: var(--ems-font-size-md);
+  cursor: pointer;
+}
+
+.ems-search {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-8);
+  height: var(--ems-control-h-input);
+  padding: 0 var(--ems-space-12);
+  background: var(--ems-color-surface);
+  border: var(--ems-border-hair) solid var(--ems-color-border-control);
+  border-radius: var(--ems-radius-input);
+}
+
+.ems-search__input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  font-size: var(--ems-font-size-sm);
+  color: var(--ems-color-text);
+}
+
+/* 膠囊：synaiq 外框膠囊 12px／500／0.06em */
+.ems-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-6);
+  height: var(--ems-pill-h);
+  padding: 0 var(--ems-space-10);
+  border: var(--ems-border-hair) solid var(--ems-color-border-control);
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-xs);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-label);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-pill--xs {
+  height: var(--ems-pill-h-xs);
+  padding: 0 var(--ems-space-7);
+  font-size: var(--ems-font-size-2xs);
+  font-weight: var(--ems-weight-regular);
+  letter-spacing: normal;
+}
+
+.ems-pill--placeholder {
+  border-style: dashed;
+  border-color: var(--ems-color-status-warn);
+  border-radius: var(--ems-radius-callout);
+  background: var(--ems-color-status-warn-bg);
+  color: var(--ems-color-status-warn-text);
+  font-weight: var(--ems-weight-regular);
+  letter-spacing: normal;
+}
+
+/* 連結按鈕（a 元素直接當按鈕） */
+.ems-link-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ems-space-8);
+  height: var(--ems-control-h-lg);
+  border: var(--ems-border-hair) solid var(--ems-color-border-strong);
+  border-radius: var(--ems-radius-button);
+  color: var(--ems-color-text);
+  text-decoration: none;
+  font-size: var(--ems-font-size-md);
+  font-weight: var(--ems-weight-medium);
+}
+/* ===== END CONTROLS ===== */
+
+/* ===== BEGIN STATUS ===== */
+/* 系統狀態卡（能源總覽） */
+.ems-status-card {
+  display: flex;
+  align-items: center;
+  gap: var(--ems-space-16);
+  padding: var(--ems-space-16) var(--ems-space-18);
+  border-radius: var(--ems-radius-panel);
+  background: var(--ems-color-status-good-bg);
+}
+
+.ems-status-card__chip {
+  display: flex;
+  flex: 0 0 var(--ems-chip-xl);
+  align-items: center;
+  justify-content: center;
+  width: var(--ems-chip-xl);
+  height: var(--ems-chip-xl);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-status-good);
+  color: var(--ems-color-surface);
+}
+
+.ems-status-card__title {
+  margin: 0;
+  font-family: var(--ems-font-heading);
+  font-weight: var(--ems-weight-regular);
+  font-size: var(--ems-font-size-lg);
+  color: var(--ems-color-status-good);
+}
+
+.ems-status-card__text {
+  font-size: var(--ems-font-size-sm);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-status-card--warn {
+  background: var(--ems-color-status-warn-bg);
+}
+
+.ems-status-card--warn .ems-status-card__chip {
+  background: var(--ems-color-status-warn);
+}
+
+.ems-status-card--warn .ems-status-card__title {
+  color: var(--ems-color-status-warn-text);
+}
+
+/* 警報等級：P0 緊急／P1 重要／P2 一般／資訊（永遠圖示＋文字） */
+.ems-level {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-5);
+  height: var(--ems-pill-h);
+  padding: 0 var(--ems-space-9);
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-xs);
+  font-weight: var(--ems-weight-medium);
+  white-space: nowrap;
+}
+
+.ems-level__icon {
+  width: var(--ems-icon-sm);
+  height: var(--ems-icon-sm);
+  fill: none;
+  stroke-width: var(--ems-stroke-line);
+}
+
+.ems-level--p0 {
+  background: var(--ems-color-status-danger-bg);
+  color: var(--ems-color-status-danger-text);
+}
+
+.ems-level--p0 .ems-level__icon {
+  stroke: var(--ems-color-status-danger);
+}
+
+.ems-level--p1 {
+  background: var(--ems-color-status-warn-bg);
+  color: var(--ems-color-status-warn-text);
+}
+
+.ems-level--p1 .ems-level__icon {
+  stroke: var(--ems-color-status-warn);
+}
+
+.ems-level--p2 {
+  background: var(--ems-color-level-p2-bg);
+  color: var(--ems-color-text);
+}
+
+.ems-level--p2 .ems-level__icon {
+  stroke: var(--ems-color-text);
+}
+
+.ems-level__dot {
+  display: block;
+  width: var(--ems-dot);
+  height: var(--ems-dot);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-level-p2-mark);
+}
+
+.ems-level--info {
+  background: var(--ems-color-status-info-bg);
+  color: var(--ems-color-status-info);
+}
+
+.ems-level--info .ems-level__icon {
+  stroke: var(--ems-color-status-info);
+}
+
+/* 警報生命週期狀態：ACTIVE／ACKED／SHELVED（確認 ≠ 解除） */
+.ems-state {
+  display: inline-flex;
+  align-items: center;
+  height: var(--ems-pill-h-sm);
+  padding: 0 var(--ems-space-8);
+  border: var(--ems-border-hair) solid transparent;
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-2xs);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-label);
+}
+
+.ems-state--active {
+  background: var(--ems-color-surface);
+  border-color: var(--ems-color-border-strong);
+  color: var(--ems-color-text);
+}
+
+.ems-state--acked {
+  background: var(--ems-color-status-good-bg);
+  color: var(--ems-color-status-good);
+}
+
+.ems-state--shelved {
+  background: var(--ems-color-status-info-bg);
+  color: var(--ems-color-status-info);
+}
+
+.ems-stepper {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ems-space-4);
+}
+
+.ems-stepper__bar {
+  display: block;
+  height: var(--ems-meter-h-2xs);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-surface-head);
+}
+
+.ems-stepper__bar--done {
+  background: var(--ems-color-accent);
+}
+
+.ems-stepper__bar--current {
+  background: var(--ems-color-accent-gold);
+}
+
+.ems-stepper__code {
+  font-size: var(--ems-font-size-2xs);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-nav);
+}
+
+/* 裝置通訊與資料品質：GOOD／UNCERTAIN／BAD／STALE／SUBSTITUTED */
+.ems-comm {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-6);
+}
+
+.ems-comm__dot {
+  display: block;
+  width: var(--ems-dot);
+  height: var(--ems-dot);
+  border-radius: var(--ems-radius-pill);
+  background: currentColor;
+}
+
+.ems-comm--good {
+  color: var(--ems-color-status-good);
+}
+
+.ems-comm--stale,
+.ems-comm--uncertain {
+  color: var(--ems-color-status-warn-text);
+}
+
+.ems-comm--stale .ems-comm__dot,
+.ems-comm--uncertain .ems-comm__dot {
+  background: var(--ems-color-status-warn);
+}
+
+.ems-comm--offline,
+.ems-comm--bad {
+  color: var(--ems-color-status-danger-text);
+}
+
+.ems-comm--offline .ems-comm__dot,
+.ems-comm--bad .ems-comm__dot {
+  background: var(--ems-color-status-danger);
+}
+
+.ems-comm--substituted {
+  color: var(--ems-color-status-info);
+}
+
+/* 裝置生命週期：candidate → confirmed → active → maintenance → retired */
+.ems-lifecycle {
+  display: inline-flex;
+  align-items: center;
+  height: var(--ems-pill-h-sm);
+  padding: 0 var(--ems-space-8);
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-xs);
+  font-weight: var(--ems-weight-medium);
+}
+
+.ems-lifecycle--active {
+  background: var(--ems-color-status-good-bg);
+  color: var(--ems-color-status-good);
+}
+
+.ems-lifecycle--maintenance {
+  background: var(--ems-color-status-warn-bg);
+  color: var(--ems-color-status-warn-text);
+}
+
+.ems-lifecycle--confirmed {
+  background: var(--ems-color-surface-head);
+  color: var(--ems-color-text);
+}
+
+.ems-lifecycle--candidate {
+  border: var(--ems-border-hair) dashed var(--ems-color-border-control);
+  color: var(--ems-color-text);
+}
+
+.ems-lifecycle--retired {
+  background: var(--ems-color-surface-head);
+  color: var(--ems-color-text-muted);
+}
+
+.ems-lifecycle-swatch--active {
+  background: var(--ems-olive);
+}
+
+.ems-lifecycle-swatch--confirmed {
+  background: var(--ems-olive-light);
+}
+
+.ems-lifecycle-swatch--maintenance {
+  background: var(--ems-gold);
+}
+
+.ems-lifecycle-swatch--retired {
+  background: var(--ems-rule);
+}
+
+/* 儲能運轉模式：STANDBY／GRID_TIE／ISLAND／FAULT */
+.ems-mode {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-8);
+  height: var(--ems-pill-h-lg);
+  padding: 0 var(--ems-space-12);
+  border-radius: var(--ems-radius-pill);
+  font-size: var(--ems-font-size-xs);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-label);
+}
+
+.ems-mode__dot {
+  display: block;
+  width: var(--ems-dot);
+  height: var(--ems-dot);
+  border-radius: var(--ems-radius-pill);
+  background: currentColor;
+}
+
+.ems-mode--standby {
+  background: var(--ems-color-status-info-bg);
+  color: var(--ems-color-status-info);
+}
+
+.ems-mode--grid-tie {
+  background: var(--ems-color-status-good-bg);
+  color: var(--ems-color-status-good);
+}
+
+.ems-mode--island {
+  background: var(--ems-color-level-p2-bg);
+  color: var(--ems-color-text);
+}
+
+.ems-mode--island .ems-mode__dot {
+  background: var(--ems-color-level-p2-mark);
+}
+
+.ems-mode--fault {
+  background: var(--ems-color-status-danger-bg);
+  color: var(--ems-color-status-danger-text);
+}
+
+.ems-mode--fault .ems-mode__dot {
+  background: var(--ems-color-status-danger);
+}
+
+/* 狀態機節點 */
+.ems-state-node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--ems-control-h-input);
+  border: var(--ems-border-hair) solid var(--ems-color-border-control);
+  border-radius: var(--ems-radius-list);
+  background: var(--ems-color-surface);
+  color: var(--ems-color-text);
+  font-size: var(--ems-font-size-sm);
+  font-weight: var(--ems-weight-medium);
+  letter-spacing: var(--ems-tracking-nav);
+}
+
+.ems-state-node--current {
+  background: var(--ems-ink);
+  border-color: var(--ems-ink);
+  color: var(--ems-paper);
+}
+
+.ems-state-node--fault {
+  background: var(--ems-color-status-danger);
+  border-color: var(--ems-color-status-danger);
+  color: var(--ems-color-surface);
+}
+
+/* 即時更新點 */
+.ems-live {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ems-space-8);
+  font-size: var(--ems-font-size-xs);
+  color: var(--ems-color-status-good);
+}
+
+.ems-live__dot {
+  display: block;
+  width: var(--ems-dot-lg);
+  height: var(--ems-dot-lg);
+  border-radius: var(--ems-radius-pill);
+  background: var(--ems-color-status-good);
+  box-shadow: var(--ems-halo-live);
+}
+/* ===== END STATUS ===== */
+
+/* ===== BEGIN UTILITIES ===== */
+.ems-sr-only {
+  position: absolute;
+  width: var(--ems-border-hair);
+  height: var(--ems-border-hair);
+  margin: calc(var(--ems-border-hair) * -1);
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ems-num {
+  font-variant-numeric: var(--ems-numeric-table);
+}
+
+.ems-figure-nums {
+  font-variant-numeric: var(--ems-numeric-figure);
+}
+
+.ems-muted {
+  color: var(--ems-color-text-muted);
+}
+
+.ems-accent-text {
+  color: var(--ems-color-text-accent);
+}
+
+.ems-nowrap {
+  white-space: nowrap;
+}
+
+.ems-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ems-space-12);
+}
+
+.ems-cluster {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ems-space-8);
+}
+
+.ems-divider-left {
+  border-left: var(--ems-border-hair) solid var(--ems-color-border);
+}
+
+.ems-icon {
+  width: var(--ems-icon-nav);
+  height: var(--ems-icon-nav);
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--ems-stroke-icon);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ems-icon--sm {
+  width: var(--ems-icon-lg);
+  height: var(--ems-icon-lg);
+}
+
+.ems-icon--lg {
+  width: var(--ems-icon-3xl);
+  height: var(--ems-icon-3xl);
+}
+/* ===== END UTILITIES ===== */

@@ -14,7 +14,7 @@ import os
 import tomllib
 from pathlib import Path
 
-from pydantic import field_validator, model_validator
+from pydantic import Field, SecretStr, field_validator, model_validator
 from pydantic.fields import FieldInfo
 from pydantic_settings import (
     BaseSettings,
@@ -27,7 +27,7 @@ _log = logging.getLogger("bff.config")
 DEFAULT_CONFIG_FILE = "config/bff.toml"
 # secrets must come from env/.env only; ignored if present in the (committed) TOML
 SECRET_FIELDS = frozenset(
-    {"ops_api_key", "ingest_api_key", "auth_users", "oidc_client_secret"}
+    {"ops_api_key", "ingest_api_key", "auth_users", "oidc_client_secret", "telegram_bot_token", "telegram_chat_id"}
 )
 
 
@@ -120,6 +120,12 @@ class Settings(BaseSettings):
     # --- measurement proxy guards (§9.3 BFF-mediated PostgREST reads) ---
     measurements_default_limit: int = 100
     measurements_max_limit: int = 1000
+
+    # Telegram demo: secrets are injected from the existing EMS environment.
+    telegram_bot_token: SecretStr = SecretStr("")
+    telegram_chat_id: str = ""
+    demo_alarm_cooldown_s: int = Field(default=30, ge=5, le=3600)
+    telegram_timeout_s: float = Field(default=8.0, ge=1, le=10)
 
     log_level: str = "INFO"
 

@@ -1,0 +1,24 @@
+.alarm-demo{box-sizing:border-box;border:1px solid #d5d5ce;border-left:3px solid #cca858;border-radius:14px;padding:22px;background:#f8f8f7;color:#282825;min-width:0}
+.alarm-demo [hidden]{display:none!important}
+.alarm-demo-top{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.alarm-demo h2{margin:0;display:flex;align-items:center;gap:12px;font:400 21px/1.4 'Noto Serif TC',serif}
+.alarm-demo-badge{font:500 11px/1.5 Manrope,sans-serif;letter-spacing:.12em;color:#826522;background:#f2ead6;padding:3px 8px;border-radius:4px}
+.alarm-demo p{font-size:13px;line-height:1.7;margin:8px 0 0;color:#64645e}
+.alarm-demo button{font-family:inherit;font-size:14px;font-weight:500;line-height:1.5;min-height:44px;border:1px solid #647956;border-radius:9px;padding:10px 18px;cursor:pointer;color:#f8f8f7;background:#576a4a;white-space:nowrap}
+.alarm-demo .alarm-demo-trigger{min-width:150px;flex-shrink:0;background:#282825;border-color:#282825}
+.alarm-demo button:disabled{opacity:.55;cursor:default}
+.alarm-demo button:focus-visible,.alarm-demo input:focus-visible{outline:2px solid #cca858;outline-offset:3px}
+.alarm-demo-status{min-height:22px}
+.alarm-demo-status[data-kind=error]{color:#96493e}
+.alarm-demo-status[data-kind=sent],.alarm-demo-status[data-kind=ready]{color:#426d4b}
+.alarm-demo-login{display:flex;gap:14px;align-items:flex-end;margin-top:16px;flex-wrap:wrap}
+.alarm-demo-login label{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.alarm-demo-login input{box-sizing:border-box;min-height:42px;width:190px;max-width:100%;border:1px solid #d5d5ce;border-radius:6px;padding:9px 11px;background:#fff;color:#282825;font:inherit}
+.alarm-demo .alarm-demo-refresh{margin-top:12px;color:#576a4a;background:transparent}
+.alarm-demo-history{margin-top:18px;border-top:1px solid #e2e2db;padding-top:14px}
+.alarm-demo h3{margin:0 0 8px;font-size:13px;font-weight:500;color:#64645e}
+.alarm-demo ul{margin:0;padding:0;list-style:none}
+.alarm-demo li{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:7px 0;font-size:12px}
+.alarm-demo-sent{color:#426d4b}
+.alarm-demo code{color:#64645e;font-size:11px}
+@media(max-width:650px){.alarm-demo{padding:18px 16px}.alarm-demo-top{align-items:stretch;flex-direction:column;gap:14px}.alarm-demo h2{font-size:19px}.alarm-demo-trigger{width:100%}.alarm-demo-login{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.alarm-demo-login input{width:100%}.alarm-demo li{gap:8px 14px}.alarm-demo li code{width:100%}}

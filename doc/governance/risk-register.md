@@ -221,3 +221,22 @@
 | Mitigated | 3 |
 | Accepted | 1 |
 | Closed | 1 |
+
+### R-018：歷史彙整查詢負載（ADR-027）
+機率 M / 衝擊 M；Owner EMS；狀態 Mitigated for local preview。7 天/1200 桶、圖表30s預設、同頁不併行刷新；資料庫 read-only RPC、時間/設備索引。剩餘風險：BFF timeout 不一定取消 DB 查詢、尚無每帳號限流，公網上線前須補 statement timeout / rate limit 並作高密度負載測試。
+
+### PRD-0019 通知風險（2026-09-23）
+外部 timeout 可能已送達：顯示結果不確定，同 UUID 快取失敗且不自動重送。重複點擊以 30 秒全域冷卻/10 分鐘 UUID 去重/前端 disabled 緩解。DEMO 固定標示無需處置。記憶體限制為單程序，重啟會清空；若擴為多 worker，需先改共用去重儲存。Owner：EMS 維運；詳細風險表見 PRD-0019 §11。
+
+## PRD-0020 Delta edge 增量風險
+動態scale/地址/word-order以PDF literal測試與現場交叉比對控制；queue有界且滿時拒收並記錄；NTP未同步或倒退不採樣；sim與field使用不同ID。PUBACK非DBACK、既有DB不去重；接收端payload身分綁定、真機RS485、SIM7600供電/APN/TLS是未完成field gate。完整8項風險見PRD-0020 §11。
+
+## Delta 多設備可靠性提案（Draft，2026-09-29）
+[PRD-0021 §11](../prd/PRD-0021-multi-device-edge-reliability.md)登錄10項提案風險，Owner EMS team，狀態均Open／待實作驗收：型號map、雙master、bus timeout、broker ACK窗口、SD電源、偽造ACK、時鐘、queue滿、v1/v2雙寫及WAL版本。現有v1限制維持，不將研究結果標為風險已關閉。
+
+PRD-0021 FR-2113～2116補充：對帳count相同但ID不同、末尾整段遺失、receipt在而量測被刪、audit超窗均為Open風險；以封存manifest、實際投影核對、範圍明示及不可恢復狀態處理，尚未部署。
+
+採樣間隔提案風險（Open，FR-2117/2118）：較快設定可能造成bus超載、pending/audit容量不足、补傳永遠追不上、revision切換誤算漏筆；由requested/effective分離、整體admission、容量規劃與slot邊界驗收處理。此為規格，控制措施尚未部署。
+
+### ADR-031 RTU 從站模擬風險
+Owner EMS team：PC/Pi兩顆隔離轉接器、同參數、總線單一主站及端點終端需到貨核驗。PTY僅驗證軟體，Windows COM驅動、電氣極性/訊號地、M70A-262/RPI-M30A型號映射及4G仍Open。錯串口/無權限/被占用須失敗退出；模擬上傳另用測試身分，避免混入實機歷史。

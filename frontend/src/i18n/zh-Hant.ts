@@ -72,6 +72,16 @@ export const zhHant = {
     sectionTitle: "字體設定 FontSwitcher",
     sectionHint: "切換介面內文字體（自託管開源字體；繁中以 Noto Sans TC 補字）",
   },
+  theme: {
+    label: "介面主題",
+    hint: "切換整體配色主題（石墨 / 琥珀 / 藍綠 / 淺色；各主題色彩仍由 tokens.css 管理）",
+    names: {
+      graphite: "石墨電力青（預設）",
+      amber: "暖琥珀工業",
+      teal: "藍綠儀表",
+      light: "晝間淺色",
+    },
+  },
   deviceTable: {
     caption: "設備清單",
     empty: "目前沒有符合條件的設備",

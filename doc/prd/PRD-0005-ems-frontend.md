@@ -413,3 +413,6 @@ charts/theme.ts      ECharts theme
 ---
 
 > **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Draft v3（2026-06-10）：Approved 前 blocker 全數清空**——GATE-2 已實作關閉（openapi 1.3.0）；**P2 路由已決策**（全部經 BFF，§9.3）；**技術棧/Design System 已定案**（FastAPI BFF + Tailwind/Radix/shadcn 種子 + 自建 EMS Design System，§6.4；視覺執行交 Claude Design）。控制下發仍為 Non-Goal（待 control-service PRD）。**本 PRD 已達可 Approve / P1 可開工狀態。**
+
+### 2026-09-23 附錄變更紀錄
+FR-520/521 的完整歷史範圍與分頁由 [PRD-0018](PRD-0018-monitor-history.md)、[ADR-027](../adr/ADR-027-monitor-history.md) 實作。既有 API 保留。視覺先落地於 output/ems-design-preview-20260923 本機預覽。

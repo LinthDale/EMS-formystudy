@@ -84,3 +84,30 @@
 | OPS / INGEST channel key、auth users | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
 | cookie 屬性（HttpOnly/Secure/SameSite=Strict）| — | — | — | 🔒 | §9.2；放寬走 ADR-023 |
 | role→至多一 key 通道、AI 通道禁入 BFF | — | — | — | 🔒 | §9.1；放寬走 ADR-023 |
+### 本機歷史監控（PRD-0018）
+- API 安全上限：7 天、points 60–1200（預設600）、records 1–1000（預設100）、offset 0–1000000；BFF history.py / migration 017 共同鎖定。
+- 預覽：30s 自動刷新預設，可選5s或暫停；自訂區間及翻頁自動暫停；顯示原始頁100列；時間粒度 ceil(span/points) 秒。
+
+### Telegram 示範通知（PRD-0019 / ADR-028）
+| 參數 | env | 預設 / 限制 | 儲存 |
+|---|---|---|---|
+| Bot Token | BFF_TELEGRAM_BOT_TOKEN | 空則不可發送 | SecretStr；Compose 由既有 TELEGRAM_BOT_TOKEN 注入；env only |
+| 固定收件者 | BFF_TELEGRAM_CHAT_ID | 空則不可發送 | Compose 由既有 TELEGRAM_CHAT_ID 注入；env only |
+| 全域冷卻 | BFF_DEMO_ALARM_COOLDOWN_S | 30 秒；5–3600 | services/bff/config/bff.toml [demo_alarm] |
+| Telegram 呼叫上限 | BFF_TELEGRAM_TIMEOUT_S | 8 秒；1–10 | 同上 |
+| 去重 TTL / cache / 最近成功紀錄 | 不提供 env | 600 秒 / 64 筆 / 10 筆 | ADR-028 鎖定；記憶體單程序 |
+
+## Delta edge（PRD-0020）
+|參數|預設|範圍／限制|位置|
+|---|---|---|---|
+|poll_interval|10s|整數1..3600|services/delta/config/*.json|
+|queue_limit|10000|1..1000000筆；滿時拒新|同上|
+|batch_size|100|1..100|同上|
+|modbus.timeout|3s|1..30|同上|
+|modbus.address_base|1|0或1|同上|
+|modbus.unit_id|1|1..247，禁止broadcast0|同上|
+|modbus.baudrate|19200|9600/19200/38400；8N1|同上|
+|modbus.read_temperature|field false|機型確認後選用|同上|
+|mode|必填|demo或field；field強制TLS+身份驗證|同上|
+|MQTT ACK wait|5s|程式上限；逾時保留待ACK MID|delta_device/publisher.py|
+|outbox payload/snapshot|1KB/16KB|硬上限|delta_device/delivery.py|

@@ -11,6 +11,8 @@
  * 注意：本檔覆寫 shadcn 預設視覺識別（灰階 / 0.5rem radius / 預設陰影）。
  */
 :root {
+  /* 預設暗色：讓瀏覽器原生控制項（select / scrollbar / form）採暗色 */
+  color-scheme: dark;
   /* ── Color · 底色（石墨控制室；Industrial） ─────────────────── */
   --ems-color-bg: #0b0f14;
   --ems-color-surface: #11161d;
@@ -22,7 +24,7 @@
   /* ── Color · 文字 ───────────────────────────────────────────── */
   --ems-color-text-primary: #e6edf3;
   --ems-color-text-secondary: #9aa7b4;
-  --ems-color-text-muted: #5c6b7a;
+  --ems-color-text-muted: #7d8da0;
   --ems-color-text-inverse: #0b0f14;
 
   /* ── Color · 品牌強調（電力青；Alive） ──────────────────────── */
@@ -119,4 +121,136 @@
 
   /* ── Focus ring（FR-532 a11y；鍵盤導航可視焦點） ───────────── */
   --ems-focus-ring: 0 0 0 2px var(--ems-color-bg), 0 0 0 4px var(--ems-color-accent);
+}
+
+/* ════════════════════════════════════════════════════════════════════
+ * 可切換主題（PRD-0005 §6.4；data-ems-theme 屬性 → theme-preference.ts）
+ * 預設 graphite = 上方 :root 基準（不帶屬性）。各主題僅覆寫色彩 token；
+ * spacing/radius/typography/motion 跨主題共用。tokens.css 仍是唯一視覺真相。
+ * ════════════════════════════════════════════════════════════════════ */
+
+/* ── 暖琥珀工業（Warm Industrial） ─────────────────────────────── */
+:root[data-ems-theme="amber"] {
+  --ems-color-bg: #100d09;
+  --ems-color-surface: #1b160f;
+  --ems-color-surface-raised: #221a11;
+  --ems-color-surface-sunken: #0a0806;
+  --ems-color-border: #3a2e1c;
+  --ems-color-border-strong: #4a3a22;
+  --ems-color-text-primary: #f2ebdf;
+  --ems-color-text-secondary: #b9a98c;
+  --ems-color-text-muted: #9a8a6a;
+  --ems-color-text-inverse: #100d09;
+  --ems-color-accent: #f59e0b;
+  --ems-color-accent-strong: #d97706;
+  --ems-color-accent-soft: rgba(245, 158, 11, 0.14);
+  --ems-color-status-candidate: #fbbf24;
+  --ems-color-status-confirmed: #84cc16;
+  --ems-color-status-active: #f59e0b;
+  --ems-color-status-retired: #9a8a6a;
+  --ems-color-status-unknown: #8a7a5e;
+  --ems-color-status-stale: #fb923c;
+  --ems-color-ok: #84cc16;
+  --ems-color-warn: #fbbf24;
+  --ems-color-danger: #f87171;
+  --ems-color-info: #f59e0b;
+  --ems-color-domain-electricity: #f59e0b;
+  --ems-color-domain-factory: #fb923c;
+  --ems-color-confidence-low: #f87171;
+  --ems-color-confidence-medium: #fbbf24;
+  --ems-color-confidence-high: #84cc16;
+  --ems-color-chart-1: #f59e0b;
+  --ems-color-chart-2: #84cc16;
+  --ems-color-chart-3: #fbbf24;
+  --ems-color-chart-4: #fb923c;
+  --ems-color-chart-5: #f87171;
+  --ems-color-chart-6: #eab308;
+  --ems-color-chart-grid: #2a2114;
+  --ems-color-chart-axis: #b9a98c;
+  --ems-glow-accent: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+/* ── 藍綠儀表（Teal Instrument） ──────────────────────────────── */
+:root[data-ems-theme="teal"] {
+  --ems-color-bg: #07120f;
+  --ems-color-surface: #0e1c19;
+  --ems-color-surface-raised: #122420;
+  --ems-color-surface-sunken: #050d0b;
+  --ems-color-border: #1e3a34;
+  --ems-color-border-strong: #2a4f47;
+  --ems-color-text-primary: #e3f2ee;
+  --ems-color-text-secondary: #8fb3aa;
+  --ems-color-text-muted: #6f9189;
+  --ems-color-text-inverse: #07120f;
+  --ems-color-accent: #2dd4bf;
+  --ems-color-accent-strong: #14b8a6;
+  --ems-color-accent-soft: rgba(45, 212, 191, 0.14);
+  --ems-color-status-candidate: #fbbf24;
+  --ems-color-status-confirmed: #34d399;
+  --ems-color-status-active: #2dd4bf;
+  --ems-color-status-retired: #6f8f88;
+  --ems-color-status-unknown: #5f817a;
+  --ems-color-status-stale: #fb923c;
+  --ems-color-ok: #34d399;
+  --ems-color-warn: #fbbf24;
+  --ems-color-danger: #f87171;
+  --ems-color-info: #2dd4bf;
+  --ems-color-domain-electricity: #2dd4bf;
+  --ems-color-domain-factory: #f59e0b;
+  --ems-color-confidence-low: #f87171;
+  --ems-color-confidence-medium: #fbbf24;
+  --ems-color-confidence-high: #34d399;
+  --ems-color-chart-1: #2dd4bf;
+  --ems-color-chart-2: #34d399;
+  --ems-color-chart-3: #38bdf8;
+  --ems-color-chart-4: #a78bfa;
+  --ems-color-chart-5: #fbbf24;
+  --ems-color-chart-6: #5eead4;
+  --ems-color-chart-grid: #143029;
+  --ems-color-chart-axis: #8fb3aa;
+  --ems-glow-accent: 0 0 12px rgba(45, 212, 191, 0.35);
+}
+
+/* ── 晝間淺色（Light Precision；首個 light mode；對比須過 WCAG）─── */
+:root[data-ems-theme="light"] {
+  color-scheme: light;
+  --ems-color-bg: #f5f7fa;
+  --ems-color-surface: #ffffff;
+  --ems-color-surface-raised: #ffffff;
+  --ems-color-surface-sunken: #eef1f5;
+  --ems-color-border: #d8dee6;
+  --ems-color-border-strong: #c0cad6;
+  --ems-color-text-primary: #0f172a;
+  --ems-color-text-secondary: #5b6675;
+  --ems-color-text-muted: #646e7e;
+  --ems-color-text-inverse: #ffffff;
+  --ems-color-accent: #2563eb;
+  --ems-color-accent-strong: #1d4ed8;
+  --ems-color-accent-soft: rgba(37, 99, 235, 0.1);
+  --ems-color-status-candidate: #d97706;
+  --ems-color-status-confirmed: #16a34a;
+  --ems-color-status-active: #2563eb;
+  --ems-color-status-retired: #94a3b8;
+  --ems-color-status-unknown: #64748b;
+  --ems-color-status-stale: #ea580c;
+  --ems-color-ok: #16a34a;
+  --ems-color-warn: #d97706;
+  --ems-color-danger: #dc2626;
+  --ems-color-info: #2563eb;
+  --ems-color-domain-electricity: #2563eb;
+  --ems-color-domain-factory: #ea580c;
+  --ems-color-confidence-low: #dc2626;
+  --ems-color-confidence-medium: #d97706;
+  --ems-color-confidence-high: #16a34a;
+  --ems-color-chart-1: #2563eb;
+  --ems-color-chart-2: #16a34a;
+  --ems-color-chart-3: #d97706;
+  --ems-color-chart-4: #7c3aed;
+  --ems-color-chart-5: #db2777;
+  --ems-color-chart-6: #0891b2;
+  --ems-color-chart-grid: #e2e8f0;
+  --ems-color-chart-axis: #5b6675;
+  --ems-shadow-card: 0 1px 2px rgba(15, 23, 42, 0.08), 0 0 0 1px var(--ems-color-border);
+  --ems-shadow-raised: 0 8px 24px rgba(15, 23, 42, 0.12);
+  --ems-glow-accent: 0 0 12px rgba(37, 99, 235, 0.25);
 }

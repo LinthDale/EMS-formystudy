@@ -26,7 +26,8 @@ from .config import Settings
 from .credentials import parse_auth_users
 from .oidc import OidcClient
 from .oidc_state import InMemoryOidcStateStore, OidcStateManager
-from .routes import auth, device_measurements, devices, health, measurements, oidc
+from .demo_alarms import DemoAlarms, protect_telegram_logs
+from .routes import alarms, auth, device_measurements, devices, health, history, measurements, oidc
 from .security import OriginCSRFMiddleware
 from .sessions import InMemorySessionStore, SessionManager, run_sweep_loop
 
@@ -36,10 +37,12 @@ def create_app(
     *,
     upstream_transport: httpx.BaseTransport | None = None,
     clock: Callable[[], float] = time.time,
+    telegram_transport: httpx.AsyncBaseTransport | None = None,
     oidc_client: "OidcClient | None" = None,
 ) -> FastAPI:
     settings = settings if settings is not None else Settings()
     logging.basicConfig(level=settings.log_level.upper())
+    protect_telegram_logs()
 
     users = parse_auth_users(settings.auth_users)  # fail fast on malformed table
     if not users and settings.auth_mode == "local":
@@ -53,6 +56,10 @@ def create_app(
     async def lifespan(app: FastAPI):
         app.state.http = httpx.AsyncClient(
             timeout=settings.upstream_timeout_s, transport=upstream_transport
+        )
+        app.state.telegram_http = httpx.AsyncClient(
+            timeout=settings.telegram_timeout_s, transport=telegram_transport,
+            trust_env=False, follow_redirects=False,
         )
         # OIDC (ADR-024): discover the IdP + cache JWKS once at startup so the
         # login/callback round-trip is fast and discovery failures surface early.
@@ -77,6 +84,7 @@ def create_app(
             with contextlib.suppress(asyncio.CancelledError):
                 await sweep_task  # await clean cancellation before teardown
             await app.state.http.aclose()
+            await app.state.telegram_http.aclose()
 
     app = FastAPI(
         title="EMS BFF",
@@ -87,6 +95,7 @@ def create_app(
         openapi_url=None,
     )
     app.state.settings = settings
+    app.state.demo_alarms = DemoAlarms(settings, clock)
     app.state.users = users
     app.state.auth_provider = auth_provider
     app.state.session_manager = SessionManager(InMemorySessionStore(), settings, clock)
@@ -100,10 +109,12 @@ def create_app(
 
     app.add_middleware(OriginCSRFMiddleware, allowed_origins=settings.allowed_origins)
 
+    app.include_router(alarms.router)
     app.include_router(health.router)
     app.include_router(auth.router)
     app.include_router(oidc.router)                  # OIDC login/callback (ADR-024)
     app.include_router(devices.router)
+    app.include_router(history.router)
     app.include_router(device_measurements.router)  # per-device facade (ADR-025)
     app.include_router(measurements.router)          # legacy /api/measurements/{domain}
     return app

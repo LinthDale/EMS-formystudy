@@ -14,11 +14,23 @@ export const tokensCss: string = readFileSync(
   "utf-8",
 );
 
+/**
+ * 取基準 `:root { … }` 區塊（預設主題 = 規範真相）。
+ * 可切換主題的覆寫區塊為 `:root[data-ems-theme="…"] { … }`，不在此 —— 消費端
+ * （charts theme / render helper）一律讀預設主題，避免主題覆寫污染讀值。
+ * 無 `:root {` 包裹時（例：傳入裸宣告）退回原字串，保持向後相容。
+ */
+export function baseRootBlock(css: string = tokensCss): string {
+  const m = css.match(/:root\s*\{([\s\S]*?)\}/);
+  return m ? m[1] : css;
+}
+
 export function parseTokens(css: string = tokensCss): ReadonlyMap<string, string> {
+  const block = baseRootBlock(css);
   const map = new Map<string, string>();
   const re = /(--ems-[\w-]+)\s*:\s*([^;]+);/g;
   let m: RegExpExecArray | null;
-  while ((m = re.exec(css)) !== null) {
+  while ((m = re.exec(block)) !== null) {
     map.set(m[1], m[2].trim().replace(/\s+/g, " "));
   }
   return map;

@@ -1,0 +1,30 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-09-23T03:04:39Z" },
+  "title": "tAIstro EMS 前端畫面",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1440, "h": 900, "title": "能源總覽", "is_interactive": true },
+    "Monitor.dc.html": { "x": 1520, "y": 0, "w": 1440, "h": 1160, "title": "即時監控", "is_interactive": true },
+    "Demand.dc.html": { "x": 3040, "y": 0, "w": 1440, "h": 1080, "title": "需量管理", "is_interactive": true },
+    "Storage.dc.html": { "x": 4560, "y": 0, "w": 1440, "h": 1240, "title": "儲能管理", "is_interactive": true },
+    "Alarms.dc.html": { "x": 0, "y": 1360, "w": 1440, "h": 1120, "title": "警報中心", "is_interactive": true },
+    "Devices.dc.html": { "x": 1520, "y": 1360, "w": 1440, "h": 1200, "title": "設備分析", "is_interactive": true },
+    "Reports.dc.html": { "x": 3040, "y": 1360, "w": 1440, "h": 1120, "title": "報表中心", "is_interactive": true }
+  },
+  "order": [
+    "Main.dc.html",
+    "Monitor.dc.html",
+    "Demand.dc.html",
+    "Storage.dc.html",
+    "Alarms.dc.html",
+    "Devices.dc.html",
+    "Reports.dc.html"
+  ],
+  "notes": {
+    "row1": { "x": 0, "y": -300, "text": "能源營運／ENERGY OPERATIONS", "kind": "title1", "maxW": 6000 },
+    "row2": { "x": 0, "y": 1060, "text": "維運與報表／O&M · REPORTS", "kind": "title1", "maxW": 1440 }
+  },
+  "designSystems": []
+}

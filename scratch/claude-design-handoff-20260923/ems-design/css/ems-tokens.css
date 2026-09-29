@@ -1,0 +1,336 @@
+/* =====================================================================
+   tAIstro EMS · 設計權杖（Design Tokens）— 唯一數值來源
+   ---------------------------------------------------------------------
+   對照：Claude Design 畫布 project/*.dc.html 七張畫面（1:1 鏡像）
+   來源：synaiq-web live prototype tokens.css（色彩、字體、圓角、動態）；
+         ◆ 標記者為本案推導值（僅移動色相，保留橄欖綠明度／金色彩度），
+         推導與對比度驗算紀錄見 PLAN.md 與 _tools/。
+   規則：
+   1. 顏色、字級、字重、行高、字距、間距、圓角、線寬、陰影、動態時間
+      只在本檔以字面值出現；每個色碼全檔只定義一次，其他類別在
+      同類別內不重複（跨類別以 var() 引用，不再寫第二次字面值）。
+   2. ems-app.css 與元件一律 var(--ems-*) 引用，禁止色碼、rgb()/hsl()、
+      px 字級與 s/ms 時間（css-lint.mjs 強制檢查）。
+   3. 每個權杖同一行附註「用在哪裡」；新增權杖請比照。
+   區段：00 色盤 · 01 語意角色 · 02 字體排印 · 03 間距 · 04 圓角／框線／
+         陰影 · 05 動態 · 06 圖表 · 07 版面
+   ===================================================================== */
+
+:root {
+  /* ---------- 00 PALETTE 色盤（十六進位只在此區出現） ---------- */
+  /* 深色外框 */
+  --ems-chrome-header: #292a2e; /* 頁首底色；鈴鐺未讀點外環（七張畫面） */
+  --ems-chrome-sidebar: #1d1e20; /* 側欄底色（七張畫面） */
+  --ems-chrome-active: #2d3229; /* ◆ 側欄作用中項目底帶，橄欖提亮（參考圖高亮） */
+  --ems-chrome-hairline: #5a503b; /* ◆ 頁首 Logo 與標題間細分隔線（金色 30 % 疊深底） */
+  --ems-chrome-line: #45474c; /* ◆ 頁首場域切換鈕外框 */
+  --ems-inverse: #c4c4be; /* 深底上的導覽文字、圖示、次要字 */
+  --ems-logo-dark: #352f2d; /* 官方深色字標：淺底／列印用（七張畫面未使用） */
+  /* 紙與墨 */
+  --ems-paper: #f4f4f2; /* 頁面底色；深色按鈕文字；作用中導覽文字 */
+  --ems-paper-light: #f8f8f7; /* 卡片底；提示框；選取中分段；圖表標記外環與 2px 表面間隙 */
+  --ems-paper-warm: #f2f0e8; /* 內嵌面板、示意資料紙條、選取列、流程節點底 */
+  --ems-paper-warm-edge: #e8e5da; /* 能源總覽流程節點與內嵌面板外框 */
+  --ems-ink: #282825; /* 主要文字、主按鈕底、作用中狀態節點 */
+  --ems-muted: #64645e; /* 次要文字、座標刻度、說明字 */
+  --ems-slate: #34383a; /* 儲能序列、頭像底、PCS 使用率條 */
+  --ems-rule: #b4b4ac; /* 座標基線、輸入框與膠囊外框、流程卡鉛筆草圖、retired 區段 */
+  --ems-film: #d5d5ce; /* 卡片外框、列分隔線、KPI 分隔線 */
+  --ems-table-head: #e9e9e3; /* 表頭列、圖表格線、分段控制底、資訊色底 */
+  --ems-slip-border: #afafa0; /* 示意資料紙條外框（synaiq 紙卡） */
+  /* 橄欖綠系 */
+  --ems-olive: #647956; /* 工作主色：太陽能序列、用電面積與線、量表、圖示 */
+  --ems-olive-ink: #576a4a; /* ◆ 橄欖綠文字（連結、狀態附註；5.54:1） */
+  --ems-olive-light: #a9bc99; /* 生命週期 confirmed 區段（synaiq 關鍵字底線色） */
+  --ems-sage: #e1e7dc; /* 圖示圓底、量表軌道 */
+  --ems-lit: #e5ebdc; /* 系統正常卡、正常色底、ACKED 膠囊 */
+  --ems-kpi-green: #345e40; /* 強調數字（節省、電費）、需量長條懸停 */
+  --ems-good: #426d4b; /* 狀態正常（文字與標記） */
+  /* 金色系 */
+  --ems-gold: #cca858; /* 字標、段落金條、導覽金條、電網序列、標註底、未讀點 */
+  --ems-gold-deep: #9b7b31; /* ◆ 契約容量虛線、太陽光芒、閃電描邊（3.75:1） */
+  --ems-p2-tint: #f6ead1; /* ◆ P2 一般警報膠囊底 */
+  --ems-tou-off: #f7f3eb; /* ◆ 時間電價：離峰 */
+  --ems-tou-mid: #f1e5cc; /* ◆ 時間電價：半尖峰 */
+  --ems-tou-peak: #e5d0a6; /* ◆ 時間電價：尖峰 */
+  /* 狀態推導色（與橄欖／金同明度、同彩度家族） */
+  --ems-warn: #a5762e; /* ◆ 警告標記：圖示、條、虛線框（3.78:1） */
+  --ems-warn-ink: #8a5f21; /* ◆ 警告文字（5.28:1） */
+  --ems-warn-tint: #f6ecd7; /* ◆ 警告色底 */
+  --ems-danger: #a55445; /* ◆ 危險標記：P0、離線、停機刻度（5.00:1） */
+  --ems-danger-ink: #96493e; /* ◆ 危險文字（5.95:1） */
+  --ems-danger-tint: #f9e9e5; /* ◆ 危險色底 */
+  /* 陰影用透明色 */
+  --ems-shadow-paper: #dedfd477; /* 示意資料紙條位移陰影（synaiq 紙卡） */
+  --ems-shadow-ink-soft: #28282519; /* 分段控制選取陰影（synaiq 紙卡環境陰影） */
+  --ems-shadow-black-soft: #0002; /* 提示框陰影（synaiq 0 16px 30px） */
+
+  /* ---------- 01 SEMANTIC ROLES 語意角色（只引用色盤） ---------- */
+  --ems-color-bg-page: var(--ems-paper); /* 內容區底色 */
+  --ems-color-bg-header: var(--ems-chrome-header); /* 頁首 */
+  --ems-color-bg-sidebar: var(--ems-chrome-sidebar); /* 側欄 */
+  --ems-color-bg-nav-active: var(--ems-chrome-active); /* 作用中導覽項目 */
+  --ems-color-surface: var(--ems-paper-light); /* 卡片、提示框、選取分段 */
+  --ems-color-surface-inset: var(--ems-paper-warm); /* 內嵌面板、選取列、紙條 */
+  --ems-color-surface-head: var(--ems-table-head); /* 表頭、分段軌道 */
+  --ems-color-surface-chip: var(--ems-sage); /* 圖示圓底、量表軌道 */
+  --ems-color-text: var(--ems-ink); /* 主要文字 */
+  --ems-color-text-muted: var(--ems-muted); /* 次要文字 */
+  --ems-color-text-on-dark: var(--ems-paper); /* 深底主要文字 */
+  --ems-color-text-on-dark-muted: var(--ems-inverse); /* 深底次要文字 */
+  --ems-color-text-accent: var(--ems-olive-ink); /* 橄欖綠文字、連結 */
+  --ems-color-text-highlight: var(--ems-kpi-green); /* 強調數字、連結懸停 */
+  --ems-color-border: var(--ems-film); /* 卡片與列分隔線 */
+  --ems-color-border-control: var(--ems-rule); /* 輸入框、膠囊、下載鈕外框 */
+  --ems-color-border-strong: var(--ems-ink); /* 主／次按鈕外框 */
+  --ems-color-border-on-dark: var(--ems-chrome-line); /* 深底控制項外框 */
+  --ems-color-accent: var(--ems-olive); /* 工作主色 */
+  --ems-color-accent-gold: var(--ems-gold); /* 金色點綴（條、標記、字標） */
+  --ems-color-status-good: var(--ems-good); /* 正常 */
+  --ems-color-status-good-bg: var(--ems-lit); /* 正常色底 */
+  --ems-color-status-warn: var(--ems-warn); /* 警告標記 */
+  --ems-color-status-warn-text: var(--ems-warn-ink); /* 警告文字 */
+  --ems-color-status-warn-bg: var(--ems-warn-tint); /* 警告色底 */
+  --ems-color-status-danger: var(--ems-danger); /* 危險標記 */
+  --ems-color-status-danger-text: var(--ems-danger-ink); /* 危險文字 */
+  --ems-color-status-danger-bg: var(--ems-danger-tint); /* 危險色底 */
+  --ems-color-status-info: var(--ems-muted); /* 資訊文字與圖示 */
+  --ems-color-status-info-bg: var(--ems-table-head); /* 資訊色底 */
+  --ems-color-level-p2-bg: var(--ems-p2-tint); /* P2 膠囊底（文字用 ink） */
+  --ems-color-level-p2-mark: var(--ems-gold); /* P2 點與圖示（非文字） */
+
+  /* ---------- 02 TYPOGRAPHY 字體排印 ---------- */
+  --ems-font-body: Manrope, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; /* 內文與介面（helmet body） */
+  --ems-font-display: Newsreader, "Noto Serif TC", "Songti TC", serif; /* 頁首「EMS 能源管理系統」 */
+  --ems-font-heading: Newsreader, "Noto Serif TC", serif; /* 頁標題 H1、卡片標題、警報詳情標題 */
+  --ems-font-figure: Newsreader, serif; /* 數字、單位、英文眉標 */
+  --ems-font-cjk-serif: "Noto Serif TC", serif; /* 能源總覽標語 */
+  --ems-weight-light: 300; /* 標題與大數字（synaiq 300） */
+  --ems-weight-regular: 400; /* 卡片標題、頁首標題、單位 */
+  --ems-weight-medium: 500; /* 按鈕、膠囊、表頭、強調 */
+  /* 字級：14 × 1.333 模組比例 19／25／33／44／59；另保留 synaiq 固定字級 12／13／15 與數字變體 */
+  --ems-font-size-2xs: 11px; /* 狀態膠囊、生命週期、報表類型膠囊（synaiq 表頭 11px） */
+  --ems-font-size-xs: 12px; /* 眉標、說明、座標刻度、圖例、表頭 */
+  --ems-font-size-sm: 13px; /* 小按鈕、表格內容、次要文字 */
+  --ems-font-size-md: 14px; /* 內文、頁首控制項、清單標題 */
+  --ems-font-size-ui: 15px; /* 導覽、KPI 單位 */
+  --ems-font-size-unit-md: 16px; /* PCS 功率單位 */
+  --ems-font-size-unit-lg: 17px; /* 電費估算 NT$ 前綴 */
+  --ems-font-size-lg: 19px; /* 卡片標題（模組 1） */
+  --ems-font-size-unit-xl: 20px; /* 即時讀值 kW 單位 */
+  --ems-font-size-figure-2xs: 22px; /* 提示框數值、SOC 百分號 */
+  --ems-font-size-brand: 24px; /* 頁首系統名稱 */
+  --ems-font-size-figure-xs: 25px; /* 次要數字、風險字（模組 2） */
+  --ems-font-size-figure-donut: 26px; /* 甜甜圈中心數字 */
+  --ems-font-size-figure-flow: 30px; /* 能源流節點數值 */
+  --ems-font-size-h1: 33px; /* 頁標題 H1、警報與裝置統計（模組 3） */
+  --ems-font-size-figure-load: 34px; /* 廠區負載數值 */
+  --ems-font-size-figure-md: 36px; /* 需量卡契約容量與最高需量 */
+  --ems-font-size-figure-lg: 40px; /* KPI 列數字 */
+  --ems-font-size-figure-xl: 44px; /* PCS 功率、電費估算合計（模組 4） */
+  --ems-font-size-figure-2xl: 52px; /* 即時讀值有效功率 */
+  --ems-font-size-hero: 59px; /* SOC 主數字（模組 5） */
+  --ems-leading-none: 1; /* 大數字 */
+  --ems-leading-tight: 1.1; /* 頁標題 H1 */
+  --ems-leading-snug: 1.25; /* 頁首使用者名稱 */
+  --ems-leading-heading: 1.35; /* 警報詳情標題 */
+  --ems-leading-ui: 1.5; /* 說明段落、側欄公司名 */
+  --ems-leading-body: 1.6; /* 規則說明、註腳 */
+  --ems-leading-prose: 1.75; /* synaiq 長文內文（畫面未使用，供 App 長文） */
+  --ems-tracking-figure: -0.055em; /* 大數字（synaiq KPI） */
+  --ems-tracking-figure-sm: -0.04em; /* 次要數字 */
+  --ems-tracking-tooltip: -0.03em; /* 提示框數值 */
+  --ems-tracking-heading: -0.02em; /* 頁標題（synaiq 標題） */
+  --ems-tracking-title: 0.02em; /* 卡片標題、事件類型代碼 */
+  --ems-tracking-nav: 0.04em; /* 導覽、節點標籤、狀態節點 */
+  --ems-tracking-label: 0.06em; /* 英文眉標、膠囊、表頭（synaiq eyebrow） */
+  --ems-tracking-eyebrow: 0.08em; /* 頁眉英文標籤 */
+  --ems-tracking-brand: 0.12em; /* 頁首系統名稱 */
+  --ems-tracking-tagline: 0.3em; /* 能源總覽標語 */
+  --ems-numeric-figure: lining-nums; /* 大數字字形 */
+  --ems-numeric-table: tabular-nums; /* 表格、刻度對齊 */
+
+  /* ---------- 03 SPACING 間距（gap 與 padding 使用的全部階） ---------- */
+  --ems-space-1: 1px; /* 圖例列內距 */
+  --ems-space-2: 2px; /* 分段選項、導覽字距組、提示框列距 */
+  --ems-space-3: 3px; /* 分段軌道內距、紙條上內距 */
+  --ems-space-4: 4px; /* 標題組、節點內、導覽列距 */
+  --ems-space-5: 5px; /* 數字與單位、膠囊圖示 */
+  --ems-space-6: 6px; /* 圖例、點與文字、提示框 */
+  --ems-space-7: 7px; /* 報表類型膠囊、警報詳情列 */
+  --ems-space-8: 8px; /* 按鈕圖示、篩選膠囊間距 */
+  --ems-space-9: 9px; /* 等級膠囊、標註左右內距 */
+  --ems-space-10: 10px; /* 段落金條與標題、紙條左右內距 */
+  --ems-space-12: 12px; /* 卡片內區塊、頁首控制項 */
+  --ems-space-14: 14px; /* 導覽圖示與文字、表格列左右內距 */
+  --ems-space-16: 16px; /* 卡片之間、內嵌面板 */
+  --ems-space-18: 18px; /* 頁眉右側、內嵌面板左右 */
+  --ems-space-20: 20px; /* 卡片內距（synaiq 按鈕左右） */
+  --ems-space-22: 22px; /* 導覽項目左右內距、側欄底部 */
+  --ems-space-24: 24px; /* 內容區外距、KPI 左右內距 */
+  --ems-space-28: 28px; /* 頁首左內距、SOC 環與指標間距 */
+
+  /* ---------- 04 RADII / BORDERS / SHADOWS 圓角、框線、陰影 ---------- */
+  --ems-radius-hair: 2px; /* 需量細長條、段落金條、時間電價帶 */
+  --ems-radius-xs: 3px; /* 圖例色塊、標記方塊 */
+  --ems-radius-sm: 4px; /* 堆疊長條群組、長條資料端 */
+  --ems-radius-callout: 6px; /* 標註、直接標籤、排程方塊 */
+  --ems-radius-list: 8px; /* 提示框、狀態節點、分段選項、分頁鈕 */
+  --ems-radius-panel: 9px; /* 內嵌面板（synaiq 產品畫面 9） */
+  --ems-radius-input: 10px; /* 輸入框、分段軌道、頁首控制項（synaiq input 10） */
+  --ems-radius-button: 12px; /* 按鈕、流程節點（synaiq button 12） */
+  --ems-radius-card: 14px; /* 卡片（synaiq 產品畫面 14） */
+  --ems-radius-pill: 999px; /* 膠囊、點、量表 */
+  --ems-border-hair: 1px; /* 細框線、格線、分隔線 */
+  --ems-border-bar: 2px; /* 導覽金條、標記外環、表面間隙、焦點框 */
+  --ems-border-slip: 3px; /* 示意資料紙條底邊（synaiq 紙卡加厚底） */
+  --ems-slip-rotate: -1.2deg; /* 示意資料紙條傾斜（synaiq ±1.2°） */
+  --ems-shadow-tooltip: 0 16px 30px var(--ems-shadow-black-soft); /* 圖表提示框 */
+  --ems-shadow-slip: 3px 5px 0 var(--ems-shadow-paper); /* 示意資料紙條 */
+  --ems-shadow-segment: 0 1px 2px var(--ems-shadow-ink-soft); /* 分段控制選取項 */
+  --ems-shadow-nav-active: inset var(--ems-border-bar) 0 0 var(--ems-gold); /* 導覽與選取列左側金條 */
+  --ems-ring-on-header: 0 0 0 var(--ems-border-bar) var(--ems-chrome-header); /* 未讀點外環 */
+  --ems-ring-on-surface: 0 0 0 var(--ems-border-bar) var(--ems-paper-light); /* 圖表懸停點外環 */
+  --ems-halo-live: 0 0 0 var(--ems-border-slip) var(--ems-lit); /* 即時更新點光暈 */
+  --ems-outline-today: inset 0 0 0 var(--ems-border-hair) var(--ems-gold); /* 今日適用時間電價列 */
+  --ems-outline-swatch: inset 0 0 0 var(--ems-border-hair) var(--ems-film); /* 離峰圖例色塊 */
+  --ems-outline-plan: inset 0 0 0 var(--ems-border-hair) var(--ems-muted); /* 計畫圖例色塊 */
+  --ems-outline-ribbon: inset 0 0 0 var(--ems-border-hair) var(--ems-table-head); /* 儲能排程離峰帶 */
+  --ems-focus-width: var(--ems-border-bar); /* 焦點框寬（synaiq 2px currentColor） */
+  --ems-focus-offset: var(--ems-space-5); /* 焦點框外距（synaiq offset 5px） */
+
+  /* ---------- 05 MOTION 動態（畫布格式不含動畫；以下供正式 App） ---------- */
+  --ems-duration-quick: 240ms; /* 連結、分段、編輯式懸停（synaiq editorial hover） */
+  --ems-duration-base: 0.3s; /* 按鈕懸停底色（synaiq button hover） */
+  --ems-duration-slow: 0.45s; /* 卡片、浮層懸停（synaiq layer hover） */
+  --ems-duration-off: 0ms; /* 減少動態時使用 */
+  --ems-ease-reveal: cubic-bezier(0.12, 0.8, 0.18, 1); /* 出現動畫（synaiq reveal easing） */
+  --ems-ease-standard: ease; /* 一般轉場 */
+
+  /* ---------- 06 CHARTS 圖表 ---------- */
+  --ems-series-pv: var(--ems-olive); /* 太陽能（類別第 1 位，固定順序） */
+  --ems-series-grid: var(--ems-gold); /* 電網（第 2 位；2.12:1 必附圖例與直接標籤） */
+  --ems-series-bess: var(--ems-slate); /* 儲能（第 3 位） */
+  --ems-series-measure: var(--ems-olive); /* 單一序列量測（用電、需量、SOC、電壓電流） */
+  --ems-series-charge: var(--ems-olive); /* 充電（負值） */
+  --ems-series-discharge: var(--ems-slate); /* 放電（正值） */
+  --ems-chart-grid: var(--ems-table-head); /* 格線 */
+  --ems-chart-baseline: var(--ems-rule); /* 基線、參考帶虛線 */
+  --ems-chart-threshold: var(--ems-gold-deep); /* 契約容量虛線 */
+  --ems-chart-reference: var(--ems-muted); /* 本月最高、現在線、十字線 */
+  --ems-chart-hover: var(--ems-kpi-green); /* 懸停長條 */
+  --ems-chart-callout-bg: var(--ems-gold); /* 契約容量標註底 */
+  --ems-chart-callout-fg: var(--ems-ink); /* 契約容量標註字（6.55:1） */
+  --ems-stroke-sketch: 0.8px; /* 側欄鉛筆草圖、輸電線 */
+  --ems-stroke-sketch-card: 0.9px; /* 流程卡鉛筆草圖 */
+  --ems-stroke-hair: 1px; /* 格線、基線、參考線 */
+  --ems-stroke-illustration: 1.1px; /* 太陽能板、建築、貨櫃線稿 */
+  --ems-stroke-illustration-strong: 1.2px; /* 電塔線稿、狀態機箭頭 */
+  --ems-stroke-threshold: 1.5px; /* 契約容量線、電壓電流小圖、計畫 SOC */
+  --ems-stroke-icon: 1.6px; /* 介面圖示（lucide 風格） */
+  --ems-stroke-icon-strong: 1.7px; /* 狀態圖示、下載圖示 */
+  --ems-stroke-line-dense: 1.8px; /* 即時監控功率線、小型圖示 */
+  --ems-stroke-line: 2px; /* 用電線、SOC 線、標記外環 */
+  --ems-stroke-icon-mini: 2.2px; /* 12px 警告三角 */
+  --ems-stroke-icon-micro: 2.4px; /* 11px 圖例三角 */
+  --ems-stroke-ring: 14px; /* SOC 環 */
+  --ems-flow-weight-base: 1.25px; /* 能源流線寬基數（線寬 = 基數 + kW × 係數） */
+  --ems-flow-weight-per-kw: 0.015px; /* 能源流線寬係數 */
+  --ems-flow-kw: 0; /* 能源流即時 kW 輸入（元素 inline 覆寫，例：style="--ems-flow-kw: 186"） */
+  --ems-dash-threshold: 6 4; /* 契約容量 */
+  --ems-dash-plan: 4 3; /* 計畫 SOC、圖例虛線 */
+  --ems-dash-plan-bar: 3 2; /* 計畫放電長條 */
+  --ems-dash-reference: 3 3; /* 額定電壓、人工復歸箭頭 */
+  --ems-dash-peak: 2 2; /* 本月最高、進行中長條 */
+  --ems-dash-now: 2 3; /* 現在線、SOC 帶 */
+  --ems-dash-sketch: 1 4; /* 草圖虛線弧 */
+  --ems-opacity-hidden: 0; /* 視覺隱藏的單選框 */
+  --ems-opacity-wash-bottom: 0.02; /* 面積漸層底端 */
+  --ems-opacity-shade: 0.06; /* 線稿側面陰影 */
+  --ems-opacity-panel: 0.16; /* 太陽能板填色 */
+  --ems-opacity-wash-monitor: 0.22; /* 即時監控功率面積頂端 */
+  --ems-opacity-wash-top: 0.24; /* 本日用電面積頂端 */
+  --ems-opacity-sketch: 0.32; /* 側欄鉛筆草圖 */
+  --ems-opacity-live: 0.35; /* 進行中需量長條 */
+  --ems-opacity-current: 0.45; /* 儲能進行中放電長條 */
+  --ems-mark-radius: 4px; /* 資料點半徑（直徑 8px 以上） */
+  --ems-bar-width-dense: 5px; /* 96 格需量長條 */
+  --ems-bar-width-max: 24px; /* 長條最大寬度 */
+
+  /* ---------- 07 LAYOUT 版面 ---------- */
+  --ems-layout-artboard-w: 1440px; /* 桌面基準寬 */
+  --ems-layout-header-h: 74px; /* 頁首高（synaiq nav 74px） */
+  --ems-layout-sidebar-w: 208px; /* 側欄寬 */
+  --ems-layout-gutter: 24px; /* 內容區外距 */
+  --ems-layout-gap: 16px; /* 卡片之間 */
+  --ems-layout-card-pad: 20px; /* 卡片內距 */
+  --ems-layout-page-head-h: 60px; /* 頁眉高 */
+  --ems-layout-card-head-h: 28px; /* 卡片標題列高 */
+  --ems-layout-section-bar-w: 3px; /* 段落金條寬 */
+  --ems-layout-section-bar-h: 18px; /* 段落金條高 */
+  --ems-layout-brand-divider-h: 30px; /* 頁首字標與系統名稱間分隔線高 */
+  --ems-layout-site-switch-w: 320px; /* 頁首場域切換鈕寬 */
+  --ems-control-h-lg: 44px; /* 頁首控制項、量測點選擇、連結按鈕 */
+  --ems-control-h: 42px; /* 按鈕（synaiq small 42） */
+  --ems-control-h-input: 40px; /* 搜尋框外框 */
+  --ems-control-h-segment: 38px; /* 即時監控分段選項 */
+  --ems-control-h-md: 36px; /* 報表分段選項、下載鈕、分頁鈕寬 */
+  --ems-control-h-chip: 34px; /* 篩選與指標膠囊、表頭列 */
+  --ems-control-h-sm: 32px; /* 警報分頁、分頁鈕 */
+  --ems-control-check: 16px; /* 核取方塊 */
+  --ems-pill-h-lg: 28px; /* 儲能模式膠囊 */
+  --ems-pill-h: 24px; /* 膠囊、等級標籤 */
+  --ems-pill-h-sm: 22px; /* 生命週期、狀態、執行者膠囊 */
+  --ems-pill-h-xs: 20px; /* 報表類型膠囊 */
+  --ems-legend-swatch: 10px; /* 圖例色塊 */
+  --ems-legend-line-w: 18px; /* 圖例線段寬 */
+  --ems-legend-line-h: 6px; /* 圖例線段高 */
+  --ems-nav-item-h: 48px; /* 導覽項目高 */
+  --ems-chip-xl: 52px; /* KPI 圖示圓、狀態卡圖示圓 */
+  --ems-chip-lg: 48px; /* 空狀態圖示圓 */
+  --ems-chip-md: 44px; /* 需量卡圖示圓 */
+  --ems-chip-sm: 40px; /* 警報等級統計圖示圓 */
+  --ems-chip-xs: 36px; /* 超約風險圖示圓 */
+  --ems-avatar: 32px; /* 使用者頭像 */
+  --ems-dot: 7px; /* 狀態點 */
+  --ems-dot-lg: 8px; /* 未讀點、即時點 */
+  --ems-meter-h: 10px; /* 需量量表 */
+  --ems-meter-h-sm: 8px; /* 信心、電芯、PCS 量表、TOU 細帶 */
+  --ems-meter-h-xs: 6px; /* 可用率迷你條 */
+  --ems-meter-h-2xs: 4px; /* 警報生命週期步驟條 */
+  --ems-meter-tick-h: 18px; /* 量表目前值刻度高 */
+  --ems-row-h-compact: 35px; /* 量測點總覽列 */
+  --ems-row-h-history: 36px; /* 警報歷史列 */
+  --ems-row-h-kv: 37px; /* 即時讀值列 */
+  --ems-row-h: 38px; /* 裝置清單、稽核紀錄列 */
+  --ems-row-h-report: 60px; /* 已產生報表列 */
+  --ems-row-h-alarm: 68px; /* 警報清單列（最小高） */
+  --ems-row-h-queue: 84px; /* AI 確認佇列列（最小高） */
+  --ems-icon-2xs: 11px; /* 圖例三角 */
+  --ems-icon-xs: 12px; /* 膠囊內圖示 */
+  --ems-icon-sm: 13px; /* 等級膠囊圖示 */
+  --ems-icon-md: 14px; /* 分頁與下載圖示 */
+  --ems-icon-md-plus: 15px; /* 匯出按鈕圖示 */
+  --ems-icon-lg: 16px; /* 箭頭、下拉、下載 */
+  --ems-icon-xl: 18px; /* 頁首場域、頭像 */
+  --ems-icon-nav: 20px; /* 導覽、狀態圖示 */
+  --ems-icon-bell: 21px; /* 頁首鈴鐺 */
+  --ems-icon-2xl: 22px; /* 需量卡圖示 */
+  --ems-icon-3xl: 24px; /* KPI 圖示 */
+  --ems-icon-4xl: 26px; /* 狀態卡盾牌 */
+  --ems-logo-h: 26px; /* 字標高（寬自動，禁止拉伸） */
+}
+
+/* 減少動態：系統設定或 data-ems-motion="off" 時，所有時間歸零 */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ems-duration-quick: var(--ems-duration-off); /* 系統要求減少動態 */
+    --ems-duration-base: var(--ems-duration-off); /* 系統要求減少動態 */
+    --ems-duration-slow: var(--ems-duration-off); /* 系統要求減少動態 */
+  }
+}
+:root[data-ems-motion="off"] {
+  --ems-duration-quick: var(--ems-duration-off); /* 使用者關閉動態 */
+  --ems-duration-base: var(--ems-duration-off); /* 使用者關閉動態 */
+  --ems-duration-slow: var(--ems-duration-off); /* 使用者關閉動態 */
+}

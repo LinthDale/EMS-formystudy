@@ -13,7 +13,7 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 1.3.0
+  version: 1.5.0
   contact:
     name: EMS Development Team
   license:
@@ -40,6 +40,172 @@ tags:
     description: Device Registry 與 AI 自動分類 API (PRD-0003, port 8002)
 
 paths:
+  /api/alarms/demo:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [BFF Demo Alarms]
+      summary: Telegram 示範通知設定狀態與最近十筆成功紀錄
+      operationId: getDemoAlarmStatus
+      description: OPS session required. No query parameters. No external send. In-memory records clear on BFF restart.
+      security: [{bffSession: []}]
+      responses:
+        '200':
+          description: Notification readiness and recent successful acknowledgements
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [configured, cooldown_seconds, recent]
+                properties:
+                  configured: {type: boolean}
+                  cooldown_seconds: {type: integer, minimum: 0}
+                  recent:
+                    type: array
+                    maxItems: 10
+                    items: {$ref: '#/components/schemas/DemoAlarmDelivery'}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '422': {description: Query parameters are not supported}
+    post:
+      tags: [BFF Demo Alarms]
+      summary: 發送固定對象與固定 DEMO 文字的 Telegram 示範警報
+      operationId: triggerDemoAlarm
+      description: |
+        OPS session and allowlisted Origin required. No query parameters.
+        Server-side fixed bot, recipient and DEMO message; no device control.
+        Global 30-second default cooldown. Same UUID is deduplicated for 10 minutes
+        including failures (64-entry cap); no automatic retry. Single-process,
+        in-memory state resets on restart. Success means Telegram accepted, not read.
+      security: [{bffSession: []}]
+      parameters:
+        - name: Origin
+          in: header
+          required: true
+          schema: {type: string, format: uri}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [request_id]
+              properties:
+                request_id:
+                  type: string
+                  format: uuid
+                  description: UUID version 4; reuse only for the same logical send attempt
+      responses:
+        '200':
+          description: Confirmed Telegram acknowledgement or replay of the same successful UUID
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - {$ref: '#/components/schemas/DemoAlarmDelivery'}
+                  - type: object
+                    required: [cooldown_seconds]
+                    properties:
+                      cooldown_seconds: {type: integer, minimum: 0}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role or Origin check failed}
+        '409': {description: Same UUID is still in progress (demo_alarm_in_progress)}
+        '422': {description: Invalid UUID4 or unsupported fields/query}
+        '429':
+          description: Global cooldown or bounded dedupe cache is full (demo_alarm_cooldown)
+          headers:
+            Retry-After:
+              schema: {type: integer, minimum: 1}
+              description: Seconds before a new attempt is permitted
+        '502':
+          description: telegram_delivery_failed or telegram_delivery_unknown; no automatic resend
+        '503': {description: Telegram credentials missing (telegram_not_configured)}
+  /api/devices/{device_id}/history:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [BFF History]
+      summary: 完整指定區間的設備趨勢彙整
+      operationId: getDeviceHistory
+      description: |
+        OPS session required. Read-only and idempotent; retries safe.
+        Half-open [since, until), timezone required, maximum 7 days.
+        Unknown/repeated query parameters return 422. No new rate limiter.
+        Server resolves domain through gateway_id and calls internal read-only
+        api.measurement_history RPC (migration 017); never accepts browser SQL.
+        Numeric value is mean; last is bucket-end sample. Boolean signals encode
+        0/1; min != max means transitions within the bucket, not an exact timeline.
+        Empty buckets/signals are omitted; missing data must not be filled with zero.
+      security: [{bffSession: []}]
+      parameters:
+        - {$ref: '#/components/parameters/HistoryDeviceId'}
+        - {$ref: '#/components/parameters/HistorySince'}
+        - {$ref: '#/components/parameters/HistoryUntil'}
+        - name: points
+          in: query
+          schema: {type: integer, minimum: 60, maximum: 1200, default: 600}
+      responses:
+        '200':
+          description: Bounded bucket series for the entire requested interval
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DeviceHistory'}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '404': {description: Device or measurement domain missing}
+        '422': {description: Invalid range or parameters}
+        '502': {description: Upstream unavailable}
+        '503': {description: OPS channel not configured}
+  /api/devices/{device_id}/records:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [BFF History]
+      summary: 查詢指定區間的原始量測紀錄
+      operationId: getDeviceRecords
+      description: |
+        OPS-only, read-only, idempotent; same 7-day timezone-aware half-open range.
+        Ordered by time descending and full row JSON as deterministic tie-break.
+        Returns a fixed-time-window page, not a transaction snapshot; late arrivals
+        may shift offsets. limit+1 lookahead determines has_more. Existing samples
+        are unmodified; fields may be null for sparse factory rows.
+        Internal RPC api.measurement_records, via BFF only for browser clients.
+      security: [{bffSession: []}]
+      parameters:
+        - {$ref: '#/components/parameters/HistoryDeviceId'}
+        - {$ref: '#/components/parameters/HistorySince'}
+        - {$ref: '#/components/parameters/HistoryUntil'}
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 1000, default: 100}
+        - name: offset
+          in: query
+          schema: {type: integer, minimum: 0, maximum: 1000000, default: 0}
+      responses:
+        '200':
+          description: Raw page; no total count
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [rows, has_more]
+                properties:
+                  has_more: {type: boolean}
+                  rows:
+                    type: array
+                    maxItems: 1000
+                    items:
+                      type: object
+                      required: [time, device_id]
+                      properties:
+                        time: {type: string, format: date-time}
+                        device_id: {type: string}
+                      additionalProperties: true
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '404': {description: Device or measurement domain missing}
+        '422': {description: Invalid range or pagination}
+        '502': {description: Upstream unavailable}
+        '503': {description: OPS channel not configured}
+
   # ============================================================
   # Simulator API (port 8001)
   # ============================================================
@@ -747,7 +913,31 @@ paths:
         '409': { description: 凍結紀錄，請用 /override }
 
 components:
+  parameters:
+    HistoryDeviceId:
+      name: device_id
+      in: path
+      required: true
+      schema: {type: string, pattern: '^[A-Za-z0-9_-]{1,64}$'}
+    HistorySince:
+      name: since
+      in: query
+      required: true
+      schema: {type: string, format: date-time}
+      description: Inclusive start with timezone; total interval at most 7 days
+    HistoryUntil:
+      name: until
+      in: query
+      required: true
+      schema: {type: string, format: date-time}
+      description: Exclusive end with timezone
+
   securitySchemes:
+    bffSession:
+      type: apiKey
+      in: cookie
+      name: ems_bff_session
+      description: HttpOnly Secure SameSite Strict opaque session; OPS role required
     basicAuth:
       type: http
       scheme: basic
@@ -763,6 +953,40 @@ components:
         AI 金鑰輪替後需 `docker compose up -d device-service-mcp` 重啟（L-3）。
 
   schemas:
+    DemoAlarmDelivery:
+      type: object
+      required: [status, event_id, sent_at, channel]
+      properties:
+        status: {type: string, enum: [sent]}
+        event_id: {type: string, format: uuid}
+        sent_at: {type: string, format: date-time}
+        channel: {type: string, enum: [telegram]}
+    DeviceHistory:
+      type: object
+      required: [device_id, since, until, bucket_seconds, series]
+      properties:
+        device_id: {type: string}
+        since: {type: string, format: date-time}
+        until: {type: string, format: date-time}
+        bucket_seconds: {type: integer, minimum: 1, maximum: 10080}
+        series:
+          type: array
+          maxItems: 7200
+          items:
+            type: object
+            required: [time, signal, value, min, max, last, samples, last_time]
+            properties:
+              time: {type: string, format: date-time, description: Bucket start anchored to since}
+              signal:
+                type: string
+                enum: [voltage, current, power_kw, energy_kwh, temperature, humidity, motor_speed, pressure, pump_on, valve_open]
+              value: {type: number, description: Mean of finite samples}
+              min: {type: number}
+              max: {type: number}
+              last: {type: number, description: Latest finite sample in the bucket}
+              samples: {type: integer, minimum: 1}
+              last_time: {type: string, format: date-time}
+
     # ===== Device Service (PRD-0003) — 對齊 services/device-service/device_service/models.py =====
     DeviceCreate:
       type: object
@@ -1190,3 +1414,88 @@ components:
                         message:
                           type: string
                           description: 測試訊息內容
+
+# 2026-09-23: Local EMS design preview reuses existing auth, devices and measurements routes.
+# No API contract change. See output/ems-design-preview-20260923/README.md.
+
+# PRD-0020: non-HTTP contract extension; existing REST schemas are unchanged.
+x-delta-telemetry:
+  profile: delta-three-phase-v1.35
+  simulator:
+    transports: [tcp, rtu]
+    default_transport: tcp
+    rtu:
+      role: slave-server
+      port: Operator-specified local COMn or /dev/ device; serial URLs rejected
+      baudrates: [9600, 19200, 38400]
+      framing: 8N1
+      unit_id: Single station, 1-247
+      function_codes: [4]
+      unknown_unit_and_broadcast: ignore
+      startup_failure: nonzero-exit
+      tcp_listener: false
+      validation: Linux PTY verified; physical RS485 and Windows COM pending
+  topic: ems/devices/{device_id}/measurements
+  format: influx-line-protocol
+  measurement: electricity_measurements
+  qos: 1
+  retain: false
+  timestamp: source-utc-nanoseconds-microsecond-aligned
+  fields:
+    voltage: L1 phase voltage in V
+    current: L1 current in A
+    power_kw: Three-phase total active output in kW
+    energy_kwh: Lifetime generation in kWh, low-word-first source
+  delivery: Broker PUBACK only; DB loss and replay duplicates remain possible
+
+# Proposed non-HTTP contract only; not an implemented endpoint or active broker route.
+x-planned-delta-edge-v2:
+  status: draft-not-implemented
+  prd: doc/prd/PRD-0021-multi-device-edge-reliability.md
+  adr: doc/adr/ADR-030-edge-durable-receipts.md
+  transport: MQTT-over-TLS
+  topics:
+    samples: ems/v2/gateways/{gateway_id}/samples
+    acks: ems/v2/gateways/{gateway_id}/acks
+    session_request: ems/v2/gateways/{gateway_id}/session/request
+    session_response: ems/v2/gateways/{gateway_id}/session/response
+    reconcile_request: ems/v2/gateways/{gateway_id}/reconcile/request
+    reconcile_response: ems/v2/gateways/{gateway_id}/reconcile/response
+    health: ems/v2/gateways/{gateway_id}/health
+  qos: 1
+  retain: false
+  identity: Per-gateway mTLS and topic/device ownership validation
+  delivery: Delete local row only after validated central DB committed ACK
+  idempotency: Unique gateway_id/sample_id with immutable canonical payload hash
+  limits:
+    sample_bytes: 1024
+    batch_samples: 32
+    batch_bytes: 65536
+    inflight_batches: 8
+    receiver_samples_per_second: 40
+  payload_schema: Draft fields and validation in PRD-0021 section 8; implementation pending
+  reconciliation:
+    status: draft-not-implemented
+    contract: PRD-0021 sections 8.1 and 15.1
+    audit_interval_seconds: 300
+    audit_history_days: 7
+    max_page_entries: 256
+    max_message_bytes: 65536
+    heartbeat_interval_seconds: 30
+    gateway_unavailable_after_seconds: 90
+    reconciliation_reply_deletes_queue: false
+  sampling:
+    status: draft-not-implemented
+    contract: PRD-0021 FR-2117/2118 and section 15.2
+    scope: per-device
+    presets_seconds: [1, 5, 10, 15, 30]
+    default_seconds: 10
+    mixed_intervals: true
+    desired_state: requested_interval_s
+    applied_state: effective_interval_s
+    activation: Gateway validated durable config_revision and applied boundary
+    admission: Model and bus schedulability plus pending/audit disk and uplink capacity
+    ui_refresh_equals_sampling: false
+    baseline: Eight devices at 10 seconds with seven days offline
+    remote_config_transport: Not implemented; no new configuration route declared
+  existing_v1_unchanged: true

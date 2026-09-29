@@ -1,0 +1,26 @@
+{
+  "mode": "field",
+  "device_id": "delta-site-001",
+  "modbus": {
+    "transport": "tcp",
+    "host": "192.0.2.10",
+    "port": 502,
+    "unit_id": 1,
+    "address_base": 1,
+    "timeout": 3,
+    "read_temperature": false
+  },
+  "mqtt": {
+    "host": "mqtt.example.com",
+    "port": 8883,
+    "client_id": "delta-site-001-pi-001",
+    "tls": true,
+    "username_env": "DELTA_MQTT_USERNAME",
+    "password_env": "DELTA_MQTT_PASSWORD"
+  },
+  "outbox_path": "/var/lib/delta-edge/spool/outbox.db",
+  "clock_sync_file": "/run/systemd/timesync/synchronized",
+  "poll_interval": 10,
+  "queue_limit": 10000,
+  "batch_size": 100
+}

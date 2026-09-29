@@ -15,6 +15,7 @@ import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/auth/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ThemeSwitcher } from "@/components/ems/ThemeSwitcher";
 
 interface FromState {
   readonly from?: { readonly pathname?: string };
@@ -48,7 +49,10 @@ export function LoginPage() {
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-sm items-center justify-center p-4">
+    <div className="mx-auto flex min-h-screen max-w-sm flex-col items-center justify-center gap-4 p-4">
+      <div className="flex w-full justify-end">
+        <ThemeSwitcher />
+      </div>
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{t("auth.login.title")}</CardTitle>

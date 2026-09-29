@@ -51,3 +51,13 @@
 - 模板：見 `doc/PRD-架構設計-Guideline.md` §9
 - 狀態值：`Proposed` / `Accepted` / `Deprecated` / `Superseded by ADR-XXX`
 - 變更已 Accepted 的 ADR：新建後續 ADR 並反向連結，**不修改舊 ADR 內容**（僅可改狀態）
+
+- [ADR-027 有界歷史查詢](ADR-027-monitor-history.md)：延伸 ADR-025，唯讀 history / records。
+
+- [ADR-028 Telegram 示範通知](ADR-028-telegram-demo-alarm.md)：BFF 直接呼叫固定 Telegram sendMessage，與 Grafana 自動告警分開。
+
+- [ADR-029 Delta edge telemetry](ADR-029-delta-edge-telemetry.md)：Accepted，本機獨立Python TCP/RTU採集、動態倍率、SQLite→MQTT，沿用四欄electricity投影。
+
+- [ADR-030 邊緣 SQLite 與中央提交確認](ADR-030-edge-durable-receipts.md)：Proposed；多設備outbox、中央receipt原子去重與committed ACK；未取代已部署v1。
+
+- [ADR-031 Delta RTU simulator](ADR-031-delta-rtu-simulator.md)：Accepted；PC 串口從站回應 Pi，沿用唯讀資料表與既有 TCP 模式。

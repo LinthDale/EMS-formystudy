@@ -227,3 +227,6 @@ Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@
 Dev：`vite@7`, `typescript@5.8`, `tailwindcss@4`(+`@tailwindcss/vite`), `vitest@3`(+`@vitest/coverage-v8`), `@testing-library/{react,jest-dom,user-event}`, `jsdom`, `openapi-typescript`（`npm run gen:api` 由 `api/openapi.yml` 生成型別，§13.2 禁手刻）
 
 Prod 服務：`frontend/Dockerfile`（多階段 node build → `nginx:1.27-alpine`）服務靜態 build，注入 §9.5 安全標頭（CSP/HSTS/X-Frame-Options/nosniff/Referrer-Policy）並同源代理 `/api`→BFF；CI `frontend-unit` job 跑 `npm run coverage`（line/stmt/branch 80% 門檻；字體 subset 收斂後 dist CSS gzip ≈ 5.6KB）。
+
+## Delta edge / simulator（PRD-0020）
+Python3.9+（本機Docker3.11）；獨立services/delta/requirements.txt固定pymodbus3.6.9、paho-mqtt2.1.0、pyserial3.5。沿ADR-002版本，未升級其他services或external submodules。測試獨立Dockerfile.test使用pytest8與pytest-cov；Pi原生venv+systemd，SIM7600 OS網路驅動/APN另行驗收。UI驗證使用已有Playwright及Edge，非edge runtime依賴。

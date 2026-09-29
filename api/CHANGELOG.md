@@ -7,3 +7,13 @@
 - `DeviceOut`：新增選填欄位 `ai_confidence`（0–1，未分類 null）——信心佇列（PRD-0005 FR-510）所需。
 - 修正既有 spec 漂移：`DeviceOut` 補上實作早已回傳的 `confirmed_at` 欄位。
 - 對應：PRD-0005 §1.5 GATE-2 後端增量（D1/D3）。消費端注意：新增欄位為 additive；client 由 spec 重新生成即可。
+
+## 1.4.0 — 2026-09-23（MINOR，本機已部署）
+- 新增 OPS-only BFF history / records，完整指定區間彙整與原始紀錄分頁；既有 measurements 不變。PRD-0018 / ADR-027；migration 017 唯讀 RPC。
+
+## 1.5.0 — 2026-09-23（MINOR）
+- 新增 OPS-only `GET/POST /api/alarms/demo`：狀態/最近十筆、固定 Telegram 對象與 DEMO 文字、Origin CSRF、30 秒冷卻與 10 分鐘 UUID 去重。PRD-0019 / ADR-028。
+- 此功能不觸發設備故障或修改 Grafana 告警規則；200 僅表示 Telegram 已確認接收，非使用者已讀。
+
+## 2026-09-29 — Delta phase-1 telemetry extension
+新增x-delta-telemetry描述既有MQTT/四欄electricity相容投影；無新增或變更HTTP endpoint。V/A=L1、kW=三相總功率、kWh=累計發電，詳PRD-0020/ADR-029。

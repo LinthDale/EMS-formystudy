@@ -124,3 +124,14 @@ flowchart LR
 | device-service | 🟢 裝置分類/CRUD 停，量測管線不受影響 | 可重啟（無狀態，雙 DB pool）|
 | bff | 🟢 前端操作面停；Grafana/管線/PostgREST 不受影響 | 可重啟（in-memory session 清空，需重登）|
 | frontend | 🟢 產品 UI 停 | 靜態檔，可重啟 |
+
+## 2026-09-23 歷史查詢擴充（ADR-027）
+既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
+### Telegram 示範警報容器路徑（ADR-028）
+Browser → DGX nginx → Windows Node proxy → WSL BFF → HTTPS api.telegram.org。既有 BFF 增加 OPS-only /api/alarms/demo；無新增容器/資料庫。Bot Token/Chat ID 透過 Compose 注入 BFF，瀏覽器不取得。
+
+## Delta 增量（PRD-0020 / ADR-029）
+新增opt-in delta-simulator + delta-edge容器；edge内部pure parser / TCP或RTU poller / SQLite outbox / MQTT sender分離。沿既有ingest與electricity四欄schema、BFF domain routing使用ems-gateway；此gateway_id為邏輯路由，不等於Pi實體識別。Pi用原生Python3.9+及systemd，不要求Docker。
+
+### RTU 模擬增補（ADR-031）
+同一Python simulator可選RTU本機serial server，與TCP共用唯讀context；一次僅選一種transport。PC原生執行、Pi原生poller，既有Compose TCP demo不變，無新增服務、公開port或DB schema。

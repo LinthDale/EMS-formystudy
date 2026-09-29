@@ -219,3 +219,22 @@
 - `doc/governance/risk-register.md` — 對應風險條目（R-001、R-002、R-003、R-006、R-009、R-013）
 - `doc/adr/ADR-008-cloudflare-tunnel-grafana-public-access.md` — 對外架構決策
 - `doc/operations/network/Cloudflare_Grafana_Demo_對外公開操作指南.md` — 操作層指引
+
+### 歷史查詢增量（2026-09-23，ADR-027）
+T-08/T-11/T-24：history/records 仍 OPS-gated；domain 只依 gateway 解析。RPC SECURITY INVOKER，只讀既有 api views；拒絕 PUBLIC EXECUTE，僅 web_anon 執行。新 RPC 增加內網查詢面但不增加可讀資料欄位；需維持 PostgREST 網路隔離。SQL 與 BFF 雙層最多 7 天、1200 桶/頁1000列，未知或重複參數拒絕。現階段尚無每使用者限流，併發濫用仍是剩餘風險；BFF 既有 timeout 不等同 DB statement_timeout。
+
+### PRD-0019 Telegram 出站邊界（2026-09-23）
+威脅：未授權通知、CSRF、任意收件者/文字濫發、Token 因 URL log 洩漏、重複送出。控制：OPS session、Origin allowlist、UUID4-only extra-forbid、固定 host/chat/message、不跟隨 redirect、限速/去重、HTTPX URL filter + httpcore WARNING、固定錯誤而非 provider body。ASGI 測試覆蓋認證/CSRF/輸入/失敗/遮蔽/併發。前端與公開 proxy 不接受使用者指定 Token。
+
+## PRD-0020 Delta edge 信任邊界
+新OT路徑只FC04、無公網Modbus或遠端命令。Field MQTT強制驗cert與hostname，帳密env或mTLS、ACL按device topic；client限制無法替代接收端payload身份綁定（後者仍是field gate）。Pi不持有DB/OPS金鑰；SQLite0600/專用目錄0700、定長payload與row上限。Demo明示plaintext且新增容器不publishhostports；既有demo broker設定沒有變動。
+
+## Delta v2 提案信任邊界（Draft，2026-09-29）
+[PRD-0021 §9](../prd/PRD-0021-multi-device-edge-reliability.md)：OT唯讀、Pi出站TLS、gateway憑證→topic→device授權、server-only ACK、pending ID/hash驗證、bounded payload與重放時間窗。主要新增威脅是偽造committed ACK導致本地刪資料，以及跨gateway注入／receipt與量測復原不一致。控制措施尚未部署；既有匿名demo broker不得視為field接收端。
+
+PRD-0021對帳補充：reconcile回覆不能刪queue；page/cursor須限自有gateway/device/stream及session/range、固定大小與速率，拒絕retained／舊session回覆。缺筆重送只操作既有資料，不允許OT控制或遠端SQL。控制仍為Draft。
+
+採樣設定提案（Draft）：僅授權OPS／管理者可改preset，中央與gateway均驗證身份、版本、速率及資源；拒絕重放／過期／並發覆蓋，離線不偽裝已生效。samples/reconcile通道不接受設定命令；正式設定傳遞介面須另實作與審查。
+
+### ADR-031 RTU simulator 增補
+僅operator指定的本機COMn或/dev路徑，拒絕網路serial URL；RTU不啟動TCP listener。single=False與單站context、ignore_missing_slaves、broadcast disabled防止回應其他站號；FC04白名單維持唯讀。串口啟動失敗不以ready假成功。實體RS485無認證能力，只在隔離實驗總線使用模擬器；TLS/接收端身分驗證的既有待辦不因本增量而完成。

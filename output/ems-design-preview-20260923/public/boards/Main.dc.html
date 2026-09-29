@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../responsive.css">
+<link rel="stylesheet" href="../brand-header.css">
+<title>能源總覽 · tAIstro EMS</title>
+<script src="./support.js"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-a-32.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="../favicon-a.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-a.png">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Noto+Sans+TC:wght@400;500&amp;family=Noto+Serif+TC:wght@300;400&amp;display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#282825}
+a{color:#576a4a}a:hover{color:#345e40}
+</style>
+</helmet>
+<div style="width: 1440px; height: 900px; box-sizing: border-box; display: grid; grid-template-columns: 208px minmax(0, 1fr); grid-template-rows: 74px minmax(0, 1fr); background: #f4f4f2; color: #282825;" class="ems-board ems-page-main">
+
+<header style="grid-column: 1 / 3; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 28px; background: #292a2e;" class="ems-header">
+<div style="display: flex; align-items: center; gap: 20px;" class="ems-brand">
+<svg viewBox="235.88 409.41 370.13 72.54" role="img" aria-label="tAIstro" style="height: 26px; width: auto; display: block;">
+<path fill="#cca858" d="M587.83,430.46h-23.75c-10.03,0-18.18,8.16-18.18,18.18v14.45c0,10.03,8.16,18.18,18.18,18.18h23.75c10.03,0,18.18-8.16,18.18-18.18v-14.45c0-10.03-8.16-18.18-18.18-18.18ZM595.46,463.1c0,4.21-3.42,7.63-7.63,7.63h-23.75c-4.21,0-7.63-3.42-7.63-7.63v-14.45c0-4.21,3.42-7.63,7.63-7.63h23.75c4.21,0,7.63,3.42,7.63,7.63v14.45Z"></path>
+<path fill="#cca858" d="M253.59,419.13h-10.55v10.94h-7.16v10.55h7.16v22.47c0,4.86,1.89,9.42,5.33,12.86,3.43,3.43,8,5.33,12.86,5.33h10.97v-10.55h-10.97c-2.04,0-3.95-.79-5.39-2.23-1.44-1.44-2.23-3.36-2.23-5.4v-22.47h18.81v-10.55h-18.81v-10.94Z"></path>
+<path fill="#cca858" d="M447.16,454.25c-1.41-1.42-3.06-2.53-4.9-3.3-1.9-.81-3.93-1.21-6.01-1.21h-25c-.66,0-1.3-.13-1.9-.38-.58-.24-1.1-.6-1.55-1.04-.45-.45-.8-.97-1.05-1.55-.25-.6-.38-1.23-.38-1.9s.13-1.3.38-1.9c.25-.58.6-1.1,1.05-1.55s.97-.8,1.55-1.04c.6-.25,1.24-.38,1.9-.38h37.14v-10.55h-37.14c-2.08,0-4.1.41-6.01,1.21-1.84.78-3.49,1.89-4.9,3.3-1.42,1.41-2.53,3.06-3.3,4.9-.81,1.9-1.21,3.93-1.21,6.01s.41,4.1,1.21,6.01c.78,1.84,1.89,3.49,3.3,4.9,1.42,1.42,3.07,2.53,4.9,3.3,1.91.81,3.93,1.22,6.01,1.22h25c.66,0,1.3.13,1.9.38.58.25,1.1.6,1.55,1.05s.8.97,1.05,1.55c.25.6.38,1.24.38,1.9s-.13,1.3-.38,1.9c-.25.58-.6,1.1-1.05,1.55s-.97.8-1.55,1.05c-.6.25-1.23.38-1.9.38h-41.36v10.55h41.36c2.08,0,4.1-.41,6.01-1.21,1.84-.78,3.49-1.89,4.9-3.3,1.42-1.41,2.53-3.06,3.31-4.9.81-1.91,1.21-3.93,1.21-6.01s-.41-4.1-1.21-6.01c-.78-1.84-1.89-3.49-3.3-4.9Z"></path>
+<path fill="#cca858" d="M476.09,468.49c-1.44-1.44-2.23-3.36-2.23-5.4v-22.6h19.12v-10.55h-19.12v-10.81h-10.55v43.97c0,4.86,1.89,9.42,5.33,12.86,3.44,3.43,8,5.32,12.86,5.32h11.87v-10.55h-11.87c-2.04,0-3.95-.79-5.39-2.23Z"></path>
+<path fill="#cca858" d="M505.24,448.65v33.3h10.55v-33.3c0-4.21,3.42-7.63,7.63-7.63h17.12v-10.55h-17.12c-10.03,0-18.18,8.16-18.18,18.18Z"></path>
+<rect fill="#cca858" x="371.02" y="431.67" width="10.55" height="49.49"></rect>
+<circle fill="#cca858" cx="376.3" cy="420.6" r="6.88"></circle>
+<g>
+<polygon fill="#cca858" points="317.83 456.72 320.97 409.41 281.74 481.94 317.83 456.72"></polygon>
+<polygon fill="#cca858" points="325.48 456.72 322.35 409.41 361.58 481.94 325.48 456.72"></polygon>
+</g>
+</svg>
+<span aria-hidden="true" style="display: block; width: 1px; height: 30px; background: #5a503b;"></span>
+<span style="font-family: Newsreader, Noto Serif TC, Songti TC, serif; font-weight: 400; font-size: 24px; letter-spacing: 0.12em; color: #cca858; white-space: nowrap;" class="ems-product-heading"><img class="ems-product-logo" src="../assets/ems-wordmark-03.svg" alt="EMS"><span>能源管理系統</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;" class="ems-header-actions">
+<button type="button" aria-haspopup="listbox" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 320px; height: 44px; box-sizing: border-box; padding: 0 14px; background: transparent; border: 1px solid #45474c; border-radius: 10px; color: #f4f4f2; font-family: inherit; font-size: 14px; cursor: pointer;">
+<span style="display: flex; align-items: center; gap: 10px;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.4 20.5 4 5.8Q4 4.2 5.6 4.1L13 3.5Q14.2 3.5 14.3 5L14.7 20.4 M14.5 10.1 19.3 10Q20 10 20 11L20.2 20.5 M2.8 20.6 21.4 20.3 M7.5 8.1l3.3-.2 M7.6 12.2l3.3-.1 M7.7 16.2h3.2"></path></svg>
+<span>台北南港展覽館專案</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</button>
+<button type="button" aria-label="通知，2 則未讀" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; border-radius: 10px; color: #c4c4be; cursor: pointer;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.5 16.8Q7 14.5 6.9 10.4Q6.8 5.5 11.8 5.1Q16.8 5 17.1 10.1Q17.1 14.4 18.6 16.8Q12.2 17.7 5.5 16.8 M10.1 20Q12.1 22 14.1 19.9 M11.9 2.7v2.4"></path></svg>
+<span aria-hidden="true" style="position: absolute; top: 10px; right: 11px; width: 8px; height: 8px; border-radius: 999px; background: #cca858; box-shadow: 0 0 0 2px #292a2e;"></span>
+</button>
+<button type="button" aria-haspopup="menu" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 4px; background: transparent; border: 0; border-radius: 10px; color: #f4f4f2; font-family: inherit; cursor: pointer;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #34383a; color: #c4c4be;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M15.7 7.4Q15.8 11.4 12 11.6Q8.1 11.4 8.2 7.5Q8.1 3.6 12 3.5Q15.6 3.6 15.7 7.4 M4.5 20.5Q4.7 15.1 11.8 14.9Q19 14.7 19.6 20.3"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+<span style="font-size: 14px;">使用者</span>
+<span style="font-size: 12px; color: #c4c4be;">維運</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</button>
+</div>
+</header>
+
+<nav aria-label="主選單" style="grid-column: 1; grid-row: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; box-sizing: border-box; padding: 20px 0 22px; background: #1d1e20; overflow: hidden;" class="ems-sidebar">
+<div style="display: flex; flex-direction: column; gap: 4px;" class="ems-nav-items">
+<a href="Main.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; background: #2d3229; box-shadow: inset 2px 0 0 #cca858; color: #f4f4f2; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: #cca858; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 10.8 11.6 3.6Q12 3.2 12.5 3.6L21 10.5 M5.1 10.1 5.3 20.3 10.1 20.4 10 14.5 14.1 14.4 14.2 20.3 19 20.1 18.9 10"></path></svg>
+<span>能源總覽</span>
+</a>
+<a href="Monitor.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 16.6 3.1 5.6Q3.1 4 4.7 4L19.3 4.2Q20.8 4.2 20.7 5.8L20.6 16.2Q20.6 17.8 19.1 17.8L4.6 17.9Q3 17.9 3 16.6 M6 11.9l2.9-.1 1.6-3.9 2.8 7.1 1.6-3.6 3.3-.1 M9 21h6 M12 18v3"></path></svg>
+<span>即時監控</span>
+</a>
+<a href="Demand.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3.4 17.7Q1.9 6 11.8 5Q21.7 4.7 20.6 17.5L3.4 17.7 M12 15.8l4.4-6.2 M6.2 13.4l1.2-.1 M7.7 8.7l.8.9 M12.2 7v1.4 M17.4 13.2h1.1"></path></svg>
+<span>需量管理</span>
+</a>
+<a href="Storage.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.1 7.4 17.8 7.2Q19.1 7.2 19.2 8.8L19.3 15.2Q19.3 16.8 17.7 16.8L4 17Q2.6 17 2.7 15.4L2.6 9Q2.6 7.5 4.1 7.4 M21.3 10.2l.1 3.7 M6.4 10.3v3.4 M10.4 10.2v3.4 M14.4 10.1v3.4"></path></svg>
+<span>儲能管理</span>
+</a>
+<a href="Alarms.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6.3 17.5l.2-5.8Q6.4 6.6 11.9 6.4Q17.3 6.3 17.5 11.4L17.8 17.4 M4.3 20.4l15.4-.2 M4.8 17.6l14.3-.2 M12 2.4v1.8 M4 5.6l1.6 1.3 M19.9 5.4l-1.4 1.5"></path></svg>
+<span>警報中心</span>
+</a>
+<a href="Devices.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7.5 6.4l8.8-.1Q17.5 6.4 17.5 7.7L17.7 16Q17.7 17.5 16.1 17.5L7.8 17.7Q6.3 17.7 6.3 16.1L6.2 8Q6.2 6.5 7.5 6.4 M9.3 2.7v3.5 M14.7 2.5v3.7 M9.6 17.7v3.5 M15 17.6v3.5 M2.7 9.5h3.4 M2.6 14.7h3.6 M17.7 9.2h3.5 M17.7 14.5h3.6 M10 10h4v4h-4z"></path></svg>
+<span>設備分析</span>
+</a>
+<a href="Reports.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M13.9 3.2l-7.4.1Q5 3.3 5 5L5.2 19Q5.2 20.8 6.8 20.7L17.1 20.5Q18.7 20.5 18.7 18.9L18.5 8.1 13.9 3.2 M13.9 3.2 13.8 8.2 18.5 8.1 M8.5 12.2l6.3-.2 M8.6 15.8l6.4-.1"></path></svg>
+<span>報表中心</span>
+</a>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 22px; font-size: 12px; line-height: 1.5; color: #c4c4be;" class="ems-sidebar-footer">
+<span>星洋智能科技股份有限公司</span>
+<span style="font-family: Newsreader, serif; letter-spacing: 0.06em;">tAistro co., ltd.</span>
+</div>
+</nav>
+
+<main style="grid-column: 2; grid-row: 2; min-width: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px;" class="ems-main">
+<h1 style="position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap;">能源總覽</h1>
+
+<div style="display: flex; gap: 16px; height: 368px;" class="ems-panel-row ems-overview-top">
+
+<section aria-labelledby="flowTitle" style="position: relative; flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 368px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px; overflow: hidden;;--ems-panel-min:368px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="flowTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">即時能源流</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">POWER FLOW</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px;">
+<span style="font-size: 12px; color: #64645e;">更新 14:32:05</span>
+<span style="display: inline-flex; align-items: center; padding: 3px 10px 2px; background: #f2f0e8; border: 1px solid #afafa0; border-bottom-width: 3px; font-size: 12px; letter-spacing: 0.06em; color: #64645e; transform: rotate(-1.2deg); box-shadow: 3px 5px 0 #dedfd477;">示意資料 · SAMPLE</span>
+</div>
+</div>
+
+<div style="position: relative; flex: 1 1 auto; min-height: 0;" class="ems-energy-flow">
+
+
+<svg viewBox="0 0 694 286" width="694" height="286" aria-hidden="true" style="position: absolute; left: 0; top: 0; display: block; overflow: visible;">
+<path d="M166 128 H198 Q206 128 206 136 V188 Q206 196 214 196 H256" style="fill: none; stroke: #cca858; stroke-width: {{flow.gridW}}; stroke-linecap: round; stroke-linejoin: round;"></path>
+<path d="M256 189 L268 196 L256 203 Z" style="fill: #cca858; stroke: none;"></path>
+<path d="M352 128 V149" style="fill: none; stroke: #647956; stroke-width: {{flow.pvW}}; stroke-linecap: round;"></path>
+<path d="M345 149 L352 161 L359 149 Z" style="fill: #647956; stroke: none;"></path>
+<path d="{{flow.bessPath}}" style="fill: none; stroke: #34383a; stroke-width: {{flow.bessW}}; stroke-linecap: round;"></path>
+<path d="{{flow.bessHead}}" style="fill: #34383a; stroke: none;"></path>
+</svg>
+
+<div style="position: absolute; left: 12px; top: 58px; width: 150px; height: 196px; box-sizing: border-box; padding: 12px 10px 14px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; background: #f2f0e8; border: 1px solid #e8e5da; border-radius: 12px;" class="ems-energy-node ems-energy-grid">
+<svg data-icon-set="illustration-v3" viewBox="50 0 520 620" width="100" height="112" aria-hidden="true" style="display:block;overflow:hidden;flex-shrink:0"><defs><clipPath id="crop-50-0-520-620"><rect x="50" y="0" width="520" height="620" /></clipPath></defs><g clip-path="url(#crop-50-0-520-620)"><image href="../assets/energy-illustrations-v3.png?v=3.1" width="1254" height="1254" /></g></svg>
+<span style="font-size: 14px; color: #282825; letter-spacing: 0.04em;">電網</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 30px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.grid}}</span>
+<span style="font-family: Newsreader, serif; font-size: 13px;">kW</span>
+</span>
+</div>
+
+<div style="position: absolute; left: 262px; top: 0; width: 180px; height: 124px; box-sizing: border-box; padding: 6px 10px 10px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; background: #f2f0e8; border: 1px solid #e8e5da; border-radius: 12px;" class="ems-energy-node ems-energy-solar">
+<svg data-icon-set="illustration-v3" viewBox="635 90 605 440" width="160" height="62" aria-hidden="true" style="display:block;overflow:hidden;flex-shrink:0"><defs><clipPath id="crop-635-90-605-440"><rect x="635" y="90" width="605" height="440" /></clipPath></defs><g clip-path="url(#crop-635-90-605-440)"><image href="../assets/energy-illustrations-v3.png?v=3.1" width="1254" height="1254" /></g></svg>
+<span style="font-size: 14px; color: #282825; letter-spacing: 0.04em;">太陽能</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 30px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.pv}}</span>
+<span style="font-family: Newsreader, serif; font-size: 13px;">kW</span>
+</span>
+</div>
+
+<div style="position: absolute; left: 232px; top: 146px; width: 240px; height: 140px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px;" class="ems-energy-node ems-energy-load">
+<svg data-icon-set="illustration-v3" viewBox="0 730 625 455" width="220" height="86" aria-hidden="true" style="display:block;overflow:hidden;flex-shrink:0"><defs><clipPath id="crop-0-730-625-455"><rect x="0" y="730" width="625" height="455" /></clipPath></defs><g clip-path="url(#crop-0-730-625-455)"><image href="../assets/energy-illustrations-v3.png?v=3.1" width="1254" height="1254" /></g></svg>
+<span style="font-size: 14px; color: #282825; letter-spacing: 0.04em;">廠區負載</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 34px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.load}}</span>
+<span style="font-family: Newsreader, serif; font-size: 14px;">kW</span>
+</span>
+</div>
+
+<div style="position: absolute; left: 520px; top: 100px; width: 158px; height: 176px; box-sizing: border-box; padding: 10px 10px 12px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px; background: #f2f0e8; border: 1px solid #e8e5da; border-radius: 12px;" class="ems-energy-node ems-energy-battery">
+<svg data-icon-set="illustration-v3" viewBox="640 660 600 575" width="130" height="86" aria-hidden="true" style="display:block;overflow:hidden;flex-shrink:0"><defs><clipPath id="crop-640-660-600-575"><rect x="640" y="660" width="600" height="575" /></clipPath></defs><g clip-path="url(#crop-640-660-600-575)"><image href="../assets/energy-illustrations-v3.png?v=3.1" width="1254" height="1254" /></g></svg>
+<span style="font-size: 14px; color: #282825; letter-spacing: 0.04em;">儲能系統</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 30px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.bess}}</span>
+<span style="font-family: Newsreader, serif; font-size: 13px;">kW</span>
+</span>
+<span style="font-size: 12px; color: #576a4a;">{{kpi.bessState}}</span>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="demandTitle" style="flex: 0 0 432px; box-sizing: border-box; height: 368px; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:368px;" class="ems-panel">
+<div style="display: flex; align-items: center; gap: 10px; height: 28px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="demandTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">需量管理</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">DEMAND</span>
+</div>
+
+<div style="height: 164px; box-sizing: border-box; padding: 16px 18px; display: flex; flex-direction: column; justify-content: space-between; background: #f2f0e8; border: 1px solid #e8e5da; border-radius: 9px;" class="ems-demand-summary">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+<div style="display: flex; align-items: center; gap: 12px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="22" height="22" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3.4 17.7Q1.9 6 11.8 5Q21.7 4.7 20.6 17.5L3.4 17.7 M12 15.8l4.4-6.2 M6.2 13.4l1.2-.1 M7.7 8.7l.8.9 M12.2 7v1.4 M17.4 13.2h1.1"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">契約容量</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 36px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{demand.contract}}</span>
+<span style="font-family: Newsreader, serif; font-size: 14px;">kW</span>
+</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; padding-left: 16px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 44px; width: 44px; height: 44px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="22" height="22" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.2 20.3l15.7-.3 M6.5 16.8l-.1-5.6 M11.8 16.7l-.1-9.2 M17.1 16.6 17 3.7"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 2px;">
+<span style="font-size: 13px; color: #64645e;">本月最高需量</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 36px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{demand.peak}}</span>
+<span style="font-family: Newsreader, serif; font-size: 14px;">kW</span>
+</span>
+</div>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<div role="meter" aria-label="契約容量使用率" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{demand.pctNum}}" style="position: relative; height: 10px; border-radius: 999px; background: #e1e7dc;">
+<div style="width: {{demand.pctCss}}; height: 10px; border-radius: 999px; background: {{demand.fill}};"></div>
+<span aria-hidden="true" style="position: absolute; left: {{demand.pctCss}}; top: -4px; width: 2px; height: 18px; background: #282825; transform: translateX(-1px);"></span>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #64645e;">
+<span>15 分鐘平均 · 本月</span>
+<span>達約 <strong style="font-weight: 500; color: #282825;">{{demand.pct}} %</strong></span>
+</div>
+</div>
+</div>
+
+<sc-if value="{{calm}}" hint-placeholder-val="{{true}}">
+<div style="flex: 1 1 auto; box-sizing: border-box; padding: 16px 18px; display: flex; align-items: center; gap: 16px; background: #e5ebdc; border-radius: 9px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #426d4b; color: #f8f8f7;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="26" height="26" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 3.1Q15.4 5.5 19.3 6L18.9 12Q18.5 17.4 12.2 21Q5.8 17.8 5.3 12.3L4.8 6.2Q8.8 5.3 12 3.1 M8.7 11.8l2.3 2.5 4.5-5"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<h3 style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; color: #426d4b;">系統正常</h3>
+<span style="font-size: 13px; color: #64645e;">能源系統運行正常，無異常警示。</span>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{alarm}}" hint-placeholder-val="{{false}}">
+<div style="flex: 1 1 auto; box-sizing: border-box; padding: 16px 18px; display: flex; align-items: center; gap: 16px; background: #f6ecd7; border-radius: 9px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #a5762e; color: #f8f8f7;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="26" height="26" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M11.2 4.1Q12 2.7 12.9 4.2L21 18.3Q21.7 19.6 20.1 19.7L3.8 19.9Q2.2 19.9 3 18.4L11.2 4.1 M12 8.8l.1 5.5 M12.2 17v.2"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<h3 style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; color: #8a5f21;">需注意</h3>
+<span style="font-size: 13px; color: #64645e;">1 則重要、2 則一般警報處理中。</span>
+</div>
+</div>
+</sc-if>
+</section>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; height: 108px;" class="ems-panel-row ems-overview-metrics">
+<section aria-label="即時指標" style="grid-column: span 3; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;" class="ems-panel">
+<div style="display: flex; align-items: center; gap: 16px; padding: 0 24px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="24" height="24" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M13.3 2.9 4.8 13.5 11 13.3 10.4 21.1 19.2 10.3 12.5 10.5z"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-size: 14px; color: #64645e;">即時用電</span>
+<span style="display: flex; align-items: baseline; gap: 5px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.load}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">kW</span>
+</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; padding: 0 24px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="24" height="24" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5 11.1l13.2-.2 2 7-17 .2z M8.8 11l-.5 7 M14.5 10.9l.6 7 M4.3 14.6l14.8-.2 M9.2 21h5.6 M12 18.1v2.8 M12 3.2v2.3 M6.9 5l1.5 1.5 M17.1 4.8l-1.4 1.7"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-size: 14px; color: #64645e;">太陽能發電</span>
+<span style="display: flex; align-items: baseline; gap: 5px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.pv}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">kW</span>
+</span>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; padding: 0 24px; border-left: 1px solid #d5d5ce;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="24" height="24" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.1 7.4 17.8 7.2Q19.1 7.2 19.2 8.8L19.3 15.2Q19.3 16.8 17.7 16.8L4 17Q2.6 17 2.7 15.4L2.6 9Q2.6 7.5 4.1 7.4 M21.3 10.2l.1 3.7 M6.4 10.3v3.4 M10.4 10.2v3.4 M14.4 10.1v3.4"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 3px;">
+<span style="font-size: 14px; color: #64645e;">儲能狀態</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.soc}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">%</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">SOH {{kpi.soh}} % · GRID_TIE · {{kpi.bessState}} {{kpi.bess}} kW</span>
+</div>
+</div>
+</section>
+<section aria-label="今日節省" style="display: flex; align-items: center; gap: 16px; padding: 0 24px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;" class="ems-panel">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; flex: 0 0 52px; width: 52px; height: 52px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="24" height="24" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.4 18.8Q2.9 10.1 10.1 6.6Q14 4.7 19.4 4.4Q19.5 12.6 15 16.5Q11.5 19.5 5.4 18.8 M4.4 21.2Q8.7 13.9 14.5 9.2 M8.9 14.4l-.2-4.1 M11.1 12.1l4 .1"></path></svg>
+</span>
+<div style="display: flex; flex-direction: column; gap: 3px;">
+<span style="font-size: 14px; color: #64645e;">今日節省</span>
+<span style="display: flex; align-items: baseline; gap: 5px; color: #345e40;">
+<span style="font-family: Newsreader, serif; font-size: 15px;">NT$</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{kpi.savings}}</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">估算 · 示意資料</span>
+</div>
+</section>
+</div>
+
+<div style="display: flex; gap: 16px; height: 270px;" class="ems-panel-row ems-overview-bottom">
+
+<section aria-labelledby="trendTitle" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 270px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:270px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="trendTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">本日用電趨勢</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">LOAD TODAY</span>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 12px; color: #64645e;">
+<span style="display: flex; align-items: center; gap: 6px;">
+<svg viewBox="0 0 18 6" width="18" height="6" aria-hidden="true" style="display: block;"><path d="M1 3H17" style="stroke: #647956; stroke-width: 2px; stroke-linecap: round;"></path></svg>
+<span>用電量</span>
+</span>
+<span style="display: flex; align-items: center; gap: 6px;">
+<svg viewBox="0 0 18 6" width="18" height="6" aria-hidden="true" style="display: block;"><path d="M1 3H17" style="stroke: #9b7b31; stroke-width: 1.5px; stroke-dasharray: 4 3;"></path></svg>
+<span>契約容量</span>
+</span>
+</div>
+</div>
+
+<div class="ems-chart" data-chart-height="190" style="position: relative; flex: 1 0 190px; min-height: 190px;">
+<span style="position: absolute; left: 0; top: -10px; font-size: 12px; color: #64645e;">kW</span>
+<sc-for list="{{trend.yTicks}}" as="t" hint-placeholder-count="5">
+<span style="position: absolute; left: 0; width: 32px; top: {{t.top}}; transform: translateY(-50%); text-align: right; font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{t.label}}</span>
+</sc-for>
+<sc-for list="{{trend.xTicks}}" as="t" hint-placeholder-count="7">
+<span style="position: absolute; top: 162px; left: {{t.left}}; transform: translateX(-50%); font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{t.label}}</span>
+</sc-for>
+
+<svg viewBox="0 0 {{trend.width}} 140" width="{{trend.width}}" height="140" role="img" aria-label="本日用電量曲線，00:00 至 14:30，今日最高 452 kW，契約容量 500 kW" style="position: absolute; left: 40px; top: 16px; display: block; overflow: visible;">
+<defs>
+<linearGradient id="mainLoadWash" x1="0" y1="0" x2="0" y2="1">
+<stop offset="0" style="stop-color: #647956; stop-opacity: 0.24;"></stop>
+<stop offset="1" style="stop-color: #647956; stop-opacity: 0.02;"></stop>
+</linearGradient>
+</defs>
+<path d="{{trend.gridPath}}" style="fill: none; stroke: #e9e9e3; stroke-width: 1px;"></path>
+<path d="M0 140H{{trend.width}}" style="fill: none; stroke: #b4b4ac; stroke-width: 1px;"></path>
+<path d="{{trend.areaPath}}" style="fill: url(#mainLoadWash); stroke: none;"></path>
+<path d="{{trend.linePath}}" style="fill: none; stroke: #647956; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round;"></path>
+<path d="{{trend.contractPath}}" style="fill: none; stroke: #9b7b31; stroke-width: 1.5px; stroke-dasharray: 6 4;"></path>
+<path d="{{trend.nowPath}}" style="fill: none; stroke: #64645e; stroke-width: 1px; stroke-dasharray: 2 3;"></path>
+<path d="{{trend.leaderPath}}" style="fill: none; stroke: #64645e; stroke-width: 1px;"></path>
+<circle cx="{{trend.peakX}}" cy="{{trend.peakY}}" r="4" style="fill: #647956; stroke: #f8f8f7; stroke-width: 2px;"></circle>
+</svg>
+
+<span style="position: absolute; left: {{trend.nowLeft}}; top: 0; transform: translateX(-50%); font-size: 12px; color: #64645e; white-space: nowrap;">現在 14:32</span>
+<div style="position: absolute; left: {{trend.calloutLeft}}; top: {{trend.calloutTop}}; display: flex; align-items: baseline; gap: 6px; padding: 4px 9px; border-radius: 6px; background: #cca858; color: #282825; white-space: nowrap;">
+<span style="font-size: 12px;">契約容量</span>
+<span style="font-family: Newsreader, serif; font-size: 14px; font-variant-numeric: lining-nums;">{{trend.contract}} kW</span>
+</div>
+<div class="ems-chart-peak" style="position: absolute; right: {{trend.peakLabelRight}}; top: {{trend.peakLabelTop}}; padding: 2px 8px; border-radius: 6px; background: #f8f8f7; border: 1px solid #d5d5ce; font-size: 12px; color: #282825; white-space: nowrap;">今日最高 {{trend.peakKw}} kW · {{trend.peakTime}}</div>
+
+<div onMouseMove="{{trendMove}}" onMouseLeave="{{trendLeave}}" style="position: absolute; left: 40px; top: 16px; width: {{trend.width}}px; height: 140px; cursor: crosshair;"></div>
+<sc-if value="{{hoverOn}}" hint-placeholder-val="{{false}}">
+<span aria-hidden="true" style="position: absolute; left: {{hover.left}}; top: 16px; width: 1px; height: 140px; background: #64645e; pointer-events: none;"></span>
+<span aria-hidden="true" style="position: absolute; left: {{hover.left}}; top: {{hover.dotTop}}; width: 8px; height: 8px; border-radius: 999px; background: #647956; box-shadow: 0 0 0 2px #f8f8f7; transform: translate(-50%, -50%); pointer-events: none;"></span>
+<div role="status" style="position: absolute; left: {{hover.tipLeft}}; top: 40px; width: 132px; box-sizing: border-box; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 8px; box-shadow: 0 16px 30px #0002; pointer-events: none;">
+<span style="font-size: 12px; color: #64645e;">{{hover.time}}</span>
+<span style="display: flex; align-items: baseline; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-size: 22px; line-height: 1; letter-spacing: -0.03em; font-variant-numeric: lining-nums;">{{hover.kw}}</span>
+<span style="font-size: 12px;">kW 用電量</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">契約使用率 {{hover.pct}} %</span>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section aria-labelledby="mixTitle" style="flex: 0 0 316px; box-sizing: border-box; height: 270px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:270px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="mixTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">能源組成</h2>
+</div>
+<span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border: 1px solid #b4b4ac; border-radius: 999px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">即時</span>
+</div>
+<div style="flex: 1 1 auto; display: flex; align-items: center; gap: 16px;">
+<div style="position: relative; flex: 0 0 150px; width: 150px; height: 150px;">
+<svg viewBox="0 0 150 150" width="150" height="150" role="img" aria-label="即時負載組成：太陽能、電網、儲能放電" style="display: block;">
+<path d="{{mix.pv}}" style="fill: #647956;"></path>
+<path d="{{mix.grid}}" style="fill: #cca858;"></path>
+<path d="{{mix.bess}}" style="fill: #34383a;"></path>
+</svg>
+<div style="position: absolute; left: 0; top: 0; width: 150px; height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;">
+<span style="font-size: 12px; color: #64645e;">即時負載</span>
+<span style="display: flex; align-items: baseline; gap: 3px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 26px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">{{kpi.load}}</span>
+<span style="font-family: Newsreader, serif; font-size: 12px;">kW</span>
+</span>
+</div>
+</div>
+<div style="flex: 1 1 auto; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+<div style="display: flex; align-items: flex-start; gap: 8px;">
+<span aria-hidden="true" style="display: block; flex: 0 0 10px; width: 10px; height: 10px; margin-top: 4px; border-radius: 3px; background: #647956;"></span>
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 1px;">
+<span style="display: flex; justify-content: space-between; gap: 6px; font-size: 13px;"><span>太陽能</span><span style="font-variant-numeric: tabular-nums;">{{mix.pvPct}}</span></span>
+<span style="font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{kpi.pv}} kW</span>
+</div>
+</div>
+<div style="display: flex; align-items: flex-start; gap: 8px;">
+<span aria-hidden="true" style="display: block; flex: 0 0 10px; width: 10px; height: 10px; margin-top: 4px; border-radius: 3px; background: #cca858;"></span>
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 1px;">
+<span style="display: flex; justify-content: space-between; gap: 6px; font-size: 13px;"><span>電網</span><span style="font-variant-numeric: tabular-nums;">{{mix.gridPct}}</span></span>
+<span style="font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{kpi.grid}} kW</span>
+</div>
+</div>
+<div style="display: flex; align-items: flex-start; gap: 8px;">
+<span aria-hidden="true" style="display: block; flex: 0 0 10px; width: 10px; height: 10px; margin-top: 4px; border-radius: 3px; background: #34383a;"></span>
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 1px;">
+<span style="display: flex; justify-content: space-between; gap: 6px; font-size: 13px;"><span>儲能放電</span><span style="font-variant-numeric: tabular-nums;">{{mix.bessPct}}</span></span>
+<span style="font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{kpi.bess}} kW</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section aria-labelledby="alertTitle" style="flex: 0 0 240px; box-sizing: border-box; height: 270px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:270px;" class="ems-panel">
+<div style="display: flex; align-items: center; gap: 10px; height: 28px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="alertTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">即時警示</h2>
+</div>
+<sc-if value="{{calm}}" hint-placeholder-val="{{true}}">
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 999px; background: #e1e7dc; color: #647956;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="24" height="24" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.6 12.1Q6.9 14.3 9.1 16.4Q14 10.6 19.5 5.9"></path></svg>
+</span>
+<span style="font-size: 14px; color: #64645e;">目前無警示事件</span>
+</div>
+</sc-if>
+<sc-if value="{{alarm}}" hint-placeholder-val="{{false}}">
+<div style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 10px;">
+<div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 10px; border-bottom: 1px solid #d5d5ce;">
+<span style="display: inline-flex; align-self: flex-start; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: #f6ecd7; color: #8a5f21; font-size: 12px; font-weight: 500;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M11.2 4.1Q12 2.7 12.9 4.2L21 18.3Q21.7 19.6 20.1 19.7L3.8 19.9Q2.2 19.9 3 18.4L11.2 4.1 M12 8.8l.1 5.5 M12.2 17v.2"></path></svg>
+<span>P1 重要</span>
+</span>
+<span style="font-size: 13px; color: #282825;">HVAC-01 資料中斷逾 2 分鐘</span>
+<span style="font-size: 12px; color: #64645e;">14:29:48 起</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="display: inline-flex; align-self: flex-start; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 999px; background: #f6ead1; color: #282825; font-size: 12px; font-weight: 500;">
+<span aria-hidden="true" style="display: block; width: 7px; height: 7px; border-radius: 999px; background: #cca858;"></span>
+<span>P2 一般 · 2 則</span>
+</span>
+<span style="font-size: 13px; color: #282825;">AI 防護攔截、LLM 預算用量</span>
+</div>
+</div>
+</sc-if>
+<a href="Alarms.dc.html" style="display: flex; align-items: center; justify-content: center; gap: 8px; height: 44px; border: 1px solid #282825; border-radius: 12px; color: #282825; text-decoration: none; font-size: 14px; font-weight: 500;">
+<span>前往警報中心</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M8.9 5.7Q12.2 8.8 15.2 11.8Q12.3 15.1 9.1 18.4"></path></svg>
+</a>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"alarmState":{"editor":"enum","options":["normal","alarm"],"default":"normal","section":"狀態"},"showSketch":{"editor":"boolean","default":true,"section":"質感"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var props = this.props || {};
+    var st = this.state || {};
+    var self = this;
+    var alarm = (props.alarmState == null ? 'normal' : props.alarmState) === 'alarm';
+    var showSketch = props.showSketch == null ? true : props.showSketch;
+    var r1 = function (v) { return Math.round(v * 10) / 10; };
+    var fmt = function (v, d) { return Number(v).toLocaleString('en-US', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); };
+
+    // One sample snapshot (示意資料) - every widget reads from it, so the numbers always agree.
+    var snap = { contract: 500, monthPeak: 428, grid: 186, pv: 142, bess: 58, soc: 78, soh: 98, savings: 2360 };
+    var load = snap.grid + snap.pv + snap.bess;
+
+    // Flow drawing: stroke weight grows with live kW; BESS arrow direction follows the sign.
+    var weight = function (kw) { return r1(1.25 + Math.abs(kw) * 0.015) + 'px'; };
+    var discharging = snap.bess > 0;
+    var flow = {
+      gridW: weight(snap.grid),
+      pvW: weight(snap.pv),
+      bessW: weight(snap.bess),
+      bessPath: discharging ? 'M516 196 H464' : 'M446 196 H500',
+      bessHead: discharging ? 'M464 189 L452 196 L464 203 Z' : 'M500 189 L512 196 L500 203 Z'
+    };
+
+    // Demand meter.
+    var pct = snap.monthPeak / snap.contract * 100;
+    var demand = {
+      contract: fmt(snap.contract), peak: fmt(snap.monthPeak), pct: fmt(pct, 1), pctNum: r1(pct),
+      pctCss: r1(pct) + '%', fill: pct > 100 ? '#a55445' : (pct >= 90 ? '#a5762e' : '#647956')
+    };
+
+    // Today's load, 15-min points 00:00-14:30 (sample shape).
+    var LOAD = [208,206,205,203,202,201,199,200,198,197,199,196,196,195,197,195,195,194,196,197,198,200,203,207,212,219,231,246,262,279,297,314,331,346,359,370,378,387,395,402,409,414,419,425,428,431,433,435,436,432,438,443,447,452,446,437,420,401,386];
+    var PW = props.plotWidth || 508, PH = 140, YMAX = 800, SLOTS = 96, OX = 40, OY = 16, BOXW = PW + 60;
+    var X = function (i) { return i / SLOTS * PW; };
+    var Y = function (kw) { return PH - kw / YMAX * PH; };
+    var smooth = function (pts) {
+      var n = pts.length, dx = [], m = [], t = [], i;
+      for (i = 0; i < n - 1; i++) { dx.push(pts[i + 1][0] - pts[i][0]); m.push((pts[i + 1][1] - pts[i][1]) / dx[i]); }
+      t.push(m[0]);
+      for (i = 1; i < n - 1; i++) { t.push(m[i - 1] * m[i] <= 0 ? 0 : (m[i - 1] + m[i]) / 2); }
+      t.push(m[n - 2]);
+      for (i = 0; i < n - 1; i++) {
+        if (m[i] === 0) { t[i] = 0; t[i + 1] = 0; continue; }
+        var a = t[i] / m[i], b = t[i + 1] / m[i], h = a * a + b * b;
+        if (h > 9) { var s = 3 / Math.sqrt(h); t[i] = s * a * m[i]; t[i + 1] = s * b * m[i]; }
+      }
+      var d = 'M' + r1(pts[0][0]) + ' ' + r1(pts[0][1]);
+      for (i = 0; i < n - 1; i++) {
+        var k = dx[i] / 3;
+        d += ' C' + r1(pts[i][0] + k) + ' ' + r1(pts[i][1] + t[i] * k) + ' ' + r1(pts[i + 1][0] - k) + ' ' + r1(pts[i + 1][1] - t[i + 1] * k) + ' ' + r1(pts[i + 1][0]) + ' ' + r1(pts[i + 1][1]);
+      }
+      return d;
+    };
+    var hhmm = function (i) { var mins = i * 15; return String(Math.floor(mins / 60)).padStart(2, '0') + ':' + String(mins % 60).padStart(2, '0'); };
+    var pts = LOAD.map(function (v, i) { return [X(i), Y(v)]; });
+    var linePath = smooth(pts);
+    var last = LOAD.length - 1;
+    var peak = Math.max.apply(null, LOAD);
+    var peakIdx = LOAD.indexOf(peak);
+    var px = X(peakIdx), py = Y(peak);
+    var nowX = X(last + 2 / 15);
+    var trend = {
+      width: PW,
+      yTicks: [0, 200, 400, 600, 800].map(function (v) { return { label: String(v), top: r1(OY + Y(v)) + 'px' }; }),
+      xTicks: (PW < 420 ? [0, 24, 48, 72, 96] : [0, 16, 32, 48, 64, 80, 96]).map(function (i) { return { label: hhmm(i), left: r1(OX + X(i)) + 'px' }; }),
+      gridPath: [200, 400, 600, 800].map(function (v) { return 'M0 ' + r1(Y(v)) + 'H' + PW; }).join(' '),
+      linePath: linePath,
+      areaPath: linePath + ' L' + r1(X(last)) + ' ' + PH + ' L0 ' + PH + ' Z',
+      contractPath: 'M0 ' + r1(Y(snap.contract)) + 'H' + PW,
+      nowPath: 'M' + r1(nowX) + ' 0V' + PH,
+      nowLeft: r1(OX + nowX) + 'px',
+      peakX: r1(px), peakY: r1(py), peakKw: fmt(peak), peakTime: hhmm(peakIdx),
+      leaderPath: 'M' + r1(px - 3) + ' ' + r1(py - 4) + 'L' + r1(px - 14) + ' ' + r1(Y(snap.contract) - 8),
+      peakLabelRight: r1(Math.max(0, Math.min(BOXW - 190, BOXW - (OX + px - 14)))) + 'px', peakLabelTop: r1(OY + Y(snap.contract) - 30) + 'px',
+      contract: fmt(snap.contract),
+      calloutLeft: r1(OX + PW - 118) + 'px', calloutTop: r1(OY + Y(snap.contract) - 30) + 'px'
+    };
+
+    // Hover crosshair (enhancement only; the peak and now labels carry the key values).
+    var hi = (st.hi === undefined || st.hi === null) ? null : st.hi;
+    var trendMove = function (e) {
+      var box = e.currentTarget.getBoundingClientRect();
+      var ratio = (e.clientX - box.left) / box.width;
+      var i = Math.max(0, Math.min(last, Math.round(ratio * SLOTS)));
+      if (!self.state || self.state.hi !== i) { self.setState({ hi: i }); }
+    };
+    var trendLeave = function () { self.setState({ hi: null }); };
+    var hover = { left: '0px', dotTop: '0px', tipLeft: '0px', time: '', kw: '', pct: '' };
+    if (hi !== null) {
+      var hx = X(hi);
+      hover = {
+        left: r1(OX + hx) + 'px', dotTop: r1(OY + Y(LOAD[hi])) + 'px',
+        tipLeft: r1(hx > PW - 150 ? OX + hx - 144 : OX + hx + 12) + 'px',
+        time: hhmm(hi), kw: fmt(LOAD[hi]), pct: fmt(LOAD[hi] / snap.contract * 100, 1)
+      };
+    }
+
+    // Energy mix donut: annular sectors with a 2 px surface gap.
+    var arcBand = function (cx, cy, r0, rr, a0, a1, gap) {
+      var dO = gap / 2 / rr, dI = gap / 2 / r0;
+      var P = function (r, a) { return [cx + r * Math.sin(a), cy - r * Math.cos(a)]; };
+      var o0 = P(rr, a0 + dO), o1 = P(rr, a1 - dO), i1 = P(r0, a1 - dI), i0 = P(r0, a0 + dI);
+      var big = (a1 - a0) > Math.PI ? 1 : 0;
+      return 'M' + r1(o0[0]) + ' ' + r1(o0[1]) + ' A' + rr + ' ' + rr + ' 0 ' + big + ' 1 ' + r1(o1[0]) + ' ' + r1(o1[1]) +
+        ' L' + r1(i1[0]) + ' ' + r1(i1[1]) + ' A' + r0 + ' ' + r0 + ' 0 ' + big + ' 0 ' + r1(i0[0]) + ' ' + r1(i0[1]) + ' Z';
+    };
+    var total = snap.pv + snap.grid + snap.bess;
+    var TAU = Math.PI * 2;
+    var aPv = snap.pv / total * TAU, aGrid = snap.grid / total * TAU;
+    var mix = {
+      pv: arcBand(75, 75, 48, 70, 0, aPv, 2),
+      grid: arcBand(75, 75, 48, 70, aPv, aPv + aGrid, 2),
+      bess: arcBand(75, 75, 48, 70, aPv + aGrid, TAU, 2),
+      pvPct: fmt(snap.pv / total * 100, 1) + ' %',
+      gridPct: fmt(snap.grid / total * 100, 1) + ' %',
+      bessPct: fmt(snap.bess / total * 100, 1) + ' %'
+    };
+
+    var kpi = {
+      load: fmt(load), grid: fmt(snap.grid), pv: fmt(snap.pv), bess: fmt(Math.abs(snap.bess)),
+      soc: snap.soc, soh: snap.soh, savings: fmt(snap.savings),
+      bessState: snap.bess > 0 ? '放電中' : (snap.bess < 0 ? '充電中' : '待機')
+    };
+
+    return {
+      alarm: alarm, calm: !alarm, showSketch: showSketch,
+      flow: flow, demand: demand, trend: trend, mix: mix, kpi: kpi,
+      hoverOn: hi !== null, hover: hover, trendMove: trendMove, trendLeave: trendLeave
+    };
+  }
+}
+</script>
+</body>
+</html>
+

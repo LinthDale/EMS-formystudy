@@ -73,3 +73,14 @@ flowchart TB
 - 本圖為 **L1 概念圖**，不畫容器/服務細節（見 `c4-container.md`）
 - 「未來接入」的真實電表已在 ADR-006 規劃同模式（domain-pipeline）擴展
 - Cloudflare Tunnel 為 outbound long-poll，**不開 inbound port**（見 ADR-008）
+
+## 2026-09-23 歷史查詢擴充（ADR-027）
+既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
+### Telegram 示範警報（PRD-0019 / ADR-028）
+維運使用者 → EMS 警報中心 → Telegram Bot API → 既有私人接收對象。跨外部 IT 邊界只傳固定 DEMO 訊息、事件 UUID 與時間，不含設備讀值/登入資料，不涉及 OT 控制。
+
+## Delta OT 邊界（PRD-0020 / ADR-029）
+Delta設備透過本地TCP或隔離RS485 RTU由Pi唯讀採集；SIM7600G-H提供OS層4G outbound IP。Pi只傳MQTT telemetry至EMS，不接收遠端控制。硬體、TLS入口及接收端payload身份綁定待現場驗收。
+
+### RTU 實體模擬邊界（ADR-031）
+在測試環境，PC原生Delta simulator透過指定串口扮演設備從站，Pi為唯一主站；兩顆隔離USB–RS485連接。PC模擬器不開網路listener；Pi以既有outbound網路路徑進入EMS。真實逆變器與模擬來源不可使用同一上傳身分。

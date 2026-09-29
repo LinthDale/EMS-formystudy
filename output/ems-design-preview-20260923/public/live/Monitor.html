@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh-Hant"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>即時監控與歷史 · tAIstro EMS</title><link rel="stylesheet" href="live.css"><link rel="stylesheet" href="history.css">
+<script src="../assets/echarts-5.6.0.min.js"></script><script type="module" src="history-live.mjs"></script><link rel="icon" type="image/png" sizes="32x32" href="../favicon-a-32.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="../favicon-a.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-a.png">
+<link rel="stylesheet" href="../responsive.css">
+<link rel="stylesheet" href="../brand-header.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Noto+Sans+TC:wght@400;500&amp;family=Noto+Serif+TC:wght@300;400&amp;display=swap">
+</head>
+<body><header style="grid-column: 1 / 3; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 28px; background: #292a2e;" class="ems-header ems-live-header">
+<div style="display: flex; align-items: center; gap: 20px;" class="ems-brand">
+<svg viewBox="235.88 409.41 370.13 72.54" role="img" aria-label="tAIstro" style="height: 26px; width: auto; display: block;">
+<path fill="#cca858" d="M587.83,430.46h-23.75c-10.03,0-18.18,8.16-18.18,18.18v14.45c0,10.03,8.16,18.18,18.18,18.18h23.75c10.03,0,18.18-8.16,18.18-18.18v-14.45c0-10.03-8.16-18.18-18.18-18.18ZM595.46,463.1c0,4.21-3.42,7.63-7.63,7.63h-23.75c-4.21,0-7.63-3.42-7.63-7.63v-14.45c0-4.21,3.42-7.63,7.63-7.63h23.75c4.21,0,7.63,3.42,7.63,7.63v14.45Z"></path>
+<path fill="#cca858" d="M253.59,419.13h-10.55v10.94h-7.16v10.55h7.16v22.47c0,4.86,1.89,9.42,5.33,12.86,3.43,3.43,8,5.33,12.86,5.33h10.97v-10.55h-10.97c-2.04,0-3.95-.79-5.39-2.23-1.44-1.44-2.23-3.36-2.23-5.4v-22.47h18.81v-10.55h-18.81v-10.94Z"></path>
+<path fill="#cca858" d="M447.16,454.25c-1.41-1.42-3.06-2.53-4.9-3.3-1.9-.81-3.93-1.21-6.01-1.21h-25c-.66,0-1.3-.13-1.9-.38-.58-.24-1.1-.6-1.55-1.04-.45-.45-.8-.97-1.05-1.55-.25-.6-.38-1.23-.38-1.9s.13-1.3.38-1.9c.25-.58.6-1.1,1.05-1.55s.97-.8,1.55-1.04c.6-.25,1.24-.38,1.9-.38h37.14v-10.55h-37.14c-2.08,0-4.1.41-6.01,1.21-1.84.78-3.49,1.89-4.9,3.3-1.42,1.41-2.53,3.06-3.3,4.9-.81,1.9-1.21,3.93-1.21,6.01s.41,4.1,1.21,6.01c.78,1.84,1.89,3.49,3.3,4.9,1.42,1.42,3.07,2.53,4.9,3.3,1.91.81,3.93,1.22,6.01,1.22h25c.66,0,1.3.13,1.9.38.58.25,1.1.6,1.55,1.05s.8.97,1.05,1.55c.25.6.38,1.24.38,1.9s-.13,1.3-.38,1.9c-.25.58-.6,1.1-1.05,1.55s-.97.8-1.55,1.05c-.6.25-1.23.38-1.9.38h-41.36v10.55h41.36c2.08,0,4.1-.41,6.01-1.21,1.84-.78,3.49-1.89,4.9-3.3,1.42-1.41,2.53-3.06,3.31-4.9.81-1.91,1.21-3.93,1.21-6.01s-.41-4.1-1.21-6.01c-.78-1.84-1.89-3.49-3.3-4.9Z"></path>
+<path fill="#cca858" d="M476.09,468.49c-1.44-1.44-2.23-3.36-2.23-5.4v-22.6h19.12v-10.55h-19.12v-10.81h-10.55v43.97c0,4.86,1.89,9.42,5.33,12.86,3.44,3.43,8,5.32,12.86,5.32h11.87v-10.55h-11.87c-2.04,0-3.95-.79-5.39-2.23Z"></path>
+<path fill="#cca858" d="M505.24,448.65v33.3h10.55v-33.3c0-4.21,3.42-7.63,7.63-7.63h17.12v-10.55h-17.12c-10.03,0-18.18,8.16-18.18,18.18Z"></path>
+<rect fill="#cca858" x="371.02" y="431.67" width="10.55" height="49.49"></rect>
+<circle fill="#cca858" cx="376.3" cy="420.6" r="6.88"></circle>
+<g>
+<polygon fill="#cca858" points="317.83 456.72 320.97 409.41 281.74 481.94 317.83 456.72"></polygon>
+<polygon fill="#cca858" points="325.48 456.72 322.35 409.41 361.58 481.94 325.48 456.72"></polygon>
+</g>
+</svg>
+<span aria-hidden="true" style="display: block; width: 1px; height: 30px; background: #5a503b;"></span>
+<span style="font-family: Newsreader, Noto Serif TC, Songti TC, serif; font-weight: 400; font-size: 24px; letter-spacing: 0.12em; color: #cca858; white-space: nowrap;" class="ems-product-heading"><img class="ems-product-logo" src="../assets/ems-wordmark-03.svg" alt="EMS"><span>能源管理系統</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;" class="ems-header-actions">
+<button type="button" aria-label="目前專案：自建 EMS" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 320px; height: 44px; box-sizing: border-box; padding: 0 14px; background: transparent; border: 1px solid #45474c; border-radius: 10px; color: #f4f4f2; font-family: inherit; font-size: 14px; cursor: pointer;">
+<span style="display: flex; align-items: center; gap: 10px;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.4 20.5 4 5.8Q4 4.2 5.6 4.1L13 3.5Q14.2 3.5 14.3 5L14.7 20.4 M14.5 10.1 19.3 10Q20 10 20 11L20.2 20.5 M2.8 20.6 21.4 20.3 M7.5 8.1l3.3-.2 M7.6 12.2l3.3-.1 M7.7 16.2h3.2"></path></svg>
+<span>自建 EMS 專案</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</button>
+<a href="../boards/Alarms.dc.html" aria-label="前往警報中心" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; border-radius: 10px; color: #c4c4be; cursor: pointer;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.5 16.8Q7 14.5 6.9 10.4Q6.8 5.5 11.8 5.1Q16.8 5 17.1 10.1Q17.1 14.4 18.6 16.8Q12.2 17.7 5.5 16.8 M10.1 20Q12.1 22 14.1 19.9 M11.9 2.7v2.4"></path></svg>
+
+</a>
+<details id="header-account" class="ems-account-menu"><summary style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 4px; background: transparent; border: 0; border-radius: 10px; color: #f4f4f2; font-family: inherit; cursor: pointer;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #34383a; color: #c4c4be;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M15.7 7.4Q15.8 11.4 12 11.6Q8.1 11.4 8.2 7.5Q8.1 3.6 12 3.5Q15.6 3.6 15.7 7.4 M4.5 20.5Q4.7 15.1 11.8 14.9Q19 14.7 19.6 20.3"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+<span id="session-name" style="font-size: 14px;">尚未登入</span>
+<span id="session-role" style="font-size: 12px; color: #c4c4be;">帳號</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</summary><div class="ems-account-options"><button id="header-login" type="button">登入</button><button id="logout" type="button" hidden>登出</button></div></details>
+</div>
+</header>
+<div class="shell"><nav aria-label="主選單"><a href="../boards/Main.dc.html">能源總覽</a><a href="Monitor.html" aria-current="page">即時監控</a><a href="../boards/Demand.dc.html">需量管理</a><a href="../boards/Storage.dc.html">儲能管理</a><a href="../boards/Alarms.dc.html">警報中心</a><a href="../boards/Devices.dc.html">設備分析</a><a href="../boards/Reports.dc.html">報表中心</a><p>星洋智能科技<br>tAIstro co., ltd.</p></nav>
+<main>
+<div class="heading"><div><p class="eyebrow">MONITOR / HISTORY <span class="live-label">後端資料</span></p><h1>即時監控與歷史趨勢</h1><p class="intro">從現在的讀值，回看每一段變化。</p></div><span id="connection" role="status" aria-live="polite" class="state">檢查連線中</span></div>
+<section id="login-panel" hidden><h2>登入自建 EMS</h2><p>登入 OPS 帳號後，查看設備圖表與歷史紀錄。</p><form id="login-form"><label>帳號<input id="username" autocomplete="username" required maxlength="64"></label><label>密碼<input id="password" type="password" autocomplete="current-password" required maxlength="256"></label><button type="submit">登入並連接</button></form></section>
+<section class="query-bar" aria-label="歷史查詢條件">
+<div class="filterbar"><label>監控設備<select id="device" disabled><option value="">等待設備清單</option></select></label>
+<label>時間範圍<select id="period"><option value="900">最近 15 分鐘</option><option value="3600">最近 1 小時</option><option value="21600">最近 6 小時</option><option value="86400">最近 24 小時</option><option value="604800">最近 7 天</option><option value="custom">自訂時間</option></select></label>
+<label>自動更新<select id="auto"><option value="5000">每 5 秒</option><option value="30000" selected>每 30 秒</option><option value="0">暫停</option></select></label>
+<button id="refresh">更新圖表</button><span id="updated">尚未取得量測</span></div>
+<form id="custom-range" hidden><label>開始時間<input id="from" type="datetime-local" required></label><label>結束時間<input id="to" type="datetime-local" required></label><button type="submit">套用時間</button><span class="caption">本機時區 · 單次最多 7 天</span></form>
+<p id="range" class="caption">選擇設備與時間範圍，載入歷史資料。</p></section>
+<p id="message" role="status" aria-live="polite">正在檢查 EMS 連線…</p>
+<div id="cards" class="cards"></div>
+<div class="section-heading"><h2>設備趨勢</h2><span id="resolution" class="caption">—</span></div>
+<div id="chart-empty" class="empty">登入後顯示設備圖表。</div><div id="chart-grid" class="chart-grid"></div>
+<p id="chart-note" class="caption" hidden>實線為平均值，虛線保留最低／最高值；累計電量與開關使用桶末讀值。拖動圖下滑桿可同步放大。空白區段代表未收到資料。</p>
+<section id="history-table"><div class="chart-heading"><div><p class="eyebrow">RAW RECORDS</p><h2>歷史原始紀錄</h2></div><button id="export" class="secondary" disabled>匯出本頁 CSV</button></div>
+<p id="records-range" class="caption">查詢結果會保留原始取樣時間與缺值。</p><div class="table-scroll"><table><thead id="table-head"></thead><tbody id="table-body"></tbody></table></div>
+<div id="records-empty" class="empty">尚未載入紀錄</div>
+<div class="pagination"><span id="page-label">0 筆</span><button id="previous" class="secondary" disabled>上一頁</button><button id="next" class="secondary" disabled>下一頁</button></div></section>
+<footer>資料來自自建 EMS 的採集紀錄。目前設備為模擬器；歷史趨勢依所選時段彙整，原始紀錄逐筆保留。</footer>
+</main></div></body></html>

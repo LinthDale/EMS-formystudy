@@ -9,6 +9,7 @@ import { ROUTES } from "./routes";
 import { cn } from "@/lib/cn";
 import { useAuth } from "@/auth/AuthContext";
 import { Button } from "@/components/ui/button";
+import { ThemeSwitcher } from "@/components/ems/ThemeSwitcher";
 
 interface NavItem {
   readonly to: string;
@@ -39,24 +40,27 @@ export function AppShell() {
               </span>
               <span className="text-xs text-fg-muted">{t("common.appTagline")}</span>
             </div>
-            {auth.role ? (
-              <div className="flex items-center gap-3 text-xs text-fg-muted">
-                <span>
-                  {auth.username}
-                  {" · "}
-                  <span className="text-fg-secondary">
-                    {t("auth.session.roleLabel")}：{t(`auth.session.role.${auth.role}`)}
+            <div className="flex items-center gap-4">
+              <ThemeSwitcher />
+              {auth.role ? (
+                <div className="flex items-center gap-3 text-xs text-fg-muted">
+                  <span>
+                    {auth.username}
+                    {" · "}
+                    <span className="text-fg-secondary">
+                      {t("auth.session.roleLabel")}：{t(`auth.session.role.${auth.role}`)}
+                    </span>
                   </span>
-                </span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => void auth.logout()}
-                >
-                  {t("auth.session.logout")}
-                </Button>
-              </div>
-            ) : null}
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => void auth.logout()}
+                  >
+                    {t("auth.session.logout")}
+                  </Button>
+                </div>
+              ) : null}
+            </div>
           </div>
           <nav aria-label={t("nav.primary")} className="flex flex-wrap gap-1">
             {NAV_ITEMS.map((item) => (

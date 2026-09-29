@@ -25,3 +25,11 @@
 ## PRD 提交前自查
 
 於 PR 描述勾選 Guideline §10 完整 checklist，缺項說明理由。
+
+- [PRD-0018 監控趨勢與歷史紀錄](PRD-0018-monitor-history.md)：本機已部署並通過真實資料驗證。
+
+- [PRD-0019 Telegram 示範警報](PRD-0019-telegram-demo-alarm.md)：警報中心按鈕、OPS session、固定通知通道。
+
+- [PRD-0020 Delta 三相模擬、解析與4G採集](PRD-0020-delta-edge-telemetry.md)：本機四欄管線已實作驗收；現場硬體與接收端身份綁定未驗收。
+
+- [PRD-0021 Delta 多設備與可靠補傳](PRD-0021-multi-device-edge-reliability.md)：Draft；M70A-262／RPI-M30A，8台／10秒／7天設計目標，尚未實作或實機驗收。
