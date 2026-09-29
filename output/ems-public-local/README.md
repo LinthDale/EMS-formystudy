@@ -31,7 +31,7 @@ PowerShell 7 執行（UNC 檔案的執行政策可能要求本次 process 使用
 
 發布程序只綁 `100.114.126.85` 與 `127.0.0.1`，只接受 DGX-01 `100.64.84.58` / 本機 loopback 的連線。沒有增加 Windows 防火牆規則，也沒有將資料庫、MQTT、設備管理端點加入公開代理。
 
-`server-config.json` 指向 `releases/20260929-shared-header-v1`。公開靜態檔案與 API 均保留 `/ems/` 前綴。API 僅允許 session、登入/登出、設備清單/單筆、量測/歷史/紀錄讀取，以及精確 GET/POST /api/alarms/demo，其餘回 404。寫入設備的 API 不在代理清單中。
+`server-config.json` 指向 `releases/20260929-logo-size-v1`。公開靜態檔案與 API 均保留 `/ems/` 前綴。API 僅允許 session、登入/登出、設備清單/單筆、量測/歷史/紀錄讀取，以及精確 GET/POST /api/alarms/demo，其餘回 404。寫入設備的 API 不在代理清單中。
 
 - 每個來源 IP 每分鐘 API 最多 120 次、登入最多 5 次。
 - 同時最多 4 個 API 請求，BFF 代理逾時 15 秒。
@@ -135,3 +135,8 @@ v3 為此次 RWD 修改前版本；v4 為未上線中間建置，v5 保留首次
 驗證：`qa/header-brand.cjs` 在來源、編譯隔離版與正式網址驗證 Main/Monitor/Demand/Storage/Alarms/Devices/Reports，1920/1024/768/390/320px 無整頁溢出。來源及正式站實測帳號選單登入、真實圖表、手機選單、登出與清空資料，無 JavaScript 例外；桌機/手機 header 截圖已人工檢視。`qa/history-public.cjs` 正式站量測 08:59:54→09:00:00、三類設備圖表、24h/7d、分頁、CSV、空時段與手機回歸通過。
 
 回復設定：`server-config.before-20260929-header.json` 指向 v8；先核對後續修改再套回並 stop-public/start-public。本次只重啟靜態發布程序，BFF 未重啟；4178 來源預覽與 4179 發布維持運行，4181 隔離 QA 已停止。
+## 2026-09-29：縮小 EMS Logo
+
+已發布 `20260929-logo-size-v1`。相較前版 `20260929-delta-monitor-v1`，38 個發布檔案只有 `brand-header.css` 改動：共用 Logo 寬度由 4.4em 改為 3.5em，縮小約 20%，維持原始向量比例。先前即時監控更新完整保留。
+
+七頁在 1920、1024、768、390、320px 的 Header 檢查通過；桌面與手機已檢視。正式 URL Main / Monitor 在 1920px 的 Logo 寬度為 84px、390px 為 56px，沒有橫向溢出；全部 38 個公開檔案 SHA256 與新 manifest 一致。後端與帳號未變更，隔離檢查程序已停止。回復設定保留於 `server-config.before-20260929-logo-size.json`（指向 delta-monitor-v1）。

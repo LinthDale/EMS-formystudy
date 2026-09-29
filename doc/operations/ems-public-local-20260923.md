@@ -149,3 +149,9 @@ v3 為此次 RWD 修改前版本；v4 為未上線中間建置，v5 保留首次
 隔離4181驗證通過後切換4179；正式網址實際登入確認指定文字、四張圖表點位屬性與83筆Delta紀錄，無pageerror。38個發布檔案SHA256全數符合manifest。qa/delta-release.cjs、delta-staging-20260929.json、delta-public-20260929.json保留驗收證據。後端與4178未重啟。
 
 回復設定server-config.before-20260929-delta.json指向shared-header-v1；核對後續變更再套用並stop/start-public。舊release保留，隔離QA程序完成後停止。
+
+## 2026-09-29：縮小 EMS Logo
+
+已發布 `20260929-logo-size-v1`。相較前版 `20260929-delta-monitor-v1`，38 個發布檔案只有 `brand-header.css` 改動：共用 Logo 寬度由 4.4em 改為 3.5em，縮小約 20%，維持原始向量比例。先前即時監控更新完整保留。
+
+七頁在 1920、1024、768、390、320px 的 Header 檢查通過；桌面與手機已檢視。正式 URL Main / Monitor 在 1920px 的 Logo 寬度為 84px、390px 為 56px，沒有橫向溢出；全部 38 個公開檔案 SHA256 與新 manifest 一致。後端與帳號未變更，隔離檢查程序已停止。回復設定保留於 `server-config.before-20260929-logo-size.json`（指向 delta-monitor-v1）。
