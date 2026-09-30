@@ -103,3 +103,12 @@ Delta V1.35 59頁 SHA256 2c608619614bc7d14da64ab4be9528ae3506f13b93de7cba1ff5ffb
 FR2008：PC simulator 必須以指定本機串口、站號 1–247、9600/19200/38400 baud、8N1 回應 Pi 的 FC04 查詢；共用既有情境與倍率。RTU 不開網路 listener、拒絕 network serial URL，開啟失敗需立即退出。錯誤 CRC、其他站號、廣播不得回應；非白名單操作不得改寫資料。
 
 驗收：獨立 raw RTU bytes 測試（CRC、位址、站號、非法讀寫及錯誤恢復），再既有 TCP/decoder/edge 回歸。Linux PTY 為軟體驗收；Windows COM、兩顆轉接器電氣連線、Pi 與 4G 必須另行到貨驗收，不能以 PTY 通過取代。只模擬 V1.35 子集，非兩款指定機型的真機認證。
+
+### 2026-09-29 監控折線格式增補
+先前稀疏採樣僅顯示點的 UI 呈現，依使用者要求更新為正常間距連線；共用規則與缺口處理見 [ADR-032](../adr/ADR-032-monitor-sampling-lines.md)。採樣、協定、API 與原始資料均不變。
+
+### 2026-09-29 每秒採樣與量測誤差增補
+使用者要求 Delta sim 參照 sim-001：本機 demo 每秒採樣，電壓/電流加入有界可重現誤差，同秒多段讀取共用快照；既有 field 預設 10 秒及協定不變。FR-2001/2003/2007 與 NFR 的 demo 例外見 [ADR-034](../adr/ADR-034-delta-one-second-noise.md)。
+
+### 2026-09-29：Simulator 控制改由 PRD-0022 / ADR-033
+四台固定模擬器的設定與故障注入統一至 BFF OPS API/CLI、持久 SQLite audit。舊 meter :8001 POST、PLC/MCP raw Modbus 寫入停用，遙測與真機唯讀採集不變。runtime 設定重啟還原，操作紀錄保留；詳 operations/simulator-control.md。

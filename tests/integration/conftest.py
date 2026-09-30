@@ -5,6 +5,7 @@ import time
 import httpx
 import psycopg2
 import pytest
+from .simulator_control_fixture import sim_control, restore_plc
 
 SIMULATOR_URL = os.getenv("EMS_SIMULATOR_URL", "http://localhost:8001")
 POSTGREST_URL = os.getenv("EMS_POSTGREST_URL", "http://localhost:3001")
@@ -84,7 +85,7 @@ def wait_for(condition_fn, *, timeout: float = 30.0, interval: float = 2.0) -> b
 
 
 @pytest.fixture
-def reset_fault_mode(simulator_client):
+def reset_fault_mode(sim_control):
     """Ensure fault_mode is cleared after any test that injects a fault."""
     yield
-    simulator_client.post("/inject-fault", params={"mode": "none"})
+    sim_control.set("sim-001", {"fault_mode": "none"})

@@ -17,7 +17,7 @@
     "tls": false
   },
   "outbox_path": "/data/delta/outbox.db",
-  "poll_interval": 10,
+  "poll_interval": 1,
   "queue_limit": 10000,
   "batch_size": 100
 }

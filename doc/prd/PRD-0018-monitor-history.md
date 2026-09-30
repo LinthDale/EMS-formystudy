@@ -69,3 +69,6 @@ RED→GREEN：ASGI 參數/授權/轉譯；SQL synthetic transaction 回滾檢查
 正式 React frontend 整合另批；更長保留期與報表匯出另批。
 ## 15. Appendix
 ADR-027；Grafana provisioning ems-overview.json。採用本機已鎖定 Apache ECharts 5.6.0（Apache-2.0）。
+
+### 2026-09-29 FR-1802 顯示規則增補
+依使用者要求，逆變器與其他設備統一使用折線：正常稀疏採樣點依觀測間距連接，較長缺口仍斷線；不補零、不新增樣本，原始紀錄及 API 不變。具體門檻、少量樣本限制與驗證見 [ADR-032](../adr/ADR-032-monitor-sampling-lines.md)，本增補優先於原 FR-1802 的逐空桶斷線規則。

@@ -4,8 +4,10 @@ info:
   description: |
     Energy Management System API 規範
 
+    Local 帳號改存 PostgreSQL；所有受保護 local session 請求均驗 DB，失效401、DB不可用503（PRD-0023/ADR-035）。
     本系統包含以下 API 端點：
-    - **Simulator API** (port 8001): 模擬電表控制
+    - **Simulator Control** (BFF port 8003): OPS 統一控制四台 simulator 與持久稽核
+      維運CLI預設使用 http://127.0.0.1:8003；僅相同數字loopback origin支援本機Secure-cookie例外，BFF認證契約不變。
     - **Query API** (port 3001): 歷史資料查詢 (PostgREST)
     - **Grafana API** (port 3000): 告警與儀表板管理
     - **Device Service API** (port 8002): Device Registry 與 AI 自動分類 (PRD-0003)
@@ -13,15 +15,15 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 1.5.0
+  version: 2.1.0
   contact:
     name: EMS Development Team
   license:
     name: Proprietary
 
 servers:
-  - url: http://localhost:8001
-    description: Simulator API (模擬電表控制)
+  - url: http://localhost:8003
+    description: Authenticated BFF simulator control
   - url: http://localhost:3001
     description: Query API - PostgREST (歷史資料查詢)
   - url: http://localhost:3000
@@ -40,6 +42,14 @@ tags:
     description: Device Registry 與 AI 自動分類 API (PRD-0003, port 8002)
 
 paths:
+  /api/auth/login: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffPasswordLogin","description":"PRD-0023: local credentials come only from PostgreSQL bff_auth. Account records are not read from env. Unknown, disabled and wrong password return identical 401. HttpOnly Secure SameSite=Strict session cookie; immutable account UUID/version/role checked on every authenticated request.","parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["username","password"],"properties":{"username":{"type":"string","minLength":1,"maxLength":64},"password":{"type":"string","minLength":1,"maxLength":256,"writeOnly":true}}}}}},"responses":{"200":{"description":"Login successful; session cookie issued","content":{"application/json":{"schema":{"type":"object","required":["username","role","expires_in"],"properties":{"username":{"type":"string"},"role":{"type":"string","enum":["ops","ingest","readonly"]},"expires_in":{"type":"integer"}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"422":{"description":"Invalid request body"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/session: {"servers":[{"url":"http://localhost:8003"}],"get":{"tags":["BFF Authentication"],"operationId":"bffSessionInfo","security":[{"bffSession":[]}],"responses":{"200":{"description":"Authenticated result","content":{"application/json":{"schema":{"type":"object","required":["username","role"],"properties":{"username":{"type":"string"},"role":{"type":"string","enum":["ops","ingest","readonly"]}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/logout: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffLogout","security":[{"bffSession":[]}],"parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Session revoked; cookie cleared"},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/role: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffSessionRoleChange","description":"Any different role revokes the session. This endpoint does not change the DB account role; use the host account-admin CLI.","security":[{"bffSession":[]}],"parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["role"],"properties":{"role":{"type":"string","enum":["ops","ingest","readonly"]}}}}}},"responses":{"200":{"description":"Whether session was terminated","content":{"application/json":{"schema":{"type":"object","required":["role","session_terminated"],"properties":{"role":{"type":"string","enum":["ops","ingest","readonly"]},"session_terminated":{"type":"boolean"}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"422":{"description":"Invalid role"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /health: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"get":{"tags":["Internal Simulator Control"],"operationId":"internalSimulatorHealth","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"type":"object","required":["status","control_configured","control_faulted"],"properties":{"status":{"const":"ok"},"control_configured":{"type":"boolean"},"control_faulted":{"type":"boolean"}}}}}}}}}
+  /state: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"get":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorState","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorSnapshot"}}}},"401":{"description":"Bad credential"},"503":{"description":"Control not configured"}}}}
+  /receipts/{request_id}: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"parameters":[{"name":"request_id","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"get":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorReceipt","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorReceipt"}}}},"401":{"description":"Bad credential"},"404":{"description":"No receipt; not evidence of non-execution"},"503":{"description":"Control not configured"}}}}
+  /apply: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"post":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorApply","description":"Internal only. Body <=4096 bytes. CAS, apply, revision and receipt run atomically on a single event-loop thread. Deadline is epoch seconds between now and now+15s. BFF sends now+10s; no automatic retries. Queries forbidden.","requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorApply"}}}},"responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorReceipt"}}}},"401":{"description":"Bad credential"},"409":{"description":"UUID, instance or revision conflict"},"410":{"description":"Expired or invalid deadline"},"413":{"description":"Body too large"},"422":{"description":"Invalid body/changes/query"},"429":{"description":"Receipt capacity exhausted; no application"},"503":{"description":"Not configured, faulted or application outcome unknown"}}}}
   /api/alarms/demo:
     servers: [{url: 'http://localhost:8003'}]
     get:
@@ -206,169 +216,174 @@ paths:
         '502': {description: Upstream unavailable}
         '503': {description: OPS channel not configured}
 
-  # ============================================================
-  # Simulator API (port 8001)
-  # ============================================================
-  /health:
+  /api/simulators:
+    servers: [{url: 'http://localhost:8003'}]
     get:
-      tags:
-        - Simulator
-      summary: 健康檢查
-      description: 檢查模擬器服務是否運作中
-      operationId: getSimulatorHealth
-      servers:
-        - url: http://localhost:8001
+      tags: [Simulator Control]
+      operationId: listSimulators
+      summary: OPS 查詢四個固定 simulator 的狀態與可設定欄位
+      description: No query parameters. Settings are control state, not telemetry. Unreachable targets return available=false.
+      security: [{bffSession: []}]
       responses:
         '200':
-          description: 服務正常運作
+          description: Fixed simulator registry
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HealthResponse'
-              example:
-                status: ok
-
-  /config:
+                type: object
+                required: [items]
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/SimulatorDescription'}}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Query parameters forbidden}
+        '503': {description: Control or audit unavailable}
+  /api/simulators/{simulator_id}:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {$ref: '#/components/parameters/SimulatorId'}
     get:
-      tags:
-        - Simulator
-      summary: 取得模擬參數
-      description: 取得目前的模擬電表參數設定
-      operationId: getSimulatorConfig
-      servers:
-        - url: http://localhost:8001
+      tags: [Simulator Control]
+      operationId: getSimulatorState
+      summary: OPS 查詢控制設定、instance 與 revision
+      security: [{bffSession: []}]
       responses:
         '200':
-          description: 目前的模擬參數
+          description: Control configuration and capabilities
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/SimulatorConfig'
-              example:
-                noise_voltage_v: 3.0
-                current_base_a: 100.0
-                current_swing_a: 40.0
-                noise_current_a: 2.0
-                power_factor: 0.85
-                period_seconds: 3600.0
-                fault_mode: none
-
+              schema: {$ref: '#/components/schemas/SimulatorDescription'}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Invalid ID or query}
+        '503': {description: Control or audit unavailable}
+  /api/simulators/{simulator_id}/commands:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {$ref: '#/components/parameters/SimulatorId'}
     post:
-      tags:
-        - Simulator
-      summary: 修改模擬參數
+      tags: [Simulator Control]
+      operationId: configureSimulator
+      summary: 統一設定 simulator 並先持久化操作紀錄
       description: |
-        修改模擬電表的參數設定。所有參數都是可選的，只會更新有提供的參數。
-
-        **功率計算公式：**
-        ```
-        P (kW) = √3 × 380V × current_base_a × power_factor / 1000
-        ```
-
-        **快速參考：**
-        - current_base_a=100, power_factor=0.85 → ~56 kW
-        - current_base_a=180, power_factor=0.85 → ~101 kW (會觸發告警)
-      operationId: setSimulatorConfig
-      servers:
-        - url: http://localhost:8001
+        OPS session plus allowlisted Origin required. No query parameters; body <=4096 bytes.
+        Changes schema must match path ID. No host/register/topic/process operations.
+        Actor comes from session. UUID dedup persists across restarts; changed actor/body conflicts.
+        Succeeded means settings applied, not telemetry delivered. Timeout/crash remains
+        outcome_unknown, blocks this target and is never automatically resent.
+        Before/after are configuration snapshots. Targets reset settings on restart.
+      security: [{bffSession: []}]
       parameters:
-        - name: noise_voltage_v
-          in: query
-          description: 電壓雜訊標準差 (V)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 3.0
-        - name: current_base_a
-          in: query
-          description: 基礎電流 (A)，直接影響功率大小
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 100.0
-        - name: current_swing_a
-          in: query
-          description: 電流波動幅度 (A)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 40.0
-        - name: noise_current_a
-          in: query
-          description: 電流雜訊標準差 (A)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 2.0
-        - name: power_factor
-          in: query
-          description: 功率因數 (0-1)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            maximum: 1
-            default: 0.85
-        - name: period_seconds
-          in: query
-          description: 負載週期秒數
-          schema:
-            type: number
-            format: float
-            minimum: 1
-            default: 3600.0
+        - {name: Origin, in: header, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SimulatorCommand'}
       responses:
         '200':
-          description: 更新後的參數
+          description: Durable succeeded, failed, or outcome_unknown operation
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '202':
+          description: Same UUID is still pending; it was not dispatched twice
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS or exact Origin required}
+        '409': {description: UUID conflict, target busy, or unresolved earlier command}
+        '413': {description: Body exceeds 4096 bytes}
+        '422': {description: Invalid ID, schema, changes, or query}
+        '503': {description: Disabled, audit unavailable, or audit capacity reached; success not confirmed}
+  /api/simulators/operations:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [Simulator Control]
+      operationId: listSimulatorOperations
+      summary: OPS 查詢持久操作紀錄，依 sequence 倒序
+      security: [{bffSession: []}]
+      parameters:
+        - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 50}}
+        - {name: before, in: query, schema: {type: integer, minimum: 1}}
+        - {name: simulator_id, in: query, schema: {$ref: '#/components/schemas/SimulatorIdValue'}}
+      responses:
+        '200':
+          description: Bounded page; next_before is the last sequence or null
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SimulatorConfig'
-
-  /inject-fault:
+                type: object
+                required: [items, next_before]
+                properties:
+                  items: {type: array, maxItems: 100, items: {$ref: '#/components/schemas/SimulatorOperation'}}
+                  next_before: {type: [integer, 'null']}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Invalid or unknown query}
+        '503': {description: Audit unavailable}
+  /api/simulators/operations/{request_id}:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {name: request_id, in: path, required: true, schema: {type: string, format: uuid}}
+    get:
+      tags: [Simulator Control]
+      operationId: getSimulatorOperation
+      summary: OPS 依 UUID 查操作與歷次結果事件
+      security: [{bffSession: []}]
+      responses:
+        '200':
+          description: Durable operation
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '404': {description: Operation not found}
+        '422': {description: Invalid UUID or query}
+        '503': {description: Audit unavailable}
+  /api/simulators/operations/{request_id}/reconcile:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {name: request_id, in: path, required: true, schema: {type: string, format: uuid}}
     post:
-      tags:
-        - Simulator
-      summary: 注入故障模式
+      tags: [Simulator Control]
+      operationId: reconcileSimulatorOperation
+      summary: 查原始 receipt 對帳，或確認 target 已換 instance 後解封
       description: |
-        設定故障模式以測試告警機制：
-        - `none`: 正常運作
-        - `zero`: 所有數值歸零
-        - `freeze`: 數值凍結不更新
-      operationId: injectFault
-      servers:
-        - url: http://localhost:8001
+        OPS plus Origin. No query; body <=4096 bytes. Never resends a command.
+        Receipt must match UUID, command hash, target, old instance, revision and snapshots.
+        Missing receipt/current matching settings do not prove success.
+        A new authoritative instance retires the old instance in this single-container topology;
+        status stays outcome_unknown, resolved=true permits further commands.
+        Unchanged/unavailable evidence returns the original unresolved record.
+      security: [{bffSession: []}]
       parameters:
-        - name: mode
-          in: query
-          required: true
-          description: 故障模式
-          schema:
-            type: string
-            enum:
-              - none
-              - zero
-              - freeze
-            default: none
+        - {name: Origin, in: header, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reason]
+              properties:
+                reason: {type: string, minLength: 1, maxLength: 200, pattern: '\S'}
       responses:
         '200':
-          description: 故障模式已設定
+          description: Current operation including any appended reconciliation event
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/FaultResponse'
-              example:
-                fault_mode: freeze
-        '400':
-          description: 無效的故障模式
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS or Origin required}
+        '404': {description: Operation not found}
+        '409': {description: Target command still running}
+        '413': {description: Body too large}
+        '422': {description: Invalid body, UUID, or query}
+        '503': {description: Audit unavailable}
 
   # ============================================================
   # Query API - PostgREST (port 3001)
@@ -914,6 +929,11 @@ paths:
 
 components:
   parameters:
+    SimulatorId:
+      name: simulator_id
+      in: path
+      required: true
+      schema: {$ref: '#/components/schemas/SimulatorIdValue'}
     HistoryDeviceId:
       name: device_id
       in: path
@@ -933,6 +953,10 @@ components:
       description: Exclusive end with timezone
 
   securitySchemes:
+    simControlToken:
+      type: http
+      scheme: bearer
+      description: Env-only service credential; never provided to browser/CLI.
     bffSession:
       type: apiKey
       in: cookie
@@ -953,6 +977,112 @@ components:
         AI 金鑰輪替後需 `docker compose up -d device-service-mcp` 重啟（L-3）。
 
   schemas:
+    SimulatorApply: {"type":"object","additionalProperties":false,"required":["request_id","expected_instance_id","expected_revision","changes","reason","deadline"],"properties":{"request_id":{"$ref":"#/components/schemas/SimulatorCommand/properties/request_id"},"expected_instance_id":{"$ref":"#/components/schemas/SimulatorCommand/properties/expected_instance_id"},"expected_revision":{"$ref":"#/components/schemas/SimulatorCommand/properties/expected_revision"},"changes":{"$ref":"#/components/schemas/SimulatorCommand/properties/changes"},"reason":{"$ref":"#/components/schemas/SimulatorCommand/properties/reason"},"deadline":{"type":"number","exclusiveMinimum":0}}}
+    SimulatorReceipt: {"type":"object","additionalProperties":false,"required":["request_id","command_hash","changes","before","after"],"properties":{"request_id":{"type":"string","format":"uuid4"},"command_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"changes":{"type":"object"},"before":{"$ref":"#/components/schemas/SimulatorSnapshot"},"after":{"$ref":"#/components/schemas/SimulatorSnapshot"}}}
+    SimulatorIdValue:
+      type: string
+      enum: [sim-001, plc-001, sensor-001, delta-sim-001]
+    SimulatorCommand:
+      type: object
+      additionalProperties: false
+      required: [request_id, expected_instance_id, expected_revision, changes, reason]
+      properties:
+        request_id: {type: string, format: uuid4}
+        expected_instance_id: {type: string, format: uuid4}
+        expected_revision: {type: integer, minimum: 0, maximum: 4096}
+        changes:
+          description: Non-empty partial settings, matching simulator_id; nulls and unknown keys forbidden.
+          oneOf:
+            - {$ref: '#/components/schemas/MeterChanges'}
+            - {$ref: '#/components/schemas/PLCChanges'}
+            - {$ref: '#/components/schemas/SensorChanges'}
+            - {$ref: '#/components/schemas/DeltaChanges'}
+        reason: {type: string, minLength: 1, maxLength: 200, pattern: '\S'}
+    MeterChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        noise_voltage_v: {type: number, minimum: 0, maximum: 20}
+        current_base_a: {type: number, minimum: 0, maximum: 1000}
+        current_swing_a: {type: number, minimum: 0, maximum: 1000}
+        noise_current_a: {type: number, minimum: 0, maximum: 20}
+        power_factor: {type: number, minimum: 0, maximum: 1}
+        period_seconds: {type: number, minimum: 1, maximum: 86400}
+        fault_mode: {type: string, enum: [none, zero, freeze]}
+    PLCChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        motor_speed: {type: integer, minimum: 0, maximum: 65535}
+        pump_on: {type: boolean}
+        valve_open: {type: boolean}
+    SensorChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        enabled: {type: boolean}
+        interval_seconds: {type: integer, enum: [1, 2, 5, 10, 15, 30], description: '2 preserves legacy default; independent of edge poll interval'}
+    DeltaChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        scenario: {type: string, enum: [day, night, alarm]}
+    SimulatorSnapshot:
+      type: object
+      required: [simulator_id, instance_id, revision, settings]
+      properties:
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        instance_id: {type: string, format: uuid4}
+        revision: {type: integer, minimum: 0, maximum: 4096}
+        settings: {type: object, description: Complete typed configuration for this ID}
+    SimulatorDescription:
+      type: object
+      required: [simulator_id, available, blocked, capabilities]
+      properties:
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        available: {type: boolean}
+        blocked: {type: boolean}
+        capabilities: {type: object, description: configure contains JSON Schema for allowed settings}
+        instance_id: {type: string, format: uuid4}
+        revision: {type: integer, minimum: 0}
+        settings: {type: object}
+        error: {type: string, enum: [target_unavailable]}
+    SimulatorOperation:
+      type: object
+      required: [sequence, request_id, simulator_id, actor, created_at, status, resolved, reason, changes, expected_instance_id, expected_revision, before, after, error, events]
+      properties:
+        sequence: {type: integer, minimum: 1}
+        request_id: {type: string, format: uuid4}
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        actor: {type: string, description: Server-validated login username}
+        created_at: {type: string, format: date-time}
+        updated_at: {type: string, format: date-time}
+        status: {type: string, enum: [pending, succeeded, failed, outcome_unknown]}
+        resolved: {type: boolean, description: 'unknown + true means old instance retired, not proven success'}
+        reason: {type: string, minLength: 1, maxLength: 200}
+        changes: {type: object}
+        expected_instance_id: {type: string, format: uuid4}
+        expected_revision: {type: integer, minimum: 0}
+        before: {anyOf: [{$ref: '#/components/schemas/SimulatorSnapshot'}, {type: 'null'}]}
+        after: {anyOf: [{$ref: '#/components/schemas/SimulatorSnapshot'}, {type: 'null'}]}
+        error: {type: [string, 'null']}
+        reconciled_by: {type: string}
+        reconcile_reason: {type: string}
+        observed_instance_id: {type: string, format: uuid4}
+        events:
+          type: array
+          items:
+            type: object
+            required: [event_id, status, created_at]
+            properties:
+              event_id: {type: integer}
+              status: {type: string, enum: [succeeded, failed, outcome_unknown]}
+              created_at: {type: string, format: date-time}
+            additionalProperties: true
     DemoAlarmDelivery:
       type: object
       required: [status, event_id, sent_at, channel]
@@ -1499,3 +1629,16 @@ x-planned-delta-edge-v2:
     baseline: Eight devices at 10 seconds with seven days offline
     remote_config_transport: Not implemented; no new configuration route declared
   existing_v1_unchanged: true
+
+x-delta-demo-sampling:
+  adr: ADR-034
+  device_id: delta-sim-001
+  demo_interval_seconds: 1
+  field_default_interval_seconds: 10
+  schedule: monotonic deadlines; skip missed slots without synthetic samples
+  noise_enable_env: DELTA_SIM_NOISE=1
+  phase_voltage_noise: {sigma_v: 1.5, maximum_absolute_v: 4.5}
+  phase_current_noise: {sigma_a: 0.15, maximum_absolute_a: 0.45}
+  power: sum of phase voltage times phase current; unity power factor
+  energy: integral of baseline generation; no random counter noise
+  contract_change: none; existing REST, MQTT and measurement fields preserved

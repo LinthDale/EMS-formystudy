@@ -33,3 +33,7 @@
 - [PRD-0020 Delta 三相模擬、解析與4G採集](PRD-0020-delta-edge-telemetry.md)：本機四欄管線已實作驗收；現場硬體與接收端身份綁定未驗收。
 
 - [PRD-0021 Delta 多設備與可靠補傳](PRD-0021-multi-device-edge-reliability.md)：Draft；M70A-262／RPI-M30A，8台／10秒／7天設計目標，尚未實作或實機驗收。
+
+- [PRD-0022 Simulator 統一控制與操作紀錄](PRD-0022-simulator-control-audit.md)：四個固定 simulator、BFF OPS API/CLI、持久 append-only audit、UUID/CAS/unknown 對帳；不控制真機。
+
+- [PRD-0023：資料庫帳號管理](PRD-0023-database-accounts.md) — PostgreSQL local users、CLI、稽核、逐請求版本撤銷；ADR-035。

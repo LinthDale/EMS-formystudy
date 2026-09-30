@@ -157,3 +157,25 @@ Delta→FC04 parser→來源UTC時間→SQLite→QoS1 MQTT→既有Telegraf→DB
 
 ### RTU 模擬資料流（ADR-031）
 Pi主站FC04 request → USB–RS485 #2 → bus → PC USB–RS485 #1 → simulator從站 → raw registers + RTU CRC原路回應 → Pi既有parser → SQLite → MQTT → 後台 → EMS。站號1–247單一站；其他站號/廣播/錯CRC不回應，非法讀寫不能改資料。後續PUBACK/DB限制沿用ADR-029。
+
+### 統一 simulator 控制（ADR-033，取代流程五的模擬器寫入）
+OPS + Origin + typed command/CAS → BFF SQLite commit intent → 內部token agent → atomic apply/revision/receipt → SQLite commit outcome。
+timeout/crash → unknown、封鎖該台後續指令；receipt證明成功才補記，換instance只解除封鎖不假稱成功。查詢目前設定相同不算對帳證據。
+既有電表/PLC/sensor/Delta上行topic及schema不改；applied不表示遙測已落DB。PLC原有不同register request會產生分欄資料列，查單欄最新值須排除不含該欄的資料列。
+
+## PRD-0023：帳號與 session
+
+```mermaid
+sequenceDiagram
+  participant U as 使用者
+  participant B as BFF
+  participant D as PostgreSQL
+  U->>B: 密碼登入
+  B->>D: account id/hash/role/version 同一快照
+  B->>B: bounded Argon2 verify
+  B-->>U: session cookie
+  U->>B: 受保護請求
+  B->>D: enabled/id/version/role 查核
+  B-->>U: 有效回應，失效401，DB故障503
+```
+管理異動與 audit 共用 transaction；READ COMMITTED + advisory lock 防止最後 OPS 並行停用。Argon2 工作完成後才釋放slot，HTTP取消不提前解除資源上限。

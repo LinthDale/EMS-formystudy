@@ -1,20 +1,8 @@
-"""Ops helper: generate an argon2id PHC hash for BFF_AUTH_USERS.
+"""Legacy standalone Argon2 hash utility, not account provisioning.
 
-The hash embeds salt + cost params, so the output drops straight into the env
-var record ``username:<phc>:role``. The plaintext password is NEVER printed,
-logged, or persisted — only the PHC string is emitted.
-
-Usage (password read interactively, not echoed — preferred for ops):
-    python -m bff.hashpw
-
-Usage (username + role, prints a ready-to-paste record):
-    python -m bff.hashpw --user ops_user --role ops
-
-Reading the password from a pipe (e.g. CI / scripted provisioning):
-    printf '%s' "$PW" | python -m bff.hashpw --stdin --user ops_user --role ops
-
-Then assemble (comma-separated) into:
-    BFF_AUTH_USERS="ops_user:<phc>:ops,ing_user:<phc>:ingest"
+Use docker compose run --rm account-admin create USER --role ops --reason REASON
+to create a database account. This utility only emits a hash or legacy import
+record; it does not save a user. Never write its output to BFF_AUTH_USERS.
 """
 from __future__ import annotations
 
@@ -45,9 +33,9 @@ def _read_password(from_stdin: bool) -> str:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="python -m bff.hashpw",
-        description="Generate an argon2id PHC hash for a BFF_AUTH_USERS record.",
+        description="Generate an Argon2id hash for legacy tooling; use account-admin for DB users.",
     )
-    parser.add_argument("--user", help="username; prints a full env record when given")
+    parser.add_argument("--user", help="username; prints a legacy import record when given")
     parser.add_argument(
         "--role",
         choices=[r.value for r in Role],

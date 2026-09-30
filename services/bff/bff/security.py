@@ -8,6 +8,7 @@ from fastapi import Depends, HTTPException, Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
+from .accounts import AccountUnavailable
 from .config import Settings
 from .roles import Role
 from .sessions import Session
@@ -47,18 +48,26 @@ async def current_session(request: Request) -> Session:
     session = await request.app.state.session_manager.validate(session_id)
     if session is None:
         raise HTTPException(status_code=401, detail="invalid or expired session")
+    if session.provider == "local":
+        auth = request.app.state.account_auth
+        try:
+            valid = auth is not None and await auth.valid_session(session)
+        except AccountUnavailable:
+            raise HTTPException(status_code=503, detail="account database unavailable") from None
+        if not valid:
+            await request.app.state.session_manager.revoke(session.id)
+            raise HTTPException(status_code=401, detail="invalid or expired session")
+    elif session.provider != "oidc":
+        raise HTTPException(status_code=401, detail="invalid or expired session")
     return session
 
 
 def require_roles(*allowed: Role):
-    """Endpoint-level authz (§9.1 [必過]): the route declares which roles may
-    use it; everything else is 403 even though the BFF process holds the keys."""
-
+    """Endpoint-level role check after per-request account validation."""
     async def _dep(session: Session = Depends(current_session)) -> Session:
         if session.role not in allowed:
             raise HTTPException(status_code=403, detail="role not permitted for this endpoint")
         return session
-
     return Depends(_dep)
 
 

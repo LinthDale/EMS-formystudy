@@ -6,7 +6,7 @@
 #     即生效。
 #   - 載入優先序（高 → 低）：環境變數（BFF_ 前綴）> .env > 本檔 > 程式內建 default。
 #   - **機密不放這裡**（本檔會進 git）。channel keys / 使用者表一律放 .env：
-#       BFF_OPS_API_KEY, BFF_INGEST_API_KEY, BFF_AUTH_USERS
+#       BFF_OPS_API_KEY, BFF_INGEST_API_KEY, BFF_AUTH_DB_DSN
 #     （compose 由既有 ${OPS_API_KEY}/${INGEST_API_KEY} 傳入；BFF 不持 AI key。）
 #   - 路徑可用環境變數 BFF_CONFIG_FILE 覆寫（預設 config/bff.toml）。
 #   - 每個值的對應環境變數名 = "BFF_" + 欄位大寫（例 session_idle_timeout_s →
@@ -57,3 +57,10 @@ log_level = "INFO"
 demo_alarm_cooldown_s = 30
 # Total Telegram wait cap; must stay below the public proxy timeout.
 telegram_timeout_s = 8.0
+
+[simulator_control]
+# Disabled until a >=32-character env-only service token is provisioned.
+sim_control_enabled = false
+sim_control_db = "/data/sim-control/audit.sqlite3"
+# Full audit fails closed; archive planning must preserve UUID dedup.
+sim_control_max_commands = 100000

@@ -71,7 +71,7 @@
 | Origin allowlist | `BFF_PUBLIC_ORIGINS` | http://localhost:8003 | csv | ✅ | CSRF 來源白名單；**dev（compose）預設含 `http://localhost:5173`（前端 origin），否則 vite-proxied 的 login/POST 會被擋** |
 | log level | `BFF_LOG_LEVEL` | INFO | — | ✅ | |
 | 認證模式 | `BFF_AUTH_MODE` | local | — | ✅ | local=argon2id 本地表（fallback）/ oidc=企業 IdP（Phase-1 stub→503）；ADR-024 |
-| 本地使用者表格式 | `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；`user:<argon2id PHC>:role`，**`;` 分隔**；`python -m bff.hashpw` 產生；ADR-024 |
+| 帳號資料库 DSN | `BFF_AUTH_DB_DSN` | 空（local 啟動失敗） | — | ✅ | secret，專用 reader；ADR-035；使用者資料不在 env |
 | OIDC issuer | `BFF_OIDC_ISSUER` | "" | — | ✅ | auth_mode=oidc 必填；discovery 來源；ADR-024 |
 | OIDC client id | `BFF_OIDC_CLIENT_ID` | "" | — | ✅ | 必填(oidc) |
 | OIDC client secret | `BFF_OIDC_CLIENT_SECRET` | "" | — | ✅ | **secret，.env only** |
@@ -81,7 +81,7 @@
 | OIDC role map | `BFF_OIDC_ROLE_MAP` | "" | — | ✅ | csv `claimval:role`；必填(oidc)；unmapped→拒（無預設權限）|
 | OIDC state TTL | `BFF_OIDC_STATE_TTL_S` | 300 | s | ✅ | redirect round-trip 時限 |
 | OIDC post-login redirect | `BFF_OIDC_POST_LOGIN_REDIRECT` | / | — | ✅ | 登入後導回 SPA 路徑 |
-| OPS / INGEST channel key、auth users | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_USERS` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
+| OPS / INGEST channel key、account DB DSN | `BFF_OPS_API_KEY` / `BFF_INGEST_API_KEY` / `BFF_AUTH_DB_DSN` | "" | — | ✅ | **secret，.env only**；AI key 不進 BFF |
 | cookie 屬性（HttpOnly/Secure/SameSite=Strict）| — | — | — | 🔒 | §9.2；放寬走 ADR-023 |
 | role→至多一 key 通道、AI 通道禁入 BFF | — | — | — | 🔒 | §9.1；放寬走 ADR-023 |
 ### 本機歷史監控（PRD-0018）
@@ -111,3 +111,16 @@
 |mode|必填|demo或field；field強制TLS+身份驗證|同上|
 |MQTT ACK wait|5s|程式上限；逾時保留待ACK MID|delta_device/publisher.py|
 |outbox payload/snapshot|1KB/16KB|硬上限|delta_device/delivery.py|
+
+## PRD-0022 Simulator control
+| Tunable | Default | Bounds / source |
+|---|---|---|
+| BFF_SIM_CONTROL_ENABLED | false | boolean; Compose env |
+| BFF_SIM_CONTROL_TOKEN | empty | env only, >=32 chars when enabled; Compose maps SIM_CONTROL_TOKEN |
+| BFF_SIM_CONTROL_DB | /data/sim-control/audit.sqlite3 | dedicated persistent volume; single process |
+| BFF_SIM_CONTROL_MAX_COMMANDS | 100000 | 1–1000000; full => reject new commands, preserve UUID |
+| HTTP hop | 3s total | code safety bound, GET and POST each bounded |
+| agent receipt capacity | 4096 | fixed per instance; full rejects new commands |
+各sim設定範圍與sensor發布preset詳 operations/simulator-control.md；不等於Pi採樣策略。
+
+| 管理 DB DSN | BFF_AUTH_ADMIN_DSN | 空（CLI 拒絕） | — | ✅ | secret，只注入 account-admin；主機管理權限 |

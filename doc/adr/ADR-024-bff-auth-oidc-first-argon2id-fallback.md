@@ -1,5 +1,7 @@
 # ADR-024：BFF 認證：OIDC-first + argon2id 本地 fallback
 
+> 2026-09-30：本文件 local env user table 決策已由 [ADR-035](ADR-035-database-local-accounts.md) 取代。現行本機帳號存 PostgreSQL；OIDC 流程仍適用。
+
 ## Status
 Proposed（2026-06-15）
 

@@ -73,84 +73,85 @@ class TestPLCDataRanges:
         assert avg is not None, "No pressure readings"
         assert 860.0 <= avg <= 1140.0, f"Pressure avg {avg:.1f} kPa outside expected range"
 
-    def test_no_null_temperature(self, db_conn):
+    def test_holding_rows_have_complete_fields(self, db_conn):
         with db_conn.cursor() as cur:
             cur.execute("""
                 SELECT COUNT(*) FROM factory_measurements
-                WHERE device_id = 'plc-001' AND temperature IS NULL
+                WHERE device_id = 'plc-001' AND motor_speed IS NOT NULL AND temperature IS NULL
                 AND time > NOW() - INTERVAL '5 minutes'
             """)
             assert cur.fetchone()[0] == 0
 
 
-class TestModbusWritePropagation:
+@pytest.mark.usefixtures("restore_plc")
+class TestAuditedControlPropagation:
     """Write Modbus registers → verify values appear in TimescaleDB within 15 seconds."""
 
-    def test_motor_speed_write(self, db_conn, plc_client):
-        plc_client.write_register(4, 1500, slave=1)
+    def test_motor_speed_write(self, db_conn, sim_control):
+        sim_control.set("plc-001", {"motor_speed": 1500})
         time.sleep(15)
 
         with db_conn.cursor() as cur:
             cur.execute("""
                 SELECT motor_speed FROM factory_measurements
-                WHERE device_id = 'plc-001'
+                WHERE device_id = 'plc-001' AND motor_speed IS NOT NULL
                 ORDER BY time DESC LIMIT 1
             """)
             row = cur.fetchone()
         assert row is not None
         assert abs(row[0] - 1500.0) < 50.0, f"motor_speed = {row[0]}, expected ~1500 RPM"
 
-        plc_client.write_register(4, 0, slave=1)  # restore
+        sim_control.set("plc-001", {"motor_speed": 0})  # restore
 
-    def test_pump_on_write_true(self, db_conn, plc_client):
-        plc_client.write_coil(0, True, slave=1)
+    def test_pump_on_write_true(self, db_conn, sim_control):
+        sim_control.set("plc-001", {"pump_on": True})
         time.sleep(15)
 
         with db_conn.cursor() as cur:
             cur.execute("""
                 SELECT pump_on FROM factory_measurements
-                WHERE device_id = 'plc-001'
+                WHERE device_id = 'plc-001' AND pump_on IS NOT NULL
                 ORDER BY time DESC LIMIT 1
             """)
             row = cur.fetchone()
         assert row is not None
         assert row[0] is True, f"pump_on = {row[0]}, expected True"
 
-        plc_client.write_coil(0, False, slave=1)
+        sim_control.set("plc-001", {"pump_on": False})
 
-    def test_valve_open_write_true(self, db_conn, plc_client):
-        plc_client.write_coil(1, True, slave=1)
+    def test_valve_open_write_true(self, db_conn, sim_control):
+        sim_control.set("plc-001", {"valve_open": True})
         time.sleep(15)
 
         with db_conn.cursor() as cur:
             cur.execute("""
                 SELECT valve_open FROM factory_measurements
-                WHERE device_id = 'plc-001'
+                WHERE device_id = 'plc-001' AND valve_open IS NOT NULL
                 ORDER BY time DESC LIMIT 1
             """)
             row = cur.fetchone()
         assert row is not None
         assert row[0] is True, f"valve_open = {row[0]}, expected True"
 
-        plc_client.write_coil(1, False, slave=1)
+        sim_control.set("plc-001", {"valve_open": False})
 
-    def test_pump_and_valve_independent(self, db_conn, plc_client):
+    def test_pump_and_valve_independent(self, db_conn, sim_control):
         """Writing one coil must not affect the other."""
-        plc_client.write_coil(0, True, slave=1)   # pump_on = True
-        plc_client.write_coil(1, False, slave=1)  # valve_open = False
+        sim_control.set("plc-001", {"pump_on": True})   # pump_on = True
+        sim_control.set("plc-001", {"valve_open": False})  # valve_open = False
         time.sleep(15)
 
         with db_conn.cursor() as cur:
             cur.execute("""
                 SELECT pump_on, valve_open FROM factory_measurements
-                WHERE device_id = 'plc-001'
+                WHERE device_id = 'plc-001' AND pump_on IS NOT NULL AND valve_open IS NOT NULL
                 ORDER BY time DESC LIMIT 1
             """)
             row = cur.fetchone()
         assert row[0] is True, "pump_on should be True"
         assert row[1] is False, "valve_open should be False (independent coil)"
 
-        plc_client.write_coil(0, False, slave=1)
+        sim_control.set("plc-001", {"pump_on": False})
 
 
 class TestMQTTSensorPipeline:

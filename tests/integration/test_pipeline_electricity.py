@@ -116,9 +116,9 @@ class TestDataQuality:
 
 class TestFaultInjectionE2E:
     def test_fault_zero_reduces_power_to_near_zero(
-        self, db_conn, simulator_client, reset_fault_mode
+        self, db_conn, sim_control, reset_fault_mode
     ):
-        simulator_client.post("/inject-fault", params={"mode": "zero"})
+        sim_control.set("sim-001", {"fault_mode": "zero"})
         time.sleep(15)  # wait for ≥2 ingest flush cycles (5s flush_interval)
 
         with db_conn.cursor() as cur:
@@ -135,11 +135,11 @@ class TestFaultInjectionE2E:
         )
 
     def test_fault_recovery_restores_power(
-        self, db_conn, simulator_client, reset_fault_mode
+        self, db_conn, sim_control, reset_fault_mode
     ):
-        simulator_client.post("/inject-fault", params={"mode": "zero"})
+        sim_control.set("sim-001", {"fault_mode": "zero"})
         time.sleep(10)
-        simulator_client.post("/inject-fault", params={"mode": "none"})
+        sim_control.set("sim-001", {"fault_mode": "none"})
         time.sleep(15)  # wait for normal readings to land
 
         with db_conn.cursor() as cur:

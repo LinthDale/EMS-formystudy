@@ -84,3 +84,19 @@ Delta設備透過本地TCP或隔離RS485 RTU由Pi唯讀採集；SIM7600G-H提供
 
 ### RTU 實體模擬邊界（ADR-031）
 在測試環境，PC原生Delta simulator透過指定串口扮演設備從站，Pi為唯一主站；兩顆隔離USB–RS485連接。PC模擬器不開網路listener；Pi以既有outbound網路路徑進入EMS。真實逆變器與模擬來源不可使用同一上傳身分。
+
+### Simulator 控制邊界（PRD-0022 / ADR-033）
+OPS → BFF session/Origin → 四個固定 demo simulator。真設備與 Pi edge 不在控制 registry。
+本文件先前「AI/MCP 操作模擬器」寫入路徑由此取代；MCP 對 demo Modbus 僅讀。
+
+## PRD-0023：本機帳號管理
+
+```mermaid
+flowchart LR
+  Operator[主機維運人員] --> CLI[account-admin CLI]
+  User[EMS 使用者] --> BFF[EMS BFF]
+  CLI --> AuthDB[(PostgreSQL bff_auth)]
+  BFF --> AuthDB
+  BFF --> IdP[OIDC IdP]
+```
+帳號資料不再從 .env 提供；OIDC 維持既有流程。詳 PRD-0023 / ADR-035。

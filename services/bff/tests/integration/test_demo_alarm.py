@@ -7,6 +7,8 @@ import pytest
 from fastapi.testclient import TestClient
 
 from bff.main import create_app
+from tests.account_fakes import FakeAccounts
+from tests.conftest import AUTH_USERS
 from tests.conftest import FakeClock, ORIGIN, login, make_settings
 
 URL = "/api/alarms/demo"
@@ -23,7 +25,7 @@ def demo():
         if response.get("timeout"):
             raise httpx.ReadTimeout("private URL " + TOKEN, request=req)
         return httpx.Response(response["status"], json=response["body"])
-    app = create_app(settings=make_settings(telegram_bot_token=TOKEN, telegram_chat_id="123"),
+    app = create_app(account_repository=FakeAccounts(AUTH_USERS), settings=make_settings(telegram_bot_token=TOKEN, telegram_chat_id="123"),
                      telegram_transport=httpx.MockTransport(transport), clock=clock)
     with TestClient(app, base_url=ORIGIN) as c:
         yield c, calls, response, clock

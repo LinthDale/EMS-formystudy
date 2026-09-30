@@ -416,3 +416,10 @@ charts/theme.ts      ECharts theme
 
 ### 2026-09-23 附錄變更紀錄
 FR-520/521 的完整歷史範圍與分頁由 [PRD-0018](PRD-0018-monitor-history.md)、[ADR-027](../adr/ADR-027-monitor-history.md) 實作。既有 API 保留。視覺先落地於 output/ems-design-preview-20260923 本機預覽。
+
+### 2026-09-29：Simulator 控制改由 PRD-0022 / ADR-033
+四台固定模擬器的設定與故障注入統一至 BFF OPS API/CLI、持久 SQLite audit。舊 meter :8001 POST、PLC/MCP raw Modbus 寫入停用，遙測與真機唯讀採集不變。runtime 設定重啟還原，操作紀錄保留；詳 operations/simulator-control.md。
+
+## 2026-09-30 變更紀錄：DB local accounts
+
+使用者要求帳號資料進 DB。PRD-0023／ADR-035 取代本文件內歷史 BFF_AUTH_USERS provisioning 描述；local account 唯一來源 PostgreSQL bff_auth，帳號異動令舊 session version 失效。HTTP 登入、cookie、CSRF 與 OIDC JSON／流程相容。帳號管理是主機 CLI，未新增網頁。

@@ -17,7 +17,7 @@
 | **工廠環境整合** | 工廠 PLC 與環境感測器與電表共用同一條管線，單一資料平台統一管理 |
 | **裝置自動登錄 + AI 分類** | 新裝置 MQTT 上線即自動偵測，可切換 LLM（mock / 雲端 / 本地）分類裝置型別與訊號定義；高信心自動納管、低信心進人工確認佇列（PRD-0003） |
 | **雙層 AI 安全防護** | 分類路徑經兩層 AI 守衛（L1 分類 + L2 guardrail）＋輸入淨化＋輸出驗證＋預算硬上限＋三層 API 分權；所有 AI 決策寫入 append-only 稽核紀錄 |
-| **AI 控制面（MCP）** | 原生 MCP 介面，讓 Claude / 其他 AI Agent 用自然語言讀寫 PLC 暫存器，並以 AI 通道工具讀取 / 重跑裝置分類 |
+| **AI 控制面（MCP）** | 原生 MCP 介面，讓 Claude / 其他 AI Agent 用自然語言讀取 PLC 暫存器（模擬器控制改由 BFF OPS 稽核入口），並以 AI 通道工具讀取 / 重跑裝置分類 |
 | **故障注入測試** | 模擬器提供故障注入 API，方便驗證告警鏈路與恢復流程 |
 | **一鍵部署 / 重建** | 容器化部署，單一指令啟動整套系統；可在不影響規格的情況下完整重建 |
 
@@ -106,7 +106,7 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 
 | 服務 | 對外 Port | 用途 |
 |------|----------|------|
-| 電表模擬器 | 5020 (Modbus), 8001 (REST) | POC 階段模擬電表，提供故障注入 API |
+| 電表模擬器 | 127.0.0.1:5020（Modbus 唯讀） | POC 電表；設定與故障注入經 BFF :8003 |
 | 電力採集閘道 | — | 電表 → MQTT |
 | MQTT broker | 1883 | 訊息路由 |
 | 電力寫入服務 | — | MQTT → 時序資料庫 |
@@ -117,7 +117,7 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | 工廠感測器模擬器 | — | POC 階段模擬 JSON 感測器 |
 | 工廠採集閘道 | — | PLC → MQTT |
 | 工廠寫入服務 | — | MQTT → 工廠量測資料表 |
-| AI 控制面 (kc-mcp-server) | 8765 (本機) | MCP client 讀寫設備暫存器 |
+| AI 控制面 (kc-mcp-server) | 8765 (本機) | MCP client 唯讀查詢模擬器暫存器；控制經 BFF OPS |
 | 裝置登錄服務 (device-service) | 8002 (REST) | 裝置 CRUD / 自動分類 / 人機確認 / 修正回饋 / 稽核（PRD-0003） |
 | 裝置登錄 MCP (device-service-mcp) | 127.0.0.1:8766 (本機) | device-service 的 MCP endpoint，AI 通道讀取 / 重跑分類工具 |
 | BFF (bff) | 127.0.0.1:8003 (本機) | 瀏覽器↔後端唯一通道：session/CSRF/role→key 注入（PRD-0005 §9）|
@@ -131,7 +131,7 @@ MQTT topic 命名規範詳見 `doc/adr/ADR-007-mqtt-topic-naming.md`：主規範
 | 監控儀表板 | <http://localhost:3000/d/ems-overview> | EMS Overview，含電力與工廠視覺化 |
 | 電力資料查詢 API | <http://localhost:3001/electricity_measurements?order=time.desc&limit=10> | 查詢歷史電力資料 |
 | 工廠資料查詢 API | <http://localhost:3001/factory_measurements?order=time.desc&limit=10> | 查詢溫度、濕度、壓力、馬達、Pump、Valve |
-| 模擬器健康檢查 | <http://localhost:8001/health> | 電表模擬器健康狀態 |
+| 模擬器控制及狀態 | [統一控制手冊](doc/operations/simulator-control.md) | OPS 登入後查詢四台模擬器 |
 | 裝置登錄服務健康檢查 | `curl http://localhost:8002/healthz` | device-service 雙 DB 連線池狀態 |
 | kc MCP endpoint | `http://localhost:8765/mcp` | 工廠 PLC MCP client 連線（非瀏覽器頁面） |
 | 裝置登錄 MCP endpoint | `http://127.0.0.1:8766/mcp`（需 X-API-Key） | device-service AI 通道工具（非瀏覽器頁面） |
@@ -164,8 +164,8 @@ docker compose ps
 ### 1. 模擬器活著
 
 ```bash
-curl http://localhost:8001/health
-# 期望：{"status":"ok"}
+python3 scripts/simulator_control.py --username demo state sim-001
+# 以既有 OPS 帳號登入；預期 available=true
 ```
 
 ### 2. 查詢 API 拿得到資料
@@ -304,3 +304,26 @@ Pi + SIM7600G-H 的 TLS、systemd 與雙介面範本見 [操作交接](doc/opera
 
 ### Delta RTU 從站模擬（2026-09-29）
 PC 可執行 `python -m delta_device simulator --transport rtu --serial-port COM5 --baudrate 19200 --unit-id 1`，經兩顆隔離 USB–RS485 與 Pi 主站對接。從 `services/delta` 目錄執行；TCP 仍為預設。安裝、接線、Pi單次解析及4G分段驗收見 [Delta操作說明](services/delta/README.md#rtu-從站電腦模擬-delta樹莓派採集)。實體線路、Windows COM 與4G待到貨驗證。
+
+
+### Delta demo 每秒採樣（2026-09-29）
+`delta-sim-001` 已支援每秒採樣與有界電壓/電流誤差，真實 field 範本仍為 10 秒。畫面使用實際入庫資料，沒有前端補值。部署、回復、queue 容量及驗收見 [Delta 操作紀錄](doc/operations/delta-edge.md) 與 [ADR-034](doc/adr/ADR-034-delta-one-second-noise.md)。
+
+## Simulator 統一控制與操作紀錄（PRD-0022）
+四台 sim-001 / plc-001 / sensor-001 / delta-sim-001 統一走 BFF OPS API，操作先持久化再執行。
+本機目前 OPS 帳號是 `demo`；`python3 scripts/simulator_control.py --username demo list` 查狀態，`history` 查設定命令紀錄。
+首次使用請依 [快速開始與 sim 簡寫設定](doc/operations/simulator-control.md#從目前這台電腦開始)；`sim` 是需自行建立的 Bash function，新視窗要先保存至 `~/.bashrc`。
+指令、參數、逾時對帳、SQLite volume 與備份見 [操作手冊](doc/operations/simulator-control.md)。
+舊 :8001 POST 與 simulator Modbus/MCP raw write 已停用；真機與 Pi edge 維持唯讀。
+
+2026-09-29 CLI 登入修正：本機 simulator 指令預設用 `http://127.0.0.1:8003`，已支援同origin的 Secure session cookie；保留後端安全設定。若曾出現登入200後查詢401，直接重跑目前 `scripts/simulator_control.py`。操作入口與故障排除見 [控制手冊](doc/operations/simulator-control.md)。
+
+### DB 帳號管理（2026-09-30）
+
+本機帳號已改存 PostgreSQL `bff_auth.accounts`，異動記錄於 `bff_auth.account_audit`；`.env` 只保留服務 DSN。`demo` 保留原密碼與 OPS 角色。
+```bash
+cd ~/synaiq/EMS
+docker compose run --rm account-admin list
+docker compose run --rm account-admin create dalelin --role ops --reason "新增維運人員"
+```
+新增／停用／改密碼／權限與備份見 [帳號管理操作手冊](doc/operations/account-management.md)。帳號異動立即在下一次請求撤銷舊 session；無網頁帳號管理入口。

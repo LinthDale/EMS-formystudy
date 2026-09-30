@@ -2,6 +2,21 @@
 
 > 規則見 [api-contract-governance](../doc/governance/api-contract-governance.md)。每次 API 變更一條：版本 / 日期 / 級別 / 摘要 / 對應 PRD。
 
+## 2.1.0 — 2026-09-30（MINOR）
+- PRD-0023 / ADR-035：local 帳號唯一來源 PostgreSQL，移除 env user table。
+- 補列既有 BFF auth login/session/logout/role 契約；停用、角色與密碼變更撤銷舊 session，DB 故障503。
+- 帳號管理為主機 CLI，未新增公網管理 API；OIDC 保持相容。
+
+## 2.0.1 — 2026-09-29（PATCH，文件）
+- 補充維運CLI數字loopback HTTP的Secure-cookie相容處理；BFF session、認證、API schema及server安全設定不變。
+- CLI登入/讀取錯誤與派送後未知結果分開提示；PRD-0022／ADR-033。
+
+## 2.0.0 — 2026-09-29
+- Breaking (PRD-0022 / ADR-033): retire host :8001 simulator API and unaudited Modbus/MCP simulator writes.
+- Add OPS-only /api/simulators state/configure and persistent /operations query/reconcile.
+- UUID dedup, instance/revision CAS, durable intent, append-only events, bounded bodies and unknown outcome handling.
+- Internal control :9000 is service-credential protected and has no host port; see [operations manual](../doc/operations/simulator-control.md).
+
 ## 1.3.0 — 2026-06-10（MINOR）
 - `GET /devices`：新增選填查詢參數 `type`（device_type 過濾）、`limit`/`offset`（分頁，limit 1–500）、`sort`（7 欄位 allowlist）/`order`（asc/desc，NULLS LAST）。預設行為不變（全列、ORDER BY device_id）。
 - `DeviceOut`：新增選填欄位 `ai_confidence`（0–1，未分類 null）——信心佇列（PRD-0005 FR-510）所需。

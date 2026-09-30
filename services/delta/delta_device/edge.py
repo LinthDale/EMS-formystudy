@@ -2,11 +2,20 @@
 import logging
 import signal
 import threading
+import time
 from .delivery import ClockGuard, Outbox, drain, encode_line
 from .poller import Poller
 from .publisher import Publisher
 
 LOG = logging.getLogger(__name__)
+
+
+def next_sample_deadline(previous, now, interval):
+    """Keep acquisition on a fixed clock; skip missed slots without catch-up bursts."""
+    deadline = previous + interval
+    if deadline < now:
+        deadline += (int((now - deadline) / interval) + 1) * interval
+    return deadline
 
 
 def run(config):
@@ -36,6 +45,7 @@ def run(config):
     publisher.start()
     sender = threading.Thread(target=send, name="delta-sender", daemon=True)
     sender.start()
+    deadline = time.monotonic()
     try:
         while not stop.is_set():
             try:
@@ -50,7 +60,9 @@ def run(config):
                 LOG.error("queue_full limit=%d sample_rejected", config["queue_limit"])
             except Exception as exc:
                 LOG.error("sample_rejected kind=%s", type(exc).__name__)
-            stop.wait(config["poll_interval"])
+            now = time.monotonic()
+            deadline = next_sample_deadline(deadline, now, config["poll_interval"])
+            stop.wait(max(0.0, deadline - now))
     finally:
         stop.set()
         sender.join(timeout=10)

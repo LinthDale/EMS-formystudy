@@ -13,6 +13,7 @@ from fastapi.testclient import TestClient
 
 from bff.config import Settings
 from bff.main import create_app
+from tests.account_fakes import FakeAccounts
 
 OPS_KEY = "test-ops-key-31337"
 INGEST_KEY = "test-ingest-key-42424"
@@ -127,7 +128,6 @@ def make_settings(**overrides) -> Settings:
         public_origins=ORIGIN,
         ops_api_key=OPS_KEY,
         ingest_api_key=INGEST_KEY,
-        auth_users=AUTH_USERS,
         session_max_lifetime_s=MAX_LIFETIME_S,
         session_idle_timeout_s=IDLE_TIMEOUT_S,
     )
@@ -147,7 +147,7 @@ def clock() -> FakeClock:
 
 @pytest.fixture
 def client(recorder, clock):
-    app = create_app(
+    app = create_app(account_repository=FakeAccounts(AUTH_USERS),
         settings=make_settings(),
         upstream_transport=httpx.MockTransport(recorder.handler),
         clock=clock,

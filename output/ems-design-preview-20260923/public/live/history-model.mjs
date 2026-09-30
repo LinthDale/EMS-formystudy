@@ -21,6 +21,21 @@ export function chartPoints(data,key){
  for(let t=Date.parse(data.since);t<Date.parse(data.until);t+=step){const row=rows.get(t);points.push({time:t,value:row?(isState(key)||key==='energy_kwh'?row.last:row.value):null,min:row?.min??null,max:row?.max??null,samples:row?.samples??0});if(points.length>1201)throw Error('圖表資料超過限制');}
  return points;
 }
+// Skip only the empty buckets between normal samples; retain longer gaps and range edges.
+export function chartLinePoints(points,bucketSeconds){
+ const actual=points.filter(p=>p.value!==null);
+ if(actual.length<4)return points;
+ const intervals=actual.slice(1).map((p,i)=>p.time-actual[i].time).sort((a,b)=>a-b);
+ const cadence=intervals[Math.floor((intervals.length-1)/2)];
+ if(cadence<=bucketSeconds*1000)return points;
+ const maxGap=cadence*1.5;
+ let previous=null,nextIndex=0;
+ return points.filter(point=>{
+  if(point.value!==null){previous=point;nextIndex++;return true;}
+  const next=actual[nextIndex];
+  return !previous||!next||next.time-previous.time>maxGap;
+ });
+}
 export function toCsv(rows,keys){
  const escape=v=>'"'+String(v??'').replaceAll('"','""')+'"';
  return ['time,'+keys.join(','),...rows.map(r=>[r.time,...keys.map(k=>r[k])].map(escape).join(','))].join('\r\n');

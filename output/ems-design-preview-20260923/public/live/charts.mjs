@@ -1,4 +1,4 @@
-import {METRICS,isState,displayValue,chartPoints,fmt} from './history-model.mjs';
+import {METRICS,isState,displayValue,chartPoints,chartLinePoints,fmt} from './history-model.mjs';
 const instances=new Map();
 const when=t=>new Date(t).toLocaleString('zh-TW',{hour12:false});
 const observer=new ResizeObserver(entries=>{for(const entry of entries)instances.get(entry.target.dataset.signal)?.chart.resize();});
@@ -17,11 +17,11 @@ export function renderCharts(data,{reset=false}={}){
    panel.append(head,el);document.getElementById('chart-grid').append(panel);
    const chart=echarts.init(el,null,{renderer:'canvas'});chart.group='ems-history';item={el,chart,sub};instances.set(key,item);observer.observe(el);
   }
-  const pts=chartPoints(data,key);const actual=pts.filter(p=>p.value!==null);
+  const pts=chartPoints(data,key);const linePts=chartLinePoints(pts,data.bucket_seconds);const actual=pts.filter(p=>p.value!==null);
   const min=actual.length?Math.min(...actual.map(p=>p.min)):null,max=actual.length?Math.max(...actual.map(p=>p.max)):null;
   item.sub.textContent=isState(key)?'桶末狀態 · 0 關閉 / 1 開啟':'最低 '+fmt(min)+' · 最高 '+fmt(max)+' '+unit;
   const state=isState(key);
-  const line=(name,field,extra={})=>({name,type:'line',showSymbol:field==='value',symbol:'circle',symbolSize:2,emphasis:{scale:false},connectNulls:false,data:pts.map(p=>[p.time,p[field]]),lineStyle:{width:2,color},itemStyle:{color,borderWidth:0},...extra});
+  const line=(name,field,extra={})=>({name,type:'line',showSymbol:field==='value',symbol:'circle',symbolSize:2,emphasis:{scale:false},connectNulls:false,data:linePts.map(p=>[p.time,p[field]]),lineStyle:{width:2,color},itemStyle:{color,borderWidth:0},...extra});
   const series=[line(state?'桶末狀態':key==='energy_kwh'?'桶末讀值':'平均值','value',{step:state?'end':false,areaStyle:state?{opacity:.08,color}:undefined})];
   if(!state&&key!=='energy_kwh')series.push(line('最低','min',{lineStyle:{color,width:1,type:'dashed',opacity:.45}}),line('最高','max',{lineStyle:{color,width:1,type:'dashed',opacity:.45}}));
   const oldZoom=item.chart.getOption()?.dataZoom?.[0];

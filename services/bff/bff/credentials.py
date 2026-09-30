@@ -1,24 +1,8 @@
-"""Local credential store: env-provisioned users hashed with argon2id.
+"""Argon2 verification and legacy import parser (ADR-035).
 
-Owner decision (2026-06-15, ADR-024): the BFF does NOT manage passwords long
-term — enterprise IdP / OIDC is the strategic primary (deferred to Phase-1).
-This module is the **local argon2id fallback** (`BFF_AUTH_MODE=local`, default),
-replacing the earlier SHA-256 stub and closing the credential-hashing finding.
-
-Format (env/.env ONLY, never the committed TOML); records are ``;``-separated:
-    BFF_AUTH_USERS="username:<argon2id PHC string>:role;..."
-
-- Records are separated by ``;`` (NOT ``,``): an argon2id PHC string contains a
-  comma inside its params segment (``m=65536,t=3,p=4``), so comma cannot be the
-  record separator. ``;`` never appears in a PHC string.
-- The PHC string (e.g. ``$argon2id$v=19$m=65536,t=3,p=4$<salt>$<hash>``) embeds
-  the algorithm id, version, cost params and salt — no separate salt column.
-- Only argon2id PHC strings are accepted; argon2i / argon2d (weaker for this
-  use case) are rejected at parse time (fail fast).
-- Verification uses argon2's own verify and burns the same hash work for unknown
-  users (dummy verify) so login timing does not leak account existence.
-- Empty table -> nobody can log in (fail closed).
-- Generate hashes for the env var with: ``python -m bff.hashpw``.
+Runtime local authentication reads PostgreSQL via accounts.py. parse_auth_users
+exists only for explicit one-time import and test fixtures; it never reads env.
+Legacy records are semicolon-separated username:<argon2id PHC>:role.
 """
 from __future__ import annotations
 

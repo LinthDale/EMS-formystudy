@@ -61,3 +61,11 @@
 - [ADR-030 邊緣 SQLite 與中央提交確認](ADR-030-edge-durable-receipts.md)：Proposed；多設備outbox、中央receipt原子去重與committed ACK；未取代已部署v1。
 
 - [ADR-031 Delta RTU simulator](ADR-031-delta-rtu-simulator.md)：Accepted；PC 串口從站回應 Pi，沿用唯讀資料表與既有 TCP 模式。
+
+- [ADR-032 依採樣間距呈現监控折線](ADR-032-monitor-sampling-lines.md)：正常稀疏採樣連線、較長缺口保留。
+
+- [ADR-034 Delta demo 一秒採樣與量測誤差](ADR-034-delta-one-second-noise.md)：固定節拍、有界量測誤差、保留場景與協定。
+
+- [ADR-033 Simulator 統一控制與持久操作紀錄](ADR-033-simulator-control-audit.md)：BFF 固定 adapters + 內部認證 wrapper、SQLite intent/events、停用舊模擬器寫入旁路。
+
+- [ADR-035：本機帳號以 PostgreSQL 為唯一來源](ADR-035-database-local-accounts.md) — 取代 ADR-024 local env table；OIDC 保留。

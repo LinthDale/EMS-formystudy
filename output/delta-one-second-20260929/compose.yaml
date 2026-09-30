@@ -1,0 +1,30 @@
+services:
+  delta-simulator:
+    image: ems-delta-one-second:20260929
+    container_name: ems-delta-simulator
+    command: ["simulator", "--host", "0.0.0.0", "--port", "5021"]
+    environment:
+      DELTA_SIM_NOISE: "1"
+    restart: unless-stopped
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+  delta-edge:
+    image: ems-delta-one-second:20260929
+    container_name: ems-delta-edge
+    command: ["edge", "--config", "/app/config/demo.json"]
+    volumes:
+      - /home/dalelin/synaiq/EMS/services/delta/config:/app/config:ro
+      - delta_edge_data:/data
+    restart: unless-stopped
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+networks:
+  default:
+    external: true
+    name: ems_default
+volumes:
+  delta_edge_data:
+    external: true
+    name: ems_delta_edge_data

@@ -135,3 +135,18 @@ Browser → DGX nginx → Windows Node proxy → WSL BFF → HTTPS api.telegram.
 
 ### RTU 模擬增補（ADR-031）
 同一Python simulator可選RTU本機serial server，與TCP共用唯讀context；一次僅選一種transport。PC原生執行、Pi原生poller，既有Compose TCP demo不變，無新增服務、公開port或DB schema。
+
+### Simulator 控制容器更新（ADR-033）
+四個 EMS wrapper 共用內部 agent API :9000（token、無 host mapping），分 image 保留 pymodbus 3.6.9/3.12.1 與 aiomqtt。
+meter host8001移除；meter5020/PLC5021改loopback唯讀。MCP模擬器寫入被target拒絕。
+BFF新增 simulator_audit volume、單process檔案鎖；無Docker socket、無獨立控制服務；詳PRD-0022 §6三圖。
+
+## PRD-0023：帳號儲存與權限
+
+```mermaid
+flowchart LR
+  BFF -->|bff_auth_reader SELECT| DB[(ems / bff_auth)]
+  Admin[臨時 account-admin container] -->|bff_auth_admin EXECUTE| DB
+  Owner[DB migration owner] -->|migration 018| DB
+```
+BFF image 加入 asyncpg；CLI 沒有 host port。management DSN 不注入 BFF。PostgREST 仍只曝露 api schema，無帳號 view。

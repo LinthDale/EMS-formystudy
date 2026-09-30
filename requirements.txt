@@ -27,3 +27,6 @@ paho-mqtt>=2.0
 
 # Delta native RTU transport; dedicated deploy pins live in services/delta/requirements.txt.
 pyserial==3.5
+
+# BFF database account integration (runtime: services/bff/requirements.txt)
+asyncpg>=0.29,<1.0

@@ -27,7 +27,7 @@ _log = logging.getLogger("bff.config")
 DEFAULT_CONFIG_FILE = "config/bff.toml"
 # secrets must come from env/.env only; ignored if present in the (committed) TOML
 SECRET_FIELDS = frozenset(
-    {"ops_api_key", "ingest_api_key", "auth_users", "oidc_client_secret", "telegram_bot_token", "telegram_chat_id"}
+    {"ops_api_key", "ingest_api_key", "auth_db_dsn", "auth_users", "oidc_client_secret", "telegram_bot_token", "telegram_chat_id", "sim_control_token"}
 )
 
 
@@ -86,7 +86,7 @@ class Settings(BaseSettings):
     upstream_timeout_s: float = 10.0
 
     # --- auth provider (ADR-024): local argon2id fallback (default) | oidc ---
-    auth_mode: str = "local"  # "local" -> argon2id user table; "oidc" -> enterprise IdP
+    auth_mode: str = "local"  # "local" -> PostgreSQL accounts; "oidc" -> enterprise IdP
 
     # --- OIDC (ADR-024 Phase-1; Authorization-Code + PKCE). Only consulted when
     #     auth_mode == "oidc"; issuer/client_id/redirect are fail-fast required then. ---
@@ -127,12 +127,17 @@ class Settings(BaseSettings):
     demo_alarm_cooldown_s: int = Field(default=30, ge=5, le=3600)
     telegram_timeout_s: float = Field(default=8.0, ge=1, le=10)
 
+    sim_control_enabled: bool = False
+    sim_control_token: SecretStr = SecretStr("")
+    sim_control_db: str = "/data/sim-control/audit.sqlite3"
+    sim_control_max_commands: int = Field(default=100000, ge=1, le=1000000)
+
     log_level: str = "INFO"
 
     # --- secrets: env/.env ONLY (SECRET_FIELDS blocks TOML) ---
     ops_api_key: str = ""      # device-service OPS channel (FR-310)
     ingest_api_key: str = ""   # device-service INGEST channel (FR-310)
-    auth_users: str = ""       # "username:<argon2id PHC>:role" csv (local fallback, ADR-024)
+    auth_db_dsn: SecretStr = SecretStr("")  # private bff_auth reader DSN; ADR-035
     oidc_client_secret: str = ""  # OIDC confidential client secret (ADR-024)
 
     @field_validator("auth_mode")
@@ -182,6 +187,8 @@ class Settings(BaseSettings):
 
     @model_validator(mode="after")
     def _coherent(self) -> "Settings":
+        if self.sim_control_enabled and len(self.sim_control_token.get_secret_value()) < 32:
+            raise ValueError("enabled simulator control requires a >=32 character service token")
         if self.session_idle_timeout_s > self.session_max_lifetime_s:
             raise ValueError("session_idle_timeout_s must not exceed session_max_lifetime_s")
         if self.measurements_default_limit > self.measurements_max_limit:

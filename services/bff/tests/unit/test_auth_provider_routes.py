@@ -14,13 +14,15 @@ import httpx
 from fastapi.testclient import TestClient
 
 from bff.main import create_app
+from tests.account_fakes import FakeAccounts
+from tests.conftest import AUTH_USERS
 from bff.oidc import OidcClient
 from tests import oidc_fixtures as mock
 from tests.conftest import ORIGIN, make_settings
 
 
 def _client(recorder, clock, oidc_client=None, **overrides) -> TestClient:
-    app = create_app(
+    app = create_app(account_repository=FakeAccounts(AUTH_USERS),
         settings=make_settings(**overrides),
         upstream_transport=httpx.MockTransport(recorder.handler),
         clock=clock,
@@ -38,7 +40,7 @@ def _oidc_app(recorder, clock):
         idp_http = httpx.AsyncClient(transport=httpx.MockTransport(issuer.handler))
         return await OidcClient.discover(settings, idp_http)
 
-    return create_app(
+    return create_app(account_repository=FakeAccounts(AUTH_USERS),
         settings=settings,
         upstream_transport=httpx.MockTransport(recorder.handler),
         clock=clock,

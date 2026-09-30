@@ -18,6 +18,7 @@ import secrets
 import time
 from dataclasses import dataclass
 from typing import Callable, Protocol
+from uuid import UUID
 
 from .config import Settings
 from .roles import Role
@@ -34,6 +35,9 @@ class Session:
     role: Role
     created_at: float
     last_seen_at: float
+    provider: str = "local"
+    account_id: UUID | None = None
+    auth_version: int | None = None
 
 
 class SessionStore(Protocol):
@@ -88,7 +92,8 @@ class SessionManager:
         self._settings = settings
         self._clock = clock
 
-    async def create(self, username: str, role: Role) -> Session:
+    async def create(self, username: str, role: Role, *, provider: str = "local",
+                     account_id: UUID | None = None, auth_version: int | None = None) -> Session:
         now = self._clock()
         session = Session(
             id=secrets.token_urlsafe(_TOKEN_BYTES),
@@ -96,6 +101,7 @@ class SessionManager:
             role=role,
             created_at=now,
             last_seen_at=now,
+            provider=provider, account_id=account_id, auth_version=auth_version,
         )
         await self._store.put(session)
         return session

@@ -1,22 +1,8 @@
-"""Pluggable authentication provider seam (ADR-024).
+"""Legacy pure provider adapters retained for compatibility tests.
 
-Owner decision (2026-06-15): the BFF stops self-managing passwords. Enterprise
-IdP / OIDC is the strategic, long-term primary; a local argon2id user table is
-the fallback for environments with no IdP yet.
-
-To keep that direction without coupling routes to a concrete mechanism, login
-goes through an ``AuthProvider`` selected by ``BFF_AUTH_MODE``:
-
-- ``local`` (default, implemented now): ``LocalArgon2Provider`` over the
-  argon2id ``BFF_AUTH_USERS`` table (see ``credentials.py``).
-- ``oidc`` (implemented 2026-06-16): ``OidcProvider`` — OIDC authenticates via a
-  browser redirect (Authorization-Code + PKCE) in ``routes/oidc.py`` + ``oidc.py``,
-  NOT a password POST, so its ``authenticate`` raises ``NotImplementedError`` and
-  the password ``/api/auth/login`` route fails closed (503) in OIDC mode. Real-IdP
-  use only needs env config (issuer / client / redirect / role_map).
-
-Everything downstream of authentication (session minting, CSRF, role→channel-key
-mapping) is unchanged: a provider's only job is ``username/password -> Role | None``.
+Runtime local authentication uses accounts.AccountAuth and PostgreSQL (ADR-035).
+These adapters do not read environment variables and are not selected by main.py.
+OIDC routes continue to use the existing redirect/PKCE client.
 """
 from __future__ import annotations
 

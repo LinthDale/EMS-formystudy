@@ -32,11 +32,18 @@ services:
 
   # ===== Dev-only: fake Modbus meter =====
   simulator:
-    build: ./services/simulator
+    build:
+      context: .
+      dockerfile: services/sim-control/Dockerfile
+      target: meter
     container_name: ems-simulator
     ports:
-      - "5020:5020"   # Modbus TCP
-      - "8001:8000"   # FastAPI REST (config, fault injection)
+      - "127.0.0.1:5020:5020"   # read-only Modbus; writes use BFF
+    environment:
+      SIM_CONTROL_TOKEN: ${SIM_CONTROL_TOKEN:-}
+    logging: &sim-logging
+      driver: json-file
+      options: {max-size: "10m", max-file: "3"}
     restart: unless-stopped
 
   # ===== Data plane =====
@@ -114,15 +121,16 @@ services:
   # ===== KC Integration: factory PLC + MQTT sensor + MCP =====
   kc-modbus-sim:
     build:
-      context: ./external/kc_modbus_mcp
-    image: ems-kc-modbus-mcp:local
+      context: .
+      dockerfile: services/sim-control/Dockerfile
+      target: plc
+    image: ems-sim-plc:local
     container_name: ems-kc-modbus-sim
-    command: python simulator.py
     environment:
-      - SIMULATOR_HOST=0.0.0.0
-      - SIMULATOR_PORT=5020
+      SIM_CONTROL_TOKEN: ${SIM_CONTROL_TOKEN:-}
+    logging: *sim-logging
     ports:
-      - "5021:5020"
+      - "127.0.0.1:5021:5020"
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c", "import socket; s=socket.socket(); s.connect(('localhost',5020)); s.close()"]
@@ -132,13 +140,16 @@ services:
 
   kc-mqtt-sim:
     build:
-      context: ./external/kc_iot_gateway
-    image: ems-kc-iot-gateway:local
+      context: .
+      dockerfile: services/sim-control/Dockerfile
+      target: sensor
+    image: ems-sim-sensor:local
     container_name: ems-kc-mqtt-sim
-    command: python simulators/mqtt_simulator.py
     environment:
-      - MQTT_BROKER=mosquitto
-      - MQTT_PORT=1883
+      MQTT_BROKER: mosquitto
+      MQTT_PORT: 1883
+      SIM_CONTROL_TOKEN: ${SIM_CONTROL_TOKEN:-}
+    logging: *sim-logging
     depends_on:
       mosquitto:
         condition: service_started
@@ -258,20 +269,40 @@ services:
     depends_on:
       - device-service
       - query
+      - timescaledb
     environment:
       BFF_CONFIG_FILE: /app/config/bff.toml
+      BFF_SIM_CONTROL_ENABLED: ${BFF_SIM_CONTROL_ENABLED:-false}
+      BFF_SIM_CONTROL_TOKEN: ${SIM_CONTROL_TOKEN:-}
+      BFF_SIM_CONTROL_DB: /data/sim-control/audit.sqlite3
       BFF_TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
       BFF_TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
       BFF_OPS_API_KEY: ${OPS_API_KEY:-}        # reuse device-service channel secrets
       BFF_INGEST_API_KEY: ${INGEST_API_KEY:-}  # AI key deliberately NOT passed (PRD-0005 §1/§6.1)
-      BFF_AUTH_USERS: ${BFF_AUTH_USERS:-}      # "user:sha256hex:role,..." (.env only)
+      BFF_AUTH_DB_DSN: ${BFF_AUTH_DB_DSN:-}  # read-only account role (ADR-035)
       BFF_PUBLIC_ORIGINS: ${BFF_PUBLIC_ORIGINS:-http://localhost:5173,http://localhost:8003,http://localhost:8080,http://127.0.0.1:5173,http://127.0.0.1:8003,http://127.0.0.1:8080}  # localhost + 127.0.0.1 variants for 5173(vite)/8003(BFF)/8080(nginx); ports bind 127.0.0.1 so both hostnames reach the same service — Origin must match either. Real prod sets its domain via env
       BFF_SESSION_COOKIE_SECURE: ${BFF_SESSION_COOKIE_SECURE:-true}  # false only for plain-http local dev
     volumes:
       - ./services/bff/config:/app/config:ro
+      - simulator_audit:/data/sim-control
     ports:
       - "127.0.0.1:8003:8003"  # loopback-only; browser reaches BFF via frontend same-origin proxy
     restart: unless-stopped
+
+  # Host-only CLI; management credential is never passed to the BFF.
+  account-admin:
+    build: ./services/bff
+    image: ems-bff
+    profiles: ["tools"]
+    entrypoint: ["python", "-m", "bff.account_cli"]
+    command: ["--help"]
+    environment:
+      BFF_AUTH_ADMIN_DSN: ${BFF_AUTH_ADMIN_DSN:-}
+    read_only: true
+    cap_drop: ["ALL"]
+    security_opt: ["no-new-privileges:true"]
+    tmpfs: ["/tmp"]
+    stdin_open: true
 
   # frontend dev server (P1); prod serves the static build via nginx + security headers (§9.5)
   frontend:
@@ -298,10 +329,16 @@ services:
 
   # Opt-in Delta V1.35 demo: no host Modbus port; separate durable edge spool.
   delta-simulator:
-    build: ./services/delta
+    build:
+      context: .
+      dockerfile: services/sim-control/Dockerfile
+      target: delta
     container_name: ems-delta-simulator
     profiles: ["delta-demo"]
-    command: ["simulator", "--host", "0.0.0.0", "--port", "5021"]
+    environment:
+      DELTA_SIM_NOISE: "1"
+      SIM_CONTROL_TOKEN: ${SIM_CONTROL_TOKEN:-}
+    logging: *sim-logging
     restart: unless-stopped
     read_only: true
     cap_drop: ["ALL"]
@@ -324,6 +361,7 @@ services:
     security_opt: ["no-new-privileges:true"]
 
 volumes:
+  simulator_audit:
   delta_edge_data:
   timescale_data:
   grafana_data:

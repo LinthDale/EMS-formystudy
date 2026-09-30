@@ -240,3 +240,20 @@ PRD-0021 FR-2113～2116補充：對帳count相同但ID不同、末尾整段遺�
 
 ### ADR-031 RTU 從站模擬風險
 Owner EMS team：PC/Pi兩顆隔離轉接器、同參數、總線單一主站及端點終端需到貨核驗。PTY僅驗證軟體，Windows COM驅動、電氣極性/訊號地、M70A-262/RPI-M30A型號映射及4G仍Open。錯串口/無權限/被占用須失敗退出；模擬上傳另用測試身分，避免混入實機歷史。
+
+### PRD-0022 統一 simulator 控制（2026-09-29）
+Owner EMS；已控制：未認證REST/Modbus寫入旁路（target拒絕）、重放（durable UUID）、併發覆蓋（CAS/單台串行）、未知結果（receipt/instance對帳）、磁碟不可寫（派送前commit/fail closed）、回應無界（16KiB/3秒總期限）。
+剩餘：受信任Docker host/root可繞過應用；設定重啟還原；SQLite單機磁碟/備份風險；未建長期歸檔、達100000 commands需停寫規劃；無前端控制頁/多副本/實機寫入。PRD-0022 §11及操作手冊列明限制。
+
+### PRD-0022 CLI Secure cookie 相容性
+機率 M／衝擊 M；Owner EMS；狀態 Mitigated。原 CLI 在 login200 後因未回送 Secure cookie 而遭401；只為 exact numeric loopback HTTP origin 增加 CookieJar 例外，不降低 BFF Secure 或外部TLS要求。跨host/port、userinfo、expiry/path 測試與真實HTTP往返已通過；同主機惡意服務仍屬受信任本機環境的剩餘風險。
+
+## 2026-09-30：PRD-0023 帳號資料庫
+
+| Risk | Impact | Mitigation | Residual / Owner |
+|---|---|---|---|
+| DB outage | local 登入及 session 驗證不可用 | 5s timeout、503 fail closed、DB復原 | 可用性依賴DB / EMS ops |
+| 並行停用最後OPS | 無維運帳號 | READ COMMITTED +共用transaction lock；拒絕其他隔離級 | DB owner受信任 / EMS ops |
+| 服務憑證外洩 | 帳號hash或管理權限外洩 | reader/admin分離、DSN不進log、.env權限600、備份保護 | 主機/Docker管理人員仍有權限 / EMS ops |
+| 變更後舊session有效 | 離職或舊權限仍能存取 | immutable UUID/version，逐請求驗DB，無快取回退 | 已在執行中的請求不回溯取消 / EMS |
+| 惡意PHC／HTTP重複取消 | 資源耗盡 | 編碼與成本上限、2 workers、completion callback釋放 | 需部署流量限制 / EMS ops |

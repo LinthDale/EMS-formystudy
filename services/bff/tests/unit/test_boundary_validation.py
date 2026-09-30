@@ -9,6 +9,8 @@ from fastapi.testclient import TestClient
 
 from bff.config import Settings
 from bff.main import create_app
+from tests.account_fakes import FakeAccounts
+from tests.conftest import AUTH_USERS
 from bff.roles import Role, channel_key_for
 from tests.conftest import INGEST_KEY, OPS_KEY, login, make_settings
 
@@ -31,7 +33,7 @@ def test_unconfigured_channel_key_resolves_to_none_fail_closed():
 def test_ops_route_returns_503_when_channel_key_not_configured(recorder, clock):
     """Fail closed end-to-end: a valid OPS session must never ride on a missing
     or borrowed key — the route answers 503 and nothing goes upstream."""
-    app = create_app(
+    app = create_app(account_repository=FakeAccounts(AUTH_USERS),
         settings=make_settings(ops_api_key=""),
         upstream_transport=httpx.MockTransport(recorder.handler),
         clock=clock,

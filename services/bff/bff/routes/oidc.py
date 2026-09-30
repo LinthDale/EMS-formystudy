@@ -94,7 +94,7 @@ async def oidc_callback(
     if not username:
         raise HTTPException(status_code=401, detail="oidc login failed")
 
-    session = await request.app.state.session_manager.create(username, role)
+    session = await request.app.state.session_manager.create(username, role, provider="oidc")
     # land the browser back on the SPA; the cookie is the only thing it carries.
     target = settings.oidc_post_login_redirect or "/"
     response = RedirectResponse(target, status_code=302)

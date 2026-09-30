@@ -31,7 +31,7 @@ PowerShell 7 執行（UNC 檔案的執行政策可能要求本次 process 使用
 
 發布程序只綁 `100.114.126.85` 與 `127.0.0.1`，只接受 DGX-01 `100.64.84.58` / 本機 loopback 的連線。沒有增加 Windows 防火牆規則，也沒有將資料庫、MQTT、設備管理端點加入公開代理。
 
-`server-config.json` 指向 `releases/20260929-logo-size-v1`。公開靜態檔案與 API 均保留 `/ems/` 前綴。API 僅允許 session、登入/登出、設備清單/單筆、量測/歷史/紀錄讀取，以及精確 GET/POST /api/alarms/demo，其餘回 404。寫入設備的 API 不在代理清單中。
+`server-config.json` 指向 `releases/20260929-sampling-lines-v1`。公開靜態檔案與 API 均保留 `/ems/` 前綴。API 僅允許 session、登入/登出、設備清單/單筆、量測/歷史/紀錄讀取，以及精確 GET/POST /api/alarms/demo，其餘回 404。寫入設備的 API 不在代理清單中。
 
 - 每個來源 IP 每分鐘 API 最多 120 次、登入最多 5 次。
 - 同時最多 4 個 API 請求，BFF 代理逾時 15 秒。
@@ -140,3 +140,10 @@ v3 為此次 RWD 修改前版本；v4 為未上線中間建置，v5 保留首次
 已發布 `20260929-logo-size-v1`。相較前版 `20260929-delta-monitor-v1`，38 個發布檔案只有 `brand-header.css` 改動：共用 Logo 寬度由 4.4em 改為 3.5em，縮小約 20%，維持原始向量比例。先前即時監控更新完整保留。
 
 七頁在 1920、1024、768、390、320px 的 Header 檢查通過；桌面與手機已檢視。正式 URL Main / Monitor 在 1920px 的 Logo 寬度為 84px、390px 為 56px，沒有橫向溢出；全部 38 個公開檔案 SHA256 與新 manifest 一致。後端與帳號未變更，隔離檢查程序已停止。回復設定保留於 `server-config.before-20260929-logo-size.json`（指向 delta-monitor-v1）。
+## 2026-09-29：統一稀疏採樣折線
+
+已發布 `20260929-sampling-lines-v1`，前版 `20260929-logo-size-v1` 保留。只變更 live/charts.mjs、history-model.mjs、Monitor.html、Monitor.history.html。Delta 正常約 10–14 秒採樣不再被 2 秒空桶拆成散點；所有設備共用正常間距連線規則，較長缺口、範圍首尾仍保留 null，沒有新增或補零樣本。詳 PRD-0018 附錄與 ADR-032；估計間距不代表設備在線判定。
+
+驗證：8 個資料模型測試通過（先 RED 後 GREEN）；`qa/sampling-lines.cjs` 在隔離發布埠與正式 URL 通過四類設備、精確比對全部圖形讀值與 API、PLC 階梯狀態及 390px RWD，沒有 JavaScript 例外。正式逆變器最近 15m 四圖各 81 點／80 段線，1h 各 324 點／323 段；桌面與手機截圖已檢視。38 個正式檔案 SHA256 與 manifest 一致。程式人工覆核確認只省略繪圖用短空桶，原始桶、tooltip、卡片、表格與 CSV 資料不變。
+
+回復設定：`server-config.before-20260929-sampling-lines.json`。僅重啟靜態發布程序，BFF、採樣服務及認證配置未變。QA 截圖與結果在 `output/ems-public-local/qa/sampling-lines-*`，隔離 4181 程序驗證後停止。

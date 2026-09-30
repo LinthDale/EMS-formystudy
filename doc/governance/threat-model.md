@@ -238,3 +238,24 @@ PRD-0021對帳補充：reconcile回覆不能刪queue；page/cursor須限自有ga
 
 ### ADR-031 RTU simulator 增補
 僅operator指定的本機COMn或/dev路徑，拒絕網路serial URL；RTU不啟動TCP listener。single=False與單站context、ignore_missing_slaves、broadcast disabled防止回應其他站號；FC04白名單維持唯讀。串口啟動失敗不以ready假成功。實體RS485無認證能力，只在隔離實驗總線使用模擬器；TLS/接收端身分驗證的既有待辦不因本增量而完成。
+
+### PRD-0022 Simulator 管理面（2026-09-29）
+Spoofing/Elevation：OPS session、Origin、service token、固定ID/目的地，actor不接受body；真機/Pi不在registry。
+Tampering/Repudiation：intent先commit、append-only events與防update/delete trigger、UUID/hash/CAS/receipt對帳；非密碼學防竄改。
+Information disclosure：錯誤固定碼、credentials不進audit、capabilities不暴露host；OPS才可查actor/reason。
+DoS：4096-byte body、16KiB串流response、3秒hop總期限、单台busy立即拒絕、100000 commands上限、4096 target receipts上限、缺token不開控制。
+舊REST與FC05/06/15/16/22/23在target封鎖；profile read僅為提示，真正防線在Modbus接收層。
+信任假設：同一Docker host的四個固定container、無負載平衡；service credential/host管理員受信任。認證內部HTTP不是現場OT遠控，也不替代4G/TLS field gate。
+
+### PRD-0022 CLI loopback cookie 修正
+僅 CLI 明確選定的數字 loopback HTTP origin（127.0.0.1／::1、相同有效port）可回送其 Secure cookie；不更改 Secure flag，仍驗 domain/path/expiry。localhost/DNS名稱、userinfo、異port、外部HTTP均不能取得例外；無環境proxy/redirect與cookie持久化。BFF仍以原Secure session與OPS/Origin驗證。受信任本機服務被冒名的風險沿用原本local HTTP開發邊界；外部連線須TLS。
+
+## PRD-0023：local 帳號信任邊界
+
+- 帳號與audit只存在 private bff_auth；PostgREST web_anon/PUBLIC無USAGE。
+- Runtime reader不可寫；account-admin只執行固定SECURITY DEFINER函數，search_path固定pg_catalog，表全限定。
+- DB actor為session_user；共享管理DSN不是個人EMS登入身分。受控DB owner可復原，並非抵抗DB owner的防竄改存證。
+- 密碼輸入getpass、Argon2id；輸出/稽核無hash。legacy明確一次性匯入，無env auth fallback。
+- 角色、密碼及enable/disable更新version；每請求驗UUID/version/role/enabled；DB outage 503，OIDC provider分流。
+- 共同transaction advisory lock + READ COMMITTED、atomic audit、UUID重送抑制、拒絕NULL/非法PHC匯入。
+- 審查發現的RR舊快照、PHC解碼、重複取消資源上限已以回歸測試覆蓋；詳account-management-verification.md。

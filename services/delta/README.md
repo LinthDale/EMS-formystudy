@@ -136,3 +136,19 @@ python -m delta_device simulator --transport rtu --serial-port /dev/serial/by-id
 此版本仍是 V1.35 唯讀子集；兩款指定 Delta 型號需以其韌體/暫存器文件及真機讀值校驗。Linux PTY 的協定測試已通過，Windows COM 驅動、實體RS485接線與4G均待到貨驗收。現有 MQTT PUBACK 不是 DB committed ACK；新模式不包含 ADR-030 的漏送對帳/去重系統。
 
 詳 [ADR-031](../../doc/adr/ADR-031-delta-rtu-simulator.md)；測試證據見 [validation.md](validation.md)。
+
+
+## 2026-09-29 Delta demo 一秒採樣與量測誤差（ADR-034）
+- `delta-sim-001` 本機 demo 的 `poll_interval=1`，採集用 monotonic 截止時間補償讀取耗時；逾時略過節拍，不補造或密集追趕。
+- `DELTA_SIM_NOISE=1` 開啟每秒一致的三相量測誤差：相電壓 σ=1.5V（限 ±4.5V）、相電流 σ=0.15A（限 ±0.45A），功率依三相 V×I 相加。這些為模擬參數，非原廠精度。
+- night/alarm 電流與發電功率為零；電量保持基準發電曲線積分，無隨機倒退，情境切換先結算。模擬器重啟仍會回到既有電量基準，新舊資料保留。
+- field 範本/預設仍為 10 秒；REST/MQTT/schema、OPS 登入及公開前端版本未變。API 可每秒入庫，畫面刷新/圖表彙整週期獨立。
+- 1 秒採樣的 10000 筆 outbox 約 2.8 小時，10 秒約 27.8 小時；PUBACK 非 DB ACK，沒有新增端到端去重/零遺失保證。
+- 本次只部署兩個 Delta 服務的既有 standalone runtime，使用 `output/delta-one-second-20260929/compose.yaml`（project=ems，外部既有 network/volume）。主 Compose 正在同步開發 ADR-033 控制介面，僅補上 noise env，沒有將該批尚待驗收的服務一併上線。後續控制介面發布須保留此 env 與 demo 採樣設定。
+- 回復：先確認沒有後續部署，再使用同目錄 `demo.before.json` 恢復 demo 設定、`docker compose -p ems -f output/delta-one-second-20260929/compose.before.yaml up -d --no-deps delta-simulator delta-edge`；保留原 queue volume 和 DB 歷史。回復舊 image 會回復原 standalone 程式；不要在 ADR-033 後續上線後盲目套用。
+
+
+### 一秒 demo 驗證補充（2026-09-29）
+新邏輯以 7 項 RED 測試重現缺少 noise/固定節拍能力；GREEN 後完整 Delta 測試共 72 passed、總 line coverage 95.19%，涵蓋 TCP/RTU、協定倍率、情境切換、queue/publisher 及新增噪聲/節拍。
+驗收期間另一批 ADR-033 控制介面已上線，本次誤差模型已補入該運行映像，保留控制與認證。`runtime-current.json` 及 simulator.py / edge.py 的運行檔案雜湊已比對一致。
+注意：主機 UTC 約每隔一段時間跳快 3.586 秒，容器 monotonic 仍每次前進 1.000 秒；sim-001 與 Delta 都留下同時段缺口。因此驗收列出所有共用缺口、檢查中位間隔為 1 秒，並拒絕 Delta 獨有的缺口；不宣稱 UTC 每秒零缺值，也不補造資料。詳 output/delta-one-second-20260929/clock-probe-result.json。

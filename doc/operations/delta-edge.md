@@ -35,3 +35,27 @@ PUBACK非DB ACK，現有資料庫不去重；這一版不能宣稱現場producti
 從 services/delta 執行 `python -m delta_device simulator --transport rtu --serial-port COM5 --baudrate 19200 --unit-id 1`；PC從站回應Pi唯一主站。9600/19200/38400、8N1、站號1–247，唯讀FC04。Windows與Linux原生安裝、兩顆轉接器接線、Pi --once、後續4G分段驗收見 [DeltaREADME](../../services/delta/README.md#rtu-從站電腦模擬-delta樹莓派採集)。
 
 64項軟體測試通過、coverage95.10%；兩PTY串接正式Poller與RTU CLI成功。實體RS485、Windows COM驅動及4G仍待硬體到貨；不表示已驗收兩款Delta真機或端到端漏送對帳。
+
+
+## 2026-09-29 Delta demo 一秒採樣與量測誤差（ADR-034）
+- `delta-sim-001` 本機 demo 的 `poll_interval=1`，採集用 monotonic 截止時間補償讀取耗時；逾時略過節拍，不補造或密集追趕。
+- `DELTA_SIM_NOISE=1` 開啟每秒一致的三相量測誤差：相電壓 σ=1.5V（限 ±4.5V）、相電流 σ=0.15A（限 ±0.45A），功率依三相 V×I 相加。這些為模擬參數，非原廠精度。
+- night/alarm 電流與發電功率為零；電量保持基準發電曲線積分，無隨機倒退，情境切換先結算。模擬器重啟仍會回到既有電量基準，新舊資料保留。
+- field 範本/預設仍為 10 秒；REST/MQTT/schema、OPS 登入及公開前端版本未變。API 可每秒入庫，畫面刷新/圖表彙整週期獨立。
+- 1 秒採樣的 10000 筆 outbox 約 2.8 小時，10 秒約 27.8 小時；PUBACK 非 DB ACK，沒有新增端到端去重/零遺失保證。
+- 本次只部署兩個 Delta 服務的既有 standalone runtime，使用 `output/delta-one-second-20260929/compose.yaml`（project=ems，外部既有 network/volume）。主 Compose 正在同步開發 ADR-033 控制介面，僅補上 noise env，沒有將該批尚待驗收的服務一併上線。後續控制介面發布須保留此 env 與 demo 採樣設定。
+- 回復：先確認沒有後續部署，再使用同目錄 `demo.before.json` 恢復 demo 設定、`docker compose -p ems -f output/delta-one-second-20260929/compose.before.yaml up -d --no-deps delta-simulator delta-edge`；保留原 queue volume 和 DB 歷史。回復舊 image 會回復原 standalone 程式；不要在 ADR-033 後續上線後盲目套用。
+
+
+### ADR-034 最終部署補充：保留同期控制介面
+驗收期間 ADR-033 的新控制 wrapper 已由另一批更新部署；本次最終以該已上線映像為基底，僅 COPY 已驗證的 delta_device，保留控制介面/認證設定。新映像 `ems-delta-noise-control:20260929` 同時標記為既有 `ems-delta-simulator`；新舊基底與 source hash 證據在 `output/delta-one-second-20260929/`。edge 維持本次一秒排程版本。先前 standalone compose 與 compose.before 只記錄過渡階段，**目前不得直接使用它回復已上線的控制 wrapper**；需回復此補丁時用 `control-runtime-before.json` 的基底映像並保留現有控制 Compose，先核對是否有後續改動。
+
+環境限制：容器內 45 次一秒計時觀察到兩次 UTC 差值約 4.586 秒、monotonic 差值仍為 1.000 秒；主機 UTC 跳快約 3.586 秒。同一時段 sim-001 與 Delta 均有時間缺口，非 Delta 獨有停止採樣。保留真實時間與缺口，不偽造補值。未調整 WSL/主機時鐘或 NTP。最終 API 驗收必須區分正常一秒節拍與共用時間跳動，不宣稱連續 UTC 每秒零缺值。
+
+
+### 最終正式 API / 畫面驗收
+- 區間：2026-09-29T08:42:47.725Z 至 2026-09-29T08:44:47.725Z（UTC），Delta 110 筆，原 sim-001 111 筆。
+- Delta 間隔：最小 1 秒、中位數 1 秒、最大 4.587 秒。3 個非一秒缺口與既有電表時間缺口吻合；45 秒探針確認 UTC 跳動，monotonic 最大 1.000147 秒。
+- 電壓 226.0–234.1 V，50 種不同讀值；電量於同一次運行不倒退。
+- 正式 Monitor 的 2 秒彙整有 56 個新電壓桶出現 min/max 差異；四圖渲染、390px 無橫向溢出、JS errors=0。桌面截圖已檢視，圖表反映後端量測與同期情境切換。
+- 證據：output/delta-one-second-20260929/live-result.json、live-chart-desktop.png、live-chart-mobile.png、clock-probe-result.json。沒有修改既有歷史或用前端補出一秒樣本。

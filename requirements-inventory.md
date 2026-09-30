@@ -230,3 +230,11 @@ Prod 服務：`frontend/Dockerfile`（多階段 node build → `nginx:1.27-alpin
 
 ## Delta edge / simulator（PRD-0020）
 Python3.9+（本機Docker3.11）；獨立services/delta/requirements.txt固定pymodbus3.6.9、paho-mqtt2.1.0、pyserial3.5。沿ADR-002版本，未升級其他services或external submodules。測試獨立Dockerfile.test使用pytest8與pytest-cov；Pi原生venv+systemd，SIM7600 OS網路驅動/APN另行驗收。UI驗證使用已有Playwright及Edge，非edge runtime依賴。
+
+## Database local accounts (PRD-0023)
+
+- PostgreSQL private schema bff_auth, migration 018_bff_accounts.sql.
+- BFF adds asyncpg>=0.29,<1.0, already used by device-service.
+- bff_auth_reader runtime credential and bff_auth_admin host CLI credential; no account records in environment variables.
+- account-admin Compose tools service uses the BFF image with no public port.
+- Procedure: [account-management.md](doc/operations/account-management.md).

@@ -8,6 +8,8 @@ from pydantic import ValidationError
 
 from bff.config import Settings
 from bff.main import create_app
+from bff.credentials import parse_auth_users
+from tests.account_fakes import FakeAccounts
 from tests.conftest import make_settings, phc
 
 
@@ -25,20 +27,20 @@ def test_non_positive_lifetimes_rejected():
 
 def test_malformed_auth_users_fails_fast_at_startup():
     with pytest.raises(ValueError):
-        create_app(settings=make_settings(auth_users="this-is-not-a-user-record"))
+        parse_auth_users("this-is-not-a-user-record")
 
 
 def test_unknown_role_in_auth_users_fails_fast():
     bad = f"root:{phc('pw')}:superadmin"
     with pytest.raises(ValueError):
-        create_app(settings=make_settings(auth_users=bad))
+        parse_auth_users(bad)
 
 
 def test_bad_password_hash_in_auth_users_fails_fast():
     # a SHA-256-style hex digest is no longer an accepted hash (argon2id PHC only)
     bad = "ops_user:" + ("a" * 64) + ":ops"
     with pytest.raises(ValueError):
-        create_app(settings=make_settings(auth_users=bad))
+        parse_auth_users(bad)
 
 
 def test_empty_auth_users_means_no_login_possible(recorder, clock):
@@ -46,7 +48,8 @@ def test_empty_auth_users_means_no_login_possible(recorder, clock):
     from fastapi.testclient import TestClient
 
     app = create_app(
-        settings=make_settings(auth_users=""),
+        settings=make_settings(),
+        account_repository=FakeAccounts(),
         upstream_transport=httpx.MockTransport(recorder.handler),
         clock=clock,
     )

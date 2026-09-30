@@ -1,0 +1,22 @@
+# Root context is only for simulator wrappers; never send secrets or preview artifacts.
+**
+!services/
+!services/sim-control/
+!services/sim-control/**
+!services/bff/
+!services/bff/bff/
+!services/bff/bff/simulator_control/
+!services/bff/bff/simulator_control/contracts.py
+!services/bff/bff/simulator_control/body_limit.py
+!services/simulator/
+!services/simulator/src/
+!services/simulator/src/main.py
+!services/delta/
+!services/delta/delta_device/
+!services/delta/delta_device/**
+!external/
+!external/kc_modbus_mcp/
+!external/kc_modbus_mcp/simulator.py
+**/__pycache__/
+**/.pytest_cache/
+**/.coverage
