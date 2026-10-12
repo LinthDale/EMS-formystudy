@@ -2,8 +2,13 @@ import http from 'node:http';
 import {readFile,realpath,stat} from 'node:fs/promises';
 import {resolve,dirname,extname,sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
+const stamp=()=>{const d=new Date(),o=-d.getTimezoneOffset(),a=Math.abs(o);return new Date(d.getTime()+o*6e4).toISOString().slice(0,23)+(o<0?'-':'+')+String(a/60|0).padStart(2,'0')+':'+String(a%60).padStart(2,'0');};
+const log=(level,text)=>{const t=stamp();(level==='ERROR'?process.stderr:process.stdout).write(String(text).split(/\r?\n/).map(line=>`${t} ${level} ${line}`).join('\n')+'\n');};
+process.on('uncaughtException',(e,origin)=>{log('ERROR',`fatal ${origin}: ${e?.stack||e}`);process.exit(1);});
+process.on('exit',code=>log(code?'ERROR':'INFO',`exit code ${code}`));
 const base=dirname(fileURLToPath(import.meta.url));
 const config=JSON.parse(await readFile(resolve(base,process.argv[2]||'server-config.json'),'utf8'));
+log('INFO',`start pid ${process.pid} node ${process.version} release ${config.release} listen 127.0.0.1,${config.tailscaleAddress} port ${config.port}`);
 const root=await realpath(resolve(base,config.release,'public'));
 const origins=new Set(['https://synaiq-ai.com',`http://127.0.0.1:${config.port}`]);
 const hosts=new Set(['synaiq-ai.com',`127.0.0.1:${config.port}`]);
@@ -61,9 +66,21 @@ async function handle(req,res){
   if(req.method==='HEAD')res.end();else res.end(await readFile(file));
  }catch{answer(res,404,'not found');}
 }
+const onRequest=(req,res)=>handle(req,res).catch(()=>{if(!res.headersSent)answer(res,500,'request failed');else res.destroy();});
+// A listener that fails before it was ever up is fatal (start-public.ps1 reports it); after that it is closed and re-bound every 5s.
 for(const address of ['127.0.0.1',config.tailscaleAddress]){
- const server=http.createServer((req,res)=>handle(req,res).catch(()=>{if(!res.headersSent)answer(res,500,'request failed');else res.destroy();}));
- server.headersTimeout=10000;server.requestTimeout=20000;
- server.on('error',e=>{console.error(e.message);process.exit(1);});
- server.listen(config.port,address,()=>console.log(`EMS publication listener ${address}:${config.port}/ems/`));
+ const name=`${address}:${config.port}`;let ready=false,down=0,tries=0,last='';
+ const open=()=>{
+  const server=http.createServer(onRequest);let failed=false;
+  server.headersTimeout=10000;server.requestTimeout=20000;
+  server.once('listening',()=>{log('INFO',down?`listener ${name} recovered after ${Math.round((Date.now()-down)/1000)}s (${tries} retries)`:`EMS publication listener ${name}/ems/`);ready=true;down=tries=0;last='';});
+  server.on('error',e=>{if(failed)return;failed=true;const why=e.code||e.message;
+   if(!ready){log('ERROR',`listener ${name} failed at startup: ${e.message}`);process.exit(1);}
+   server.close();
+   if(!down){down=Date.now();log('ERROR',`listener ${name} lost: ${e.message}; closed, retrying every 5s`);}
+   else if(why!==last||tries%120===0)log('WARN',`listener ${name} still down, retry ${tries}: ${e.message}`);
+   last=why;tries++;setTimeout(open,5000);});
+  server.listen(config.port,address);
+ };
+ open();
 }
