@@ -1,6 +1,7 @@
 # ADR-028：BFF 發送固定 Telegram 示範警報
 ## Status
 Accepted — 2026-09-23，依使用者要求增加警報中心 DEMO 按鈕。
+部分取代 — 2026-10-13：「固定單一接收對象」由 [ADR-036](ADR-036-telegram-visitor-binding-long-polling.md) 改為「有效展位訪客綁定優先，否則固定對象」；其餘決策維持。
 ## Context
 既有 Telegram contact point 已設定；產品警報頁目前無通知操作。讓前端接 Bot API 會暴露密鑰；Grafana 管理 API 權限超出這個按鈕所需。
 ## Decision

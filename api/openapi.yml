@@ -15,7 +15,7 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 2.1.0
+  version: 2.2.0
   contact:
     name: EMS Development Team
   license:
@@ -54,18 +54,22 @@ paths:
     servers: [{url: 'http://localhost:8003'}]
     get:
       tags: [BFF Demo Alarms]
-      summary: Telegram 示範通知設定狀態與最近十筆成功紀錄
+      summary: Telegram 示範通知設定狀態、最近十筆成功紀錄與展位 QR 綁定狀態
       operationId: getDemoAlarmStatus
-      description: OPS session required. No query parameters. No external send. In-memory records clear on BFF restart.
+      description: |
+        OPS session required. No query parameters. No external send. In-memory recent records
+        clear on BFF restart. `binding` (PRD-0024) is null when booth binding is disabled; the
+        deep link carries a rotating start code (new every 60 s, each valid 300 s) and is only
+        present while the Telegram poller is ready. The UI polls this endpoint (~4 s).
       security: [{bffSession: []}]
       responses:
         '200':
-          description: Notification readiness and recent successful acknowledgements
+          description: Notification readiness, recent acknowledgements and booth binding state
           content:
             application/json:
               schema:
                 type: object
-                required: [configured, cooldown_seconds, recent]
+                required: [configured, cooldown_seconds, recent, binding]
                 properties:
                   configured: {type: boolean}
                   cooldown_seconds: {type: integer, minimum: 0}
@@ -73,16 +77,24 @@ paths:
                     type: array
                     maxItems: 10
                     items: {$ref: '#/components/schemas/DemoAlarmDelivery'}
+                  binding:
+                    oneOf:
+                      - {$ref: '#/components/schemas/DemoAlarmBinding'}
+                      - {type: 'null'}
         '401': {description: Session absent or expired}
         '403': {description: OPS role required}
         '422': {description: Query parameters are not supported}
     post:
       tags: [BFF Demo Alarms]
-      summary: 發送固定對象與固定 DEMO 文字的 Telegram 示範警報
+      summary: 發送 Telegram 示範警報（有效展位綁定訪客優先，否則固定對象）
       operationId: triggerDemoAlarm
       description: |
         OPS session and allowlisted Origin required. No query parameters.
-        Server-side fixed bot, recipient and DEMO message; no device control.
+        Recipient is chosen server-side (PRD-0024): a valid booth binding receives only the fixed
+        3-line visitor text with today's visitor number (Asia/Taipei); otherwise the fixed chat
+        receives the original DEMO message (not counted). The request cannot name a recipient or text.
+        Numbers are kept for acknowledged or uncertain (timeout) sends, released on definite failure.
+        Server-side fixed bot and message templates; no device control.
         Global 30-second default cooldown. Same UUID is deduplicated for 10 minutes
         including failures (64-entry cap); no automatic retry. Single-process,
         in-memory state resets on restart. Success means Telegram accepted, not read.
@@ -1085,12 +1097,47 @@ components:
             additionalProperties: true
     DemoAlarmDelivery:
       type: object
-      required: [status, event_id, sent_at, channel]
+      required: [status, event_id, sent_at, channel, target, visitor_number]
       properties:
         status: {type: string, enum: [sent]}
         event_id: {type: string, format: uuid}
         sent_at: {type: string, format: date-time}
         channel: {type: string, enum: [telegram]}
+        target:
+          type: string
+          enum: [visitor, default]
+          description: visitor = current booth binding (PRD-0024); default = fixed chat (PRD-0019)
+        visitor_number:
+          type: [integer, 'null']
+          minimum: 1
+          description: Today's distinct-visitor number (Asia/Taipei day); null for default sends
+    DemoAlarmBinding:
+      type: object
+      description: PRD-0024 booth binding block. Contains no chat id, username or token.
+      required: [state, deep_link, current, today]
+      properties:
+        state:
+          type: string
+          enum: [ready, starting, webhook_active, conflict, unauthorized, unavailable]
+          description: Telegram getUpdates poller / state-store health
+        deep_link:
+          type: [string, 'null']
+          format: uri
+          description: https://t.me/<bot>?start=<code>; only when state=ready
+        current:
+          oneOf:
+            - type: object
+              required: [display, expires_in_seconds]
+              properties:
+                display: {type: string, description: 'Masked, e.g. @da***; first-name initial + *** or "Telegram 訪客" without username'}
+                expires_in_seconds: {type: integer, minimum: 1, maximum: 3600}
+            - {type: 'null'}
+        today:
+          type: object
+          required: [date, visitor_count]
+          properties:
+            date: {type: string, format: date, description: Asia/Taipei calendar day}
+            visitor_count: {type: integer, minimum: 0}
     DeviceHistory:
       type: object
       required: [device_id, since, until, bucket_seconds, series]

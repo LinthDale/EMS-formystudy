@@ -127,6 +127,14 @@ class Settings(BaseSettings):
     demo_alarm_cooldown_s: int = Field(default=30, ge=5, le=3600)
     telegram_timeout_s: float = Field(default=8.0, ge=1, le=10)
 
+    # Booth QR binding (PRD-0024 / ADR-036). Off unless config/bff.toml or env enables it.
+    demo_bind_enabled: bool = False
+    demo_bind_db: str = "/data/demo-alarm/state.sqlite3"
+    demo_bind_ttl_s: int = Field(default=600, ge=60, le=3600)
+    demo_bind_code_rotate_s: int = Field(default=60, ge=15, le=600)
+    demo_bind_code_ttl_s: int = Field(default=300, ge=15, le=900)
+    telegram_poll_timeout_s: int = Field(default=25, ge=1, le=50)
+
     sim_control_enabled: bool = False
     sim_control_token: SecretStr = SecretStr("")
     sim_control_db: str = "/data/sim-control/audit.sqlite3"
@@ -189,6 +197,8 @@ class Settings(BaseSettings):
     def _coherent(self) -> "Settings":
         if self.sim_control_enabled and len(self.sim_control_token.get_secret_value()) < 32:
             raise ValueError("enabled simulator control requires a >=32 character service token")
+        if self.demo_bind_code_ttl_s < self.demo_bind_code_rotate_s:
+            raise ValueError("demo_bind_code_ttl_s must not be shorter than demo_bind_code_rotate_s")
         if self.session_idle_timeout_s > self.session_max_lifetime_s:
             raise ValueError("session_idle_timeout_s must not exceed session_max_lifetime_s")
         if self.measurements_default_limit > self.measurements_max_limit:

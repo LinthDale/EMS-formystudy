@@ -54,7 +54,7 @@
 
 - [ADR-027 有界歷史查詢](ADR-027-monitor-history.md)：延伸 ADR-025，唯讀 history / records。
 
-- [ADR-028 Telegram 示範通知](ADR-028-telegram-demo-alarm.md)：BFF 直接呼叫固定 Telegram sendMessage，與 Grafana 自動告警分開。
+- [ADR-028 Telegram 示範通知](ADR-028-telegram-demo-alarm.md)：BFF 直接呼叫固定 Telegram sendMessage，與 Grafana 自動告警分開（固定單一接收者部分由 ADR-036 取代）。
 
 - [ADR-029 Delta edge telemetry](ADR-029-delta-edge-telemetry.md)：Accepted，本機獨立Python TCP/RTU採集、動態倍率、SQLite→MQTT，沿用四欄electricity投影。
 
@@ -69,3 +69,5 @@
 - [ADR-033 Simulator 統一控制與持久操作紀錄](ADR-033-simulator-control-audit.md)：BFF 固定 adapters + 內部認證 wrapper、SQLite intent/events、停用舊模擬器寫入旁路。
 
 - [ADR-035：本機帳號以 PostgreSQL 為唯一來源](ADR-035-database-local-accounts.md) — 取代 ADR-024 local env table；OIDC 保留。
+
+- [ADR-036：Telegram 訪客 QR 綁定採 BFF 長輪詢與單一綁定](ADR-036-telegram-visitor-binding-long-polling.md) — getUpdates（無 webhook）、輪替 start code、SQLite 單一綁定與每日 keyed 計數；部分取代 ADR-028。

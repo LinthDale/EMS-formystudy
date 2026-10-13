@@ -97,6 +97,18 @@
 | Telegram 呼叫上限 | BFF_TELEGRAM_TIMEOUT_S | 8 秒；1–10 | 同上 |
 | 去重 TTL / cache / 最近成功紀錄 | 不提供 env | 600 秒 / 64 筆 / 10 筆 | ADR-028 鎖定；記憶體單程序 |
 
+### 展位 QR 綁定訪客（PRD-0024 / ADR-036）
+| 參數 | env | 預設 / 限制 | 儲存 / 備註 |
+|---|---|---|---|
+| 功能開關 | BFF_DEMO_BIND_ENABLED | code false；bff.toml true | `services/bff/config/bff.toml` [demo_binding]；false + 重啟 = PRD-0019 行為 |
+| 狀態檔 | BFF_DEMO_BIND_DB | /data/demo-alarm/state.sqlite3 | volume `demo_alarm_state`；單程序鎖 |
+| 綁定有效期 | BFF_DEMO_BIND_TTL_S | 600 秒；60–3600 | 自綁定起算；Bot 確認文字的分鐘數跟隨此值 |
+| start code 輪替 | BFF_DEMO_BIND_CODE_ROTATE_S | 60 秒；15–600 | 耦合：必須 ≤ code 有效期（啟動時驗證） |
+| start code 有效期 | BFF_DEMO_BIND_CODE_TTL_S | 300 秒；15–900 | 拍照 QR 可用的最長時間 |
+| long-poll 等待 | BFF_TELEGRAM_POLL_TIMEOUT_S | 25 秒；1–50 | HTTP 逾時 = 此值 + 10 |
+| 訊息時效 / 每使用者頻率 / 全域回覆 / batch | 不提供 env | 120 秒 / 3 秒 1 指令 / 20 則每分 / 100 | **spec-locked**（PRD-0024 §5）；放寬須走 ADR |
+| 錯誤退避 / 409 重試 / webhook 重查 / 空批次間隔 | 不提供 env | 1→60 秒 / 30 秒 / 300 秒 / 1 秒 | **spec-locked**（ADR-036） |
+
 ## Delta edge（PRD-0020）
 |參數|預設|範圍／限制|位置|
 |---|---|---|---|

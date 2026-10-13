@@ -1,6 +1,7 @@
 # PRD-0019：警報中心 Telegram 示範通知
 
 狀態：Implemented（2026-09-23；使用者授權，已部署驗證）；決策：[ADR-028](../adr/ADR-028-telegram-demo-alarm.md)。遵循 PRD 架構 Guideline §2/3/4/10。補充 PRD-0005；與 PRD-0004 自動 Grafana 告警並存。
+**2026-10-13 修訂**：「不提供任意接收者」Non-goal 由 [PRD-0024](PRD-0024-booth-telegram-qr-binding.md) 修訂——訪客可經展位 QR 自助綁定成為唯一示範收件者；無有效綁定時本 PRD 的固定對象與原訊息完全不變。自由文字與請求指定收件者仍不支援。
 
 ## 1. Overview & Context
 警報中心目前為示意頁，使用者需要可點擊的「觸發警報」按鈕，透過既有 Telegram Bot 向已設定的私人對象送出示範訊息。
@@ -74,3 +75,5 @@ Unit：格式、去重、冷卻、併發、錯誤、timeout、log遮蔽。ASGI i
 Telegram sendMessage 官方契約：https://core.telegram.org/bots/api#sendmessage。使用既有 Synaiq_ems_bot 與既有私人接收對象；不另建 Bot。架構/安全以人工程式檢查與測試執行，本次 harness 禁止自主新增審查代理，未宣稱 agent 審查通過。
 
 驗收：BFF 196 tests、新邏輯94% coverage，mock UI/RWD與正式站單次 Telegram ACK 均通過；15:03:14 +08:00 事件 78d4e2b8-fe13-4bf5-b2fa-0c77e6e3eb2e。回歸即時監控/歷史與導覽通過。詳細發佈/回復證據見 [本機公開部署紀錄](../operations/ems-public-local-20260923.md)。
+
+變更紀錄 2026-10-13（PRD-0024／ADR-036）：FR-1902「僅送設定的接收者」改為「有效展位訪客綁定時只送該訪客（固定三行文字），否則送設定的接收者（本 PRD 原文字）」；GET/POST 契約只增加附加欄位，FR-1903～1905 不變。

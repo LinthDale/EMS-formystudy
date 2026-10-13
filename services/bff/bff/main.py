@@ -26,6 +26,7 @@ from .config import Settings
 from .oidc import OidcClient
 from .oidc_state import InMemoryOidcStateStore, OidcStateManager
 from .demo_alarms import DemoAlarms, protect_telegram_logs
+from .demo_binding import DemoBinding, TelegramPoller
 from .routes import alarms, auth, device_measurements, devices, health, history, measurements, oidc
 from .routes import simulators
 from .simulator_control.audit import Audit
@@ -33,6 +34,25 @@ from .simulator_control.manager import Controller
 from .simulator_control.body_limit import BodyLimitMiddleware
 from .security import OriginCSRFMiddleware
 from .sessions import InMemorySessionStore, SessionManager, run_sweep_loop
+
+
+def _start_demo_binding(binding: DemoBinding | None, settings: Settings, resources: AsyncExitStack,
+                        transport: httpx.AsyncBaseTransport | None,
+                        autostart: bool) -> asyncio.Task | None:
+    """PRD-0024: open the booth state and start the getUpdates poller (single consumer).
+    A store that cannot be opened leaves the feature 'unavailable'; fixed-chat demo still works."""
+    if binding is None:
+        return None
+    binding.open()
+    resources.callback(binding.close)
+    if not (autostart and binding.pollable):
+        return None
+    poll_http = httpx.AsyncClient(
+        timeout=settings.telegram_poll_timeout_s + 10, transport=transport,
+        trust_env=False, follow_redirects=False,
+    )
+    resources.push_async_callback(poll_http.aclose)
+    return asyncio.create_task(TelegramPoller(settings, binding, poll_http).run())
 
 
 def create_app(
@@ -44,6 +64,7 @@ def create_app(
     oidc_client: "OidcClient | None" = None,
     simulator_transport: httpx.AsyncBaseTransport | None = None,
     account_repository: AccountRepository | None = None,
+    demo_binder_autostart: bool = True,
 ) -> FastAPI:
     settings = settings if settings is not None else Settings()
     logging.basicConfig(level=settings.log_level.upper())
@@ -102,12 +123,18 @@ def create_app(
                     app.state.session_manager, settings.session_sweep_interval_s
                 )
             )
+            # Started last so no later startup failure can leave the poller running.
+            poll_task = _start_demo_binding(app.state.demo_binding, settings, resources,
+                                            telegram_transport, demo_binder_autostart)
             try:
                 yield
             finally:
-                sweep_task.cancel()
-                with contextlib.suppress(asyncio.CancelledError):
-                    await sweep_task  # await clean cancellation before teardown
+                for task in (sweep_task, poll_task):
+                    if task is None:
+                        continue
+                    task.cancel()
+                    with contextlib.suppress(asyncio.CancelledError):
+                        await task  # await clean cancellation before teardown
 
 
     app = FastAPI(
@@ -119,7 +146,8 @@ def create_app(
         openapi_url=None,
     )
     app.state.settings = settings
-    app.state.demo_alarms = DemoAlarms(settings, clock)
+    app.state.demo_binding = DemoBinding(settings, clock) if settings.demo_bind_enabled else None
+    app.state.demo_alarms = DemoAlarms(settings, clock, binding=app.state.demo_binding)
     app.state.account_auth = None
     app.state.session_manager = SessionManager(InMemorySessionStore(), settings, clock)
     # OIDC transient login state (PKCE verifier / state / nonce), short-TTL,

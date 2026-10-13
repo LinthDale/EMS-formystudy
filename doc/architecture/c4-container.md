@@ -129,6 +129,8 @@ flowchart LR
 既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
 ### Telegram 示範警報容器路徑（ADR-028）
 Browser → DGX nginx → Windows Node proxy → WSL BFF → HTTPS api.telegram.org。既有 BFF 增加 OPS-only /api/alarms/demo；無新增容器/資料庫。Bot Token/Chat ID 透過 Compose 注入 BFF，瀏覽器不取得。
+### 展位 QR 綁定（ADR-036）
+同一 ems-bff 容器內新增 getUpdates 長輪詢背景任務（出站 api.telegram.org:443）與具名 volume `demo_alarm_state:/data/demo-alarm`（SQLite：唯一綁定、當日 keyed 計數、offset）。無新增容器、host port、入站路徑或資料庫權限；公開代理白名單不變。同一 Bot Token 只允許一個 getUpdates 消費者。
 
 ## Delta 增量（PRD-0020 / ADR-029）
 新增opt-in delta-simulator + delta-edge容器；edge内部pure parser / TCP或RTU poller / SQLite outbox / MQTT sender分離。沿既有ingest與electricity四欄schema、BFF domain routing使用ems-gateway；此gateway_id為邏輯路由，不等於Pi實體識別。Pi用原生Python3.9+及systemd，不要求Docker。

@@ -1,4 +1,5 @@
-"""PRD-0019 fixed-recipient Telegram demonstration, OPS only."""
+"""PRD-0019/PRD-0024 Telegram demonstration, OPS only. Status includes the booth binding block;
+the POST contract is unchanged (recipient chosen server-side: bound visitor, else fixed chat)."""
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, ConfigDict, UUID4
 

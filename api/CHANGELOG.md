@@ -2,6 +2,11 @@
 
 > 規則見 [api-contract-governance](../doc/governance/api-contract-governance.md)。每次 API 變更一條：版本 / 日期 / 級別 / 摘要 / 對應 PRD。
 
+## 2.2.0 — 2026-10-13（MINOR）
+- PRD-0024 / ADR-036：展位 QR 綁定 Telegram 訪客。`GET /api/alarms/demo` 新增 `binding`（state、deep_link、遮罩後 current、today 計數；功能關閉時 null）。
+- `DemoAlarmDelivery` 新增 `target`（visitor/default）與 `visitor_number`；`POST /api/alarms/demo` 請求不變，收件者由伺服器依目前綁定決定。
+- 無新路徑：公開代理白名單不變；Bot 指令經 getUpdates 長輪詢（非 HTTP API）。消費端注意：皆為附加欄位，舊 UI 不受影響。
+
 ## 2.1.0 — 2026-09-30（MINOR）
 - PRD-0023 / ADR-035：local 帳號唯一來源 PostgreSQL，移除 env user table。
 - 補列既有 BFF auth login/session/logout/role 契約；停用、角色與密碼變更撤銷舊 session，DB 故障503。
