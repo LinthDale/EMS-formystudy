@@ -257,3 +257,16 @@ Owner EMS；已控制：未認證REST/Modbus寫入旁路（target拒絕）、重
 | 服務憑證外洩 | 帳號hash或管理權限外洩 | reader/admin分離、DSN不進log、.env權限600、備份保護 | 主機/Docker管理人員仍有權限 / EMS ops |
 | 變更後舊session有效 | 離職或舊權限仍能存取 | immutable UUID/version，逐請求驗DB，無快取回退 | 已在執行中的請求不回溯取消 / EMS |
 | 惡意PHC／HTTP重複取消 | 資源耗盡 | 編碼與成本上限、2 workers、completion callback釋放 | 需部署流量限制 / EMS ops |
+
+## 2026-10-13：PRD-0024 展位 QR 綁定 Telegram 訪客（R-019）
+
+| Risk | Impact | Mitigation | Residual / Owner / 狀態 |
+|---|---|---|---|
+| 兩位訪客同時掃碼 | 示範送給後按 Start 的人 | 後掃者優先（需求）；面板遮罩名稱，按鈕前確認 | 依賴工作人員確認 / EMS ops / Accepted |
+| 拍照 QR 遠端冒綁 | 示範訊息送錯人 | 60 秒輪替、300 秒有效、120 秒訊息時效 | 有效窗內仍可能 / EMS / Mitigated |
+| 同 Bot 第二個 getUpdates 或 webhook | 綁定停擺（409／webhook_active） | 狀態顯示、QR 暫停、固定對象仍可示範；不自動刪 webhook；預備容器上線前移除 | 需人工排除 / EMS ops / Open |
+| BFF 容器 DNS／出站失敗 | 無法綁定或發送 | 退避 1→60 秒、unavailable 狀態；預備容器同網路驗證 | Grafana 曾需固定 DNS；必要時為 bff 加 `dns:` / EMS ops / Open |
+| 個資保留（chat id、username） | 個資法風險 | 原始 id ≤10 分鐘、遮罩顯示、每日 key HMAC 午夜銷毀、secure_delete、0600、無 id log、Bot 告知 | 主機／volume 管理者可在綁定期間讀到 id / EMS / Mitigated |
+| 送出逾時但已送達 | 兩位訪客同號 | 不確定結果也計號；同 UUID 不重送 | 少數號碼可能跳號 / EMS / Accepted |
+| Bot 指令濫發 | 回覆放大、資源消耗 | 私人對話限定、每使用者 3 秒、全域 20 回覆／分、batch 100 | Telegram 平台層級濫用無法根除 / EMS / Mitigated |
+| 單程序假設 | 多 worker 時重複輪詢／鎖衝突 | flock fail closed、uvicorn 單 worker | 水平擴展前需重新設計 / EMS / Accepted |

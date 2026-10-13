@@ -226,6 +226,15 @@ T-08/T-11/T-24：history/records 仍 OPS-gated；domain 只依 gateway 解析。
 ### PRD-0019 Telegram 出站邊界（2026-09-23）
 威脅：未授權通知、CSRF、任意收件者/文字濫發、Token 因 URL log 洩漏、重複送出。控制：OPS session、Origin allowlist、UUID4-only extra-forbid、固定 host/chat/message、不跟隨 redirect、限速/去重、HTTPX URL filter + httpcore WARNING、固定錯誤而非 provider body。ASGI 測試覆蓋認證/CSRF/輸入/失敗/遮蔽/併發。前端與公開 proxy 不接受使用者指定 Token。
 
+### PRD-0024 Telegram 訪客綁定入口（2026-10-13，ADR-036）
+新信任邊界：任何 Telegram 使用者都能向 Bot 傳訊，BFF 以 getUpdates **出站**拉取（無 webhook、無新入站埠、代理白名單不變）。
+- Spoofing：拍照／轉傳 QR 遠端冒綁 → start code 128-bit 隨機、60 秒輪替、300 秒有效、訊息逾 120 秒忽略；面板顯示遮罩名稱供工作人員按鈕前確認。deep link 只回給 OPS session。剩餘：有效窗內的遠端綁定仍可能（衝擊為示範訊息送錯人，無設備控制）。
+- Tampering：Bot 指令只接受私人對話、非 bot、≤64 字的 `/start [code]`、`/stop`；只能改變「唯一綁定」，不能指定文字或其他收件者；`/stop` 只能解除自己的綁定。
+- Repudiation：log 只記事件類型（bound/unbound/rejected/state），刻意不記身分；屬隱私優先取捨。
+- Information disclosure：狀態只回遮罩名稱與當日人數；原始 chat id 只在綁定期間（≤10 分鐘）存於 0600 SQLite；訪客以每日隨機 key HMAC 假名化、午夜銷毀 key 與名單、secure_delete；getUpdates 請求行不入 log、Token URL 遮蔽、provider 回應不記錄。
+- DoS：每使用者 3 秒 1 指令、全域每分鐘 ≤20 回覆、batch 上限 100、錯誤退避 1→60 秒；狀態檔被鎖或失敗時 fail closed（綁定停用，固定對象示範仍可用）。
+- Elevation：Bot 指令無法觸發發送；發送仍需 OPS + Origin + 冷卻 + UUID 去重。webhook／第二個輪詢者只回報狀態，不自動 deleteWebhook。
+
 ## PRD-0020 Delta edge 信任邊界
 新OT路徑只FC04、無公網Modbus或遠端命令。Field MQTT強制驗cert與hostname，帳密env或mTLS、ACL按device topic；client限制無法替代接收端payload身份綁定（後者仍是field gate）。Pi不持有DB/OPS金鑰；SQLite0600/專用目錄0700、定長payload與row上限。Demo明示plaintext且新增容器不publishhostports；既有demo broker設定沒有變動。
 

@@ -153,6 +153,8 @@ cryptography>=42.0,<45.0
 
 Dev：`pytest>=8.0`、`pytest-cov>=5.0`（`docker build --target test -t ems-bff-test services/bff`）
 
+Runtime（compose）：volumes `simulator_audit:/data/sim-control`（ADR-033）與 `demo_alarm_state:/data/demo-alarm`（PRD-0024，展位綁定與當日計數）；出站 HTTPS api.telegram.org:443（sendMessage 與 getUpdates 長輪詢）。PRD-0024 未新增 Python 套件；前端 QR 產生器 `uqr@0.1.3`（MIT）以檔案形式 vendored 於發布包，非 npm runtime 依賴。
+
 ## Optional Host Tools
 
 | Tool | Version / constraint | Purpose |

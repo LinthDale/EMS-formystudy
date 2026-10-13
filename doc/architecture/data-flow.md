@@ -151,6 +151,8 @@ sequenceDiagram
 既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
 ### 示範通知（PRD-0019）
 `POST /api/alarms/demo {request_id:UUID4}` → session/OPS/Origin/schema → 全域冷卻與 UUID 去重 → Telegram sendMessage → 驗證 HTTP 200 + ok + message_id + chat.id → 回傳 sent/固定錯誤。8 秒上限、不自動重送；GET 僅回最近十筆成功紀錄與冷卻，重啟清空。
+### 展位訪客綁定（PRD-0024 / ADR-036）
+訪客手機 → Telegram（`/start <code>`、`/stop`）⇠ BFF 背景任務 getUpdates 長輪詢（出站拉取，offset 存 SQLite）→ 驗證私人對話／code／時效／頻率 → 寫入唯一綁定（volume `demo_alarm_state`）→ sendMessage 確認。按鈕 POST 時於冷卻鎖內解析目前綁定：有效 → 訪客三行文字＋當日號碼（ACK 或逾時才計入，HMAC 每日 key）；否則 → 固定對象原訊息。GET 每 4 秒回 deep link（輪替 code）、遮罩名稱與當日人數。資料不進 TimescaleDB；無新入站路徑。
 
 ## Delta 來源時間與斷線回補（PRD-0020 / ADR-029）
 Delta→FC04 parser→來源UTC時間→SQLite→QoS1 MQTT→既有Telegraf→DB→BFF/Monitor。採集和sender分執行緒；重送保留payload與時間，只有對應PUBACK才刪除。PUBACK非資料庫commit，既有ingest buffer仍可能丟失、DB仍可能重複。僅持久化L1 V/A、總kW、累計kWh；其他decoded資料止於CLI/未ACKsnapshot。

@@ -37,3 +37,5 @@
 - [PRD-0022 Simulator 統一控制與操作紀錄](PRD-0022-simulator-control-audit.md)：四個固定 simulator、BFF OPS API/CLI、持久 append-only audit、UUID/CAS/unknown 對帳；不控制真機。
 
 - [PRD-0023：資料庫帳號管理](PRD-0023-database-accounts.md) — PostgreSQL local users、CLI、稽核、逐請求版本撤銷；ADR-035。
+
+- [PRD-0024：展位 QR Code 綁定 Telegram 訪客示範告警](PRD-0024-booth-telegram-qr-binding.md) — 掃碼自助綁定唯一收件者、10 分鐘到期、台北日不重複計數、getUpdates 長輪詢；修訂 PRD-0019 Non-goal；ADR-036。

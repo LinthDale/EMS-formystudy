@@ -290,6 +290,9 @@ PRD-0018 / ADR-027：新增有界歷史查詢、ECharts 趨勢、布林状态與
 ### 警報中心 Telegram 示範通知
 警報中心新增「觸發警報」：以既有 OPS 登入後，透過 BFF 發送固定 DEMO／無需處置訊息到已設定的 Telegram。既有 `.env` 的 TELEGRAM_BOT_TOKEN、TELEGRAM_CHAT_ID 由 Compose 注入 BFF；不寫入前端。30 秒冷卻，最近成功十筆僅存記憶體。見 [PRD-0019](doc/prd/PRD-0019-telegram-demo-alarm.md)、[ADR-028](doc/adr/ADR-028-telegram-demo-alarm.md)。
 
+### 展位 QR Code 綁定訪客（PRD-0024）
+警報中心顯示 QR Code：訪客掃碼並在 Telegram 按「開始」即成為唯一示範收件者（後掃者優先、10 分鐘到期、`/stop` 解除），按「觸發警報」只送該訪客並告知「今天第 N 位」（台北日不重複計數、午夜歸零）；無綁定時維持固定對象原訊息。BFF 以 getUpdates 長輪詢（無 webhook／入站埠），狀態存 `demo_alarm_state` volume，`bff.toml` `demo_bind_enabled` 可關閉。見 [PRD-0024](doc/prd/PRD-0024-booth-telegram-qr-binding.md)、[ADR-036](doc/adr/ADR-036-telegram-visitor-binding-long-polling.md)、[操作手冊](doc/operations/操作手冊.md)。
+
 ## Delta 三相模擬與 4G 邊緣採集
 已新增 [Delta simulator / parser / TCP–RTU edge](services/delta/README.md)（V1.35）；opt-in `delta-demo` profile。
 本機 [Monitor](http://127.0.0.1:4178/#Monitor) 選 `delta-sim-001`，欄位為 L1 V/A、三相總 kW、累計 kWh。
