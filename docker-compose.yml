@@ -285,6 +285,7 @@ services:
     volumes:
       - ./services/bff/config:/app/config:ro
       - simulator_audit:/data/sim-control
+      - demo_alarm_state:/data/demo-alarm  # PRD-0024 booth binding + today's keyed counter (ADR-036)
     ports:
       - "127.0.0.1:8003:8003"  # loopback-only; browser reaches BFF via frontend same-origin proxy
     restart: unless-stopped
@@ -362,6 +363,7 @@ services:
 
 volumes:
   simulator_audit:
+  demo_alarm_state:
   delta_edge_data:
   timescale_data:
   grafana_data:

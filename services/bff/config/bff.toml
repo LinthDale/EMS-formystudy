@@ -58,6 +58,19 @@ demo_alarm_cooldown_s = 30
 # Total Telegram wait cap; must stay below the public proxy timeout.
 telegram_timeout_s = 8.0
 
+[demo_binding]
+# PRD-0024 / ADR-036 展位 QR 綁定訪客。關閉（false）後重啟 bff 即回到 PRD-0019 固定對象行為。
+demo_bind_enabled = true
+# 綁定與當日計數（BFF 專用 volume demo_alarm_state；單程序鎖）
+demo_bind_db = "/data/demo-alarm/state.sqlite3"
+# 綁定有效秒數（自綁定起算；60–3600）
+demo_bind_ttl_s = 600
+# QR start code 輪替間隔（15–600）與每個 code 的有效秒數（>= 輪替、<= 900）
+demo_bind_code_rotate_s = 60
+demo_bind_code_ttl_s = 300
+# getUpdates long-poll 等待秒數（1–50；HTTP 逾時 = 此值 + 10）
+telegram_poll_timeout_s = 25
+
 [simulator_control]
 # Disabled until a >=32-character env-only service token is provisioned.
 sim_control_enabled = false

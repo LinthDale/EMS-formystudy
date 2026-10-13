@@ -130,6 +130,9 @@ def make_settings(**overrides) -> Settings:
         ingest_api_key=INGEST_KEY,
         session_max_lifetime_s=MAX_LIFETIME_S,
         session_idle_timeout_s=IDLE_TIMEOUT_S,
+        # PRD-0024: config/bff.toml enables booth binding for the deployment; tests opt in
+        # explicitly so no test opens /data state or starts a Telegram poller by accident.
+        demo_bind_enabled=False,
     )
     base.update(overrides)
     return Settings(_env_file=None, **base)
