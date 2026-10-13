@@ -21,4 +21,17 @@
 .alarm-demo li{display:flex;gap:18px;align-items:center;flex-wrap:wrap;padding:7px 0;font-size:12px}
 .alarm-demo-sent{color:#426d4b}
 .alarm-demo code{color:#64645e;font-size:11px}
+/* PRD-0024 booth QR binding; the QR quiet zone (4 modules) is part of the SVG and drawn on white. */
+.alarm-demo-booth{display:flex;align-items:center;gap:24px;margin-top:16px;padding:16px 18px;border:1px solid #e2e2db;border-radius:12px;background:#fff}
+.alarm-demo-qr{margin:0;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:8px}
+.alarm-demo-qr svg{display:block;width:240px;height:240px;background:#fff}
+.alarm-demo-qr figcaption{max-width:240px;font-size:12px;line-height:1.6;color:#64645e;text-align:center;text-wrap:balance}
+.alarm-demo-facts{min-width:0;display:grid;gap:6px}
+.alarm-demo .alarm-demo-facts p{margin:0;overflow-wrap:anywhere}
+.alarm-demo .alarm-demo-binding{font-size:16px;font-weight:500;color:#282825}
+.alarm-demo .alarm-demo-today{font-size:14px;color:#426d4b}
+.alarm-demo .alarm-demo-bot-note{color:#826522}
+.alarm-demo-target{font-weight:500;color:#282825}
+.alarm-demo .alarm-demo-toggle{margin-top:6px;padding:8px 14px;font-size:13px;color:#576a4a;background:transparent;border-color:#d5d5ce}
 @media(max-width:650px){.alarm-demo{padding:18px 16px}.alarm-demo-top{align-items:stretch;flex-direction:column;gap:14px}.alarm-demo h2{font-size:19px}.alarm-demo-trigger{width:100%}.alarm-demo-login{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}.alarm-demo-login input{width:100%}.alarm-demo li{gap:8px 14px}.alarm-demo li code{width:100%}}
+@media(max-width:650px){.alarm-demo-booth{flex-direction:column;align-items:stretch;gap:14px;padding:14px}.alarm-demo-qr svg{width:180px;height:180px}.alarm-demo-qr figcaption{max-width:none}}
