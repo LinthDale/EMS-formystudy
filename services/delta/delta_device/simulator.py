@@ -1,6 +1,7 @@
 """Read-only TCP/RTU simulator; supports only the phase-1 input register profile."""
 from __future__ import annotations
 
+import asyncio
 import logging
 import math
 import os
@@ -10,6 +11,7 @@ import time
 from pymodbus.datastore import ModbusServerContext, ModbusSlaveContext, ModbusSparseDataBlock
 from pymodbus.server import ModbusSerialServer, StartAsyncTcpServer
 from .protocol import pdu_address, scales
+from .config import simulator_recovery_settings
 
 
 class DeltaRegisters(ModbusSparseDataBlock):
@@ -144,13 +146,47 @@ async def serve_rtu(serial_port: str, baudrate: int = 19200, unit_id: int = 1,
     port = local_serial_port(serial_port)
     if baudrate not in (9600, 19200, 38400) or not 1 <= unit_id <= 247:
         raise ValueError("unsupported RTU baudrate or unit ID")
+    health_seconds, reconnect_seconds = simulator_recovery_settings()
     context = simulator_context(unit_id, scenario, scale_word, address_base)
-    server = FailFastSerialServer(
-        context=context, port=port, baudrate=baudrate, bytesize=8,
-        parity="N", stopbits=1, ignore_missing_slaves=True,
-        broadcast_enable=False,
-    )
-    try:
-        await server.serve_forever()
-    finally:
-        await server.shutdown()
+    started = False
+    while True:
+        server = FailFastSerialServer(
+            context=context, port=port, baudrate=baudrate, bytesize=8,
+            parity="N", stopbits=1, ignore_missing_slaves=True,
+            broadcast_enable=False,
+        )
+        polling = None
+        try:
+            await server.listen()
+            started = True
+            # pymodbus schedules setup with call_soon. Keep the task reference
+            # before close() clears transport.poll_task on read/write failure.
+            await asyncio.sleep(0)
+            polling = getattr(server.transport, 'poll_task', None)
+            while True:
+                await asyncio.sleep(health_seconds)
+                transport = server.transport
+                handle = getattr(transport, 'sync_serial', None)
+                if polling is not None and polling.done():
+                    # Retrieve the exception: pymodbus 3.6.9 can leave the
+                    # Windows in_waiting error on an otherwise orphaned task.
+                    if not polling.cancelled():
+                        error = polling.exception()
+                        closed_write_race = handle is None and isinstance(error, AttributeError)
+                        if error is not None and not isinstance(error, OSError) and not closed_write_race:
+                            raise error
+                    raise OSError('RTU polling stopped')
+                if handle is None or not handle.is_open:
+                    raise OSError('RTU serial transport closed')
+        except OSError as exc:
+            if not started:
+                raise
+            logging.warning('serial_disconnected kind=%s', type(exc).__name__)
+        finally:
+            try:
+                await server.shutdown()
+            finally:
+                if polling is not None:
+                    polling.cancel()
+                    await asyncio.gather(polling, return_exceptions=True)
+        await asyncio.sleep(reconnect_seconds)

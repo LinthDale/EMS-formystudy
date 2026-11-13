@@ -1,0 +1,43 @@
+{
+  "passed": true,
+  "backup": {
+    "passed": true,
+    "request_id": "e1dc15b6-2afd-49b2-ab98-2a44dcb655f6",
+    "op": "db_backup",
+    "container_id": "4b37879fca8e5389d22b2dc2381927f7fd01940b65fde50db8f211bfaa0fd204",
+    "format": "pg_dump-custom",
+    "backup_sha256": "cdfc802eac54c9ebad76dc2c9a1fe312a7bbb847aeb60c5765ff732c69f4598b",
+    "backup_bytes": 19573,
+    "source_database": "ems"
+  },
+  "restore": {
+    "passed": true,
+    "request_id": "11411d57-7f29-4750-a367-65562c01492e",
+    "op": "db_restore",
+    "container_id": "4b37879fca8e5389d22b2dc2381927f7fd01940b65fde50db8f211bfaa0fd204",
+    "target_database": "ems_restore",
+    "source_database_preserved": true,
+    "restore_method": "pg_restore-to-new-database",
+    "counts": "1|1"
+  },
+  "old_generation": "2b97b390-4ee6-45af-b4da-c1d36645f45f",
+  "new_generation": "e74aff71-7380-4271-9335-af614b2d99cf",
+  "original_db_preserved": true,
+  "restored_counts_before_replay": [
+    1,
+    0,
+    0
+  ],
+  "backup_identity_and_projection_matched": true,
+  "recovered_original_identity_and_projection_matched": true,
+  "old_ack_replayed": true,
+  "old_ack_accepted": false,
+  "pending_original_id": "2b2784da-0276-4ac9-9604-a4e2ae54a9ed",
+  "recovered_pending_rows": 1,
+  "fresh_rows": 1,
+  "pending_end": 0,
+  "unrecoverable_acked_after_backup": [
+    "3f3924c5-6c5d-4916-bb63-71b55ff04ea0"
+  ],
+  "scope": "logical restore from dump+local only; source DB retained solely as test oracle, not WAL PITR/RPO/RTO acceptance"
+}

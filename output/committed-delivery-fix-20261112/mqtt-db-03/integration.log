@@ -1,0 +1,24 @@
+.............                                                            [100%]
+=============================== warnings summary ===============================
+tests/integration/test_edge_receipts.py:17
+  /app/tests/integration/test_edge_receipts.py:17: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.integration
+
+tests/integration/test_edge_receipts_mqtt.py:24
+  /app/tests/integration/test_edge_receipts_mqtt.py:24: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.integration
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                               Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------
+services/edge-receiver/edge_receiver/__init__.py       0      0   100%
+services/edge-receiver/edge_receiver/receiver.py     168     38    77%   35, 38, 42, 46, 51, 54, 78, 96, 99-100, 115, 118, 121, 124, 131, 134, 138, 141, 143, 149, 153-159, 187-196, 200
+services/edge-receiver/edge_receiver/store.py         47      3    94%   29, 63, 78
+--------------------------------------------------------------------------------
+TOTAL                                                215     41    81%
+Coverage JSON written to file /evidence/receiver-coverage.json
+13 passed, 2 warnings in 6.90s

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "database_tls": {
+    "ssl": true,
+    "version": "TLSv1.3",
+    "client_dn": "/CN=qa_tls_receiver"
+  },
+  "rows": 1,
+  "pending_end": 0,
+  "sync_wal": true
+}

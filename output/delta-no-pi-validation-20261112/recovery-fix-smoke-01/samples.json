@@ -1,0 +1,23 @@
+[
+  {
+    "sampled_ns": 1794456568568074000,
+    "voltage": 230.0,
+    "current": 13.11,
+    "power_kw": 9.05,
+    "energy_kwh": 1234.56
+  },
+  {
+    "sampled_ns": 1794456573557489000,
+    "voltage": 230.0,
+    "current": 13.32,
+    "power_kw": 9.196,
+    "energy_kwh": 1234.57
+  },
+  {
+    "sampled_ns": 1794456578567435000,
+    "voltage": 230.0,
+    "current": 13.52,
+    "power_kw": 9.331,
+    "energy_kwh": 1234.58
+  }
+]

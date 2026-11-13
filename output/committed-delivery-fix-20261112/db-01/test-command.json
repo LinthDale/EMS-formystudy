@@ -1,0 +1,18 @@
+[
+  "docker",
+  "exec",
+  "e738ffe13f9c7997e1f05a350655d04952a894a00bc959cf022cbd67262f0722",
+  "python",
+  "-m",
+  "pytest",
+  "--noconftest",
+  "/app/tests/integration/test_edge_receipts.py",
+  "/app/services/edge-receiver/tests",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "--cov=edge_receiver",
+  "--cov-report=term-missing",
+  "--cov-report=json:/evidence/receiver-coverage.json",
+  "--junitxml=/evidence/integration.xml"
+]

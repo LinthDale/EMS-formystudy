@@ -1,0 +1,29 @@
+{
+  "files": [
+    "README.md",
+    "api/openapi.yml",
+    "services/delta/README.md",
+    "services/edge-receiver/README.md",
+    "doc/README.md",
+    "doc/prd/README.md",
+    "doc/prd/PRD-0021-multi-device-edge-reliability.md",
+    "doc/adr/README.md",
+    "doc/adr/ADR-048-v2-live-backlog-fairness.md",
+    "doc/architecture/README.md",
+    "doc/architecture/edge-committed-telemetry.md",
+    "doc/architecture/c4-context.md",
+    "doc/architecture/c4-container.md",
+    "doc/architecture/data-flow.md",
+    "doc/governance/risk-register.md",
+    "doc/governance/threat-model.md",
+    "doc/governance/tunable-parameters.md",
+    "doc/operations/edge-temperature-handoff-20261112.md",
+    "doc/operations/操作手冊.md",
+    "doc/operations/容器速查表.md",
+    "output/no-pi-restore-load-20261113/README.md",
+    "output/no-pi-restore-load-20261113/reviews.md"
+  ],
+  "checked": 640,
+  "broken": [],
+  "passed": true
+}

@@ -1,0 +1,1194 @@
+[
+  {
+    "elapsed": 0.0006804680451750755,
+    "pending": 0,
+    "live_committed": 0,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.0011018710000000043
+  },
+  {
+    "elapsed": 0.20104634715244174,
+    "pending": 1,
+    "live_committed": 1,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.005223164000000002
+  },
+  {
+    "elapsed": 0.4014196442440152,
+    "pending": 1,
+    "live_committed": 1,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.005729529000000011
+  },
+  {
+    "elapsed": 0.6018445510417223,
+    "pending": 1,
+    "live_committed": 1,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.0062667160000000055
+  },
+  {
+    "elapsed": 0.8022266491316259,
+    "pending": 1,
+    "live_committed": 1,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.006821675999999999
+  },
+  {
+    "elapsed": 1.0025946884416044,
+    "pending": 1,
+    "live_committed": 1,
+    "received": 0,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.007445352000000016
+  },
+  {
+    "elapsed": 1.203188382089138,
+    "pending": 2,
+    "live_committed": 2,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.011258536000000013
+  },
+  {
+    "elapsed": 1.4036093400791287,
+    "pending": 1,
+    "live_committed": 2,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.012719657999999995
+  },
+  {
+    "elapsed": 1.6040056124329567,
+    "pending": 1,
+    "live_committed": 2,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.013213276999999995
+  },
+  {
+    "elapsed": 1.8043644223362207,
+    "pending": 1,
+    "live_committed": 2,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.013661301000000015
+  },
+  {
+    "elapsed": 2.004740910138935,
+    "pending": 1,
+    "live_committed": 2,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.014114509999999997
+  },
+  {
+    "elapsed": 2.205100381281227,
+    "pending": 2,
+    "live_committed": 3,
+    "received": 1,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.016175332000000014
+  },
+  {
+    "elapsed": 2.405520025175065,
+    "pending": 2,
+    "live_committed": 3,
+    "received": 2,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.018086548000000008
+  },
+  {
+    "elapsed": 2.6059299241751432,
+    "pending": 1,
+    "live_committed": 3,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.020343655000000016
+  },
+  {
+    "elapsed": 2.8063144981861115,
+    "pending": 0,
+    "live_committed": 3,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.02175365900000001
+  },
+  {
+    "elapsed": 3.0067640664055943,
+    "pending": 0,
+    "live_committed": 3,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.022299996000000016
+  },
+  {
+    "elapsed": 3.207132088020444,
+    "pending": 1,
+    "live_committed": 4,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.024024297
+  },
+  {
+    "elapsed": 3.4075084682554007,
+    "pending": 1,
+    "live_committed": 4,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.024521124000000005
+  },
+  {
+    "elapsed": 3.6078510894440114,
+    "pending": 1,
+    "live_committed": 4,
+    "received": 3,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.025080237000000005
+  },
+  {
+    "elapsed": 3.808185624424368,
+    "pending": 1,
+    "live_committed": 4,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.02698304500000001
+  },
+  {
+    "elapsed": 4.008655613288283,
+    "pending": 0,
+    "live_committed": 4,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.028697340000000016
+  },
+  {
+    "elapsed": 4.209161799401045,
+    "pending": 1,
+    "live_committed": 5,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.031459524000000016
+  },
+  {
+    "elapsed": 4.409633775241673,
+    "pending": 1,
+    "live_committed": 5,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.032069474000000014
+  },
+  {
+    "elapsed": 4.609970702324063,
+    "pending": 1,
+    "live_committed": 5,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.032561958
+  },
+  {
+    "elapsed": 4.810331352055073,
+    "pending": 1,
+    "live_committed": 5,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.033116233999999994
+  },
+  {
+    "elapsed": 5.010802208445966,
+    "pending": 1,
+    "live_committed": 5,
+    "received": 4,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.034566712
+  },
+  {
+    "elapsed": 5.211210064124316,
+    "pending": 1,
+    "live_committed": 6,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.037421909
+  },
+  {
+    "elapsed": 5.411579312290996,
+    "pending": 1,
+    "live_committed": 6,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.037883533999999996
+  },
+  {
+    "elapsed": 5.611912795342505,
+    "pending": 1,
+    "live_committed": 6,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.038336145000000016
+  },
+  {
+    "elapsed": 5.812235922086984,
+    "pending": 1,
+    "live_committed": 6,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.038817184000000005
+  },
+  {
+    "elapsed": 6.012576993089169,
+    "pending": 1,
+    "live_committed": 6,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.039798357000000006
+  },
+  {
+    "elapsed": 6.212929929140955,
+    "pending": 2,
+    "live_committed": 7,
+    "received": 5,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.04163266500000001
+  },
+  {
+    "elapsed": 6.4133851723745465,
+    "pending": 1,
+    "live_committed": 7,
+    "received": 6,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.044115828999999995
+  },
+  {
+    "elapsed": 6.613746265415102,
+    "pending": 0,
+    "live_committed": 7,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.04638051600000001
+  },
+  {
+    "elapsed": 6.814093848224729,
+    "pending": 0,
+    "live_committed": 7,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.046853162000000004
+  },
+  {
+    "elapsed": 7.032714627217501,
+    "pending": 1,
+    "live_committed": 8,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.048885836000000016
+  },
+  {
+    "elapsed": 7.2331949742510915,
+    "pending": 1,
+    "live_committed": 8,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.04942972200000001
+  },
+  {
+    "elapsed": 7.433580542448908,
+    "pending": 1,
+    "live_committed": 8,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.049984421
+  },
+  {
+    "elapsed": 7.633948218077421,
+    "pending": 1,
+    "live_committed": 8,
+    "received": 7,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.05118162300000001
+  },
+  {
+    "elapsed": 7.834337012376636,
+    "pending": 0,
+    "live_committed": 8,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.05347913800000001
+  },
+  {
+    "elapsed": 8.03467093128711,
+    "pending": 1,
+    "live_committed": 9,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.05562609800000001
+  },
+  {
+    "elapsed": 8.235017920378596,
+    "pending": 1,
+    "live_committed": 9,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.056031352000000006
+  },
+  {
+    "elapsed": 8.435390385333449,
+    "pending": 1,
+    "live_committed": 9,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.05646446800000002
+  },
+  {
+    "elapsed": 8.635751453228295,
+    "pending": 1,
+    "live_committed": 9,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.056879771999999995
+  },
+  {
+    "elapsed": 8.836038343142718,
+    "pending": 1,
+    "live_committed": 9,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.057817489
+  },
+  {
+    "elapsed": 9.0364829772152,
+    "pending": 2,
+    "live_committed": 10,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06027201800000001
+  },
+  {
+    "elapsed": 9.236935549415648,
+    "pending": 2,
+    "live_committed": 10,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06076403700000002
+  },
+  {
+    "elapsed": 9.437360166106373,
+    "pending": 2,
+    "live_committed": 10,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.061214094
+  },
+  {
+    "elapsed": 9.63772023608908,
+    "pending": 2,
+    "live_committed": 10,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06161607900000002
+  },
+  {
+    "elapsed": 9.838080705143511,
+    "pending": 2,
+    "live_committed": 10,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.062449848
+  },
+  {
+    "elapsed": 10.038462791126221,
+    "pending": 3,
+    "live_committed": 11,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06422593600000001
+  },
+  {
+    "elapsed": 10.238856267184019,
+    "pending": 3,
+    "live_committed": 11,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06465326400000002
+  },
+  {
+    "elapsed": 10.439239445142448,
+    "pending": 3,
+    "live_committed": 11,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06508144300000002
+  },
+  {
+    "elapsed": 10.639841856434941,
+    "pending": 3,
+    "live_committed": 11,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06552580700000002
+  },
+  {
+    "elapsed": 10.840239339042455,
+    "pending": 3,
+    "live_committed": 11,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06637611800000001
+  },
+  {
+    "elapsed": 11.040583744179457,
+    "pending": 4,
+    "live_committed": 12,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.06929750200000001
+  },
+  {
+    "elapsed": 11.24094554502517,
+    "pending": 4,
+    "live_committed": 12,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.07016270900000002
+  },
+  {
+    "elapsed": 11.441340707242489,
+    "pending": 4,
+    "live_committed": 12,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.07064193000000002
+  },
+  {
+    "elapsed": 11.64168146206066,
+    "pending": 4,
+    "live_committed": 12,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.07116705200000001
+  },
+  {
+    "elapsed": 11.842061245348305,
+    "pending": 4,
+    "live_committed": 12,
+    "received": 8,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.072166759
+  },
+  {
+    "elapsed": 12.042436971329153,
+    "pending": 4,
+    "live_committed": 13,
+    "received": 9,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.075860291
+  },
+  {
+    "elapsed": 12.242842887993902,
+    "pending": 3,
+    "live_committed": 13,
+    "received": 10,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.07845532600000002
+  },
+  {
+    "elapsed": 12.443297890014946,
+    "pending": 2,
+    "live_committed": 13,
+    "received": 11,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08112451400000001
+  },
+  {
+    "elapsed": 12.643682966008782,
+    "pending": 2,
+    "live_committed": 13,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08238875200000001
+  },
+  {
+    "elapsed": 12.844072719104588,
+    "pending": 1,
+    "live_committed": 13,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08384761700000001
+  },
+  {
+    "elapsed": 13.044499437324703,
+    "pending": 2,
+    "live_committed": 14,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.085624321
+  },
+  {
+    "elapsed": 13.244940891396254,
+    "pending": 2,
+    "live_committed": 14,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08613812900000001
+  },
+  {
+    "elapsed": 13.44541231635958,
+    "pending": 2,
+    "live_committed": 14,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08667646000000001
+  },
+  {
+    "elapsed": 13.645789860282093,
+    "pending": 2,
+    "live_committed": 14,
+    "received": 12,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.08722191200000001
+  },
+  {
+    "elapsed": 13.846165444236249,
+    "pending": 2,
+    "live_committed": 14,
+    "received": 13,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.089144482
+  },
+  {
+    "elapsed": 14.046576891094446,
+    "pending": 2,
+    "live_committed": 15,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.093221564
+  },
+  {
+    "elapsed": 14.24704905739054,
+    "pending": 1,
+    "live_committed": 15,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.09460691000000002
+  },
+  {
+    "elapsed": 14.44751255819574,
+    "pending": 1,
+    "live_committed": 15,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.09516243600000002
+  },
+  {
+    "elapsed": 14.647894167341292,
+    "pending": 1,
+    "live_committed": 15,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.09566129300000001
+  },
+  {
+    "elapsed": 14.848347921390086,
+    "pending": 1,
+    "live_committed": 15,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.09622245200000001
+  },
+  {
+    "elapsed": 15.04872945509851,
+    "pending": 2,
+    "live_committed": 16,
+    "received": 14,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.098088019
+  },
+  {
+    "elapsed": 15.249077859334648,
+    "pending": 2,
+    "live_committed": 16,
+    "received": 15,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.099824349
+  },
+  {
+    "elapsed": 15.44946775212884,
+    "pending": 1,
+    "live_committed": 16,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.10243997400000002
+  },
+  {
+    "elapsed": 15.649854113347828,
+    "pending": 0,
+    "live_committed": 16,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.103755882
+  },
+  {
+    "elapsed": 15.85025743721053,
+    "pending": 0,
+    "live_committed": 16,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.104274683
+  },
+  {
+    "elapsed": 16.050884500145912,
+    "pending": 1,
+    "live_committed": 17,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.106063364
+  },
+  {
+    "elapsed": 16.251237909309566,
+    "pending": 1,
+    "live_committed": 17,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.10650686000000001
+  },
+  {
+    "elapsed": 16.451652778312564,
+    "pending": 1,
+    "live_committed": 17,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.107101218
+  },
+  {
+    "elapsed": 16.65196225931868,
+    "pending": 1,
+    "live_committed": 17,
+    "received": 16,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.10874028300000002
+  },
+  {
+    "elapsed": 16.852351401001215,
+    "pending": 0,
+    "live_committed": 17,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11045553900000002
+  },
+  {
+    "elapsed": 17.052794631104916,
+    "pending": 1,
+    "live_committed": 18,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.112687007
+  },
+  {
+    "elapsed": 17.253180546220392,
+    "pending": 1,
+    "live_committed": 18,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11318984700000001
+  },
+  {
+    "elapsed": 17.453643397428095,
+    "pending": 1,
+    "live_committed": 18,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11374462100000002
+  },
+  {
+    "elapsed": 17.65400841133669,
+    "pending": 1,
+    "live_committed": 18,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11422337200000002
+  },
+  {
+    "elapsed": 17.854446407407522,
+    "pending": 1,
+    "live_committed": 18,
+    "received": 17,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.115383228
+  },
+  {
+    "elapsed": 18.054784505162388,
+    "pending": 1,
+    "live_committed": 19,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11897535600000003
+  },
+  {
+    "elapsed": 18.255206296220422,
+    "pending": 1,
+    "live_committed": 19,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.11968035300000002
+  },
+  {
+    "elapsed": 18.455535587389022,
+    "pending": 1,
+    "live_committed": 19,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.120128299
+  },
+  {
+    "elapsed": 18.655917978379875,
+    "pending": 1,
+    "live_committed": 19,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.120603656
+  },
+  {
+    "elapsed": 18.856282731052488,
+    "pending": 1,
+    "live_committed": 19,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.12107178600000001
+  },
+  {
+    "elapsed": 19.05707528628409,
+    "pending": 2,
+    "live_committed": 20,
+    "received": 18,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.12449285599999999
+  },
+  {
+    "elapsed": 19.257432989310473,
+    "pending": 1,
+    "live_committed": 20,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.126506271
+  },
+  {
+    "elapsed": 19.457846361212432,
+    "pending": 1,
+    "live_committed": 20,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.126973964
+  },
+  {
+    "elapsed": 19.658198369201273,
+    "pending": 1,
+    "live_committed": 20,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.12740174199999998
+  },
+  {
+    "elapsed": 19.8585423422046,
+    "pending": 1,
+    "live_committed": 20,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.1278434
+  },
+  {
+    "elapsed": 20.05884897802025,
+    "pending": 2,
+    "live_committed": 21,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.129756419
+  },
+  {
+    "elapsed": 20.259207729250193,
+    "pending": 2,
+    "live_committed": 21,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.130586798
+  },
+  {
+    "elapsed": 20.45959056634456,
+    "pending": 2,
+    "live_committed": 21,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13098528800000003
+  },
+  {
+    "elapsed": 20.659984429366887,
+    "pending": 2,
+    "live_committed": 21,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.131404886
+  },
+  {
+    "elapsed": 20.860415746457875,
+    "pending": 2,
+    "live_committed": 21,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13188349100000002
+  },
+  {
+    "elapsed": 21.06075346004218,
+    "pending": 3,
+    "live_committed": 22,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.134427633
+  },
+  {
+    "elapsed": 21.261122707277536,
+    "pending": 3,
+    "live_committed": 22,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.135358194
+  },
+  {
+    "elapsed": 21.46155929705128,
+    "pending": 3,
+    "live_committed": 22,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13584584500000002
+  },
+  {
+    "elapsed": 21.661931390408427,
+    "pending": 3,
+    "live_committed": 22,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13628740500000003
+  },
+  {
+    "elapsed": 21.862339156214148,
+    "pending": 3,
+    "live_committed": 22,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13674345100000002
+  },
+  {
+    "elapsed": 22.062761042267084,
+    "pending": 4,
+    "live_committed": 23,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13855071800000002
+  },
+  {
+    "elapsed": 22.263182604219764,
+    "pending": 4,
+    "live_committed": 23,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13936313900000002
+  },
+  {
+    "elapsed": 22.463546507060528,
+    "pending": 4,
+    "live_committed": 23,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.13976068600000002
+  },
+  {
+    "elapsed": 22.66391254402697,
+    "pending": 4,
+    "live_committed": 23,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.140196577
+  },
+  {
+    "elapsed": 22.86439420329407,
+    "pending": 4,
+    "live_committed": 23,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.14072092800000002
+  },
+  {
+    "elapsed": 23.064708181191236,
+    "pending": 5,
+    "live_committed": 24,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.14319893
+  },
+  {
+    "elapsed": 23.265077197458595,
+    "pending": 5,
+    "live_committed": 24,
+    "received": 19,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.14470363200000003
+  },
+  {
+    "elapsed": 23.465573700144887,
+    "pending": 4,
+    "live_committed": 24,
+    "received": 20,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.14692984000000003
+  },
+  {
+    "elapsed": 23.665939735248685,
+    "pending": 3,
+    "live_committed": 24,
+    "received": 21,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.14910766400000003
+  },
+  {
+    "elapsed": 23.866307251155376,
+    "pending": 2,
+    "live_committed": 24,
+    "received": 22,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.151615086
+  },
+  {
+    "elapsed": 24.066695138346404,
+    "pending": 3,
+    "live_committed": 25,
+    "received": 23,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.15429407300000003
+  },
+  {
+    "elapsed": 24.26712260907516,
+    "pending": 2,
+    "live_committed": 25,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.15663527500000002
+  },
+  {
+    "elapsed": 24.467486535198987,
+    "pending": 1,
+    "live_committed": 25,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.157907274
+  },
+  {
+    "elapsed": 24.66806145804003,
+    "pending": 1,
+    "live_committed": 25,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.15848618200000003
+  },
+  {
+    "elapsed": 24.86853291420266,
+    "pending": 1,
+    "live_committed": 25,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.15903478399999998
+  },
+  {
+    "elapsed": 25.06891852710396,
+    "pending": 2,
+    "live_committed": 26,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.160842851
+  },
+  {
+    "elapsed": 25.26936298701912,
+    "pending": 2,
+    "live_committed": 26,
+    "received": 24,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.16147203599999999
+  },
+  {
+    "elapsed": 25.469733859412372,
+    "pending": 2,
+    "live_committed": 26,
+    "received": 25,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.163366157
+  },
+  {
+    "elapsed": 25.67006246931851,
+    "pending": 1,
+    "live_committed": 26,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.165619868
+  },
+  {
+    "elapsed": 25.870469401124865,
+    "pending": 0,
+    "live_committed": 26,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.16703250600000003
+  },
+  {
+    "elapsed": 26.07083578314632,
+    "pending": 1,
+    "live_committed": 27,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.168778869
+  },
+  {
+    "elapsed": 26.271204305347055,
+    "pending": 1,
+    "live_committed": 27,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.169248238
+  },
+  {
+    "elapsed": 26.47155474126339,
+    "pending": 1,
+    "live_committed": 27,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.16972344100000003
+  },
+  {
+    "elapsed": 26.67186983022839,
+    "pending": 1,
+    "live_committed": 27,
+    "received": 26,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17027571400000002
+  },
+  {
+    "elapsed": 26.87219279911369,
+    "pending": 1,
+    "live_committed": 27,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17254176
+  },
+  {
+    "elapsed": 27.07255999231711,
+    "pending": 1,
+    "live_committed": 28,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17557530500000001
+  },
+  {
+    "elapsed": 27.27301191724837,
+    "pending": 1,
+    "live_committed": 28,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17613179700000003
+  },
+  {
+    "elapsed": 27.473351241089404,
+    "pending": 1,
+    "live_committed": 28,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17655287600000003
+  },
+  {
+    "elapsed": 27.673760773148388,
+    "pending": 1,
+    "live_committed": 28,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17708583100000003
+  },
+  {
+    "elapsed": 27.87413380900398,
+    "pending": 1,
+    "live_committed": 28,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.17766525700000002
+  },
+  {
+    "elapsed": 28.07444017706439,
+    "pending": 2,
+    "live_committed": 29,
+    "received": 27,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18058796700000002
+  },
+  {
+    "elapsed": 28.274773948360234,
+    "pending": 1,
+    "live_committed": 29,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.182251387
+  },
+  {
+    "elapsed": 28.475089145358652,
+    "pending": 1,
+    "live_committed": 29,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18271120000000002
+  },
+  {
+    "elapsed": 28.675456174183637,
+    "pending": 1,
+    "live_committed": 29,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.183145609
+  },
+  {
+    "elapsed": 28.875789598096162,
+    "pending": 1,
+    "live_committed": 29,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18355750399999998
+  },
+  {
+    "elapsed": 29.076093729119748,
+    "pending": 2,
+    "live_committed": 30,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18523366200000002
+  },
+  {
+    "elapsed": 29.276445978321135,
+    "pending": 2,
+    "live_committed": 30,
+    "received": 28,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18632918399999998
+  },
+  {
+    "elapsed": 29.47689700126648,
+    "pending": 1,
+    "live_committed": 30,
+    "received": 29,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.18881207700000002
+  },
+  {
+    "elapsed": 29.677353863138705,
+    "pending": 0,
+    "live_committed": 30,
+    "received": 30,
+    "sqlite_bytes": 16384,
+    "process_cpu_seconds": 0.19086514100000002
+  }
+]

@@ -1,0 +1,39 @@
+{
+  "fragment": {
+    "count": 20,
+    "passed": 20,
+    "first_seconds_min": 0.07799999974668026,
+    "first_seconds_max": 0.11000000033527613
+  },
+  "truncated": {
+    "count": 20,
+    "passed": 20,
+    "first_seconds_min": 3.139999999664724,
+    "first_seconds_max": 3.1719999997876585
+  },
+  "crc": {
+    "count": 20,
+    "passed": 20,
+    "first_seconds_min": 0.14099999982863665,
+    "first_seconds_max": 0.17200000025331974
+  },
+  "wrong_unit": {
+    "count": 20,
+    "passed": 20,
+    "first_seconds_min": 0.125,
+    "first_seconds_max": 0.1559999999590218
+  },
+  "silent": {
+    "count": 20,
+    "passed": 20,
+    "first_seconds_min": 6.108999999705702,
+    "first_seconds_max": 6.141000000294298
+  },
+  "late": {
+    "count": 20,
+    "passed": 0,
+    "first_seconds_min": 6.108999999705702,
+    "first_seconds_max": 6.141000000294298,
+    "stale_accepted": 20
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "passed": true,
+  "failure": {
+    "passed": true,
+    "request_id": "fa464f5c-cd2e-45f8-9585-dc9a513bb958",
+    "op": "wal_full",
+    "actual_enospc": true,
+    "archive_limit_bytes": 134217728,
+    "child_exit": 1,
+    "before": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/3024BE0",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/3024BE0"
+    },
+    "after": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/3024BE0",
+      "lag_bytes": 33403936,
+      "slot_retained_bytes": 33403936,
+      "active": false,
+      "peer_tls": null,
+      "peer_role": null,
+      "peer_client_dn": null,
+      "flush_lsn": null
+    },
+    "container_kept_running": true
+  },
+  "recovered": {
+    "passed": true,
+    "request_id": "22ed483f-55e5-4070-9b24-fcbb5c941f99",
+    "op": "wal_free",
+    "synchronous": true,
+    "same_slot": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/4000000",
+      "lag_bytes": 16777216,
+      "slot_retained_bytes": 16777216,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/4000000"
+    }
+  },
+  "caught_up": {
+    "passed": true,
+    "request_id": "58b5f116-a121-4a86-9e57-672dfbf1d81a",
+    "op": "wal_caught_up",
+    "fixed_lsn": "0/5003870",
+    "flush_fence_satisfied": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/5003870",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/5003870"
+    }
+  },
+  "source_preserved": true,
+  "no_partial_write": true,
+  "rows": 1,
+  "pending_end": 0,
+  "scope": "bounded owned tmpfs ENOSPC behavior; not nonvolatile/power-failure durability"
+}

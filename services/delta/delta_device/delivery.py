@@ -51,6 +51,11 @@ class Outbox:
         os.close(fd)
         self.path.chmod(0o600)
         with self.connect() as db:
+            # A rollback must never let legacy PUBACK semantics consume a v2 queue.
+            if db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='metadata'").fetchone():
+                protocol = db.execute("SELECT value FROM metadata WHERE key='protocol'").fetchone()
+                if protocol and protocol[0] != '1':
+                    raise ValueError('reliable outbox cannot be opened by v1')
             db.execute("CREATE TABLE IF NOT EXISTS outbox (id INTEGER PRIMARY KEY, "
                        "sampled_ns INTEGER NOT NULL, payload TEXT NOT NULL, snapshot TEXT NOT NULL)")
             db.execute("CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)")

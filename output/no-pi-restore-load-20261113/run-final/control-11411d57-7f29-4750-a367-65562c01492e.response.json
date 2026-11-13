@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "request_id": "11411d57-7f29-4750-a367-65562c01492e",
+  "op": "db_restore",
+  "container_id": "4b37879fca8e5389d22b2dc2381927f7fd01940b65fde50db8f211bfaa0fd204",
+  "target_database": "ems_restore",
+  "source_database_preserved": true,
+  "restore_method": "pg_restore-to-new-database",
+  "counts": "1|1"
+}

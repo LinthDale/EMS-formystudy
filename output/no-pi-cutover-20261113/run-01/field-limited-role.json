@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "administrative_flags": {
+    "rolsuper": false,
+    "rolreplication": false,
+    "rolcreatedb": false,
+    "rolcreaterole": false
+  },
+  "denied_operations": 4,
+  "actual_exception": "InsufficientPrivilegeError",
+  "source_preserved_during_denial": true,
+  "receipt_timestamp_unchanged": true,
+  "mqtt_mtls": true,
+  "ack_durability": "sync_wal",
+  "rows": 1,
+  "pending_end": 0
+}

@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "new_fault_cases": 9,
+  "mandatory_boundary_cases": 35,
+  "total_private_cases": 44,
+  "private_skipped": 0,
+  "private_elapsed_seconds": 11.09,
+  "controller_cases": 32,
+  "new_controller_cases": 16,
+  "new_assessment_line_percent": 96.875,
+  "production_changed": false,
+  "shared_deployment_changed": false,
+  "long_test_restarted": false,
+  "pi_field_acceptance": false,
+  "production_full_regression_repeated": false
+}

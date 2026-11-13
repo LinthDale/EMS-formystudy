@@ -1,0 +1,7 @@
+{
+  "root": "\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\committed-delivery-fix-20261112",
+  "exclude": [
+    "artifact-sha256.json"
+  ],
+  "meaning": "all static artifacts in this repair only; active soak outside root; original manifests remain unchanged"
+}

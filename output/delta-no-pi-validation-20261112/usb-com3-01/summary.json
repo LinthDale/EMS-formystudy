@@ -1,0 +1,40 @@
+{
+  "scheduled": 60,
+  "attempted": 56,
+  "valid": 52,
+  "committed": 52,
+  "missing_slots": [
+    53,
+    55,
+    57,
+    59
+  ],
+  "failed_slots": [
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59
+  ],
+  "duplicate_attempt_slots": [],
+  "duplicate_read_slots": [],
+  "duplicate_commit_slots": [],
+  "outside_slots": [],
+  "poll_seconds": {
+    "p50": 0.29699999978765845,
+    "p95": 0.3440000000409782,
+    "p99": 0.3440000000409782,
+    "max": 0.3440000000409782
+  },
+  "pass": false,
+  "ledger_error": null,
+  "outages_restarted": 0,
+  "control_errors": [],
+  "golden_errors": [],
+  "normal_sampling_pass": false,
+  "pending_end": 0,
+  "sqlite_bytes": 16384
+}

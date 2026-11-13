@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "request_id": "803427f0-cd56-4fcb-92ec-a8b52e1678ea",
+  "op": "wal_basebackup",
+  "files": {
+    "backup_manifest": {
+      "bytes": 312283,
+      "sha256": "ea8144fbd55caa9292248770f7d9767179342ffe79f077fb40d53903e00cd6d6"
+    },
+    "base.tar": {
+      "bytes": 36283392,
+      "sha256": "a2cf47df095529c1665d63ef5930b15ba57f7eaee694e412479cc04e7e51e8af"
+    },
+    "pg_wal.tar": {
+      "bytes": 16778752,
+      "sha256": "b6ef4e4f085ec07ff259461c7db0f8d2bf4fe2744eaffc663a5535a6b8dbe8ba"
+    }
+  },
+  "format": "physical-basebackup-tar"
+}

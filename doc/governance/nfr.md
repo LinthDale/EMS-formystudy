@@ -1,5 +1,7 @@
 # Non-Functional Requirements (NFR) — 量化版
 
+2026-11-13 PRD-0021例外修訂：[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)核定量測最新優先；本地容量超額時最舊前綴淘汰，不再承諾被淘汰資料零遺失／完整7天補傳。容量內durable sample／authenticated ACK／中央去重保持；本次336項短回歸通過、coverage≥80%，非Pi／SD／7天／20/s／可用性SLA驗收。此修訂只適用量測，控制帳本保護與中央災難RPO不變。
+
 > 對齊：`doc/PRD-架構設計-Guideline.md` §3.4  
 > 原則：避免「高效能」「高可用」這類模糊敘述，全部量化到可驗證指標。
 
@@ -149,3 +151,4 @@
 - 升級階段（Dev → Demo → POC → Prod）必須走 ADR，明示哪些 NFR 等級切換
 - 任一指標未達當前階段最低值 = release blocker
 - 季度 review 一次 NFR 表，依實況調整
+

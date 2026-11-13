@@ -1,0 +1,31 @@
+1794472909: mosquitto version 2.1.2 starting
+1794472909: Config loaded from /qa.conf.
+1794472909: Bridge support available.
+1794472909: Persistence support available.
+1794472909: TLS support available.
+1794472909: TLS-PSK support available.
+1794472909: Websockets support available.
+1794472909: Opening ipv4 listen socket on port 1883.
+1794472909: mosquitto version 2.1.2 running
+1794472945: New connection from 127.0.0.1:44353 on port 1883.
+1794472945: New client connected from 127.0.0.1:44353 as sink-bulk-10000 (p4, c1, k30).
+1794472946: New connection from 127.0.0.1:49604 on port 1883.
+1794472946: New client connected from 127.0.0.1:49604 as sender-bulk-10000 (p4, c1, k30).
+1794473103: Client sender-bulk-10000 [127.0.0.1:49604] disconnected.
+1794473103: Client sink-bulk-10000 [127.0.0.1:44353] disconnected.
+1794473104: New connection from 127.0.0.1:43159 on port 1883.
+1794473104: New client connected from 127.0.0.1:43159 as sink-weak-stream (p4, c1, k30).
+1794473104: New connection from 127.0.0.1:33804 on port 1883.
+1794473105: New client connected from 127.0.0.1:33804 as sender-weak-stream (p4, c1, k30).
+1794473117: Client sender-weak-stream [127.0.0.1:33804] disconnected: connection closed by client.
+1794473120: New connection from 127.0.0.1:39176 on port 1883.
+1794473120: New client connected from 127.0.0.1:39176 as sender-weak-stream (p4, c1, k30).
+1794473137: Client sender-weak-stream [127.0.0.1:39176] disconnected: connection closed by client.
+1794473140: New connection from 127.0.0.1:52776 on port 1883.
+1794473140: New client connected from 127.0.0.1:52776 as sender-weak-stream (p4, c1, k30).
+1794473160: Client sender-weak-stream [127.0.0.1:52776] disconnected: connection closed by client.
+1794473163: New connection from 127.0.0.1:35764 on port 1883.
+1794473163: New client connected from 127.0.0.1:35764 as sender-weak-stream (p4, c1, k30).
+1794473188: Client sender-weak-stream [127.0.0.1:35764] disconnected: connection closed by client.
+1794473188: Client sink-weak-stream [127.0.0.1:43159] disconnected.
+1794472909: Info: running mosquitto as user id: 1000.

@@ -1,6 +1,10 @@
 # Data Flow Diagram
 
+2026-11-13 [ADR-045](../adr/ADR-045-newest-first-edge-retention.md)：本地容量淘汰＋新量測同交易，淘汰不經中央ACK、不記送達；[子集資料流](edge-committed-telemetry.md)已更新。schema3、wire2，中央去重路徑不變，未切共享部署。
+
 > 範圍：關鍵業務流程的資料流向。實線 = 同步、虛線 = 非同步 / event-driven。
+
+2026-11-12 [v2 committed telemetry 資料流](edge-committed-telemetry.md)：SQLite先存、PUBACK保留、receipt及投影同交易、commit後ACK、當前session驗證後刪；與下方 v1 Telegraf 路徑隔離。只私有驗證，原共享長測維持 v1。
 
 ## 流程一：量測資料上行（電表）
 
@@ -181,3 +185,24 @@ sequenceDiagram
   B-->>U: 有效回應，失效401，DB故障503
 ```
 管理異動與 audit 共用 transaction；READ COMMITTED + advisory lock 防止最後 OPS 並行停用。Argon2 工作完成後才釋放slot，HTTP取消不提前解除資源上限。
+
+
+## 2026-11-10 演進設計：即時狀態與歷史分路（尚未實作）
+
+
+
+S1–S4 只連隔離模擬器；7 天歷史回補不得刷新控制快照。PRD-0006 的時間 fallback 與 PRD-0021 的保留來源時間，需按新 PRD §12 在實作前整合；不改目前 v1 管線。受理、達成及 unknown 分開，不因網路 ACK 就宣稱設備完成。
+
+
+
+
+
+### ADR-041採集有效性更新（2026-11-12）
+
+RTU可能送出請求後遇不確定回覆，整筆sample丟棄並鎖定，沒有SQLite commit／MQTT假值。未知上界停採；有核定時限隔離後換client/framer及清buffer再讀完整sample；field啟動也隔離。既有可信SQLite→MQTT流程維持、PUBACK仍不是DB committed ACK。詳[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)。
+
+### 2026-11-13 DB／WAL TLS與還原準入
+
+沿原receiver→PostgreSQL與PostgreSQL→WAL archive連線，field雙向驗證TLS；WAL ACK須唯一同步ems_wal_archive、TLS＋client DN且flush覆蓋固定LSN。021新函式缺失拒絕，不回舊版。維運backup_preflight先tar layout／資源界限，再外置可信cluster ID＋checksum，最後PG真recovery至核定timeline／target；滿載保留原slot修復，不降級。依[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)，[55案／相鄰回歸證據](../../output/no-pi-wal-security-20261113/README.md)；元件及wire2/schema3不變，正式異失效域／Pi另驗。
+
+2026-11-13：[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md) 僅補維運還原準入：外置核定timeline／target、slot先reserve→basebackup→新archive接手→真新鏈PITR驗證→generation換代／重新開ACK；沿原元件／資料流，無新增自動reseed/failover服務。中央資料滿與同ID分支短測已驗，[證據](../../output/no-pi-critical-closure-20261113/README.md)。

@@ -1,0 +1,188 @@
+1794542660: mosquitto version 2.1.2 starting
+1794542660: Config loaded from /qa/tls.conf.
+1794542660: Bridge support available.
+1794542660: Persistence support available.
+1794542660: TLS support available.
+1794542660: TLS-PSK support available.
+1794542660: Websockets support available.
+1794542660: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542660: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542660: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542660: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542660: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542660: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542660: Opening ipv4 listen socket on port 8886.
+1794542660: Opening ipv4 listen socket on port 8887.
+1794542660: Opening ipv4 listen socket on port 8888.
+1794542660: mosquitto version 2.1.2 running
+1794542673: New connection from 127.0.0.1:38033 on port 8886.
+1794542673: New client connected from 127.0.0.1:38033 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794542673: No will message specified.
+1794542673: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542673: Sending CONNACK to receiver-qa-edge (0, 0)
+1794542674: Received SUBSCRIBE from receiver-qa-edge
+1794542674: 	ems/v2/gateways/+/samples (QoS 1)
+1794542674: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794542674: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542674: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794542674: Sending SUBACK to receiver-qa-edge
+1794542674: New connection from 127.0.0.1:60129 on port 8886.
+1794542674: New client connected from 127.0.0.1:60129 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794542674: No will message specified.
+1794542674: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542674: Sending CONNACK to sender-qa-edge (0, 0)
+1794542674: Received SUBSCRIBE from sender-qa-edge
+1794542674: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794542674: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794542674: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794542674: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794542674: Sending SUBACK to sender-qa-edge
+1794542674: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542674: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542674: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794542674: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794542674: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542674: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542674: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794542674: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794542674: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542674: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542674: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794542674: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794542674: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542674: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542674: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794542674: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794542674: Received DISCONNECT from sender-qa-edge
+1794542674: Client sender-qa-edge [127.0.0.1:60129] disconnected.
+1794542674: Received DISCONNECT from receiver-qa-edge
+1794542674: Client receiver-qa-edge [127.0.0.1:38033] disconnected.
+1794542674: New connection from 127.0.0.1:41219 on port 8886.
+1794542674: New client connected from 127.0.0.1:41219 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794542674: No will message specified.
+1794542674: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542674: Sending CONNACK to receiver-qa-edge (0, 0)
+1794542674: Received SUBSCRIBE from receiver-qa-edge
+1794542674: 	ems/v2/gateways/+/samples (QoS 1)
+1794542674: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794542674: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542674: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794542674: Sending SUBACK to receiver-qa-edge
+1794542674: New connection from 127.0.0.1:54947 on port 8886.
+1794542674: New client connected from 127.0.0.1:54947 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794542674: No will message specified.
+1794542674: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542674: Sending CONNACK to sender-qa-edge (0, 0)
+1794542674: Received SUBSCRIBE from sender-qa-edge
+1794542674: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794542674: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794542674: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794542674: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794542674: Sending SUBACK to sender-qa-edge
+1794542674: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542674: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542674: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794542674: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794542674: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542674: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542674: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794542674: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794542674: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542674: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542674: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794542674: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794542674: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542674: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542674: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794542674: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794542674: Received DISCONNECT from sender-qa-edge
+1794542674: Client sender-qa-edge [127.0.0.1:54947] disconnected.
+1794542674: Received DISCONNECT from receiver-qa-edge
+1794542674: Client receiver-qa-edge [127.0.0.1:41219] disconnected.
+1794542674: mosquitto version 2.1.2 terminating
+1794542675: mosquitto version 2.1.2 starting
+1794542675: Config loaded from /qa/tls.conf.
+1794542675: Bridge support available.
+1794542675: Persistence support available.
+1794542675: TLS support available.
+1794542675: TLS-PSK support available.
+1794542675: Websockets support available.
+1794542675: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542675: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542675: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542675: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542675: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794542675: Plugin builtin-security has registered to receive 'acl-check' events.
+1794542675: Opening ipv4 listen socket on port 8886.
+1794542675: Opening ipv4 listen socket on port 8887.
+1794542675: Opening ipv4 listen socket on port 8888.
+1794542675: mosquitto version 2.1.2 running
+1794542675: New connection from 127.0.0.1:49721 on port 8886.
+1794542675: OpenSSL Error while trying to get the error[0]: error:0A000086:SSL routines::certificate verify failed
+1794542675: Client 127.0.0.1 [127.0.0.1:49721] disconnected: Protocol error.
+1794542679: New connection from 127.0.0.1:40761 on port 8886.
+1794542679: New client connected from 127.0.0.1:40761 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794542679: No will message specified.
+1794542679: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542679: Sending CONNACK to receiver-qa-edge (0, 0)
+1794542679: Received SUBSCRIBE from receiver-qa-edge
+1794542679: 	ems/v2/gateways/+/samples (QoS 1)
+1794542679: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794542679: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542679: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794542679: Sending SUBACK to receiver-qa-edge
+1794542679: New connection from 127.0.0.1:33171 on port 8886.
+1794542679: New client connected from 127.0.0.1:33171 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794542679: No will message specified.
+1794542679: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794542679: Sending CONNACK to sender-qa-edge (0, 0)
+1794542679: Received SUBSCRIBE from sender-qa-edge
+1794542679: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794542679: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794542679: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794542679: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794542679: Sending SUBACK to sender-qa-edge
+1794542679: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542679: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794542679: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794542679: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794542679: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542679: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794542679: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794542679: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794542679: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542679: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794542679: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794542679: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794542679: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542679: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794542679: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794542679: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794542679: Received DISCONNECT from sender-qa-edge
+1794542679: Client sender-qa-edge [127.0.0.1:33171] disconnected.
+1794542679: Received DISCONNECT from receiver-qa-edge
+1794542679: Client receiver-qa-edge [127.0.0.1:40761] disconnected.
+1794542660: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794542660: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794542660: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542660: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542660: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542660: Info: running mosquitto as user id: 1000.
+1794542675: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794542675: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794542675: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542675: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542675: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794542675: Info: running mosquitto as user id: 1000.

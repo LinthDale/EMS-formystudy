@@ -13,3 +13,7 @@ PC 是從站（server），Pi 是唯一主站（client）。不自動尋找、�
 
 ## Consequences
 Linux PTY 測試可驗證正式 CLI、RTU bytes/CRC/站號/唯讀與既有 TCP 回歸；不能驗證 RS485 電氣層、Windows 驅動或 4G。實體驗收需兩顆隔離轉接器、線材、終端/訊號地及相同串口參數。Pi → MQTT → DB 的既有 PUBACK 與重送限制不變，ADR-030 仍未實作。
+
+## 2026-11-12 延伸
+
+成功啟動後的同埠斷線恢復由[ADR-040](ADR-040-delta-rtu-listener-recovery.md)補充；首次開啟失敗退出與其他唯讀／串口邊界保持。

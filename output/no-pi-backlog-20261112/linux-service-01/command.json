@@ -1,0 +1,21 @@
+[
+  "systemd-run",
+  "--user",
+  "--unit",
+  "ems-no-pi-qa-20261112",
+  "--collect",
+  "--property=Restart=on-failure",
+  "--property=RestartSec=10",
+  "--property=TimeoutStopSec=30",
+  "--property=UMask=0077",
+  "--property=NoNewPrivileges=true",
+  "--setenv=PYTHONPATH=/home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/runtime-deps:/home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/service",
+  "--setenv=PYTHONDONTWRITEBYTECODE=1",
+  "--working-directory=/home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/service",
+  "/usr/bin/python3",
+  "-m",
+  "delta_device",
+  "edge",
+  "--config",
+  "/home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/config.json"
+]

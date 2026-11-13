@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.071" timestamp="2026-11-13T05:12:21.366380+00:00" hostname="9a0c0027cbab"><testcase classname="tests.test_reliable_fairness" name="test_new_sample_arrives_within_two_successes_and_oldest_also_advances" time="0.013"><failure message="AssertionError: new telemetry waits behind the historical backlog&#10;assert {'capture_seq': 51, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...} in [{'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}, {'capture_seq': 2, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}]">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_new_sample_arrives_within0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77fe55e2ce10&gt;
+
+    def test_new_sample_arrives_within_two_successes_and_oldest_also_advances(tmp_path,monkeypatch):
+        box,sender,sent=ready_sender(tmp_path,monkeypatch)
+        old=[box.enqueue(NOW+i*1000,VALUES) for i in range(50)]
+        live=box.enqueue(NOW+100000,VALUES)
+        assert step(sender) and step(sender), 'valid committed replies did not advance sender'
+&gt;       assert live in sent, 'new telemetry waits behind the historical backlog'
+E       AssertionError: new telemetry waits behind the historical backlog
+E       assert {'capture_seq': 51, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...} in [{'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}, {'capture_seq': 2, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}]
+
+services/delta/tests/test_reliable_fairness.py:48: AssertionError</failure></testcase><testcase classname="tests.test_reliable_fairness" name="test_continuous_new_samples_cannot_starve_oldest_backlog" time="0.009"><failure message="AssertionError: oldest backlog not guaranteed progress&#10;assert [{'capture_se...1', ...}, ...] == [{'capture_se...': 'g1', ...}]&#10;  &#10;  Left contains 5 more items, first extra item: {'capture_seq': 6, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}&#10;  Use -v to get more diff">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_continuous_new_samples_ca0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77fe55e1ff50&gt;
+
+    def test_continuous_new_samples_cannot_starve_oldest_backlog(tmp_path,monkeypatch):
+        box,sender,sent=ready_sender(tmp_path,monkeypatch)
+        old=[box.enqueue(NOW+i*1000,VALUES) for i in range(20)]
+        for i in range(10):
+            box.enqueue(NOW+(100+i)*1000,VALUES)
+            assert step(sender), 'fresh source failed to commit'
+&gt;       assert [s for s in sent if s['sample_id'] in {x['sample_id'] for x in old}]==old[:5], 'oldest backlog not guaranteed progress'
+E       AssertionError: oldest backlog not guaranteed progress
+E       assert [{'capture_se...1', ...}, ...] == [{'capture_se...': 'g1', ...}]
+E         
+E         Left contains 5 more items, first extra item: {'capture_seq': 6, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', ...}
+E         Use -v to get more diff
+
+services/delta/tests/test_reliable_fairness.py:58: AssertionError</failure></testcase><testcase classname="tests.test_reliable_fairness" name="test_failed_latest_attempt_does_not_consume_oldest_turn_or_delete_data" time="0.012"><failure message="AssertionError: failed attempt consumed fair turn or replaced immutable source&#10;assert [{'capture_se...': 'g1', ...}] == [{'capture_se...': 'g1', ...}]&#10;  &#10;  At index 0 diff: {'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', 'measurements': {'current': 5.0, 'energy_kwh': 100.0, 'power_kw': 1.0, 'voltage': 230.0}, 'payload_hash': 'd277bf29e3fc17b12958bd452e1fe4981d3fcc8953a576cb7efd87626b2dfd95', 'profile_version': 'v135', 'sample_id': 'ea962aa5-ca45-4128-a951-b23b3f5fce5f', 'sampled_at_us': 1794474000000000, 'stream_id': 'ac215142-f714-49d0-ba44-c4958d966ad7', 'time_quality': 'trusted', 'window_id': 'f960c325-c101-4e5d-b459-4b11b8710e1f'} != {'gateway_id': 'g1', 'device_id': 'd1', 'stream_id'...&#10;  &#10;  ...Full output truncated (2 lines hidden), use '-vv' to show">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_failed_latest_attempt_doe0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x77fe55e71a90&gt;
+
+    def test_failed_latest_attempt_does_not_consume_oldest_turn_or_delete_data(tmp_path,monkeypatch):
+        box,sender,sent=ready_sender(tmp_path,monkeypatch)
+        old=box.enqueue(NOW,VALUES);latest=box.enqueue(NOW+1000,VALUES)
+        success=sender.client.publish
+        sender.client.publish=lambda *a,**kw:SimpleNamespace(rc=0)  # Real application ACK timeout path.
+        assert not step(sender) and box.pending_count()==2, 'missing ACK deleted samples'
+        sender.client.publish=success
+        # step failure reopens the session; complete a new valid handshake.
+        sender.state.establish(dict(schema_version=2,gateway_id='g1',session_challenge=sender.state.challenge,
+            recovery_generation=str(uuid4())))
+        sender.session_ready.set()
+        assert step(sender) and step(sender), 'sender failed to recover from ACK timeout'
+&gt;       assert sent==[latest,old], 'failed attempt consumed fair turn or replaced immutable source'
+E       AssertionError: failed attempt consumed fair turn or replaced immutable source
+E       assert [{'capture_se...': 'g1', ...}] == [{'capture_se...': 'g1', ...}]
+E         
+E         At index 0 diff: {'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g1', 'measurements': {'current': 5.0, 'energy_kwh': 100.0, 'power_kw': 1.0, 'voltage': 230.0}, 'payload_hash': 'd277bf29e3fc17b12958bd452e1fe4981d3fcc8953a576cb7efd87626b2dfd95', 'profile_version': 'v135', 'sample_id': 'ea962aa5-ca45-4128-a951-b23b3f5fce5f', 'sampled_at_us': 1794474000000000, 'stream_id': 'ac215142-f714-49d0-ba44-c4958d966ad7', 'time_quality': 'trusted', 'window_id': 'f960c325-c101-4e5d-b459-4b11b8710e1f'} != {'gateway_id': 'g1', 'device_id': 'd1', 'stream_id'...
+E         
+E         ...Full output truncated (2 lines hidden), use '-vv' to show
+
+services/delta/tests/test_reliable_fairness.py:73: AssertionError</failure></testcase></testsuite></testsuites>

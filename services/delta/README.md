@@ -83,7 +83,7 @@ credentials.env 權限0600/root；不要放repo或shellhistory。
 採集與送出分開執行；SQLite先寫入，再傳QoS1，**對應MID收到PUBACK才刪除該列**。
 逾時保留樣本，重啟從SQLite恢復，原ILP位元組與UTC微秒對齊時戳不變。
 每個操作明確close SQLite連線，spool檔0600、專用目錄0700。
-預設10000筆（10秒約27.8小時），上限1000000筆；满時拒絕新樣本並記錄queue_full，保留舊樣本；磁碟滿同樣不視為成功。容量規劃需含檔案與flash磨損。
+v1行為：預設10000筆（10秒約27.8小時），上限1000000筆；满時拒絕新樣本並記錄queue_full，保留舊樣本；磁碟滿同樣不視為成功。容量規劃需含檔案與flash磨損。opt-in v2已依ADR-045改成最舊淘汰／最新優先，見本文後段。
 日誌含sample_queued/pending_rows、sample_rejected、queue_full、broker_ack、delivery_failed；不輸出密碼或原始連線例外。
 
 **PUBACK只代表broker確認。**既有Telegraf記憶體buffer可能在IT端故障時丟失，DB無唯一鍵可消除重複。不能保證端到端零遺失、exactly-once或計費精度；正式要求更強保證須新增DB committed receipt與去重契約。
@@ -152,3 +152,61 @@ python -m delta_device simulator --transport rtu --serial-port /dev/serial/by-id
 新邏輯以 7 項 RED 測試重現缺少 noise/固定節拍能力；GREEN 後完整 Delta 測試共 72 passed、總 line coverage 95.19%，涵蓋 TCP/RTU、協定倍率、情境切換、queue/publisher 及新增噪聲/節拍。
 驗收期間另一批 ADR-033 控制介面已上線，本次誤差模型已補入該運行映像，保留控制與認證。`runtime-current.json` 及 simulator.py / edge.py 的運行檔案雜湊已比對一致。
 注意：主機 UTC 約每隔一段時間跳快 3.586 秒，容器 monotonic 仍每次前進 1.000 秒；sim-001 與 Delta 都留下同時段缺口。因此驗收列出所有共用缺口、檢查中位間隔為 1 秒，並拒絕 Delta 獨有的缺口；不宣稱 UTC 每秒零缺值，也不補造資料。詳 output/delta-one-second-20260929/clock-probe-result.json。
+
+
+### 2026-11-12 Windows 實體 RS485 bench（無 Pi）
+
+兩台 USB–RS485 接同一台 Windows PC，COM3 從站／COM4 採集；修正 Windows 短封包後 110/110 成功。獨立 `delta-rtu-sim-001` 的 SQLite 暫存／補送、DB 與 EMS records API 15/15 通過，完整回歸 78 passed、coverage 95.20%。Pi、4G、Delta 真機與長期可靠性仍待驗證；舊紀錄的「Windows COM／實體 RS485 待驗證」僅由本次 bench 範圍更新。重現、證據及限制見 [驗證紀錄](../../output/delta-rtu-bench-20261112/README.md)。
+
+
+### 無 Pi 逐關執行紀錄（2026-11-12）
+
+實際關卡狀態、帳本工具重現方式及限制見 [逐關驗證紀錄](../../output/delta-no-pi-validation-20261112/README.md)。測試只作用於獨立 delta-rtu-sim-001 與各 run 自有 SQLite，不新增／重啟共用容器；中央 DB committed ACK 仍未實作。
+
+### RTU串口恢復（2026-11-12，ADR-040）
+
+同一RTU模擬器程序成功監聽後，偵測serial handle或Windows poll task失效，關閉舊端點後重開原串口；context保留，首次開啟失敗仍退出。config集中驗證DELTA_SIM_RTU_HEALTH_SECONDS（0.5s）與DELTA_SIM_RTU_RECONNECT_SECONDS（2s），有限0.01..60s。完整回歸127 passed、line coverage95.71%；修正後實體正常採集3/3。這不等於USB恢復通過，詳[ADR-040](../../doc/adr/ADR-040-delta-rtu-listener-recovery.md)與[逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)。
+
+2026-11-12 12:16更新（ADR-040）：COM3修正後實體拔插usb-com3-04-fixed通過，離線33.328秒，恢復上界9.672秒，原程序持續運行，52筆DB/API逐筆相符、pending0；COM4仍待獨立測試，關卡4只部分完成。實際證據以逐關紀錄為準。
+
+2026-11-12實體故障測試已完成：合法分段、截斷、錯誤CRC、錯站號、無回應各20/20通過；遲到回覆20/20被下一次read接受，交易關聯／新鮮度尚有缺口。此為Poller.read測試，非完整edge污染證據，未送故障值到MQTT。[逐關／封包證據](../../output/delta-no-pi-validation-20261112/frames-01/README.md)。
+
+## ADR-041：RTU錯誤後採集暫停與恢復
+
+不確定交易後正式Poller丟棄整筆並鎖定。未知回覆上界不再送新請求；已核定上界等待後才重建client/framer並清buffer。field RTU必填response_lifetime_seconds（有限0.01..120秒）及response_lifetime_source（非空、至多256字），啟動與--once也先隔離。field-rtu.example.json保留null，未由工程人員核定機型／韌體／USB／驅動上界前會拒絕啟動，不是可直接部署的設定。
+
+既有可信outbox仍由獨立sender補送；SynchronizationUncertain需查profile，不要靠重啟或填猜測值解除。RecoveryPending表示仍在隔離期。台架bench_recovery的1秒只是假設已知的受控fixture，不能複製到M70A-262／RPI-M30A；超界或惡意遲到仍無辨識保證。[決策](../../doc/adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)；[最新驗證](../../output/delta-no-pi-validation-20261112/README.md)。共用Docker runtime未部署此修正。
+
+[ADR-041完整sample實測](../../output/delta-no-pi-validation-20261112/rtu-recovery-policy/README.md)：unknown鎖定20/20、有界lab隔離恢復20/20；163項隔離回歸通過。它只限定受控時限契約，真機profile仍待核定、原無界late FAIL保留；沒有故障值入庫，也未重建共享runtime。
+
+## 2026-11-12 續驗：DB確認反例與長測
+
+[最新逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)：第9關以私有真MQTT／production傳送端／受控SQLite重現3案，v1系統驗收FAIL；未操作共享DB，v2中央commit receipt／去重待實作。本機Monitor攔截API的5案新鮮度及圖表／卡片／表格值通過，只屬UI契約。1秒1小時於13:49啟動，通過才進5秒24小時，當前以紀錄內活動status為準；未先報長測通過。保持PC開機及兩顆USB，不再人工拔插。回歸183 passed、production coverage96.06%；無API／schema變更、未部署共享runtime。
+
+## 2026-11-12 時鐘／TLS補驗完成
+
+[補驗紀錄](../../output/delta-no-pi-validation-20261112/field-security-02/README.md)：正式edge加真Modbus TCP／SQLite／私有TLS broker，時鐘2案11階段、TLS10案，共12/12通過；7個憑證／認證拒絕案保留pending，同Publisher1.0274秒重連。只注入測試UTC／節拍及sender permit，不改主機時鐘或COM。首輪9/12失敗保留，工具修正後另驗；完整回歸191 passed／12 skipped，12項隔離案已另實跑，production coverage96.06%。私有容器已清理，無API／schema／production改動、未部署共享runtime。1秒／1小時已PASS、5秒／24小時仍運行；中央receipt／去重、多設備仍待實作，非Pi／4G／真機准入。
+
+## 無 Pi 弱網與積壓驗證工具（2026-11-12）
+
+[bench_backlog.py](tools/bench_backlog.py) 使用正式 edge／TCP Poller／SQLite／Publisher，加入測試用 stream delay／jitter／rate／reset，並核對完整 payload 集合及線上備份前綴。私有 mode 需核對 namespace；local-ems 僅允許保留的 QA 身分，不允許活動 COM 台架 ID。
+
+[判定測試](tests/test_bench_backlog.py)及 [實跑證據](../../output/no-pi-backlog-20261112/README.md)：203 項回歸，10,120／155 筆私有、110 筆真 EMS 跨層對帳。completion 與 unique_delivery 分開；本輪無重複不代表 v1 有中央去重。未改 production 或活動長測來源。
+
+## 實際接收程式故障驗證（2026-11-12）
+
+[bench_ingest.py](tools/bench_ingest.py)／[判定測試](tests/test_bench_ingest.py)以自有 network-none anchor 連接私有 Mosquitto／Telegraf／TimescaleDB，使用相同接收 image／原設定核對及 repo 初始化 schema；只改副本 endpoint，無 host port。`python3 services/delta/tools/bench_ingest.py --output <全新目錄>` 於 repo 根目錄執行，保留每案 sender、DB、凍結來源、映像及清理結果。exit0 表示基準／兩反例／恢復皆按預期驗出，**不是系統可靠送達通過**，須讀 `system_delivery_acceptance_passed`。
+
+[實跑證據](../../output/no-pi-ingest-20261112/README.md)：重送重複入庫與接收停止缺筆仍 FAIL；DB 暫停恢復 10／10。另以私有核心 netem 實際丟 17 封包後 230／230 完整；211 項回歸通過。Pi、正式 TLS／ACL、中央 receipt／去重及原 24h 全窗驗收未完成；production 不變。
+
+## v2 committed delivery 修復（2026-11-12）
+
+在新設定明示 `delivery.protocol=2` 啟用 [reliable_store](delta_device/reliable_store.py)／[sender](delta_device/reliable_sender.py)／[wire](delta_device/reliable_wire.py)。[接收端／維護與切換說明](../edge-receiver/README.md)、[field設定範本](config/reliable-field.example.json)；範本 RTU lifetime=null 刻意拒啟動，現場須核定，不能照抄台架值。現有無 delivery 設定仍為 v1，不能把歷史 PUBACK 改稱中央 commit。
+
+新專用 SQLite（2026-11-13已升本地schema3、wire仍2）、未知／舊五欄schema拒開；穩定原 ID/hash，PUBACK不刪，當前已驗 session／batch committed ACK 才記送達並刪payload。另依[ADR-045](../../doc/adr/ADR-045-newest-first-edge-retention.md)，容量滿按capture_seq淘汰最舊資料以保留新讀值，包含未送／quarantine與audit；淘汰不記committed。v1與舊v2拒開schema3；離線 [migrate_delivery](delta_device/migrate_delivery.py)只讀已停止的v1來源，以全新目的檔完整轉換後原子發布，容量不足不發布裁切版，保留對應及clock高水位，不恢復已被v1刪除資料。demo v2只接受明示network-none namespace；field強制mTLS與權威ACL。[驗證與維運](../edge-receiver/README.md)。
+
+[本輪證據](../../output/committed-delivery-fix-20261112/README.md)：259項通過／12跳過、combined coverage90.81%。兩個送達缺口在新v2修復並實跑驗證；沒有切共享v1／原24h，也不宣稱完整多設備、對帳API、Pi／4G或20/s補傳已驗收。
+
+### v2最新／最舊公平傳送（2026-11-13）
+
+[ADR-048](../../doc/adr/ADR-048-v2-live-backlog-fairness.md)修原FIFO使新資料排整批歷史之後：sender先latest，真committed且本地成功解析後latest／oldest1:1交替；timeout／retryable／原列已淘汰ACK不吃輪次。box.pending()預設最舊保持；新選項只換查詢方向，原UUID/hash不變、quarantine不送。重啟從latest、輪次不持久；latest候選非所有新筆固定SLA。[千筆積壓下3新筆與相鄰回歸](../../output/no-pi-restore-load-20261113/README.md)通過（419／12專用skip／91.04%），原1秒edge節奏、wire2／schema3／mTLS及容量淘汰保持，未切共享或跑長測。

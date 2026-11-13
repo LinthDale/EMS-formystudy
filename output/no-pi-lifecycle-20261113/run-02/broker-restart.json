@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "broker_container_id": "7ae5d5e31a01f5aa43ef6166e2c63d0de86ed33d08be6a8674cb37e972e39d18",
+  "stopped": {
+    "passed": true,
+    "request_id": "a9ebaa8d-6b1d-4460-acfa-0bc7cf5fc6f7",
+    "op": "broker_stop",
+    "container_id": "7ae5d5e31a01f5aa43ef6166e2c63d0de86ed33d08be6a8674cb37e972e39d18",
+    "started_at": "2026-11-13T04:06:52.675716183Z",
+    "before_started_at": "2026-11-13T04:06:52.675716183Z",
+    "running": false
+  },
+  "started": {
+    "passed": true,
+    "request_id": "db159c8e-5b47-403e-82a7-1be828487d88",
+    "op": "broker_start",
+    "container_id": "7ae5d5e31a01f5aa43ef6166e2c63d0de86ed33d08be6a8674cb37e972e39d18",
+    "started_at": "2026-11-13T04:07:05.51242977Z",
+    "before_started_at": "2026-11-13T04:06:52.675716183Z",
+    "running": true
+  },
+  "edge_pid": 17,
+  "same_edge_process": true,
+  "tcp_samples_during_outage": 3,
+  "original_sample_ids": [
+    "a2062b0a-ac5e-4986-aadd-6be47d9f406f",
+    "e142c814-7125-4f89-abb3-8ef6988b2018",
+    "c2940742-6490-4888-a0db-2771ff986023"
+  ],
+  "projections_each": 1,
+  "pending_end": 0
+}

@@ -1,0 +1,107 @@
+{
+  "started_utc": "2026-11-12T09:10:52.407605+00:00",
+  "scope": "private actual v1 ingest clone, not shared DB fault injection",
+  "verification_passed": true,
+  "system_delivery_acceptance_passed": false,
+  "meaning": "counterexamples reproduced and recovery checked; v1 has no durable central ACK/dedup",
+  "cases": [
+    {
+      "kind": "baseline",
+      "comparison": {
+        "expected": 3,
+        "received": 3,
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": true
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": true
+    },
+    {
+      "kind": "duplicate",
+      "comparison": {
+        "expected": 1,
+        "received": 2,
+        "missing": [],
+        "extra": [],
+        "duplicates": [
+          1794474662027356000
+        ],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": false
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": false
+    },
+    {
+      "kind": "receiver-down",
+      "comparison": {
+        "expected": 1,
+        "received": 0,
+        "missing": [
+          1794474670997909000
+        ],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": false
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": false
+    },
+    {
+      "kind": "db-pause",
+      "comparison": {
+        "expected": 10,
+        "received": 10,
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": true
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": true
+    }
+  ],
+  "cleanup": [
+    {
+      "action": "remove",
+      "name": "ingest",
+      "container": "5ed7708da810369c650507b8223db1209341b14628b4dc482d2415dc8540567d",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "worker",
+      "container": "9393a75f8cb22209bfdcd9cebec6449d231e12bd90641fde882540442b5080de",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "database",
+      "container": "9d7c2c51ba68319ce887a9cab4f415412229f381433cb4f5bf9b322e2b5603e9",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "broker",
+      "container": "2dae52c84d5b1eed4c2b5ff1456c355d4ba35b7b6e5eceab35331e31e5ccf3dc",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "anchor",
+      "container": "8634c9a275084e3c6f9548d19f119af3d76075b4d82879632b3e3a47a465dc89",
+      "passed": true
+    }
+  ],
+  "sources_unchanged": true,
+  "finished_utc": "2026-11-12T09:11:32.206828+00:00"
+}

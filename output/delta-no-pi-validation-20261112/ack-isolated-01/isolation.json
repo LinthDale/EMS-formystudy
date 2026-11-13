@@ -1,0 +1,7 @@
+{
+  "broker_id": "a6f02249d1facfae30a7006f0efb006a0966b5c6fd4573d8f3ead162cadbab37",
+  "network": "none",
+  "namespace": "net:[4026533384]",
+  "host_ports": "none",
+  "receiver": "controlled SQLite, not production Telegraf/Timescale"
+}

@@ -48,3 +48,43 @@
 - 電壓 226.0–234.1 V，50 種不同讀值；電量於同一次運行不倒退。
 - 正式 Monitor 的 2 秒彙整有 56 個新電壓桶出現 min/max 差異；四圖渲染、390px 無橫向溢出、JS errors=0。桌面截圖已檢視，圖表反映後端量測與同期情境切換。
 - 證據：output/delta-one-second-20260929/live-result.json、live-chart-desktop.png、live-chart-mobile.png、clock-probe-result.json。沒有修改既有歷史或用前端補出一秒樣本。
+
+
+### 2026-11-12 Windows 實體 RS485 bench（無 Pi）
+
+兩台 USB–RS485 接同一台 Windows PC，COM3 從站／COM4 採集；修正 Windows 短封包後 110/110 成功。獨立 `delta-rtu-sim-001` 的 SQLite 暫存／補送、DB 與 EMS records API 15/15 通過，完整回歸 78 passed、coverage 95.20%。Pi、4G、Delta 真機與長期可靠性仍待驗證；舊紀錄的「Windows COM／實體 RS485 待驗證」僅由本次 bench 範圍更新。重現、證據及限制見 [驗證紀錄](../../output/delta-rtu-bench-20261112/README.md)。
+
+
+### 2026-11-12 無 Pi 逐關驗證（進行中）
+
+以正式 edge.run 搭配旁路slot帳本驗收，實際PASS/FAIL及限制見 [逐關結果](../../output/delta-no-pi-validation-20261112/README.md)。固定10分鐘5秒基準120/120、DB/API逐筆120/120；其餘關卡按紀錄更新，不能將待測或v2設計當成已驗收。
+
+### 2026-11-12 RTU listener恢復修正
+
+先RED重現Windows poll task死掉但listener未重開，再以loop exception_handler抓出write-close未回收例外。修正後新18項測試通過，完整127 passed、delta_device line coverage95.71%；隔離無網路／無硬體容器驗證。修正後recovery-fix-smoke-01實體正常採集與DB/API3/3。code／Python審查Approve；物理USB重驗尚未完成，關卡4舊FAIL保留。[證據](../../output/delta-no-pi-validation-20261112/README.md)；[ADR-040](../../doc/adr/ADR-040-delta-rtu-listener-recovery.md)。
+
+2026-11-12 12:16更新（ADR-040）：COM3修正後實體拔插usb-com3-04-fixed通過，離線33.328秒，恢復上界9.672秒，原程序持續運行，52筆DB/API逐筆相符、pending0；COM4仍待獨立測試，關卡4只部分完成。實際證據以逐關紀錄為準。
+
+12:22 usb-com4-01：恢復上界3.047秒，52/52對帳、pending0，但wrong_usb_events=1（COM3也曾失效並重開），原工具FAIL不改；COM4單端判讀INCONCLUSIVE，關卡4仍部分完成。詳逐關紀錄。
+
+2026-11-12 12:30：COM4-02單端恢復上界2.516秒、55/55 DB/API對帳、pending0；離線27.235秒未達28秒預設下限，原FAIL不改，操作時長判讀INCONCLUSIVE待受控計時補驗。COM3維持已通過，整關未完成。
+
+usb-com4-03-timed依使用者指示取消，不完整run不計驗收。COM4-02恢復2.516秒、55/55對帳，但27.235秒離線操作偏差保留，使用者不再補驗秒數。COM3正式PASS；不能將COM4工具FAIL改稱無條件正式PASS。
+
+### 第5關實體故障（2026-11-12）
+
+六類各20次、共120案；前五類100案皆通過，late 20案皆先逾時、第二查詢誤收舊2300（應2400），late_order_verified全部true，errors全部空。Gate5 FAIL，原始資料與來源快照見[frames-01](../../output/delta-no-pi-validation-20261112/frames-01/README.md)。沒有MQTT／DB寫入，也不能當成真機或完整sample測試。USB精確秒數補驗已依使用者取消。
+
+### ADR-041完整sample保護（2026-11-12）
+
+原版完整sample替身重現舊AC跨close/open污染；修正為不確定交易鎖定、未知時限停採、有核定時限隔離重建與field啟動等待。實體完整sample unknown20/20不發後續請求，有界lab1秒20/20丟棄舊AC並取得240V／9.36kW；未連MQTT，未將故障值入庫。163項隔離回歸、production line coverage96.06%。真機上界未核定，無界late舊FAIL與R20-BENCH-01 Open保留。詳[修正證據](../../output/delta-no-pi-validation-20261112/rtu-recovery-policy/README.md)；共用runtime未部署本次修正。
+
+2026-11-12最終逐關結果：ADR-041完整sample實體40案通過有界契約；第6關離線300秒、80筆DB/API完整；第7關強殺10次、30筆恢復且DB/API完整；第8關私有SQLite容量故障通過。完整164 passed、production line coverage96.06%。中央DB ACK仍缺、第9關BLOCKED，1h／24h未驗，未部署共享runtime。[完整紀錄](../../output/delta-no-pi-validation-20261112/README.md)。
+
+## 2026-11-12 續驗：DB確認反例與長測
+
+[最新逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)：第9關以私有真MQTT／production傳送端／受控SQLite重現3案，v1系統驗收FAIL；未操作共享DB，v2中央commit receipt／去重待實作。本機Monitor攔截API的5案新鮮度及圖表／卡片／表格值通過，只屬UI契約。1秒1小時於13:49啟動，通過才進5秒24小時，當前以紀錄內活動status為準；未先報長測通過。保持PC開機及兩顆USB，不再人工拔插。回歸183 passed、production coverage96.06%；無API／schema變更、未部署共享runtime。
+
+## 2026-11-12 時鐘／TLS補驗完成
+
+[補驗紀錄](../../output/delta-no-pi-validation-20261112/field-security-02/README.md)：正式edge加真Modbus TCP／SQLite／私有TLS broker，時鐘2案11階段、TLS10案，共12/12通過；7個憑證／認證拒絕案保留pending，同Publisher1.0274秒重連。只注入測試UTC／節拍及sender permit，不改主機時鐘或COM。首輪9/12失敗保留，工具修正後另驗；完整回歸191 passed／12 skipped，12項隔離案已另實跑，production coverage96.06%。私有容器已清理，無API／schema／production改動、未部署共享runtime。1秒／1小時已PASS、5秒／24小時仍運行；中央receipt／去重、多設備仍待實作，非Pi／4G／真機准入。

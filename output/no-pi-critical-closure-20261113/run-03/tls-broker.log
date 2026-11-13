@@ -1,0 +1,179 @@
+1794556911: mosquitto version 2.1.2 starting
+1794556911: Config loaded from /qa/tls.conf.
+1794556911: Bridge support available.
+1794556911: Persistence support available.
+1794556911: TLS support available.
+1794556911: TLS-PSK support available.
+1794556911: Websockets support available.
+1794556911: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794556911: Plugin builtin-security has registered to receive 'acl-check' events.
+1794556911: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794556911: Plugin builtin-security has registered to receive 'acl-check' events.
+1794556911: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794556911: Plugin builtin-security has registered to receive 'acl-check' events.
+1794556911: Opening ipv4 listen socket on port 8886.
+1794556911: Opening ipv4 listen socket on port 8887.
+1794556911: Opening ipv4 listen socket on port 8888.
+1794556911: mosquitto version 2.1.2 running
+1794556916: New connection from 127.0.0.1:36211 on port 8886.
+1794556916: New client connected from 127.0.0.1:36211 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794556916: No will message specified.
+1794556916: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556916: Sending CONNACK to receiver-qa-edge (0, 0)
+1794556916: Received SUBSCRIBE from receiver-qa-edge
+1794556916: 	ems/v2/gateways/+/samples (QoS 1)
+1794556916: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794556916: 	ems/v2/gateways/+/session/request (QoS 1)
+1794556916: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794556916: Sending SUBACK to receiver-qa-edge
+1794556916: New connection from 127.0.0.1:57357 on port 8886.
+1794556916: New client connected from 127.0.0.1:57357 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794556916: No will message specified.
+1794556916: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556916: Sending CONNACK to sender-qa-edge (0, 0)
+1794556916: Received SUBSCRIBE from sender-qa-edge
+1794556916: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794556916: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794556916: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794556916: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794556916: Sending SUBACK to sender-qa-edge
+1794556916: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556916: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556916: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794556916: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794556916: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556916: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556916: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794556916: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794556916: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556916: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556916: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794556916: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794556917: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (405 bytes))
+1794556917: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (405 bytes))
+1794556917: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794556917: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794556918: Received PUBLISH from sender-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556918: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556918: Sending PUBACK to sender-qa-edge (m4, rc0)
+1794556918: Received PUBACK from receiver-qa-edge (Mid: 3, RC:0)
+1794556918: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556918: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556918: Sending PUBACK to receiver-qa-edge (m4, rc0)
+1794556918: Received PUBACK from sender-qa-edge (Mid: 3, RC:0)
+1794556918: Received PUBLISH from sender-qa-edge (d0, q1, r0, m5, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556918: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556918: Sending PUBACK to sender-qa-edge (m5, rc0)
+1794556918: Received PUBACK from receiver-qa-edge (Mid: 4, RC:0)
+1794556918: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m5, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556918: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556918: Sending PUBACK to receiver-qa-edge (m5, rc0)
+1794556918: Received PUBACK from sender-qa-edge (Mid: 4, RC:0)
+1794556918: Received DISCONNECT from sender-qa-edge
+1794556918: Client sender-qa-edge [127.0.0.1:57357] disconnected.
+1794556919: Received DISCONNECT from receiver-qa-edge
+1794556919: Client receiver-qa-edge [127.0.0.1:36211] disconnected.
+1794556919: New connection from 127.0.0.1:58757 on port 8886.
+1794556919: New client connected from 127.0.0.1:58757 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794556919: No will message specified.
+1794556919: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556919: Sending CONNACK to receiver-qa-edge (0, 0)
+1794556919: Received SUBSCRIBE from receiver-qa-edge
+1794556919: 	ems/v2/gateways/+/samples (QoS 1)
+1794556919: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794556919: 	ems/v2/gateways/+/session/request (QoS 1)
+1794556919: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794556919: Sending SUBACK to receiver-qa-edge
+1794556919: New connection from 127.0.0.1:45315 on port 8886.
+1794556919: New client connected from 127.0.0.1:45315 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794556919: No will message specified.
+1794556919: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556919: Sending CONNACK to sender-qa-edge (0, 0)
+1794556919: Received SUBSCRIBE from sender-qa-edge
+1794556919: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794556919: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794556919: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794556919: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794556919: Sending SUBACK to sender-qa-edge
+1794556919: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556919: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556919: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794556919: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794556919: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556919: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556919: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794556919: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794556919: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556919: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556919: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794556919: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794556919: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556919: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556919: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794556919: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794556920: Received PUBLISH from sender-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556920: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556920: Sending PUBACK to sender-qa-edge (m4, rc0)
+1794556920: Received PUBACK from receiver-qa-edge (Mid: 3, RC:0)
+1794556920: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/acks', ... (405 bytes))
+1794556920: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (405 bytes))
+1794556920: Sending PUBACK to receiver-qa-edge (m4, rc0)
+1794556920: Received PUBACK from sender-qa-edge (Mid: 3, RC:0)
+1794556920: Received DISCONNECT from sender-qa-edge
+1794556920: Client sender-qa-edge [127.0.0.1:45315] disconnected.
+1794556920: Received DISCONNECT from receiver-qa-edge
+1794556920: Client receiver-qa-edge [127.0.0.1:58757] disconnected.
+1794556923: New connection from 127.0.0.1:53119 on port 8886.
+1794556923: New client connected from 127.0.0.1:53119 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794556923: No will message specified.
+1794556923: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556923: Sending CONNACK to receiver-qa-edge (0, 0)
+1794556923: Received SUBSCRIBE from receiver-qa-edge
+1794556923: 	ems/v2/gateways/+/samples (QoS 1)
+1794556923: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794556923: 	ems/v2/gateways/+/session/request (QoS 1)
+1794556923: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794556923: Sending SUBACK to receiver-qa-edge
+1794556923: New connection from 127.0.0.1:52263 on port 8886.
+1794556923: New client connected from 127.0.0.1:52263 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794556923: No will message specified.
+1794556923: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794556923: Sending CONNACK to sender-qa-edge (0, 0)
+1794556923: Received SUBSCRIBE from sender-qa-edge
+1794556923: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794556923: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794556923: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794556923: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794556923: Sending SUBACK to sender-qa-edge
+1794556923: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556923: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794556923: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794556923: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794556923: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556923: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794556923: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794556923: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794556923: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556923: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794556923: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794556923: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794556923: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556923: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794556923: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794556923: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794556923: Received DISCONNECT from sender-qa-edge
+1794556923: Client sender-qa-edge [127.0.0.1:52263] disconnected.
+1794556923: Received DISCONNECT from receiver-qa-edge
+1794556923: Client receiver-qa-edge [127.0.0.1:53119] disconnected.
+1794556911: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794556911: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794556911: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794556911: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794556911: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794556911: Info: running mosquitto as user id: 1000.

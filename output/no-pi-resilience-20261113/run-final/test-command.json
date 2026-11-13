@@ -1,0 +1,21 @@
+[
+  "docker",
+  "exec",
+  "f5bffdcb16eb91034c591813c121b493096689f787802e99f757aff4ebf1e432",
+  "python",
+  "-m",
+  "pytest",
+  "-c",
+  "/app/services/delta/pytest.ini",
+  "/app/tests/integration/test_edge_resilience.py",
+  "/app/services/delta/tests/test_reliable_resilience.py",
+  "/app/services/delta/tests/test_bench_slot_boundary.py",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "--cov=edge_receiver",
+  "--cov=delta_device",
+  "--cov-report=term-missing",
+  "--cov-report=json:/evidence/receiver-coverage.json",
+  "--junitxml=/evidence/integration.xml"
+]

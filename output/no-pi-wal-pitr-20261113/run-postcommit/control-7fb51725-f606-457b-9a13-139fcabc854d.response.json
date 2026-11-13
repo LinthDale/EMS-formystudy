@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "request_id": "7fb51725-f606-457b-9a13-139fcabc854d",
+  "op": "wal_restorepoint",
+  "restore_point": "ems_ack_boundary",
+  "target_lsn": "0/3039460",
+  "independent_flush_verified": true
+}

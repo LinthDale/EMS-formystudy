@@ -1,0 +1,36 @@
+{
+  "passed": true,
+  "request_id": "42a29b38-ea28-4fc0-a1e5-0c12ce1b10d2",
+  "op": "slot_reseed",
+  "base_verified": true,
+  "expected_system_id": "7707564299261452330",
+  "old_slot_preserved": "ems_archive_slot",
+  "replacement_slot": {
+    "slot": "ems_archive_reseed",
+    "active": true,
+    "restart_lsn": "0/703B8E8",
+    "wal_status": "reserved",
+    "peer_tls": true,
+    "flush_lsn": "0/703B8E8"
+  },
+  "fixed_lsn": "0/70000D8",
+  "flush_fence_satisfied": true,
+  "reserved_before_backup": "0/2000028",
+  "forced_gap_segments": 3,
+  "reseed_chain_pitr_verified": true,
+  "recovered_gap_marker": "reseed-gap",
+  "base_artifacts": {
+    "base-backup_manifest": {
+      "bytes": 313085,
+      "sha256": "5e6f8efd6a469ee7e0abcdce157214d1bdae51823489adf572c9a1d7215e8fdf"
+    },
+    "base-base.tar": {
+      "bytes": 36457984,
+      "sha256": "72743361d0887454af69d9747f0a288f5eb3cf3618caf92e8152e4b2b36aa24b"
+    },
+    "base-pg_wal.tar": {
+      "bytes": 16778752,
+      "sha256": "aa24a5a6bca7015e2dc40582b4965e93660fc1eb801e5e5e8f5a281046e54066"
+    }
+  }
+}

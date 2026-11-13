@@ -240,3 +240,21 @@ Python3.9+（本機Docker3.11）；獨立services/delta/requirements.txt固定py
 - bff_auth_reader runtime credential and bff_auth_admin host CLI credential; no account records in environment variables.
 - account-admin Compose tools service uses the BFF image with no public port.
 - Procedure: [account-management.md](doc/operations/account-management.md).
+
+## 可選測試：Delta時鐘／TLS隔離補驗（2026-11-12）
+
+`services/delta/tools/bench_field_checks.py`只在WSL測試host使用Python標準庫、Docker CLI與OpenSSL3 CLI（本次3.0.13）、已快取`ems-delta-test`及`eclipse-mosquitto:2`；後者提供mosquitto_passwd，不安裝到Pi。不新增pip或production依賴。一次性私有PKI／密碼、無host port、自有容器清理見[補驗紀錄](output/delta-no-pi-validation-20261112/field-security-02/README.md)。
+
+## Opt-in committed telemetry（ADR-043）
+
+新增`services/edge-receiver`原生Python3.11服務／可選Compose：paho-mqtt==2.1.0、asyncpg==0.31.0，根requirements已有相容依賴；未升級其他runtime。獨立Dockerfile使用python3.11-slim，無hostport；PostgreSQL群組ems_edge_receiver、migration019、mTLS broker／ACL、DB外generation與receiver設定需commission。Pi仍只需要Delta既有runtime，不新增Pi PostgreSQL/asyncpg。
+
+測試`Dockerfile.test`由現有同ABI CPython3.11的ems-delta-test＋ems-bff快取離線組合；主機只用Docker／OpenSSL CLI。`verify_private.py`建立network-none的5個自有容器，臨時PKI清除；不部署共享v1。完整需求／切換見[receiver README](services/edge-receiver/README.md)。
+
+2026-11-13 ADR-049新增正式維運依賴：PostgreSQL15 client工具pg_receivewal（必須--synchronous）、pg_basebackup、pg_verifybackup；systemd與TLS複寫client配置範本在services/edge-receiver/deploy，正式獨立持久儲存仍待部署。私有驗證沿既有timescale/timescaledb:latest-pg15 cached image，無新增pip依賴或共享服務。
+
+### 2026-11-13 DB／WAL TLS與還原預檢
+
+無新增pip依賴；ssl／tarfile／subprocess使用Python標準庫，asyncpg與PG15沿用。維運backup_preflight須同版本pg_controldata、pg_verifybackup可執行檔；TLS／WAL fixture另用既有openssl／pg_receivewal／pg_basebackup／Docker，非receiver runtime新增服務。正式server key外置PGDATA，DB與WAL client cert分開。
+
+2026-11-13 ADR-051：無新增依賴；沿Python stdlib／PG15。slot reseed依PG15 pg_receivewal READ_REPLICATION_SLOT在空目錄採restart_lsn起點，維運需鎖定PG15相容版本及完整WAL保留鏈；CLI新增必填核定timeline／target。

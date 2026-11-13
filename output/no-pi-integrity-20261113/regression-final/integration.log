@@ -1,0 +1,36 @@
+........................................................................ [ 14%]
+........................................................................ [ 28%]
+.................ssssssssssss........................................... [ 42%]
+........................................................................ [ 56%]
+........................................................................ [ 70%]
+........................................................................ [ 84%]
+........................................................................ [ 98%]
+........                                                                 [100%]
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                                Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------
+services/delta/delta_device/__init__.py                 0      0   100%
+services/delta/delta_device/__main__.py                60      3    95%   54, 65, 71
+services/delta/delta_device/config.py                 120      4    97%   30, 33, 134, 146
+services/delta/delta_device/delivery.py                91      1    99%   23
+services/delta/delta_device/edge.py                    63      9    86%   24-30, 50-52, 66, 73
+services/delta/delta_device/migrate_delivery.py        75     19    75%   23, 25, 34, 37, 56, 73-87, 91
+services/delta/delta_device/poller.py                 101      4    96%   45, 54, 123-124
+services/delta/delta_device/protocol.py                54      1    98%   18
+services/delta/delta_device/publisher.py               62      6    90%   26, 51-52, 62, 74-75
+services/delta/delta_device/reliable_sender.py        128      8    94%   87-88, 107, 115-117, 137-138
+services/delta/delta_device/reliable_store.py         262     16    94%   24, 28, 35, 47, 52, 75, 84, 87, 90, 106, 108, 117, 143, 157, 233, 263
+services/delta/delta_device/reliable_transport.py      23      6    74%   12, 14, 21-24
+services/delta/delta_device/reliable_wire.py          131     14    89%   56, 88, 91, 98, 125-126, 129, 135, 155, 165-169
+services/delta/delta_device/simulator.py              142      6    96%   26, 49, 118-119, 148, 180
+services/edge-receiver/edge_receiver/__init__.py        0      0   100%
+services/edge-receiver/edge_receiver/receiver.py      194     36    81%   38, 42, 47, 50, 52, 54, 57, 61, 65, 70, 73, 103, 122, 125-126, 141, 144, 147, 150, 157, 160, 164, 167, 169, 175, 179-185, 221-223, 230
+services/edge-receiver/edge_receiver/store.py          57      2    96%   72, 90
+---------------------------------------------------------------------------------
+TOTAL                                                1563    135    91%
+Coverage JSON written to file /evidence/receiver-coverage.json
+Required test coverage of 80% reached. Total coverage: 91.36%
+500 passed, 12 skipped in 34.12s

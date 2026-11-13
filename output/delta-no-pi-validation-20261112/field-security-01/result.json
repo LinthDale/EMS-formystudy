@@ -1,0 +1,34 @@
+{
+  "passed": false,
+  "scope": "private broker TLS + production edge with injected clock; not field/4G/DB ACK",
+  "started_utc": "2026-11-12T07:18:34.127937+00:00",
+  "broker_id": "1c2edea9961d66f2a6a4e9f3b5c647d3a258278128a1a7314424076e6b58b891",
+  "broker_image": "sha256:a908c65cc8e67ec9d292ef27c2c0360dbaaee7eb1b935cdd194e67697f15dea1",
+  "worker_image": "sha256:f4d96daebc6de17659ceaab3246e35d239cc24126564070404a18e7f19b9af8a",
+  "network": "none",
+  "host_ports": [],
+  "namespace": "net:[4026533382]",
+  "assessment": {
+    "passed": false,
+    "returncode": 1,
+    "tests": 12,
+    "failures": 3,
+    "errors": 0,
+    "skipped": 0
+  },
+  "docker_attach_exit": 1,
+  "case_records": 10,
+  "sources_unchanged": true,
+  "tests_passed": false,
+  "cleanup": [
+    {
+      "container": "851c74ee2919dc40aa4cc2a9f43dbf024067c8a250c805699dd3215b52bc9553",
+      "removed": true
+    },
+    {
+      "container": "1c2edea9961d66f2a6a4e9f3b5c647d3a258278128a1a7314424076e6b58b891",
+      "removed": true
+    }
+  ],
+  "finished_utc": "2026-11-12T07:18:47.863079+00:00"
+}

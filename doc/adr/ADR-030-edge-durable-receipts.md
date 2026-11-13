@@ -1,5 +1,7 @@
 # ADR-030：邊緣 SQLite 與中央提交確認
 ## Status
+2026-11-13：[ADR-045](ADR-045-newest-first-edge-retention.md)依使用者要求明示修訂本地滿容量政策，量測改按最舊seq淘汰以保留新資料，淘汰不記committed；本ADR中衝突的lossless／永保pending文字為歷史規格。中央receipt／ACK認證保持；新子集已私有驗證，未切共享部署。
+
 Proposed，2026-09-29。對應 [PRD-0021](../prd/PRD-0021-multi-device-edge-reliability.md)。
 ADR-029 的已實作v1行為仍有效；本ADR不宣稱已替換部署。
 
@@ -27,3 +29,5 @@ v2使用ems/v2/gateways/{gateway_id}/samples與/acks，隔離舊Telegraf以免�
 對帳審查補充：不可變sample schema與server receipt明確包含stream_id/capture_seq/window_id/config_revision並納入hash；receipt新增stream/seq唯一約束。首次ingest／重送／缺列修復共用receipt交易鎖，鎖內重查量測數量，避免並行repair雙插入。詳PRD-0021 §8／§15.1。
 
 採樣間隔補充（Proposed）：PRD-0021 FR-2117/2118及§15.2定義每設備1/5/10/15/30秒preset、預設10秒、可混用；8台10秒7天仍是基準級距。requested/effective與版本化排程分開，切換按實際slot核對，採樣／傳送／顯示／聚合互不混淆。快採樣須通過bus、pending＋audit空間及補傳驗收，不承諾8台在同一RS485能1秒採完；操作介面／設定下發尚未實作。
+
+2026-11-12：[ADR-043](ADR-043-opt-in-committed-telemetry.md)接受可靠送達的第一個 opt-in 子集：v2 SQLite／session ACK／原子 receipts＋四欄投影／去重／缺列修復，已私有實測；單筆／單 inflight、不宣稱完整多設備、20/s 或 sealed manifest 對帳。共享 v1 不切換；本 ADR 整體目標仍部分 Proposed，狀態及證據以 PRD-0021 §15.3 為準。

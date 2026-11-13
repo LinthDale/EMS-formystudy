@@ -1,0 +1,9 @@
+{
+  "root": "output\\no-pi-ingest-20261112",
+  "policy": "all static files under this new run only; excludes manifest itself",
+  "excludes": [
+    "artifact-sha256.json"
+  ],
+  "old_output_manifests_unchanged": true,
+  "active_soak_excluded": "original active soak directory is outside this root"
+}

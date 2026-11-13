@@ -1,0 +1,63 @@
+{
+  "passed": false,
+  "suite": "wal-security",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "ValueError",
+  "cleanup": [
+    {
+      "name": "wal-probe-expired",
+      "container": "bbf686a405fd5a57236dcc7685af2595f9ab948ccfef2a0e7e75cce2f3685556",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_host",
+      "container": "92335a125c6c7b08f49d5b21cf3c260eec1ca059697bcde0894c8533a649a587",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_ca",
+      "container": "0c385796729d778a9fab3d3f9ca4f0ae8ca895ac06d0ff41fe7bbc4aab9eaf90",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "11a963e4228c3d75e787bb60823634e530f7505c91233eb7bbd31436a49185af",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "11b11a04651036a999c51c4dc461e1c324d274f39ddadde5f9e02baafea9a24b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "6cf5b43c76d28a6ed21f4b0b544c1be2388f513afd15878ebd1a924d5ee689aa",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "f65a759dd729a8f126d1c2079e4da12f540e3336962b25964fe63bd4c244ea13",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "2ba6a1788b6eab2ff0ea2df3db82aceadfc45b808d0697eb359c904d7374fd1d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "cf3d9f8e64661d7778320b9e42bd6e0389f30ccd93c95301d9725b13163694bb",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

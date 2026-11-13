@@ -1,0 +1,57 @@
+{
+  "passed": true,
+  "child_exit": -9,
+  "observed": {
+    "pid": 73,
+    "stage": "after_commit",
+    "journal_bytes": 0,
+    "baseline_stage": "after_constructor",
+    "baseline_sha256": "da5a6f57a0fa9996b7b8c80d2cfa63bdb93d80fd1dfb9b05ad24314ef8c310fb",
+    "observed_sha256": "ba5de3908196f400e58227d06b86d821c5a68aa1b0244946803fd71bff5f7e51",
+    "constructor_changed_file": true,
+    "main_file_changed": true,
+    "committed_sample": {
+      "gateway_id": "g1",
+      "device_id": "d1",
+      "stream_id": "dc74cfcf-4e69-48a1-a58e-362f68bbab02",
+      "config_revision": "r1",
+      "profile_version": "v135",
+      "sample_id": "4ff7214b-a3fc-4edc-8022-a86efd5b44d5",
+      "capture_seq": 2,
+      "window_id": "ec49f86f-cc35-4602-8322-ac7136d2cbd7",
+      "sampled_at_us": 1794474000000001,
+      "time_quality": "trusted",
+      "measurements": {
+        "voltage": 231.0,
+        "current": 5.0,
+        "power_kw": 1.0,
+        "energy_kwh": 100.0
+      },
+      "payload_hash": "b7edc6a140323186a21852bc391f1ee8bddcacbedd65674f525abc9dc9dc41fe"
+    }
+  },
+  "recovered_ids": [
+    "4ff7214b-a3fc-4edc-8022-a86efd5b44d5"
+  ],
+  "recovered_sequence": 2,
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 1,
+    "unconfirmed_evicted_total": 1,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 1,
+      "first_seq": 1,
+      "last_seq": 1,
+      "sample_id": "bae48565-09d4-43d3-8044-1ea64d0afd5c",
+      "payload_hash": "f8557140e9741013bec7f3b182de5c7b0e4ba09fca349db53904059893dd5cd9",
+      "state": "pending",
+      "sampled_at_us": 1794474000000000
+    }
+  },
+  "next_sequence": 3,
+  "integrity": "ok",
+  "committed_identity_preserved": true
+}

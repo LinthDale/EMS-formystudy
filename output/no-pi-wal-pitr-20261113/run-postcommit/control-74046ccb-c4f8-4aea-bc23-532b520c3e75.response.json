@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "request_id": "74046ccb-c4f8-4aea-bc23-532b520c3e75",
+  "op": "wal_start",
+  "running": true,
+  "container_id": "3f17e2a499fce3cc310e7b343fae1029ec071564d9d354e61190fc005ebf5e81"
+}

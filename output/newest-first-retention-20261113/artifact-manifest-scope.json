@@ -1,0 +1,12 @@
+{
+  "captured_utc": "2026-11-13T02:22:46.051729+00:00",
+  "scope": "all completed static evidence including source snapshots and independent legacy schema2 fixture",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "final_runs": [
+    "baseline-final",
+    "faults-final-02"
+  ],
+  "no_active_soak": true
+}

@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "indexed_plan": [
+    "SCAN CONSTANT ROW",
+    "SCALAR SUBQUERY 1",
+    "SEARCH audit USING COVERING INDEX audit_sequence",
+    "SCALAR SUBQUERY 2",
+    "SEARCH audit USING COVERING INDEX audit_time"
+  ],
+  "indexes_removed_fallback_correct": true,
+  "next_sequence": 2
+}

@@ -1,0 +1,10 @@
+1794554416: mosquitto version 2.1.2 starting
+1794554416: Config loaded from /qa.conf.
+1794554416: Bridge support available.
+1794554416: Persistence support available.
+1794554416: TLS support available.
+1794554416: TLS-PSK support available.
+1794554416: Websockets support available.
+1794554416: Opening ipv4 listen socket on port 1883.
+1794554416: mosquitto version 2.1.2 running
+1794554416: Info: running mosquitto as user id: 1000.

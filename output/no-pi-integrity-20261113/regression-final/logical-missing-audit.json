@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "missing-audit",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "5a63d6cd-93a7-487d-9523-afc966ae814d",
+  "before_sha256": "5f9161728cd90c552fffc24dcb146c19f49e2f6ba172a412037699d9bee86ab0",
+  "after_sha256": "5f9161728cd90c552fffc24dcb146c19f49e2f6ba172a412037699d9bee86ab0"
+}

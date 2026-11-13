@@ -176,7 +176,7 @@ def test_serial_server_cleanup_and_no_tcp_listener(monkeypatch):
         def __init__(self, **kwargs):
             events.append(kwargs["port"])
 
-        async def serve_forever(self):
+        async def listen(self):
             events.append("listening")
             raise asyncio.CancelledError()
 

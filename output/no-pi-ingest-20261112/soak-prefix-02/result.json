@@ -1,0 +1,48 @@
+{
+  "observed_utc": "2026-11-12T09:17:24.096807+00:00",
+  "scope": "settled prefix 0..1739 only; source snapshot identical to first check",
+  "slots": 1740,
+  "ledger": {
+    "scheduled": 1740,
+    "attempted": 1740,
+    "valid": 1740,
+    "committed": 1740,
+    "missing_slots": [],
+    "failed_slots": [],
+    "duplicate_attempt_slots": [],
+    "duplicate_read_slots": [],
+    "duplicate_commit_slots": [],
+    "outside_slots": [],
+    "poll_seconds": {
+      "p50": 0.29700000025331974,
+      "p95": 0.3440000000409782,
+      "p99": 0.3600000003352761,
+      "max": 0.375
+    },
+    "pass": true
+  },
+  "golden_error_slots": [],
+  "database": {
+    "expected": 1740,
+    "received": 1740,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 1740,
+    "received": 1740,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "snapshot_sha256": "78740d074a948c614710f1dc17e2ab4d9beb658083ef13031076dbf5c09e4277",
+  "full_24h_passed": false,
+  "prefix_passed": true
+}

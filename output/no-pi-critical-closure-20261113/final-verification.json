@@ -1,0 +1,126 @@
+{
+  "captured_utc": "2026-11-13T08:09:12.799503+00:00",
+  "passed": true,
+  "checks": {
+    "run-final": true,
+    "regression-final": true,
+    "48_unit_and_evidence_counterexamples": true,
+    "new_chain_and_distinct_branch_pitr_proofs": true,
+    "14_prior_sealed_archives_unchanged": true,
+    "17_shared_running_containers_unchanged": true,
+    "no_private_key_files_or_tar_contents": true,
+    "openapi_yaml_valid": true,
+    "changed_document_links_valid": true,
+    "diff_whitespace_excluding_preexisting_guideline": true
+  },
+  "runs": {
+    "run-final": {
+      "passed": 38,
+      "skipped": 0,
+      "seconds": "18.000",
+      "cleanup": 21,
+      "sources_unchanged": true
+    },
+    "regression-final": {
+      "passed": 616,
+      "skipped": 12,
+      "seconds": "36.055",
+      "cleanup": 6,
+      "sources_unchanged": true
+    }
+  },
+  "coverage_percent": 91.73204586602293,
+  "unit_count": 48,
+  "prior_archives": [
+    {
+      "archive": "delta-no-pi-validation-20261112",
+      "files": 770,
+      "unchanged": true
+    },
+    {
+      "archive": "committed-delivery-fix-20261112",
+      "files": 752,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-backlog-20261112",
+      "files": 384,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-ingest-20261112",
+      "files": 321,
+      "unchanged": true
+    },
+    {
+      "archive": "slot-boundary-fix-20261113",
+      "files": 20,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-v2-faults-20261113",
+      "files": 526,
+      "unchanged": true
+    },
+    {
+      "archive": "newest-first-retention-20261113",
+      "files": 670,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-resilience-20261113",
+      "files": 305,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-lifecycle-20261113",
+      "files": 595,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-restore-load-20261113",
+      "files": 581,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-wal-pitr-20261113",
+      "files": 814,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-cutover-20261113",
+      "files": 446,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-integrity-20261113",
+      "files": 506,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-wal-security-20261113",
+      "files": 2587,
+      "unchanged": true
+    }
+  ],
+  "tar_private_key_audit": {
+    "archives": 8,
+    "entries": 6400,
+    "findings": 0
+  },
+  "current_source_files": 148,
+  "post_test_documentation_changes": {
+    "run-final": [
+      "services/edge-receiver/README.md",
+      "services/edge-receiver/WAL-PITR.md"
+    ],
+    "regression-final": [
+      "services/edge-receiver/README.md",
+      "services/edge-receiver/WAL-PITR.md"
+    ]
+  },
+  "no_long_soak_rerun": true,
+  "no_COM_access": true,
+  "no_shared_fault_injection": true,
+  "scope_closed": true
+}

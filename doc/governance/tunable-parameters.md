@@ -1,5 +1,19 @@
 # 可調參數表（Tunable Parameters Registry）
 
+## 量測本地循環容量（2026-11-13，ADR-045）
+
+既有權威為[Delta config](../../services/delta/delta_device/config.py)的delivery與outbox設定；改檔停舊程序備份後重啟。未新增env／調參入口，也不把量測政策寫進device-service.toml。
+
+| 參數／規則 | 預設／單位 | 範圍／性質 |
+|---|---|---|
+| queue_limit | 10000筆 | 1..1000000，既有operational；wire2時包含quarantine，滿時最舊淘汰 |
+| delivery.audit_limit | 600000筆 | 1..6000000，既有operational；滿時最舊audit前綴回收，含對應queue |
+| delivery.queue_byte_limit | 4294967296 bytes | 65536..68719476736，既有operational；SQLite主檔pages上限，journal／主機空間另計 |
+| 最新優先淘汰規則 | 固定drop_oldest | spec-locked，依[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)，不是可從遠端修改的config key |
+| 本地schema／wire | 3／2 | spec-locked；metadata.retention摘要≤4096字元；不是完整缺口歷史；來源奈秒int64且微秒對齊 |
+
+筆數cap調小可能立即淘汰更多舊量測，需維運者核定並備份；bytes上限若小於既有主檔頁數會安全拒開，不自動縮檔或先刪資料。容量淘汰不變成central ACK，中央retention與控制稽核不受這些值支配。
+
 > **人類調參主檔：[`config/device-service.toml`](../../config/device-service.toml)**（有完整註解；改檔後重啟服務生效）。本表為總覽 / 稽核索引。
 > 載入優先序（高→低）：環境變數 > `.env` > `device-service.toml` > 程式 default。機密（DB 密碼 / API keys）只放 `.env`。
 >
@@ -7,6 +21,28 @@
 > **operational** 落於 `config.Settings`（env 可覆寫）；**spec-locked** 由 PRD/ADR 鎖定，放寬走 ADR。
 >
 > 狀態：✅ 已在 Settings（env 可覆寫）｜🔒 spec-locked（改走 ADR）
+
+## Delta v2 reliable delivery（ADR-043，2026-11-12）
+
+Delta／receiver 為獨立原生服務，沿既有 JSON `load_config/validate_delivery` 與 `receiver.validate_config` 集中載入，不把此服務的參數混入 device-service.toml。人類主檔為 [edge範本](../../services/delta/config/reliable-field.example.json)／[receiver範本](../../services/edge-receiver/deploy/receiver.example.json)，機密僅 env／唯讀私鑰；Owner EMS。改 JSON 後重啟該服務，不能覆寫凍結長測。
+
+| 鍵／介面 | 預設／界線 | 性質與耦合 |
+|---|---|---|
+| delivery.protocol | 明示2；無此節仍舊v1 | spec-locked；新獨立檔／topic，禁止同樣本雙路 |
+| delivery.gateway_id／stream_id／config_revision／profile_version | 無預設，須權威登錄 | spec-locked；與device_id及queue metadata一致，已有queue不可重綁 |
+| delivery.queue_byte_limit | 4GiB；64KiB..64GiB | operational；SQLite max_page_count整檔上限，含queue/quarantine/audit，非7天容量保證 |
+| queue_limit／delivery.audit_limit | 10000／600000；上限1000000／6000000 | operational；audit不自動清除，任一滿停新採樣、保留pending與quarantine |
+| delivery.ack_timeout_seconds | 30；1..120秒 | operational；超時保留樣本，退避後重新握手；不放寬ACK身份／hash驗證 |
+| receiver.db_timeout_seconds | 5；1..30秒 | operational；DB連線／命令deadline；逾時只retryable |
+| dsn_env／generation_file | 必填 env 名／DB外UUID檔 | deployment；無fallback，PITR換generation並強制重連 |
+| receiver.bindings | ≤128 gateway，每個≤8 device | spec-locked；綁stream/revision/profile及半開生效時間，不是已支援8台bus |
+| sample／wire／session bytes | 1024／65536／1024 | spec-locked；JSON深度≤8、sample≤32/batch、欄位固定、finite 0..1e15 |
+| sender batch／inflight／rate | 1／1／≤2 batch/s | 本階段spec-locked；不宣稱20 samples/s；edge loop另有約1秒等待 |
+| receiver batch／sample rate | ≤2 batch/s；40 samples/s，burst64 | spec-locked；各自token bucket，入站queue≤64，超額不回committed |
+| session request／retry | ≤1/s；重送退避1..60s含jitter | spec-locked；reconnect先清舊batch/session，SUBACK後握手 |
+| source time／receipt retention | DB UTC前90天至後120秒；retention至少max(now,sampled)+91天 | spec-locked；本階段不自動purge，仍須中央磁碟監控 |
+| window bucket／rich snapshot | 300秒／≤16KiB | spec-locked；window先持久化，尚未sealed；rich snapshot僅本地保留至ACK，中央四欄canonical不冒稱詳細三相 |
+
 
 ## A. Operational（env 可覆寫，`config.Settings`）
 
@@ -136,3 +172,65 @@
 各sim設定範圍與sensor發布preset詳 operations/simulator-control.md；不等於Pi採樣策略。
 
 | 管理 DB DSN | BFF_AUTH_ADMIN_DSN | 空（CLI 拒絕） | — | ✅ | secret，只注入 account-admin；主機管理權限 |
+
+## Windows無Pi驗證工具（2026-11-12，僅台架）
+
+對應PRD-0020 §13、ADR-031；不改production設定或API。來源：services/delta/tools/bench_run.py、bench_frames.py、bench_network.py。結果以[逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)為準，工具存在不代表各關已通過。
+
+| 入口 | 參數／預設 | 限制及耦合 |
+|---|---|---|
+| bench_run | count必填；interval必填1/5/10/15/30秒；scenario=day | 正整數槽數，總窗≤24h；新目錄、自有SQLite；僅delta-rtu-sim-001、loopback MQTT及RTU |
+| bench_run | sim-port=COM3；主站取config(COM4)；outage可重複offset:duration | 埠不可相同，故障窗口不可重疊且須保留重啟後採樣槽 |
+| bench_run固定驗收值 | sender settle=5秒；從站恢復≤15秒；ledger queue=10000events | settle不增加採樣分母，超界／帳本寫失敗不能PASS |
+| bench_verify | wait-seconds=30秒；固定loopback4178 API | 完整已結束run窗口；DB/API逐筆原時戳與四欄位，還需run summary通過 |
+| bench_frames | count=20（1..100）；timeout=3秒（0.5..5） | 固定已確認COM3/COM4；晚回覆依第二請求同步，不把serial timeout當整輪deadline |
+| bench_network固定驗收值 | 5秒80槽，第9秒斷300秒，恢復後≤120秒DB/API核對 | private loopback gate到1883；60離線槽、單一Publisher自動重連；不停止共享broker |
+| bench_usb | target必填COM3/COM4；5秒60槽；枚舉wait=0.5秒 | 使用者約30秒拔插（驗收觀察28..60秒）；恢復上界以最後absent探測開始時間計算，非固定0.5秒誤差；需原序號與原COM。 |
+
+## RTU simulator串口恢復（ADR-040／FR-2008）
+
+| 參數／env | 預設 | 範圍／單位 | 所屬模組／性質 |
+|---|---|---|---|
+| DELTA_SIM_RTU_HEALTH_SECONDS | 0.5 | 有限數0.01..60秒 | config.simulator_recovery_settings；operational，監看listener／poll task，不因總線無量測而重開 |
+| DELTA_SIM_RTU_RECONNECT_SECONDS | 2 | 有限數0.01..60秒 | 同上；operational，成功啟動後故障重開等待；首次開啟失敗仍立即退出 |
+
+## RTU不確定交易（ADR-041／FR-2003）
+
+| 參數 | 預設 | 範圍 | 用途與核定 |
+|---|---|---|---|
+| modbus.response_lifetime_seconds | null／省略 | 有限數0.01..120秒，拒絕bool | 舊請求最後一byte可能抵達主站的核定上界，含設備／USB／驅動；不是timeout。field RTU必填；demo未知時，遇錯鎖定且不自動恢復 |
+| modbus.response_lifetime_source | null／省略 | 配置上界時必填非空字串，最多256字 | 受信operator提供的機型／韌體／介面核定依據；欄位不驗證來源真實性。台架1秒只屬受控fixture，不可帶到Delta真機 |
+
+field-rtu.example.json刻意保留null，未核定前拒絕啟動；不得為了通過validate填入猜測值。故障從失敗時刻等待完整上界，field也有啟動等待；TCP不可配置非null上界。
+
+只影響RTU模擬器，env改值重啟生效；不改TCP simulator或採集器timeout，不改CRC／站號／長度校驗。現場恢復延遲還包含USB枚舉及查詢排程，不能以此兩設定相加宣稱15秒達標。
+
+## v2公平傳送與私有restore測試限制（2026-11-13，ADR-048）
+
+[ADR-048](../adr/ADR-048-v2-live-backlog-fairness.md)登錄sender最新／最舊成功1:1為本階段spec-locked固定規則，初始latest、只有authenticated committed且本地resolved成功才換；沒有新增JSON/env可調key。原單筆／inflight1、成功間隔≥.5秒與edge1秒loop不變，資料率仍需實測；輪次記憶體不跨程序持久。
+
+僅私有verify_private工具的backup binary cap16MiB、request1024B／proof64KiB／JUnit8MiB均為防護上限，非正式DB備份容量配額；超限中止測試，不放寬production隊列／wire限制。Owner EMS；[證據](../../output/no-pi-restore-load-20261113/README.md)，不新增全域service參數或依賴。
+
+| receiver.ack_durability | receiver JSON | field=sync_wal; demo=local | enum | edge-receiver | ADR-049／FR-2106 | field強制sync_wal spec-locked，demo僅隔離驗證 |
+| receiver.wal_standby_name | receiver JSON | ems_archive | named peer | edge-receiver | ADR-049／FR-2106 | 1個[a-z][a-z0-9_]{0,62}；須與FIRST 1完全匹配；不得ANY替代 |
+| WAL CLI / slot | systemd / pg_service.conf | --synchronous; ems_archive_slot; interval=1s | flags/s | 維運pg_receivewal | ADR-049 | synchronous spec-locked，slot/peer/cluster需一致；正式獨立儲存＋首份basebackup準入 |
+
+### 2026-11-13 DB TLS／備份預檢
+
+| 參數 | 預設／邊界 | 來源／耦合 |
+|---|---|---|
+| db_tls.ca_file/cert_file/key_file | field必填，非空檔案路徑；無不驗證選項 | receiver.example.json／database_tls.py；受管CA、hostname與專用登入角色CN對應 |
+| WAL peer role | 固定ems_wal_archive，不是runtime可調降級 | migration021／受管LOGIN與client cert，peer名仍受wal_standby_name約束 |
+| --expected-system-id | 還原必填外置可信正uint64十進位字串 | backup_preflight；不可取同一bundle自稱值 |
+| --max-archive-bytes | 8589934592，正整數；檔案及展開累計上限 | backup_preflight CLI --check-archive；標準未壓縮tar，需與核定備份大小相符 |
+| --max-archive-members | 100000，正整數 | backup_preflight CLI；超限拒，不部分放行 |
+| QA WAL tmpfs | 固定128MiB，僅隔離測試安全上限 | private_wal_security；不得用於推算正式持久容量 |
+
+### 2026-11-13 還原分支參數
+
+| 參數 | 預設／邊界 | 權威與耦合 |
+|---|---|---|
+| --expected-timeline | directory預檢必填，正uint32標準十進位字串；拒latest/current/前導0 | backup_preflight.recovery_settings；維運外置核定，與target-name共同固定來源分支 |
+| --target-name | directory預檢必填，1–63安全ASCII字元，首字母數字/底線，其餘字母數字/底線/點/減號 | recovery_settings；實際PG recovery須到此named target，輸出需維運套用 |
+| QA central quota | 固定16MiB tmpfs，僅自有receipt tablespace | private_critical，非正式容量設定；測後移回pg_default/drop測試tablespace |
+| QA pickup gap | 固定3段＋checkpoint | 僅驗base→接手保護空窗，不能視為正式容量／失效域SLA |

@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "request_id": "468b0537-757a-4c6e-b131-b5911e4dfd2e",
+  "op": "wal_primary_loss",
+  "original_primary_stopped": true,
+  "container_id": "3dcee61f65640b8889aaf2624a0f92e7043283d072773e69945e8f7b63000898",
+  "artifacts": {
+    "base-backup_manifest": {
+      "bytes": 312283,
+      "sha256": "5b745c275f5baf01d00c85caaf174bacb5b6ee82c47ba66db288544136533da9"
+    },
+    "base-base.tar": {
+      "bytes": 36430848,
+      "sha256": "a965b996b72ae4c49faf4050dd05409bef7cfb6f6d8fa32dc60443ea2b0b667f"
+    },
+    "base-pg_wal.tar": {
+      "bytes": 16778752,
+      "sha256": "6c0faa16ea3fee9e15a9789cea9c15b88f40d22f1fd50a7065afbf23c681b2d2"
+    },
+    "wal-000000010000000000000003.partial": {
+      "bytes": 16777216,
+      "sha256": "9952bddb2d3aab7bf76cbe9946e4e1acc2d176157fd9eb28e4b7ba183c8ae1d9"
+    },
+    "wal-000000010000000000000001": {
+      "bytes": 16777216,
+      "sha256": "c3018255795843b439ae3c85cf996fc6650916e85686e6f06d40b08b7d2ecfe9"
+    },
+    "wal-000000010000000000000002": {
+      "bytes": 16777216,
+      "sha256": "f3c8e2e33a8cd35e904d804b95ac69ef816beeeaebe8ea7fe30da52a9bfd29fd"
+    }
+  },
+  "original_pgdata_used_for_recovery": false
+}

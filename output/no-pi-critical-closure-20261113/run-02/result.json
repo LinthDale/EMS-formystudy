@@ -1,0 +1,75 @@
+{
+  "passed": false,
+  "suite": "critical",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "FileExistsError",
+  "cleanup": [
+    {
+      "name": "branch-two-database",
+      "container": "036038e28ac7e0265edebe29386406eb0cc580d8e15848d80f143a20c11209ca",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-branch-two",
+      "container": "a90726a828c892f9f93ba9a5b5298f809b810d1264bc22db7d5c69cf60237d13",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver-reseed",
+      "container": "27de9e5910df4cdf69ebd573aecc8cd73ae7d6284fbccfbaaa5d94c95fe39357",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-reseed-verify",
+      "container": "6cf5f16060593a06e9fd25a2fdc1c3caf3ae9b6fcc00fa3bbe0cda7b9da1c1b6",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "14d3aea1a1af1fc98df3dff5868e7aca72b8d7b26e4571bf7e84b5a73ccd5c9a",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "7e22748b7c4907da12a556a2e40a402cf5ce861cb8dc28d10548026cf84ee04c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "72128b872f52cb51e91c28445125e298f00ca3f0b7ee08fe1830a06c7d946b47",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "68e012a24d7e3a169459348544df0658a3ec6bb0525f85d1c3249b5a84006558",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "6e94dc5eba849edfb0bd2c43250f57531d45016e800504c8257a996f67a07347",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "d8c7085a0e129c613177edcbe55ac673dde8c29385316bd928dd6a3d13a4c802",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "1f97e787eadfa3655625556970339d2184f06cbc8e6598d3ef22c028b7784ca1",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

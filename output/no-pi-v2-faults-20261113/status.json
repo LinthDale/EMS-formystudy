@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "new_fault_cases": 8,
+  "mandatory_boundary_cases": 35,
+  "private_cases_total": 43,
+  "controller_guard_cases": 16,
+  "long_test_restarted": false,
+  "shared_v2_deployed": false,
+  "pi_field_acceptance": false,
+  "final_run": "final-04",
+  "final_elapsed_seconds": 9.63
+}

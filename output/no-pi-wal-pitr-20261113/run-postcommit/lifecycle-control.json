@@ -1,0 +1,110 @@
+[
+  {
+    "passed": true,
+    "request_id": "8c39aca4-ca66-482b-9c97-49918e4766d1",
+    "op": "wal_stop",
+    "running": false,
+    "container_id": "3f17e2a499fce3cc310e7b343fae1029ec071564d9d354e61190fc005ebf5e81"
+  },
+  {
+    "passed": true,
+    "request_id": "74046ccb-c4f8-4aea-bc23-532b520c3e75",
+    "op": "wal_start",
+    "running": true,
+    "container_id": "3f17e2a499fce3cc310e7b343fae1029ec071564d9d354e61190fc005ebf5e81"
+  },
+  {
+    "passed": true,
+    "request_id": "3ea6a09b-2f3f-4245-9845-eac09236edb4",
+    "op": "wal_stop",
+    "running": false,
+    "container_id": "3f17e2a499fce3cc310e7b343fae1029ec071564d9d354e61190fc005ebf5e81"
+  },
+  {
+    "passed": true,
+    "request_id": "9b99878a-9965-48a0-b5f0-ca40abc9624f",
+    "op": "wal_start",
+    "running": true,
+    "container_id": "3f17e2a499fce3cc310e7b343fae1029ec071564d9d354e61190fc005ebf5e81"
+  },
+  {
+    "passed": true,
+    "request_id": "601f3b8d-5436-4fb6-9d45-644a60e652b3",
+    "op": "wal_basebackup",
+    "files": {
+      "backup_manifest": {
+        "bytes": 312283,
+        "sha256": "5b745c275f5baf01d00c85caaf174bacb5b6ee82c47ba66db288544136533da9"
+      },
+      "base.tar": {
+        "bytes": 36430848,
+        "sha256": "a965b996b72ae4c49faf4050dd05409bef7cfb6f6d8fa32dc60443ea2b0b667f"
+      },
+      "pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "6c0faa16ea3fee9e15a9789cea9c15b88f40d22f1fd50a7065afbf23c681b2d2"
+      }
+    },
+    "format": "physical-basebackup-tar"
+  },
+  {
+    "passed": true,
+    "request_id": "7fb51725-f606-457b-9a13-139fcabc854d",
+    "op": "wal_restorepoint",
+    "restore_point": "ems_ack_boundary",
+    "target_lsn": "0/3039460",
+    "independent_flush_verified": true
+  },
+  {
+    "passed": true,
+    "request_id": "468b0537-757a-4c6e-b131-b5911e4dfd2e",
+    "op": "wal_primary_loss",
+    "original_primary_stopped": true,
+    "container_id": "3dcee61f65640b8889aaf2624a0f92e7043283d072773e69945e8f7b63000898",
+    "artifacts": {
+      "base-backup_manifest": {
+        "bytes": 312283,
+        "sha256": "5b745c275f5baf01d00c85caaf174bacb5b6ee82c47ba66db288544136533da9"
+      },
+      "base-base.tar": {
+        "bytes": 36430848,
+        "sha256": "a965b996b72ae4c49faf4050dd05409bef7cfb6f6d8fa32dc60443ea2b0b667f"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "6c0faa16ea3fee9e15a9789cea9c15b88f40d22f1fd50a7065afbf23c681b2d2"
+      },
+      "wal-000000010000000000000003.partial": {
+        "bytes": 16777216,
+        "sha256": "9952bddb2d3aab7bf76cbe9946e4e1acc2d176157fd9eb28e4b7ba183c8ae1d9"
+      },
+      "wal-000000010000000000000001": {
+        "bytes": 16777216,
+        "sha256": "c3018255795843b439ae3c85cf996fc6650916e85686e6f06d40b08b7d2ecfe9"
+      },
+      "wal-000000010000000000000002": {
+        "bytes": 16777216,
+        "sha256": "f3c8e2e33a8cd35e904d804b95ac69ef816beeeaebe8ea7fe30da52a9bfd29fd"
+      }
+    },
+    "original_pgdata_used_for_recovery": false
+  },
+  {
+    "passed": true,
+    "request_id": "7bd9738b-b20e-4885-a6e4-1a5364dcc678",
+    "op": "wal_missing",
+    "container_id": "f35d34d187c9602d9dbb272c4355946e624aa24ebcfaa195bdcd2772c5eed975",
+    "target_not_reached": true,
+    "promoted": false
+  },
+  {
+    "passed": true,
+    "request_id": "0b6f697d-2ce0-45ee-9574-9956c43e6e71",
+    "op": "wal_recover",
+    "container_id": "73ca1edfe868d8c03f01823e672b8c54d15c3d359178075e8a57e710d52bfe84",
+    "target_reached": true,
+    "promoted": true,
+    "port": 5433,
+    "backup_verified": true
+  }
+]

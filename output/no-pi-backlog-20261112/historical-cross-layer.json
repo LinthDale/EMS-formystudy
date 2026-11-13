@@ -1,0 +1,33 @@
+{
+  "database": {
+    "expected": 60,
+    "received": 60,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 60,
+    "received": 60,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "rendered_records": {
+    "expected": 60,
+    "received": 60,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "passed": true
+}

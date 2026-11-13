@@ -1,0 +1,33 @@
+[
+  {
+    "passed": true,
+    "request_id": "37ae0fe7-da79-4eba-96b8-6429880b071d",
+    "op": "broker_stop",
+    "container_id": "c29b52196d5a56b45e74b33e2950c51c424a44ed94ee9c688c86d461dbe9cdbd",
+    "started_at": "2026-11-13T04:08:38.213535879Z",
+    "before_started_at": "2026-11-13T04:08:38.213535879Z",
+    "running": false
+  },
+  {
+    "passed": true,
+    "request_id": "69615526-e567-4039-a8f1-2011c6652317",
+    "op": "broker_start",
+    "container_id": "c29b52196d5a56b45e74b33e2950c51c424a44ed94ee9c688c86d461dbe9cdbd",
+    "started_at": "2026-11-13T04:08:51.5310594Z",
+    "before_started_at": "2026-11-13T04:08:38.213535879Z",
+    "running": true
+  },
+  {
+    "passed": true,
+    "request_id": "ca5ae072-8116-4c3c-a22e-c657e7f81281",
+    "op": "revoke_old_client",
+    "container_id": "59169b711da6409256430e96987ed10eb1e1fd7a597c5b5ee8186d5af6bd25f8",
+    "started_at": "2026-11-13T04:09:11.03565932Z",
+    "before_started_at": "2026-11-13T04:08:38.344445962Z",
+    "running": true,
+    "serial_revoked": "675CC3B369D3C131D56CAAEA37EA57E88E6F69EC",
+    "crl_verified": true,
+    "revocation_verify_error": 23,
+    "crl_sha256": "53c049325fa751277a6949c0829caf54851fccf18c512d4ecda31b31979cd956"
+  }
+]

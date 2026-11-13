@@ -1,0 +1,92 @@
+{
+  "observed_utc": "2026-11-13T00:40:35.859248+00:00",
+  "status": "INTERRUPTED",
+  "full_24h_passed": false,
+  "window_start": {
+    "kind": "window_start",
+    "utc": "2026-11-12T06:49:53.637469+00:00",
+    "monotonic": 2544316.218,
+    "origin": 2544316.218,
+    "count": 17280,
+    "interval": 5
+  },
+  "planned_slots": 17280,
+  "observed_slots": 5512,
+  "unobserved_planned_slots": 11768,
+  "observed_coverage_percent": 31.89814814814815,
+  "elapsed_to_last_event_seconds": 27555.46900000004,
+  "last_event": {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T14:29:13.726591+00:00",
+    "monotonic": 2571871.687,
+    "sampled_ns": 1794493753284848000
+  },
+  "last_sample_utc": "2026-11-12T14:29:13.284848+00:00",
+  "window_end_events": 0,
+  "local_summary": {
+    "scheduled": 5512,
+    "attempted": 5511,
+    "valid": 5511,
+    "committed": 5511,
+    "missing_slots": [
+      5109
+    ],
+    "failed_slots": [
+      5109
+    ],
+    "duplicate_attempt_slots": [
+      5108
+    ],
+    "duplicate_read_slots": [
+      5108
+    ],
+    "duplicate_commit_slots": [
+      5108
+    ],
+    "outside_slots": [],
+    "poll_seconds": {
+      "p50": 0.29700000025331974,
+      "p95": 0.3440000000409782,
+      "p99": 0.3440000000409782,
+      "max": 0.375
+    },
+    "pass": false
+  },
+  "read_errors": 0,
+  "golden_error_slots": [],
+  "sqlite": {
+    "integrity_check": "ok",
+    "pending": 0,
+    "latest_timestamp": "1794493753284848000"
+  },
+  "database": {
+    "expected": 5512,
+    "received": 5512,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "verified": true,
+    "origin": "http://127.0.0.1:8003",
+    "comparison": {
+      "expected": 5512,
+      "received": 5512,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    }
+  },
+  "events_sha256": "f18a263d64639f90a5e4861e78a0f146e4203ff27cd3893c0daebaabed46f02c",
+  "query_bounds": {
+    "lower_inclusive_ns": 1794466193637469000,
+    "upper_inclusive_ns": 1794552593637468000,
+    "meaning": "entire planned 24h sample interval; compares all persisted source samples, also detects orphan DB rows"
+  }
+}

@@ -1,0 +1,144 @@
+{
+  "passed": true,
+  "suite": "critical",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532318]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 38,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 38,
+    "observed_tests": 38,
+    "evidence_checks": {
+      "central_enospc": true,
+      "lost_slot": true,
+      "timeline": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "unsafe-latest-counterexample-database",
+      "container": "c1f4a71c4aa805505a65a65b9e1664673317d172fb36d32a717584cbb10d039e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-unsafe-latest-counterexample",
+      "container": "7aa6cf73268f28e7bf04c47a9840653153a3d5da698718dd2ad3f498a4f14956",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "pinned-second-pitr-database",
+      "container": "1d60f196ae9b5218c40859d6c5d7d1ac044cfc454d7babacfe1efd71f562f135",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-pinned-second-pitr",
+      "container": "517ed9564c4dc0e1a9edbe8ecd30836a8bc74bcbb4c3e30d8e703e7fb0121015",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-three-wal",
+      "container": "53d3204e695cb18c4a7a6b30afdf344d5933963602ee27730071d57890ca2131",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-three-database",
+      "container": "294ef77535cd75b2fc79eae8e8fa8c5a043dc9f1581d60eed66b6ce04ec7e3de",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-branch-three",
+      "container": "1978ff7b0f208ddcd0ee1d8a01181161d76079ef615f7230d6fe78bd64dba72f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-two-wal",
+      "container": "96dc48f984edd3d3807c52b1ebb721ef2fd9dd46e8b0dbe0cb64959c19321df2",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-two-database",
+      "container": "5b7cbbef0827637430f0103f65429ed975712a9f88e946bbe39302e2a52162f2",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-branch-two",
+      "container": "288136de6893fe90372fa74d4bc1fb25aa97d2ec8027b4e667e3a18df202ff24",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver-reseed",
+      "container": "3da401db85ab52a3e0d325f3f0f40b1459b71325e4194f7216adc73c3a07a18c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-reseed-verify",
+      "container": "d2836104d9b40f2cd0e059494d308379183b33c7e81b7f9d65197a5f1ab4183d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "c6f447e53c98a0c8e17db8ea4f55189603a26260bbe85ef8d13fb847436530aa",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "acf96ce1b55f2f5c1d683fd9931e97d435123ca73e8e39c0b30ed6aeb295313f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "55c88a631c253c252a872c616afd19731adb7aa4cff6e48fb4f8ab9c4d751991",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "7e28630f563df200fced7f1efd67ca86c8456f56ffc67c59689b072a504b342e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "b963fefa51cf30c7e016643b13a2f97412499ede1583df93d58672fbc3abd534",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "555c6a9fdc6b501ff67910f5ef42331d71a67d3b08a1aa74107431f37b176a73",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "c06b1756f3cf0cf21405baf0cbebb533d9777f12fa7492cfba10e2d367303791",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

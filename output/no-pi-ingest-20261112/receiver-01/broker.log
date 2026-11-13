@@ -1,0 +1,115 @@
+1794474653: mosquitto version 2.1.2 starting
+1794474653: Config loaded from /qa.conf.
+1794474653: Bridge support available.
+1794474653: Persistence support available.
+1794474653: TLS support available.
+1794474653: TLS-PSK support available.
+1794474653: Websockets support available.
+1794474653: Opening ipv4 listen socket on port 1883.
+1794474653: mosquitto version 2.1.2 running
+1794474656: New connection from 127.0.0.1:55972 on port 1883.
+1794474656: New client connected from 127.0.0.1:55972 as ems-ingest (p4, c1, k60).
+1794474656: No will message specified.
+1794474656: Sending CONNACK to ems-ingest (0, 0)
+1794474656: Received SUBSCRIBE from ems-ingest
+1794474656: 	ems/devices/+/measurements (QoS 1)
+1794474656: ems-ingest 1 ems/devices/+/measurements
+1794474656: Sending SUBACK to ems-ingest
+1794474656: New connection from 127.0.0.1:39819 on port 1883.
+1794474656: New client connected from 127.0.0.1:39819 as sender-baseline (p4, c1, k30).
+1794474656: No will message specified.
+1794474656: Sending CONNACK to sender-baseline (0, 0)
+1794474656: Received PUBLISH from sender-baseline (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (136 bytes))
+1794474656: Sending PUBLISH to ems-ingest (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (136 bytes))
+1794474656: Sending PUBACK to sender-baseline (m1, rc0)
+1794474656: Received PUBACK from ems-ingest (Mid: 1, RC:0)
+1794474656: Received PUBLISH from sender-baseline (d0, q1, r0, m2, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (139 bytes))
+1794474656: Sending PUBLISH to ems-ingest (d0, q1, r0, m2, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (139 bytes))
+1794474656: Sending PUBACK to sender-baseline (m2, rc0)
+1794474656: Received PUBACK from ems-ingest (Mid: 2, RC:0)
+1794474656: Received PUBLISH from sender-baseline (d0, q1, r0, m3, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (139 bytes))
+1794474656: Sending PUBLISH to ems-ingest (d0, q1, r0, m3, 'ems/devices/delta-ingest-qa-baseline/measurements', ... (139 bytes))
+1794474656: Sending PUBACK to sender-baseline (m3, rc0)
+1794474656: Received PUBACK from ems-ingest (Mid: 3, RC:0)
+1794474656: Received DISCONNECT from sender-baseline
+1794474656: Client sender-baseline [127.0.0.1:39819] disconnected.
+1794474662: New connection from 127.0.0.1:48449 on port 1883.
+1794474662: New client connected from 127.0.0.1:48449 as sender-duplicate (p4, c1, k30).
+1794474662: No will message specified.
+1794474662: Sending CONNACK to sender-duplicate (0, 0)
+1794474662: Received PUBLISH from sender-duplicate (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-duplicate/measurements', ... (137 bytes))
+1794474662: Sending PUBLISH to ems-ingest (d0, q1, r0, m4, 'ems/devices/delta-ingest-qa-duplicate/measurements', ... (137 bytes))
+1794474662: Sending PUBACK to sender-duplicate (m1, rc0)
+1794474662: Received PUBACK from ems-ingest (Mid: 4, RC:0)
+1794474662: Received PUBLISH from sender-duplicate (d0, q1, r0, m2, 'ems/devices/delta-ingest-qa-duplicate/measurements', ... (137 bytes))
+1794474662: Sending PUBLISH to ems-ingest (d0, q1, r0, m5, 'ems/devices/delta-ingest-qa-duplicate/measurements', ... (137 bytes))
+1794474662: Sending PUBACK to sender-duplicate (m2, rc0)
+1794474662: Received PUBACK from ems-ingest (Mid: 5, RC:0)
+1794474662: Received DISCONNECT from sender-duplicate
+1794474662: Client sender-duplicate [127.0.0.1:48449] disconnected.
+1794474670: Received DISCONNECT from ems-ingest
+1794474670: Client ems-ingest [127.0.0.1:55972] disconnected.
+1794474671: New connection from 127.0.0.1:44249 on port 1883.
+1794474671: New client connected from 127.0.0.1:44249 as sender-receiver-down (p4, c1, k30).
+1794474671: No will message specified.
+1794474671: Sending CONNACK to sender-receiver-down (0, 0)
+1794474671: Received PUBLISH from sender-receiver-down (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-receiver-down/measurements', ... (141 bytes))
+1794474671: Sending PUBACK to sender-receiver-down (m1, rc0)
+1794474671: Received DISCONNECT from sender-receiver-down
+1794474671: Client sender-receiver-down [127.0.0.1:44249] disconnected.
+1794474671: New connection from 127.0.0.1:51736 on port 1883.
+1794474671: New client connected from 127.0.0.1:51736 as ems-ingest (p4, c1, k60).
+1794474671: No will message specified.
+1794474671: Sending CONNACK to ems-ingest (0, 0)
+1794474671: Received SUBSCRIBE from ems-ingest
+1794474671: 	ems/devices/+/measurements (QoS 1)
+1794474671: ems-ingest 1 ems/devices/+/measurements
+1794474671: Sending SUBACK to ems-ingest
+1794474681: New connection from 127.0.0.1:60161 on port 1883.
+1794474681: New client connected from 127.0.0.1:60161 as sender-db-pause (p4, c1, k30).
+1794474681: No will message specified.
+1794474681: Sending CONNACK to sender-db-pause (0, 0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (136 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m1, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (136 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m1, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 1, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m2, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m2, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m2, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 2, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m3, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m3, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m3, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 3, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m4, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m4, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m4, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 4, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m5, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m5, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m5, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 5, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m6, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m6, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m6, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 6, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m7, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m7, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m7, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 7, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m8, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m8, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m8, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 8, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m9, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m9, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m9, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 9, RC:0)
+1794474681: Received PUBLISH from sender-db-pause (d0, q1, r0, m10, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBLISH to ems-ingest (d0, q1, r0, m10, 'ems/devices/delta-ingest-qa-db-pause/measurements', ... (139 bytes))
+1794474681: Sending PUBACK to sender-db-pause (m10, rc0)
+1794474681: Received PUBACK from ems-ingest (Mid: 10, RC:0)
+1794474681: Received DISCONNECT from sender-db-pause
+1794474681: Client sender-db-pause [127.0.0.1:60161] disconnected.
+1794474691: Client ems-ingest [127.0.0.1:51736] disconnected: connection closed by client.
+1794474653: Info: running mosquitto as user id: 1000.

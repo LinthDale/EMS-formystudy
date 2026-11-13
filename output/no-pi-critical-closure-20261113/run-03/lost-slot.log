@@ -1,0 +1,7 @@
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: error: unexpected termination of replication stream: ERROR:  requested WAL segment 000000010000000000000001 has already been removed
+pg_receivewal: error: disconnected

@@ -1,0 +1,30 @@
+{
+  "python": "3.12.14",
+  "packages": {
+    "pymodbus": "3.6.9",
+    "pyserial": "3.5",
+    "paho-mqtt": "2.1.0"
+  },
+  "ports": [
+    {
+      "port": "COM3",
+      "serial": "BG04PB77A"
+    },
+    {
+      "port": "COM4",
+      "serial": "BG04PB7RA"
+    }
+  ],
+  "serial": {
+    "baudrate": 19200,
+    "bytesize": 8,
+    "parity": "N",
+    "stopbits": 1,
+    "unit_id": 1,
+    "address_base": 1,
+    "timeout": 3
+  },
+  "cable_length": "user estimate about 60cm; not measured",
+  "field_qualified": false,
+  "deployment": "local source only; shared containers unchanged"
+}

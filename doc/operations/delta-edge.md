@@ -59,3 +59,27 @@ PUBACK非DB ACK，現有資料庫不去重；這一版不能宣稱現場producti
 - 電壓 226.0–234.1 V，50 種不同讀值；電量於同一次運行不倒退。
 - 正式 Monitor 的 2 秒彙整有 56 個新電壓桶出現 min/max 差異；四圖渲染、390px 無橫向溢出、JS errors=0。桌面截圖已檢視，圖表反映後端量測與同期情境切換。
 - 證據：output/delta-one-second-20260929/live-result.json、live-chart-desktop.png、live-chart-mobile.png、clock-probe-result.json。沒有修改既有歷史或用前端補出一秒樣本。
+
+
+### 2026-11-12 Windows 實體 RS485 bench（無 Pi）
+
+兩台 USB–RS485 接同一台 Windows PC，COM3 從站／COM4 採集；修正 Windows 短封包後 110/110 成功。獨立 `delta-rtu-sim-001` 的 SQLite 暫存／補送、DB 與 EMS records API 15/15 通過，完整回歸 78 passed、coverage 95.20%。Pi、4G、Delta 真機與長期可靠性仍待驗證；舊紀錄的「Windows COM／實體 RS485 待驗證」僅由本次 bench 範圍更新。重現、證據及限制見 [驗證紀錄](../../output/delta-rtu-bench-20261112/README.md)。
+
+
+### 2026-11-12 無 Pi 驗證計畫（待逐關執行）
+
+[單設備 Windows 台架計畫與驗收基準](delta-no-pi-validation-plan.md)：定義採樣槽帳本、資料正確性、USB／封包／上傳故障、程序恢復及 DB 對帳關卡。門檻為台架提議值，非已達成 SLA；中央 committed ACK／去重沿 PRD-0021 待實作。本次未新增容器、API 或 runtime 設定。
+
+### RTU從站串口恢復（ADR-040）
+
+成功監聽後的串口失效會重開相同明確指定的COM／dev端點，資料context保留；啟動失敗仍退出。不會因無查詢或無發電重開串口。兩個恢復延遲env見[參數表](../governance/tunable-parameters.md)，改值後重啟。回歸與實體拔插狀態分開，見[逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)。
+
+2026-11-12 12:16更新（ADR-040）：COM3修正後實體拔插usb-com3-04-fixed通過，離線33.328秒，恢復上界9.672秒，原程序持續運行，52筆DB/API逐筆相符、pending0；COM4仍待獨立測試，關卡4只部分完成。實際證據以逐關紀錄為準。
+
+## RTU不確定交易更新（ADR-041）
+
+遇到未知回覆時限的不確定交易，現行本機原始碼會停新採樣；不再依舊版描述無條件進入下一輪。既有SQLite可信資料仍可補送。有核定response_lifetime_seconds/source時才可隔離後重建client/framer並清buffer，field啟動亦隔離；範本null需人工核定後補值。台架1秒不是Delta真機依據，現場profile待驗。執行證據以[逐關紀錄](../../output/delta-no-pi-validation-20261112/README.md)為準。
+
+## v2 可靠送達（ADR-043）
+
+[設定／部署／轉換及回滾](../../services/edge-receiver/README.md)。`delivery.protocol=2`使用新專用queue與samples/acks/session；只有中央commit後已驗ACK刪payload，無delivery的舊設定仍v1。field強制mTLS／server-only ACK與權威stream/revision/profile，RTU時限仍先核定。未知schema／滿queue／滿audit停新採樣但保留舊資料。原24h凍結v1不得切換；本輪是259項及私有真故障驗證，非Pi／4G／ADTEK驗收。

@@ -1,0 +1,11 @@
+# 三項無Pi續測：獨立複核
+
+Python reviewer及code reviewer均實證新ro預檢遇hot rollback journal會拋SQLITE_READONLY_ROLLBACK，阻擋合法恢復；主代理先重跑前輪SIGKILL取得2RED／1PASS，再只對精確錯誤採mode=rw原生rollback、schema仍檢查，不建立新DB。修後原native反例恢復原UUID/hash、journal消失；4損壞／empty案仍拒開，阻擋已關閉。
+
+Code reviewer提出新host-worker控制回覆的固定tmp symlink及其他log／result讀寫同類HIGH；已統一host postworker寫入exclusive隨機FD→原子rename，stdout持匿名FD不按可換路徑重讀，request／XML／proof皆NOFOLLOW＋regular＋bounded。增加外檔不被改／不被讀、oversize／目錄拒絕與固定owned target測試；最終CRITICAL0／HIGH0、Approve。
+
+Python reviewer另提出憑證原案只證明撤權後新連線拒絕，未證明活動session被中斷；已保留活動舊client等controller CRL＋brokerrestart後真正disconnect，再測old拒／new可。broker前置改成已有commit，再以seq_at_stop界定離線真TCP採樣，避免永遠pending>0造成誤FAIL。
+
+Security reviewer核對host op／UUID／owned CID白名單、無worker dockersocket、CRL私有範圍及檔案邊界，無剩餘CRITICAL/HIGH、Approve。限制：此為受信測試程式、worker可讀私有測試PKI，不能宣稱正式最小憑證／完全不受信worker隔離。run-02來源變動保持整輪false，最終來源一致與清理由主代理核對。
+
+所有reviewer唯讀、不改檔、不操作共享服務／COM／長測。production唯一變更為ReliableOutbox啟動防護；沒有修改broker認證實作、中央receipt或wire／schema契約。

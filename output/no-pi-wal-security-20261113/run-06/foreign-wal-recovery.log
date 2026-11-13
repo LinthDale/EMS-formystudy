@@ -1,0 +1,27 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+chmod: /var/run/postgresql: Operation not permitted
+2026-11-13 07:13:49.221 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 07:13:49.221 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5436
+2026-11-13 07:13:49.232 UTC [1] LOG:  listening on IPv6 address "::", port 5436
+2026-11-13 07:13:49.243 UTC [1] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5436"
+2026-11-13 07:13:49.247 UTC [17] LOG:  database system was interrupted; last known up at 2026-11-13 07:13:32 UTC
+2026-11-13 07:13:49.269 UTC [23] FATAL:  the database system is starting up
+2026-11-13 07:13:49.403 UTC [30] FATAL:  the database system is starting up
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 07:13:49.480 UTC [17] LOG:  starting point-in-time recovery to "ems_ack_boundary"
+2026-11-13 07:13:49.480 UTC [17] LOG:  starting backup recovery with redo LSN 0/2000028, checkpoint LSN 0/2000060, on timeline ID 1
+2026-11-13 07:13:49.488 UTC [17] LOG:  restored log file "000000010000000000000002" from archive
+2026-11-13 07:13:49.499 UTC [17] LOG:  redo starts at 0/2000028
+2026-11-13 07:13:49.505 UTC [17] LOG:  restored log file "000000010000000000000003" from archive
+2026-11-13 07:13:49.513 UTC [17] LOG:  completed backup recovery with redo LSN 0/2000028 and end LSN 0/2000100
+2026-11-13 07:13:49.513 UTC [17] LOG:  consistent recovery state reached at 0/2000100
+2026-11-13 07:13:49.513 UTC [17] LOG:  WAL file is from different database system: WAL file database system identifier is 7707550812177383466, pg_control database system identifier is 7707550589225996330
+2026-11-13 07:13:49.513 UTC [17] LOG:  redo done at 0/2000100 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2026-11-13 07:13:49.513 UTC [17] FATAL:  recovery ended before configured recovery target was reached
+2026-11-13 07:13:49.513 UTC [1] LOG:  database system is ready to accept read-only connections
+2026-11-13 07:13:49.514 UTC [1] LOG:  startup process (PID 17) exited with exit code 1
+2026-11-13 07:13:49.514 UTC [1] LOG:  terminating any other active server processes
+2026-11-13 07:13:49.514 UTC [1] LOG:  shutting down due to startup process failure
+2026-11-13 07:13:49.515 UTC [1] LOG:  database system is shut down

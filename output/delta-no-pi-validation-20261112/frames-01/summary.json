@@ -1,0 +1,27 @@
+{
+  "fragment": {
+    "count": 20,
+    "passed": 20
+  },
+  "truncated": {
+    "count": 20,
+    "passed": 20
+  },
+  "crc": {
+    "count": 20,
+    "passed": 20
+  },
+  "wrong_unit": {
+    "count": 20,
+    "passed": 20
+  },
+  "silent": {
+    "count": 20,
+    "passed": 20
+  },
+  "late": {
+    "count": 20,
+    "passed": 0
+  },
+  "passed": false
+}

@@ -1,0 +1,173 @@
+1794538166: mosquitto version 2.1.2 starting
+1794538166: Config loaded from /qa/tls.conf.
+1794538166: Bridge support available.
+1794538166: Persistence support available.
+1794538166: TLS support available.
+1794538166: TLS-PSK support available.
+1794538166: Websockets support available.
+1794538166: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794538166: Plugin builtin-security has registered to receive 'acl-check' events.
+1794538166: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794538166: Plugin builtin-security has registered to receive 'acl-check' events.
+1794538166: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794538166: Plugin builtin-security has registered to receive 'acl-check' events.
+1794538166: Opening ipv4 listen socket on port 8886.
+1794538166: Opening ipv4 listen socket on port 8887.
+1794538166: Opening ipv4 listen socket on port 8888.
+1794538166: mosquitto version 2.1.2 running
+1794538169: New connection from 127.0.0.1:52670 on port 8886.
+1794538169: OpenSSL Error while trying to get the error[0]: error:0A000418:SSL routines::tlsv1 alert unknown ca
+1794538169: Client 127.0.0.1 [127.0.0.1:52670] disconnected: Protocol error.
+1794538169: New connection from 127.0.0.1:44329 on port 8886.
+1794538169: OpenSSL Error while trying to get the error[0]: error:0A000418:SSL routines::tlsv1 alert unknown ca
+1794538169: Client 127.0.0.1 [127.0.0.1:44329] disconnected: Protocol error.
+1794538170: New connection from 127.0.0.1:56751 on port 8886.
+1794538170: New client connected from 127.0.0.1:56751 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794538170: No will message specified.
+1794538170: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538170: Sending CONNACK to receiver-qa-edge (0, 0)
+1794538170: Received SUBSCRIBE from receiver-qa-edge
+1794538170: 	ems/v2/gateways/+/samples (QoS 1)
+1794538170: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794538170: 	ems/v2/gateways/+/session/request (QoS 1)
+1794538170: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794538170: Sending SUBACK to receiver-qa-edge
+1794538170: New connection from 127.0.0.1:49865 on port 8886.
+1794538170: New client connected from 127.0.0.1:49865 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794538170: No will message specified.
+1794538170: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538170: Sending CONNACK to sender-qa-edge (0, 0)
+1794538170: Received SUBSCRIBE from sender-qa-edge
+1794538170: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794538170: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794538170: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794538170: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794538170: Sending SUBACK to sender-qa-edge
+1794538170: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538170: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538170: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794538170: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794538170: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538170: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538170: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794538170: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794538170: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538170: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538170: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794538170: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794538171: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538171: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538171: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794538171: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794538171: Received DISCONNECT from sender-qa-edge
+1794538171: Client sender-qa-edge [127.0.0.1:49865] disconnected.
+1794538171: Received DISCONNECT from receiver-qa-edge
+1794538171: Client receiver-qa-edge [127.0.0.1:56751] disconnected.
+1794538171: New connection from 127.0.0.1:42604 on port 8887.
+1794538171: OpenSSL Error while trying to get the error[0]: error:0A000412:SSL routines::ssl/tls alert bad certificate
+1794538171: Client 127.0.0.1 [127.0.0.1:42604] disconnected: Protocol error.
+1794538171: New connection from 127.0.0.1:37647 on port 8887.
+1794538171: OpenSSL Error while trying to get the error[0]: error:0A000412:SSL routines::ssl/tls alert bad certificate
+1794538171: Client 127.0.0.1 [127.0.0.1:37647] disconnected: Protocol error.
+1794538172: New connection from 127.0.0.1:57667 on port 8886.
+1794538172: New client connected from 127.0.0.1:57667 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794538172: No will message specified.
+1794538172: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538172: Sending CONNACK to receiver-qa-edge (0, 0)
+1794538172: Received SUBSCRIBE from receiver-qa-edge
+1794538172: 	ems/v2/gateways/+/samples (QoS 1)
+1794538172: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794538172: 	ems/v2/gateways/+/session/request (QoS 1)
+1794538172: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794538172: Sending SUBACK to receiver-qa-edge
+1794538172: New connection from 127.0.0.1:42947 on port 8886.
+1794538172: New client connected from 127.0.0.1:42947 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794538172: No will message specified.
+1794538172: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538172: Sending CONNACK to sender-qa-edge (0, 0)
+1794538172: Received SUBSCRIBE from sender-qa-edge
+1794538172: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794538172: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794538172: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794538172: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794538172: Sending SUBACK to sender-qa-edge
+1794538172: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538172: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538172: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794538172: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794538172: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538172: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538172: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794538172: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794538172: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538172: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538172: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794538172: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794538172: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538172: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538172: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794538172: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794538172: Received DISCONNECT from sender-qa-edge
+1794538172: Client sender-qa-edge [127.0.0.1:42947] disconnected.
+1794538172: Received DISCONNECT from receiver-qa-edge
+1794538172: Client receiver-qa-edge [127.0.0.1:57667] disconnected.
+1794538172: New connection from 127.0.0.1:49982 on port 8888.
+1794538172: OpenSSL Error while trying to get the error[0]: error:0A000415:SSL routines::ssl/tls alert certificate expired
+1794538172: Client 127.0.0.1 [127.0.0.1:49982] disconnected: Protocol error.
+1794538172: New connection from 127.0.0.1:33785 on port 8888.
+1794538172: OpenSSL Error while trying to get the error[0]: error:0A000415:SSL routines::ssl/tls alert certificate expired
+1794538172: Client 127.0.0.1 [127.0.0.1:33785] disconnected: Protocol error.
+1794538173: New connection from 127.0.0.1:45795 on port 8886.
+1794538173: New client connected from 127.0.0.1:45795 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794538173: No will message specified.
+1794538173: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538173: Sending CONNACK to receiver-qa-edge (0, 0)
+1794538173: Received SUBSCRIBE from receiver-qa-edge
+1794538173: 	ems/v2/gateways/+/samples (QoS 1)
+1794538173: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794538173: 	ems/v2/gateways/+/session/request (QoS 1)
+1794538173: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794538173: Sending SUBACK to receiver-qa-edge
+1794538173: New connection from 127.0.0.1:54283 on port 8886.
+1794538173: New client connected from 127.0.0.1:54283 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794538173: No will message specified.
+1794538173: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794538173: Sending CONNACK to sender-qa-edge (0, 0)
+1794538173: Received SUBSCRIBE from sender-qa-edge
+1794538173: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794538173: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794538173: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794538173: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794538173: Sending SUBACK to sender-qa-edge
+1794538173: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538173: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794538173: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794538173: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794538173: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538173: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794538173: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794538173: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794538173: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538173: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794538173: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794538173: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794538174: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538174: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794538174: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794538174: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794538174: Received DISCONNECT from sender-qa-edge
+1794538174: Client sender-qa-edge [127.0.0.1:54283] disconnected.
+1794538174: Received DISCONNECT from receiver-qa-edge
+1794538174: Client receiver-qa-edge [127.0.0.1:45795] disconnected.
+1794538166: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794538166: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794538166: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794538166: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794538166: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794538166: Info: running mosquitto as user id: 1000.

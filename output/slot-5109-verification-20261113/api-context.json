@@ -1,0 +1,37 @@
+[
+  {
+    "sampled_ns": 1794491748649157000,
+    "voltage": 230,
+    "current": 13.65,
+    "power_kw": 9.423,
+    "energy_kwh": 1298.45
+  },
+  {
+    "sampled_ns": 1794491743638980000,
+    "voltage": 230,
+    "current": 13.790000000000001,
+    "power_kw": 9.515,
+    "energy_kwh": 1298.44
+  },
+  {
+    "sampled_ns": 1794491738631664000,
+    "voltage": 230,
+    "current": 13.870000000000001,
+    "power_kw": 9.575,
+    "energy_kwh": 1298.43
+  },
+  {
+    "sampled_ns": 1794491733646420000,
+    "voltage": 230,
+    "current": 13.91,
+    "power_kw": 9.599,
+    "energy_kwh": 1298.41
+  },
+  {
+    "sampled_ns": 1794491728633570000,
+    "voltage": 230,
+    "current": 13.89,
+    "power_kw": 9.586,
+    "energy_kwh": 1298.4
+  }
+]

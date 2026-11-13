@@ -1,0 +1,103 @@
+{
+  "original": {
+    "files": 770,
+    "mismatches": [],
+    "passed": true
+  },
+  "v2_repair": {
+    "files": 752,
+    "mismatches": [],
+    "passed": true
+  },
+  "backlog": {
+    "files": 384,
+    "mismatches": [],
+    "passed": true
+  },
+  "ingest": {
+    "files": 321,
+    "mismatches": [],
+    "passed": true
+  },
+  "interruption": {
+    "files": 18,
+    "mismatches": [],
+    "passed": true
+  },
+  "single_sample": {
+    "files": 7,
+    "mismatches": [],
+    "passed": true
+  },
+  "boundary_fix": {
+    "files": 20,
+    "mismatches": [],
+    "passed": true
+  },
+  "previous_faults": {
+    "files": 526,
+    "mismatches": [],
+    "passed": true
+  },
+  "newest_first": {
+    "files": 670,
+    "mismatches": [],
+    "passed": true
+  },
+  "resilience": {
+    "files": 305,
+    "mismatches": [],
+    "passed": true
+  },
+  "lifecycle": {
+    "files": 595,
+    "mismatches": [],
+    "passed": true
+  },
+  "archived_frozen": {
+    "files": 17,
+    "mismatches": [],
+    "passed": true
+  },
+  "verifier_dependencies": {
+    "files": 3,
+    "mismatches": [],
+    "passed": true
+  },
+  "other_production_unchanged": {
+    "files": 15,
+    "mismatches": [],
+    "passed": true
+  },
+  "central_schema_unchanged": {
+    "files": 2,
+    "mismatches": [],
+    "passed": true
+  },
+  "final_tested_sources": {
+    "files": 80,
+    "mismatches": [],
+    "passed": true
+  },
+  "slot_fix_unchanged": {
+    "files": 2,
+    "mismatches": [],
+    "passed": true
+  },
+  "windows_frozen": {
+    "files": 17,
+    "passed": true,
+    "mismatches": []
+  },
+  "shared_containers": {
+    "before": 17,
+    "after": 17,
+    "removed": [],
+    "added": [],
+    "passed": true
+  },
+  "temporary_pki_removed": {
+    "remaining": [],
+    "passed": true
+  }
+}

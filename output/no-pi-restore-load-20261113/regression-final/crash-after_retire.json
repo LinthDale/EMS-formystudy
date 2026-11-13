@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "child_exit": -9,
+  "observed": {
+    "pid": 69,
+    "stage": "after_retire",
+    "journal_bytes": 35336,
+    "baseline_stage": "after_constructor",
+    "baseline_sha256": "47ee84f4066ff5b4966b795952e6af0d86f868de7911251e0fcba12059051629",
+    "observed_sha256": "3e657227eff1e6f470b93de3af02df031e399d4b7265f0f42bf6ac8951b2005d",
+    "constructor_changed_file": true,
+    "main_file_changed": true,
+    "committed_sample": null
+  },
+  "recovered_ids": [
+    "364ea5ea-2cd5-42aa-8d95-9ce794c613b8"
+  ],
+  "recovered_sequence": 1,
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 0,
+    "unconfirmed_evicted_total": 0,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": null
+  },
+  "next_sequence": 2,
+  "integrity": "ok",
+  "committed_identity_preserved": null
+}

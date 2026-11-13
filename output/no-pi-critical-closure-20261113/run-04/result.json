@@ -1,0 +1,156 @@
+{
+  "passed": true,
+  "suite": "critical",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532320]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 38,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 38,
+    "observed_tests": 38,
+    "evidence_checks": {
+      "central_enospc": true,
+      "lost_slot": true,
+      "timeline": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "unsafe-latest-counterexample-database",
+      "container": "c7e46f7e71298ae1e88dea2cd8d551ff14940b40ccb7c63218206f6331c26931",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-unsafe-latest-counterexample",
+      "container": "65ef67bd621e97769c9234a6cad81b8240e0d1baac97d76c4658345472366aa0",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "pinned-second-pitr-database",
+      "container": "acbd0e5597dbca813e14ffc9939447b254da62f6b7af1d6ab2ff213e2b41b5e0",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-pinned-second-pitr",
+      "container": "9bdc28ecefd3e86888bc21cf045f71e5c8e59c5ff58fd8ca40acdc93f77fd634",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-three-wal",
+      "container": "74cdc2259f5c3ca8a9d959f3b9f5804fae42aa4eac042f64277e1f00d0ce6ff2",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-three-database",
+      "container": "14670750e25b77acbe1e2c9bea6372339a65abc0054af73d95839620f2f7eb5e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-branch-three",
+      "container": "1298325656d83555b64eec749fb9e77a39119c8bc68b897a20c871bfd210c423",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-two-wal",
+      "container": "287b42c00034aa0c0f0ea414048d1602ca6451f6d53eacfb3ffd74c7e30bc3c3",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "branch-two-database",
+      "container": "4ed6690f5de56c628c9cd5466b07b318d10978d8c9ee692a7a80daa78bd9d6bd",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-branch-two",
+      "container": "6f71f843227701420501109ddaa4b14d27a025d414ca985c81d502392fff823d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "reseed-chain-pitr-database",
+      "container": "894dbb5b4caa8a61b53a5e2fca6cbc5a947c97752ff6d1a48731d5dffefd1686",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-reseed-chain-pitr",
+      "container": "4983ca017c9e9e6928f2dd299fc8e6107cda357219838fa1bbb3f12d3c628b89",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver-reseed",
+      "container": "822f579ee34169372aeb1a19eb5e145575f1a6bd44c44576d2eb80900a8e5604",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-reseed-verify",
+      "container": "30216d266a8aa04370cd100f6e0c196b3d8c71fa89eb95f0ade08fa439dabc22",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "4a139968be8877219294a9046886c5dcc53c845a94c539d22db4b2563a0b2e19",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "cf93b57f3c63e030fb42eb853c39c3508f641044e5fa5f654b14fe4547d39ff4",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "8a92cd048b7e75e32817bbe08624ecefd4f0b500424a28846834adfeec3c4311",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "9591421c86fb357c1bfe9365cf1830992524a775596644e7b2dc7a460c355a1a",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "38683ad5c77d433f1707d26dadfb3aa7a4d3f771d34687c6d0b111a62a940ca2",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "aaed350f02f6b0192a847644253deb20e06d4acacf7f0502f44aded1b0dfde66",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "0c981fdbe9fcc6ff8a0f6f7a4411814e2f7e3f4dbbb4034908531684c548ba72",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

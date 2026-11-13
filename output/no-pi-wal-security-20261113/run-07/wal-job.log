@@ -1,0 +1,48 @@
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: finished segment at 0/2000000 (timeline 1)
+pg_receivewal: finished segment at 0/3000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000003.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/3000000 (timeline 1)
+pg_receivewal: finished segment at 0/4000000 (timeline 1)
+pg_receivewal: error: could not open write-ahead log file "000000010000000000000004.partial": No space left on device
+pg_receivewal: error: disconnected
+pg_receivewal: starting log streaming at 0/4000000 (timeline 1)
+pg_receivewal: finished segment at 0/5000000 (timeline 1)

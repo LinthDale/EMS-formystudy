@@ -1,0 +1,7 @@
+COM3                
+    desc: USB Serial Port (COM3)
+    hwid: USB VID:PID=0403:6001 SER=BG04PB77A
+COM4                
+    desc: USB Serial Port (COM4)
+    hwid: USB VID:PID=0403:6001 SER=BG04PB7RA
+2 ports found

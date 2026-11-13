@@ -1,0 +1,17 @@
+
+==================================== ERRORS ====================================
+______________ ERROR collecting tests/test_bench_slot_boundary.py ______________
+ImportError while importing test module '/app/tests/test_bench_slot_boundary.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests/test_bench_slot_boundary.py:9: in <module>
+    from bench_run import slot_observation
+E   ImportError: cannot import name 'slot_observation' from 'bench_run' (/app/tools/bench_run.py)
+-------------------- generated xml file: /evidence/red.xml ---------------------
+=========================== short test summary info ============================
+ERROR tests/test_bench_slot_boundary.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.13s

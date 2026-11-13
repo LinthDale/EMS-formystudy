@@ -1,0 +1,31 @@
+1794533494: mosquitto version 2.1.2 starting
+1794533494: Config loaded from /qa/tls.conf.
+1794533494: Bridge support available.
+1794533494: Persistence support available.
+1794533494: TLS support available.
+1794533494: TLS-PSK support available.
+1794533494: Websockets support available.
+1794533494: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794533494: Plugin builtin-security has registered to receive 'acl-check' events.
+1794533494: Opening ipv4 listen socket on port 8886.
+1794533494: mosquitto version 2.1.2 running
+1794533506: New connection from 127.0.0.1:39175 on port 8886.
+1794533506: New client connected from 127.0.0.1:39175 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794533506: No will message specified.
+1794533506: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794533506: Sending CONNACK to sender-qa-edge (0, 0)
+1794533506: Received SUBSCRIBE from sender-qa-edge
+1794533506: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794533506: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794533506: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794533506: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794533506: Sending SUBACK to sender-qa-edge
+1794533506: Received DISCONNECT from sender-qa-edge
+1794533506: Client sender-qa-edge [127.0.0.1:39175] disconnected.
+1794533506: New connection from 127.0.0.1:58165 on port 8886.
+1794533506: OpenSSL Error while trying to get the error[0]: error:0A000086:SSL routines::certificate verify failed
+1794533506: Client 127.0.0.1 [127.0.0.1:58165] disconnected: Protocol error.
+1794533494: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794533494: Info: running mosquitto as user id: 1000.

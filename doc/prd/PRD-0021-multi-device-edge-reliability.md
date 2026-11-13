@@ -1,5 +1,8 @@
 # PRD-0021：Delta 多設備採集與可靠補傳規格
-狀態：Draft（2026-09-29，尚未實作／部署）｜Owner：EMS team
+
+2026-11-13：[ADR-048](../adr/ADR-048-v2-live-backlog-fairness.md)補實作FR-2107既有公平目標，最新／最舊成功送達1:1交替；wire2／schema3、容量最舊淘汰與中央ACK契約不變。最新延遲只按本輪短測條件報告，不承諾20/s或全負載SLA。
+狀態：Draft（整體多設備／容量／對帳目標）；2026-11-12 可靠送達子集已實作並私有驗證，未切換共享部署，見 §15.3。Owner：EMS team
+2026-11-13容量政策修訂：使用者要求最新資料優先；[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)／§15.5取代下方歷史版本「滿容量拒新、pending永不淘汰」條款，wire2與中央receipt契約保持，實作結果見§15.5。
 依據：project_rules.md、PRD 架構設計 Guideline。承接 PRD-0020；決策 ADR-030。容量證據見 [調研報告](../research/2026-09-29-sqlite-edge-capacity.md)。
 
 ## 1. Overview & Context
@@ -78,7 +81,7 @@ Constraints：Pi Zero 2 W 的 512 MB；SIM7600G-H 整板未定；可能有既有
 16 台擴充提案：Pi 4 Model B ≥2 GB、2 路隔離 RS485、每 bus 8 台、queue ≥1,200,000、outbox budget ≥8 GiB、RW data ≥16 GiB、重新測試資源及補傳。現有 config 最大1,000,000需調整；本次不承諾16台已可用。1秒採樣級距見§15.2，30天斷網另核算。
 
 ## 6. System Architecture
-圖內部署標示是提案；中央 durable receiver 尚不存在。Owner：現場硬體由安裝維運，Python軟體與中央服務／DB由EMS team。
+圖內標示為完整目標；可靠送達 receiver 子集已按 §15.3 實作及隔離驗證，多設備／對帳仍是提案。Owner：現場硬體由安裝維運，Python軟體與中央服務／DB由EMS team。
 
 ### 6.1 C4 Context
 ~~~mermaid
@@ -189,7 +192,7 @@ Edge待送保留到committed；quarantine保留且計入總容量，不無限增
 §15.1補充stream/sequence、audit索引及中央量測身份關聯；ERD為原始交付主路徑示意，實作前需隨schema migration補齊audit模型。
 
 ## 8. API Contract
-全部是Draft；api/openapi.yml的x-planned-delta-edge-v2只登記提案，無新REST endpoint。
+完整目標仍部分為 Draft；api/openapi.yml 的 x-delta-edge-v2-reliable-subset 登記 §15.3 已實作子集，其餘 topics／功能保持待實作，無新 REST endpoint。
 
 MQTT topics：
 - publish: ems/v2/gateways/{gateway_id}/samples
@@ -271,7 +274,7 @@ queue>70%或oldest>5天warning；>85%、free<1GiB、integrity fail、clock untru
 | 假ACK／跨gateway／hash衝突 | 2106 | 拒絕並保留pending；超大payload與timestamp超窗拒絕；同ID改值但沿用claimed hash時拒絕 |
 | E2E UI／retention／復原 | 2111,2112 | device身份及L1語意正確；90天窗口與DBrestore保持receipt一致；未來偏移2分鐘樣本跨90天清理邊界不得二次入庫；PITR後舊session ACK不得刪資料 |
 
-目前研究probe只完成PC上的容量與程序crash，**上述硬體／v2用例全部待實作驗收**；既有單設備測試不能抵扣。
+上述完整里程碑未全數驗收；2026-11-12 新可靠送達子集的實測及限制見 §15.3。Pi／實體電源／多設備容量仍待驗，既有單設備測試不能抵扣。
 
 ## 14. Open Questions
 - M70A-262確切官方手冊／韌體／Modbus profile；RPI-M30A完整後綴、韌體。
@@ -394,3 +397,78 @@ audit索引cap至少等於對應pending cap；budget按列cap與實測索引成�
 
 
 採樣間隔補充審查完成：2026-09-29架構／安全審查無新增必修問題；五種頻率的容量／補傳公式與YAML preset一致性已驗證。此為Draft規格，不代表EMS設定UI、gateway套用或任意1秒硬體組合已完成。
+
+
+### 2026-11-12 接手與後續範圍
+
+[採集交接](../operations/edge-temperature-handoff-20261112.md)列出 v1 第9關3個反例、其餘台架結果、活動長測及後續缺口。中央 committed receipt／去重／缺筆對帳與多設備 scheduler 仍待實作；先測單溫度經 Pi 上傳不代表上述可靠性已完成。沒有更改本 PRD 契約或部署狀態。
+
+### 2026-11-12 實際接收程式反例補證
+
+[私有 Telegraf／TimescaleDB 證據](../../output/no-pi-ingest-20261112/README.md)使用現行相同 image 與核對後的接收設定，重現同時間／同設備／同 payload 兩次入庫，以及接收服務停止期間 PUBACK 後本地已刪但恢復後 DB 缺筆。這把受控 sink 反例延伸到實際接收程式；核心欄位路徑相符，不宣稱整個共享 schema 複製或共享服務被故障注入。v1 系統驗收 FAIL；本 PRD 的中央 committed receipt／去重與缺筆對帳仍未實作，Draft／部署狀態不變。
+
+### 15.3 2026-11-12 可靠送達子集實作
+
+使用者要求修復上述兩個缺口，依 [ADR-043](../adr/ADR-043-opt-in-committed-telemetry.md)新增 opt-in v2 queue／sender／receiver／migration019。[實作入口](../../services/edge-receiver/README.md)與 [故障證據](../../output/committed-delivery-fix-20261112/README.md)為目前狀態，前面的未實作敘述保留為歷史基線。
+
+| 需求 | 本階段狀態／限制 |
+|---|---|
+| FR-2104／2106 | stable UUID/hash／stream seq、SQLite 同交易、PUBACK 不刪、當前 authenticated session committed ACK 才刪；中央 receipt＋四欄投影同交易與並行去重，私有真 MQTT／DB／mTLS 已驗證 |
+| FR-2107 | sender 單筆／單 inflight、上限 2 batch/s，退避；沒有 20/s 或公平批次吞吐驗收 |
+| FR-2111 | 原四欄投影與來源時間一致；中央 receipt 保存此 canonical sample。本地 rich snapshot 至 committed 保留，詳細三相中央展示／完整詳細 snapshot 上傳不在此子集 |
+| FR-2113 | 單設備 stream/seq/window/revision 與 audit 身分持久化；一般程序重啟不換 ID，restore 必須人工換新 stream。未完成 sealed manifests／全部採樣缺口分類 |
+| FR-2114–2118 | 集合對帳 API／每日重查／heartbeat UI／遠端頻率設定仍未實作；receipt 缺投影可在重送交易內修復，但不是完整每日 reconcile |
+
+259 項回歸與私有整合通過、12 項既有專用 clock/TLS case 本輪跳過（原獨立實跑保留），production combined line coverage 90.81%。包括接收停機而 broker ACK 後本地保留、commit 後 ACK 遺失、相同 MQTT 重送、6 個並行寫入／repair、同 timestamp 不同 ID、衝突拒絕、DB 寫入失敗回滾、真 TCP 採集程序 SIGKILL 後原 ID 補送、mTLS ACL 正反向。具體失敗與工具修正仍保存，不回寫歷史 PASS。
+
+部署採靜態權威 gateway/device/stream/revision/profile 及生效時間、強制 mTLS／server-only ACK、DB 外 generation；原共享匿名 v1／活動 24h 未切換，Pi／SD／真機／4G／PITR／憑證撤銷輪替尚未驗收。新 queue 專用路徑、未知 schema 拒開；離線轉換只處理仍存在的 v1 pending，已被 v1 刪除資料不能保證恢復。audit／receipt 暫不自動 purge，達容量停新採樣並保留舊資料；這不等於 7 天容量或長期維運 SLA 已完成。
+
+### 15.4 2026-11-13 無Pi短故障補測
+
+沿§13／ADR-043補8案真私有MQTT／DB／mTLS／SQLite故障：真DB逾時與回滾、自有backend終止、雙投影quarantine、兩receiver同筆去重、generation舊ACK回放、SQLITE_FULL／audit cap、rogue client cert。加35槽號固定回歸共43項通過，另16個測試驗收閘門反例。[證據與界線](../../output/no-pi-v2-faults-20261113/README.md)。只修改測試／控制器／固定案名catalog，FR／API／schema／production不變；非DB PITR、實體掉電、多主機HA或Pi field驗收，也未重跑長測。
+
+### 15.5 2026-11-13 最新量測優先的容量變更
+
+使用者核定「新資料比舊資料重要，應該要從最舊資料開始覆寫」。依ADR-045修訂FR-2105／2106／2109／2113：本地queue／audit／byte容量不足時，按capture_seq淘汰最舊樣本或索引以接納新樣本；未送／quarantine亦可淘汰。淘汰與新樣本同交易，失敗整筆回滾；不重用ID／seq、不將淘汰列為committed。正常送達清理仍驗authenticated ACK；本地淘汰另記有界累積筆數／最近序號span／身份並告警。滿audit不再永久阻塞採樣，無引用window需回收。
+
+本節取代§2、FR-2109、§5空間政策／RPO、§7本地保留、§13滿容量驗收、§15.1 audit／pending保護、§15.3停新採樣及2026-11-10 lossless相容邊界中相衝突的條款。容量內仍以原ID補傳與去重，超出容量後只保證留最新可容納資料，不保證7天完整或已淘汰資料可追回。中央receipt90天／ACK認證／唯讀OT不變；中央對帳與缺口UI尚未完成。schema3本地升版、wire仍2；未部署共享服務、未重跑長測。[本輪證據](../../output/newest-first-retention-20261113/README.md)：336項短回歸通過／12專用case未重跑、coverage≥80%，含23項容量案例、真同session ACK淘汰競態、離線12限3／中央0×9+1×3、原35槽號與16驗收閘門反例。另以faults短套件確認其餘故障路徑。code／Python獨立複核通過，schema3拒舊版；實際Pi／SD／4G與完整SLA仍另驗。
+
+### 15.6 2026-11-13 無Pi程序／儲存／v2 server TLS續測
+
+FR-2104／2106／2109及ADR-045新增短測：[9案＋35槽號共44通過／11.09秒，工具32通過](../../output/no-pi-resilience-20261113/README.md)。SIGKILL三個循環交易邊界、真SQLite BUSY／READONLY、線上backup期間實際旋轉、v2錯CA／錯hostname／expired server原因驗證後合法mTLS原ID補送中央一次。初版崩潰hash混入constructor提交可能假PASS，已修post-constructor基準與真hash差異／journal，commit後完整sample比對；marker原子發布。production／FR／wire／schema未改，不增加已部署認證、完整對帳或中央備援能力。未重跑前輪336整套或長測，未切共享／占COM；實體掉電／Pi／SD／RTC／4G／中央PITR仍另驗。
+
+### 15.7 2026-11-13 broker重啟、損壞庫及client憑證輪替撤權
+
+FR-2104／2106／2109既有拒絕損壞與重連契約補測：[定點42通過，393相鄰通過／12專用case跳過，coverage91.02%](../../output/no-pi-lifecycle-20261113/README.md)。同edge PID真TCP在broker離線採3筆，重啟恢復各原ID入庫1次；4種損壞檔拒開／hash不變；新client cert同gateway可用，CRL撤oldserial、error23，重啟私有broker後活動old session斷開／重連拒、新cert原ID恢復。這是受控私有PKI驗證，不是正式CA分發／即時撤權SLA。
+
+修復production空庫誤重建：只有真正不存在的新路徑能建schema，既有zero／empty SQLite／damaged拒開；僅精確SQLITE_READONLY_ROLLBACK以mode=rw交SQLite原生恢復journal，再驗schema，不能清空重建。新guard造成的兩個SIGKILL回歸RED已修／GREEN，wire2／schema3／FR不變。測試控制器只動自有broker，host寫入exclusive random FD→rename，讀worker產物NOFOLLOW／bounded，避免symlink外檔讀寫；新30工具案。原資料損失不得藉seq1新庫假恢復。未部署共享／用COM／重跑長測，Pi／實體掉電／SD／4G／PITR仍另驗。
+
+### 15.8 2026-11-13 邏輯還原、接收超量與新舊資料公平送達
+
+依[ADR-048](../adr/ADR-048-v2-live-backlog-fairness.md)實作FR-2107既有公平子集：sender先最新，再最舊，只有authenticated committed且本地原筆resolved成功才1:1換邊；timeout／retry／retiredACK不換，pending()預設最舊保持相容。wire2／schema3／容量輪替／單筆inflight／原1秒edge節奏及退避不變。成功輪次在記憶體，重啟從最新；最新候選不等於每一筆新資料固定延遲，吞吐不足／重啟風暴仍有風險。
+
+[本輪](../../output/no-pi-restore-load-20261113/README.md)38定點通過／18.90秒，419相鄰通過／12既有專用skip、coverage91.04%；1000舊＋3新以原1秒senderloop量enqueue→中央commit1.044／2.091／2.098秒，oldest亦進展，6confirmed＋997pending＝1003。真pg_dump還原新DB、receipt/hash/時間/投影一致、外generation換代／舊ACK拒、pending原ID補回；backup後已ACK且localpayload刪的B明示dump＋local不可補（來源原庫僅testoracle），非WAL PITR／RPO0。200封同1合法樣本重送，queue64/drop135/rate拒65，無假ACK且恢復原／新各1列；非200獨立樣本吞吐。工具backup-copy NOFOLLOW／boundedbinary防外檔，原RED／中途FAIL保留。未切共享／用COM／重跑長測；完整多設備／manifest／UI／Pi／現場SLA仍另驗。
+
+### 15.9 2026-11-13 已確認資料的 WAL 保護與 PITR
+
+使用者核定修復舊dump缺少backup後ACK資料。依[ADR-049](../adr/ADR-049-synchronous-wal-ack-and-pitr.md)，FR-2106於field強制具名獨立同步WAL刷盤後才committed ACK；field不得local降級。receipt/投影同交易，COMMIT後固定LSN覆蓋檢查，接收端中斷則retryable／保留原ID。migration020僅給receiver受限boolean函式，不開統計全讀權限。實體basebackup＋同步WAL含partial、明示restorepoint與缺WAL失敗、原主庫隔離／外generation換代／恢復庫重新同步WAL後才ACK。正式必須異失效域持久儲存與TLS複寫帳號；本輪同宿主私有容器只驗單主庫損失，不核定站點RPO/RTO。§6三圖與維護入口見[子集架構](../architecture/edge-committed-telemetry.md)。舊檔沒有留下的WAL不能倒推補出過去遺失payload。
+
+### 15.10 2026-11-13 受限field帳號、轉換SIGKILL與clientID碰撞短測
+
+依FR-2104／2106、§12轉換及ADR-043／049補尚未完整實測的3類5案：[本輪證據](../../output/no-pi-cutover-20261113/README.md)。field mTLS＋非管理DB帳號＋syncWAL真送達，四項權限拒絕、真撤INSERT只retryable／來源保留、恢復缺列同receipt timestamp；v1轉換首筆後／發布前／發布後真SIGKILL，原檔不變、無部分正式目的庫、完整mapping再送中央一次；重複合法clientID在inflight時真踢線，callback拍ready/challenge/batch證明非timeout先reset，重連換challenge／舊ACK拒／原新各1。40定點通過15.00秒（新5＋35槽號）、131工具及轉換單測通過；初版碰撞證據弱點已修並保留原run。僅測試／工具變動，無FR／API／schema／production更動，不等於Pi／實體掉電或正式部署，無長測重跑。
+
+### 15.11 2026-11-13 邏輯一致性、異常MQTT批次與SIGTERM短測／bugfix
+
+沿FR-2104／2106／2109既有不可重用序號／完整性／audit與原ID送達契約，修reliable_store開庫只quick_check漏掉邏輯損壞、pending payload未對SQL/audit、ACK缺audit仍刪source；開庫同交易驗關係與重複seq，高水位在enqueue淘汰前同IMMEDIATE比現存audit MAX，pending短read snapshot、ACK同write tx重驗，retention累加後先驗界再淘汰。optional audit_time與原2索引同FULL-deferred交易，正常MAX各走covering index；無索引仍scan安全。schema3／wire2／ADR-045容量政策／ADR-048公平／ADR-049同步WAL不變，屬既有契約bugfix，無新topic／REST／角色或表。
+
+[證據](../../output/no-pi-integrity-20261113/README.md)：25新一致性／競態／溢位案＋5種真MQTT malformedbatch＋DBwait中正常SIGTERM／完整edge重啟，與35槽號共66通過22.08秒；11筆ID/hash/receipt/投影時間device四值全符。相鄰短回歸500通過12既有skip／34.12秒／91.36%，最新210工具／儲存案通過，兩輪RED、原中間證據保留。原17shared與舊封存不變，無COM／長測／部署。不能推論全庫持續bitrot防護、完整一致的舊備份回滾偵測、600k在Pi性能或實體掉電。
+
+### 15.12 2026-11-13 DB／WAL TLS、archive空間耗盡與還原身分
+
+依使用者本輪核定，沿FR-2106及ADR-049，以[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)強化field DB必填db_tls CA/client cert/key、驗hostname/TCP不得降級；migration021同步peer另需TLS及client certificate。還原前核外置可信expected_system_id與pg_controldata、pg_verifybackup才啟PG，不以內部manifest代替操作者cluster期望。真WAL archive ENOSPC只在自有128MiB tmpfs，故障不假ACK、原slot恢復；損壞backup/WAL／foreign WAL及有效外庫backup應分原因拒絕，正例可達target。server key外置PGDATA不進實體備份，PKI不封存。無新MQTT/REST/table、wire2/schema3保持；正式獨立主機／非揮發儲存／Pi另驗，無共享／COM／長測操作。
+
+§15.12驗收完成：DB／WAL TLS、128MiB archive ENOSPC恢復、損壞backup／WAL及有效外cluster拒絕已私有短測；55通過62.52秒，568短回歸／12專用skip／coverage90.99%，原已ACK資料PITR36通過。修field db_tls強制驗證、021版本化TLS＋固定角色WAL predicate、外置expected_system_id及tar資源預檢。無COM／共享部署／長測重跑；正式異失效域與Pi仍待驗。 [證據](../../output/no-pi-wal-security-20261113/README.md)。20新整合案包含DB七／WAL八種TLS拒絕、兩個已連上但不符TLS／角色peer拒ACK、恢復矩陣與真ENOSPC；35既有槽號完整。28安全單測與38閘門反例已過（與整體回歸重疊），原主庫停止後已ACK資料PITR亦相容。schema3／wire2、容量最舊淘汰與成功1:1公平不變。
+
+### 15.13 2026-11-13 必要性高的資料保護強化收尾
+
+沿FR-2106／ADR-049／050，以[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md)固定還原CLI的外置核定timeline／target及lost slot維運順序，無receiver wire／角色／schema／API或容量公平變更。本輪限定三項高必要性補強已完成：中央receipt資料16MiB空間真ENOSPC→retryable／原ID一次恢復；slot真lost→新slot先reserve再basebackup，跨3段／checkpoint後真PITR驗gap marker；同cluster兩分支二次PITR固定核定timeline／target。38定點通過18.00秒；616相鄰短回歸／12既有專用skip／coverage91.73%，48新單測通過（套件重疊不加總）。正式部署／Pi仍待驗，無COM／共享／長測重跑。 [證據](../../output/no-pi-critical-closure-20261113/README.md)。修補原CLI不能固定分支的準入缺口，並關閉初版reseed先base後slot的保護空窗；新base之前reserve，刻意在backup→pickup間真commit／3切段checkpoint，最後以新鏈還原marker。latest僅隔離負例，不能自動辨識業務正確分支；CLI只輸出設定不自動起PG。有限高必要性三項全過即結束，不將所有能測情境視為本輪阻擋。

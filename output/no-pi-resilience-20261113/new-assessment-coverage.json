@@ -1,0 +1,9 @@
+{
+  "function": "assess_resilience_report",
+  "covered_statements": 31,
+  "missing_statements": [
+    122
+  ],
+  "line_percent": 96.875,
+  "scope": "new assessment function only; controller module unit-test percentage excludes provisioning/main paths"
+}

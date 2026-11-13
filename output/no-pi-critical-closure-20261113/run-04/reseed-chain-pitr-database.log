@@ -1,0 +1,33 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+chmod: /var/run/postgresql: Operation not permitted
+2026-11-13 08:03:29.993 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 08:03:29.993 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5437
+2026-11-13 08:03:29.994 UTC [1] LOG:  listening on IPv6 address "::", port 5437
+2026-11-13 08:03:30.004 UTC [1] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5437"
+2026-11-13 08:03:30.008 UTC [17] LOG:  database system was interrupted; last known up at 2026-11-13 08:03:26 UTC
+2026-11-13 08:03:30.041 UTC [23] FATAL:  the database system is starting up
+2026-11-13 08:03:30.216 UTC [30] FATAL:  the database system is starting up
+2026-11-13 08:03:30.224 UTC [17] LOG:  starting point-in-time recovery to "ems_reseed_boundary"
+2026-11-13 08:03:30.224 UTC [17] LOG:  starting backup recovery with redo LSN 0/3000028, checkpoint LSN 0/3000060, on timeline ID 1
+2026-11-13 08:03:30.231 UTC [17] LOG:  restored log file "000000010000000000000003" from archive
+2026-11-13 08:03:30.246 UTC [17] LOG:  redo starts at 0/3000028
+2026-11-13 08:03:30.252 UTC [17] LOG:  restored log file "000000010000000000000004" from archive
+2026-11-13 08:03:30.264 UTC [17] LOG:  restored log file "000000010000000000000005" from archive
+2026-11-13 08:03:30.279 UTC [17] LOG:  restored log file "000000010000000000000006" from archive
+2026-11-13 08:03:30.293 UTC [17] LOG:  restored log file "000000010000000000000007" from archive
+2026-11-13 08:03:30.298 UTC [17] LOG:  completed backup recovery with redo LSN 0/3000028 and end LSN 0/3000100
+2026-11-13 08:03:30.298 UTC [17] LOG:  consistent recovery state reached at 0/3000100
+2026-11-13 08:03:30.298 UTC [1] LOG:  database system is ready to accept read-only connections
+2026-11-13 08:03:30.298 UTC [17] LOG:  recovery stopping at restore point "ems_reseed_boundary", time 2026-11-13 08:03:28.609893+00
+2026-11-13 08:03:30.298 UTC [17] LOG:  redo done at 0/70000D8 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.05 s
+2026-11-13 08:03:30.298 UTC [17] LOG:  last completed transaction was at log time 2026-11-13 08:03:26.878557+00
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 08:03:30.301 UTC [17] LOG:  selected new timeline ID: 2
+cp: can't stat '/archive/00000001.history.partial': No such file or directory
+2026-11-13 08:03:30.320 UTC [17] LOG:  archive recovery complete
+2026-11-13 08:03:30.322 UTC [15] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-13 08:03:30.336 UTC [15] LOG:  checkpoint complete: wrote 6 buffers (0.3%); 0 WAL file(s) added, 1 removed, 3 recycled; write=0.003 s, sync=0.003 s, total=0.017 s; sync files=4, longest=0.002 s, average=0.001 s; distance=65536 kB, estimate=65536 kB
+2026-11-13 08:03:30.340 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 08:03:30.341 UTC [47] LOG:  TimescaleDB background worker launcher connected to shared catalogs

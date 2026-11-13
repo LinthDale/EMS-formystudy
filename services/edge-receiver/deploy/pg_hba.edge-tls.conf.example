@@ -1,0 +1,11 @@
+# EXAMPLE ONLY. Replace documentation CIDRs with approved production sources.
+# Install before any broader trust/password rules; use matching certificate CN.
+# ems_receiver_app must be LOGIN and a member of ems_edge_receiver.
+hostssl all ems_receiver_app 192.0.2.10/32 cert
+host all ems_receiver_app 0.0.0.0/0 reject
+host all ems_receiver_app ::/0 reject
+# Migration 021 creates ems_wal_archive NOLOGIN; operator provisions LOGIN/cert.
+hostssl replication ems_wal_archive 192.0.2.20/32 cert
+host replication ems_wal_archive 0.0.0.0/0 reject
+host replication ems_wal_archive ::/0 reject
+# Separate approved basebackup/operator roles require their own bounded rules.

@@ -1,0 +1,11 @@
+{
+  "start_delay_seconds": {
+    "p50": 0.015999999828636646,
+    "p95": 0.015999999828636646,
+    "p99": 0.015999999828636646,
+    "max": 0.015999999828636646
+  },
+  "queue_peak_observed_at_commit": 2,
+  "recorded_errors": 0,
+  "utc_minus_monotonic_elapsed_seconds": -0.007093999828633457
+}

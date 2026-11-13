@@ -1,0 +1,63 @@
+..FF.                                                                    [100%]
+=================================== FAILURES ===================================
+_ test_damaged_existing_queue_fails_without_reset_or_modification[zero-length] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_damaged_existing_queue_fa2')
+damage = 'zero-length'
+
+    @pytest.mark.parametrize('damage',['header','truncated','zero-length','empty-sqlite'])
+    def test_damaged_existing_queue_fails_without_reset_or_modification(tmp_path,damage):
+        path=tmp_path/'source'/'q.db'
+        identity=dict(gateway_id='g1',device_id='d1',stream_id=str(uuid4()),config_revision='r1',profile_version='v135')
+        box=ReliableOutbox(path,5,**identity)
+        original=box.enqueue(1794474000000000000,dict(voltage=230,current=5,power_kw=1,energy_kwh=100))
+        good=path.read_bytes()
+        if damage=='header':
+            path.write_bytes(b'BROKEN-SQLITE!!!'+good[16:])
+        elif damage=='truncated':
+            path.write_bytes(good[:len(good)//2])
+        elif damage=='zero-length':
+            path.write_bytes(b'')
+        else:
+            replacement=tmp_path/'replacement.db'
+            with closing(sqlite3.connect(replacement)) as db:
+                db.execute('PRAGMA user_version=0');db.commit()
+            path.write_bytes(replacement.read_bytes())
+        damaged=path.read_bytes()
+>       with pytest.raises((ValueError,sqlite3.DatabaseError)) as error:
+E       Failed: DID NOT RAISE any of (<class 'ValueError'>, <class 'sqlite3.DatabaseError'>)
+
+services/delta/tests/test_reliable_corruption.py:35: Failed
+_ test_damaged_existing_queue_fails_without_reset_or_modification[empty-sqlite] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_damaged_existing_queue_fa3')
+damage = 'empty-sqlite'
+
+    @pytest.mark.parametrize('damage',['header','truncated','zero-length','empty-sqlite'])
+    def test_damaged_existing_queue_fails_without_reset_or_modification(tmp_path,damage):
+        path=tmp_path/'source'/'q.db'
+        identity=dict(gateway_id='g1',device_id='d1',stream_id=str(uuid4()),config_revision='r1',profile_version='v135')
+        box=ReliableOutbox(path,5,**identity)
+        original=box.enqueue(1794474000000000000,dict(voltage=230,current=5,power_kw=1,energy_kwh=100))
+        good=path.read_bytes()
+        if damage=='header':
+            path.write_bytes(b'BROKEN-SQLITE!!!'+good[16:])
+        elif damage=='truncated':
+            path.write_bytes(good[:len(good)//2])
+        elif damage=='zero-length':
+            path.write_bytes(b'')
+        else:
+            replacement=tmp_path/'replacement.db'
+            with closing(sqlite3.connect(replacement)) as db:
+                db.execute('PRAGMA user_version=0');db.commit()
+            path.write_bytes(replacement.read_bytes())
+        damaged=path.read_bytes()
+>       with pytest.raises((ValueError,sqlite3.DatabaseError)) as error:
+E       Failed: DID NOT RAISE any of (<class 'ValueError'>, <class 'sqlite3.DatabaseError'>)
+
+services/delta/tests/test_reliable_corruption.py:35: Failed
+--------------- generated xml file: /evidence/corruption-red.xml ---------------
+=========================== short test summary info ============================
+FAILED services/delta/tests/test_reliable_corruption.py::test_damaged_existing_queue_fails_without_reset_or_modification[zero-length]
+FAILED services/delta/tests/test_reliable_corruption.py::test_damaged_existing_queue_fails_without_reset_or_modification[empty-sqlite]
+2 failed, 3 passed in 0.03s

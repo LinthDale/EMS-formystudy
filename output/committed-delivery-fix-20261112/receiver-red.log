@@ -1,0 +1,16 @@
+
+==================================== ERRORS ====================================
+________ ERROR collecting services/edge-receiver/tests/test_receiver.py ________
+ImportError while importing test module '/app/services/edge-receiver/tests/test_receiver.py'.
+Hint: make sure your test modules/packages have valid Python names.
+Traceback:
+/usr/local/lib/python3.11/importlib/__init__.py:126: in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/edge-receiver/tests/test_receiver.py:8: in <module>
+    from edge_receiver.receiver import authority, load_generation
+E   ModuleNotFoundError: No module named 'edge_receiver.receiver'
+=========================== short test summary info ============================
+ERROR services/edge-receiver/tests/test_receiver.py
+!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!
+1 error in 0.05s

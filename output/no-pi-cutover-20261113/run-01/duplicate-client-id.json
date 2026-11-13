@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "actual_disconnect": true,
+  "old_challenge": "d2bd3c5a-9b4c-4640-89bb-f7acd32bab20",
+  "new_challenge": "da14248c-620f-41ee-a2c3-fc5f2525ee2b",
+  "old_ack_observed": true,
+  "old_ack_accepted": false,
+  "source_preserved": true,
+  "central_rows": [
+    1,
+    1
+  ],
+  "pending_end": 0
+}

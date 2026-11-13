@@ -1,0 +1,63 @@
+{
+  "status": "RUNNING",
+  "plan": [
+    {
+      "name": "one-second-one-hour",
+      "interval": 1,
+      "count": 3600,
+      "formal": true
+    },
+    {
+      "name": "five-second-twenty-four-hours",
+      "interval": 5,
+      "count": 17280,
+      "formal": true
+    }
+  ],
+  "results": [
+    {
+      "passed": true,
+      "valid_rate": 1.0,
+      "raw_strict_pass": true,
+      "classified_failed_slots": [],
+      "measured_seconds": 3600.0,
+      "minimum_measurement_seconds": 3600,
+      "name": "one-second-one-hour",
+      "formal": true,
+      "verifier_exit_code": 0
+    }
+  ],
+  "controller_pid": 4564,
+  "local_root": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01",
+  "archive_root": "\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\soak-sequence-01",
+  "stop_file": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\STOP.txt",
+  "scope": "v1 Windows bench, not Pi/4G/field/central DB ACK",
+  "started_utc": "2026-11-12T05:49:42.632275+00:00",
+  "updated_utc": "2026-11-12T09:52:37.852900+00:00",
+  "stage": "five-second-twenty-four-hours",
+  "expected_slots": 17280,
+  "interval": 5,
+  "expected_measurement_seconds": 86400,
+  "bench_pid": 18924,
+  "last_resource_observation": {
+    "utc": "2026-11-12T09:52:37.852900+00:00",
+    "monotonic": 2555280.437,
+    "processes": [
+      {
+        "Id": 5524,
+        "CPU": 66.453125,
+        "WorkingSet64": 38305792,
+        "PrivateMemorySize64": 24354816
+      },
+      {
+        "Id": 18924,
+        "CPU": 25.46875,
+        "WorkingSet64": 47239168,
+        "PrivateMemorySize64": 31756288
+      }
+    ],
+    "cpu_unit": "cumulative process seconds",
+    "free_bytes": 255611174912,
+    "sqlite_bytes": 16384
+  }
+}

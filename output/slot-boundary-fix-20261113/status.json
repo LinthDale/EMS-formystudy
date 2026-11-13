@@ -1,0 +1,14 @@
+{
+  "completed_utc": "2026-11-13T01:18:51.330421+00:00",
+  "fixed": true,
+  "targeted_tests_passed": 66,
+  "new_boundary_cases": 35,
+  "new_function_line_coverage_percent": 84.61538461538461,
+  "five_observation_replay_passed": true,
+  "reviewers_approved": true,
+  "hardware_test_started": false,
+  "long_soak_restarted": false,
+  "production_changed": false,
+  "original_evidence_changed": false,
+  "original_24h_status": "INTERRUPTED"
+}

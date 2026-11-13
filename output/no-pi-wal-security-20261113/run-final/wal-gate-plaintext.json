@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "kind": "plaintext",
+  "gate": {
+    "passed": true,
+    "request_id": "9aaf6034-a341-4a24-9454-9c6eda8701f4",
+    "op": "wal_gate_plaintext",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": false,
+      "client_dn": null,
+      "username": "ems_wal_archive",
+      "guard": false
+    }
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

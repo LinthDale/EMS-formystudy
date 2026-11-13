@@ -1,0 +1,22 @@
+{
+  "recorded_utc": "2026-11-12T09:20:57.864192+00:00",
+  "scope": "no-Pi private actual-ingest and IP-loss verification",
+  "experiments_completed": true,
+  "v1_system_delivery_acceptance_passed": false,
+  "open_counterexamples": [
+    "duplicate database rows on identical republish",
+    "broker ACK and local removal while receiver down leaves central sample missing"
+  ],
+  "database_pause_recovered": 10,
+  "ip_loss_actual_dropped_packets": 17,
+  "ip_loss_samples": 230,
+  "regression_passed": 211,
+  "regression_skipped": 12,
+  "production_line_coverage_percent": 96.06,
+  "settled_soak_prefix_verified": 1740,
+  "full_24h_passed": false,
+  "soak_status": "RUNNING",
+  "pi_available": false,
+  "production_changed": false,
+  "owned_resources_cleaned": true
+}

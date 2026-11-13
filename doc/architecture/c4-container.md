@@ -1,6 +1,10 @@
 # C4 Level 2 — Container Diagram
 
+2026-11-13 [ADR-045](../adr/ADR-045-newest-first-edge-retention.md)：既有edge SQLite本地schema3／最舊淘汰，無新服務、port或依賴；wire仍2。[子集圖](edge-committed-telemetry.md)包含容量策略，未切共享部署。
+
 > 範圍：EMS 內部所有容器（services + infra）、技術選型、部署位置、Owner。
+
+2026-11-12 [v2 reliable receiver Container](edge-committed-telemetry.md)：新增 opt-in Python3.11/paho/asyncpg receiver、獨立 SQLite v2、普通 receipts＋nullable投影身份欄、DB外generation；無新對外port。私有驗證通過，未變更以下共享 v1 部署。
 
 ```mermaid
 flowchart LR
@@ -152,3 +156,22 @@ flowchart LR
   Owner[DB migration owner] -->|migration 018| DB
 ```
 BFF image 加入 asyncpg；CLI 沒有 host port。management DSN 不注入 BFF。PostgREST 仍只曝露 api schema，無帳號 view。
+
+
+## 2026-11-10 演進設計：站端核心與模擬 runner（尚未實作）
+
+
+
+
+
+
+
+### ADR-041內部狀態更新（2026-11-12）
+
+Delta RTU edge內部增加不確定交易鎖定與有界隔離恢復；容器／volume／port及跨服務關係不變，無共用runtime重建。field範本未核定時限前拒絕啟動。詳[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)。
+
+### 2026-11-13 DB／WAL TLS與還原準入
+
+沿原receiver→PostgreSQL與PostgreSQL→WAL archive連線，field雙向驗證TLS；WAL ACK須唯一同步ems_wal_archive、TLS＋client DN且flush覆蓋固定LSN。021新函式缺失拒絕，不回舊版。維運backup_preflight先tar layout／資源界限，再外置可信cluster ID＋checksum，最後PG真recovery至核定timeline／target；滿載保留原slot修復，不降級。依[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)，[55案／相鄰回歸證據](../../output/no-pi-wal-security-20261113/README.md)；元件及wire2/schema3不變，正式異失效域／Pi另驗。
+
+2026-11-13：[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md) 僅補維運還原準入：外置核定timeline／target、slot先reserve→basebackup→新archive接手→真新鏈PITR驗證→generation換代／重新開ACK；沿原元件／資料流，無新增自動reseed/failover服務。中央資料滿與同ID分支短測已驗，[證據](../../output/no-pi-critical-closure-20261113/README.md)。

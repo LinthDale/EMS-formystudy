@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "request_id": "c9626705-aa1b-4142-9601-5d88e05a0289",
+  "op": "slot_reseed",
+  "base_verified": true,
+  "expected_system_id": "7707563068630024234",
+  "old_slot_preserved": "ems_archive_slot",
+  "replacement_slot": {
+    "slot": "ems_archive_reseed",
+    "active": true,
+    "restart_lsn": "0/4000000",
+    "wal_status": "reserved",
+    "peer_tls": true,
+    "flush_lsn": "0/4000000"
+  },
+  "fixed_lsn": "0/4000000",
+  "flush_fence_satisfied": true,
+  "base_artifacts": {
+    "base-backup_manifest": {
+      "bytes": 313085,
+      "sha256": "33083b83b53dc8613b487c3decb7b5f1e8e0488849c582f8a369d89125ae2f09"
+    },
+    "base-base.tar": {
+      "bytes": 36457984,
+      "sha256": "718ee872052ded8dd4dfa06fdea1f32ac0d1792b1bdfb95de38d7d3e1d8f9cd3"
+    },
+    "base-pg_wal.tar": {
+      "bytes": 16778752,
+      "sha256": "0be699fa79e07cbef768f81dc661f38fb2204705193d56d722b00f0bf11e1c37"
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "source": "independent archived pre-change module",
+  "archived_source_sha256": "20c0f8cccbca7c6930eb87f90c4d4a03803d865adde9f8936a2e62b07d3712ce",
+  "before_schema": 2,
+  "after_schema": 3,
+  "old_code_rejected": true,
+  "original_sample_id": "0933c4be-4a38-445c-9f14-c6cb75889865",
+  "original_payload_hash": "b80c583311da6e4f347334627064fd9c5686c30cdfeab278e1473e97fea1b862",
+  "unchanged_sample_after_upgrade": true
+}

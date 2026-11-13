@@ -1,0 +1,462 @@
+[
+  {
+    "kind": "attempt",
+    "utc": "2026-11-12T13:55:28.633570+00:00",
+    "monotonic": 2569851.218,
+    "slot": 5107,
+    "start_delay": 0.0
+  },
+  {
+    "kind": "read_ok",
+    "utc": "2026-11-12T13:55:28.930664+00:00",
+    "monotonic": 2569851.515,
+    "slot": 5107,
+    "sampled_ns": 1794491728633570000,
+    "started": 2569851.218,
+    "duration": 0.29700000025331974,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.89,
+      "power_kw": 9.586,
+      "energy_kwh": 1298.4,
+      "today_energy_kwh": 78.84,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    }
+  },
+  {
+    "kind": "committed",
+    "utc": "2026-11-12T13:55:28.934215+00:00",
+    "monotonic": 2569851.515,
+    "slot": 5107,
+    "sampled_ns": 1794491728633570000,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.89,
+      "power_kw": 9.586,
+      "energy_kwh": 1298.4,
+      "today_energy_kwh": 78.84,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.89,
+          "power_kw": 3.195,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    },
+    "pending": 1
+  },
+  {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T13:55:29.304668+00:00",
+    "monotonic": 2569851.89,
+    "sampled_ns": 1794491728633570000
+  },
+  {
+    "kind": "attempt",
+    "utc": "2026-11-12T13:55:33.646420+00:00",
+    "monotonic": 2569856.218,
+    "slot": 5108,
+    "start_delay": 0.0
+  },
+  {
+    "kind": "read_ok",
+    "utc": "2026-11-12T13:55:33.893483+00:00",
+    "monotonic": 2569856.468,
+    "slot": 5108,
+    "sampled_ns": 1794491733646420000,
+    "started": 2569856.218,
+    "duration": 0.25,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.91,
+      "power_kw": 9.599,
+      "energy_kwh": 1298.41,
+      "today_energy_kwh": 78.85,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    }
+  },
+  {
+    "kind": "committed",
+    "utc": "2026-11-12T13:55:33.896476+00:00",
+    "monotonic": 2569856.468,
+    "slot": 5108,
+    "sampled_ns": 1794491733646420000,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.91,
+      "power_kw": 9.599,
+      "energy_kwh": 1298.41,
+      "today_energy_kwh": 78.85,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.91,
+          "power_kw": 3.199,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    },
+    "pending": 1
+  },
+  {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T13:55:34.362265+00:00",
+    "monotonic": 2569856.937,
+    "sampled_ns": 1794491733646420000
+  },
+  {
+    "kind": "attempt",
+    "utc": "2026-11-12T13:55:38.631664+00:00",
+    "monotonic": 2569861.203,
+    "slot": 5108,
+    "start_delay": 4.985000000335276
+  },
+  {
+    "kind": "read_ok",
+    "utc": "2026-11-12T13:55:38.928569+00:00",
+    "monotonic": 2569861.5,
+    "slot": 5108,
+    "sampled_ns": 1794491738631664000,
+    "started": 2569861.203,
+    "duration": 0.29699999978765845,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.870000000000001,
+      "power_kw": 9.575,
+      "energy_kwh": 1298.43,
+      "today_energy_kwh": 78.87,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    }
+  },
+  {
+    "kind": "committed",
+    "utc": "2026-11-12T13:55:38.932487+00:00",
+    "monotonic": 2569861.515,
+    "slot": 5108,
+    "sampled_ns": 1794491738631664000,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.870000000000001,
+      "power_kw": 9.575,
+      "energy_kwh": 1298.43,
+      "today_energy_kwh": 78.87,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.870000000000001,
+          "power_kw": 3.191,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    },
+    "pending": 1
+  },
+  {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T13:55:39.411944+00:00",
+    "monotonic": 2569861.984,
+    "sampled_ns": 1794491738631664000
+  },
+  {
+    "kind": "attempt",
+    "utc": "2026-11-12T13:55:43.638980+00:00",
+    "monotonic": 2569866.218,
+    "slot": 5110,
+    "start_delay": 0.0
+  },
+  {
+    "kind": "read_ok",
+    "utc": "2026-11-12T13:55:43.937667+00:00",
+    "monotonic": 2569866.515,
+    "slot": 5110,
+    "sampled_ns": 1794491743638980000,
+    "started": 2569866.218,
+    "duration": 0.29700000025331974,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.790000000000001,
+      "power_kw": 9.515,
+      "energy_kwh": 1298.44,
+      "today_energy_kwh": 78.88,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    }
+  },
+  {
+    "kind": "committed",
+    "utc": "2026-11-12T13:55:43.941175+00:00",
+    "monotonic": 2569866.515,
+    "slot": 5110,
+    "sampled_ns": 1794491743638980000,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.790000000000001,
+      "power_kw": 9.515,
+      "energy_kwh": 1298.44,
+      "today_energy_kwh": 78.88,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.790000000000001,
+          "power_kw": 3.171,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    },
+    "pending": 1
+  },
+  {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T13:55:44.466353+00:00",
+    "monotonic": 2569867.046,
+    "sampled_ns": 1794491743638980000
+  },
+  {
+    "kind": "attempt",
+    "utc": "2026-11-12T13:55:48.649157+00:00",
+    "monotonic": 2569871.234,
+    "slot": 5111,
+    "start_delay": 0.016000000294297934
+  },
+  {
+    "kind": "read_ok",
+    "utc": "2026-11-12T13:55:48.943988+00:00",
+    "monotonic": 2569871.515,
+    "slot": 5111,
+    "sampled_ns": 1794491748649157000,
+    "started": 2569871.234,
+    "duration": 0.2809999999590218,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.65,
+      "power_kw": 9.423,
+      "energy_kwh": 1298.45,
+      "today_energy_kwh": 78.89,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    }
+  },
+  {
+    "kind": "committed",
+    "utc": "2026-11-12T13:55:48.947983+00:00",
+    "monotonic": 2569871.531,
+    "slot": 5111,
+    "sampled_ns": 1794491748649157000,
+    "snapshot": {
+      "profile": "delta-three-phase-v1.35",
+      "scale_word": 1,
+      "voltage": 230.0,
+      "current": 13.65,
+      "power_kw": 9.423,
+      "energy_kwh": 1298.45,
+      "today_energy_kwh": 78.89,
+      "state": 2,
+      "phases": [
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        },
+        {
+          "voltage": 230.0,
+          "current": 13.65,
+          "power_kw": 3.141,
+          "frequency_hz": 60.0
+        }
+      ],
+      "temperature_c": 35
+    },
+    "pending": 1
+  },
+  {
+    "kind": "broker_ack",
+    "utc": "2026-11-12T13:55:49.522304+00:00",
+    "monotonic": 2569872.093,
+    "sampled_ns": 1794491748649157000
+  }
+]

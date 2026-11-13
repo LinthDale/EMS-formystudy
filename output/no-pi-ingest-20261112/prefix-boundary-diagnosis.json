@@ -1,0 +1,10 @@
+{
+  "cause": "interim query end incorrectly converted monotonic elapsed to UTC using start offset; next slot was included by 2.781ms clock drift",
+  "extra_slot": 1740,
+  "extra_sampled_ns": 1794474893634688000,
+  "nominal_utc_boundary_ns": 1794474893637469000,
+  "actual_next_attempt_utc_ns": 1794474893634688000,
+  "difference_ns": 2781000,
+  "original_result_preserved": true,
+  "production_or_active_verifier_changed": false
+}

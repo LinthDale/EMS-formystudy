@@ -2,6 +2,11 @@
 
 > 規則見 [api-contract-governance](../doc/governance/api-contract-governance.md)。每次 API 變更一條：版本 / 日期 / 級別 / 摘要 / 對應 PRD。
 
+## 2.2.1 — 2026-11-13（PATCH，REST契約不變）
+- PRD-0020／0021、ADR-040／041／043／045／048–051：登錄opt-in可靠送達、最新優先容量、成功新舊公平、同步WAL／TLS及還原目標限制的非HTTP契約與驗證狀態。
+- 既有REST paths/components/servers/tags不變；MQTT wire2、本地schema3。僅私有隔離驗證，未正式部署、未核定Pi／ADTEK全鏈路。
+- 版控與驗證入口：[edge可靠送達交付](../doc/releases/edge-reliability-20261113.md)。
+
 ## 2.2.0 — 2026-10-13（MINOR）
 - PRD-0024 / ADR-036：展位 QR 綁定 Telegram 訪客。`GET /api/alarms/demo` 新增 `binding`（state、deep_link、遮罩後 current、today 計數；功能關閉時 null）。
 - `DemoAlarmDelivery` 新增 `target`（visitor/default）與 `visitor_number`；`POST /api/alarms/demo` 請求不變，收件者由伺服器依目前綁定決定。

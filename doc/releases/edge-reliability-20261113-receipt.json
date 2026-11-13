@@ -1,0 +1,7 @@
+{
+  "status": "prepared; final receipt is recorded after payload push",
+  "branch": "codex/edge-reliability-20261113",
+  "base_commit": "79427c6e160832d297972b8c651604f4bd0ecf84",
+  "version_tag": "edge-reliability-20261113",
+  "deployment": false
+}

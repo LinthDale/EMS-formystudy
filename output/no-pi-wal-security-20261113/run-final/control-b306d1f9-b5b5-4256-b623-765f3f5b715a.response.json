@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "request_id": "b306d1f9-b5b5-4256-b623-765f3f5b715a",
+  "op": "wal_resume",
+  "synchronous": true,
+  "slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC7370",
+    "lag_bytes": 0,
+    "slot_retained_bytes": 0,
+    "active": true,
+    "peer_tls": true,
+    "peer_role": "ems_wal_archive",
+    "peer_client_dn": "/CN=ems_wal_archive",
+    "flush_lsn": "0/1FC7370"
+  }
+}

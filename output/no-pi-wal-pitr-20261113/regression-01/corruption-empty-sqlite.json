@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "damage": "empty-sqlite",
+  "original_sample_id": "e9a19436-c2fa-4139-bd9b-bf4c4f79c437",
+  "damaged_bytes": 4096,
+  "before_sha256": "ccebca1c3994a93a9dc1a0648fe4cfd7db8211a1f364f5fab0aa28efa73ff2af",
+  "after_sha256": "ccebca1c3994a93a9dc1a0648fe4cfd7db8211a1f364f5fab0aa28efa73ff2af",
+  "error_kind": "ValueError",
+  "empty_database_recreated": false
+}

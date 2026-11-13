@@ -1,0 +1,41 @@
+{
+  "passed": true,
+  "request_id": "f5c6af55-d417-4c2c-9c90-f0f9eda7c662",
+  "op": "recovery_matrix",
+  "expected_system_id": "7707554044145840170",
+  "foreign_system_id": "7707554306294304810",
+  "good_promoted": true,
+  "postbackup_marker_recovered": true,
+  "corrupt_backup_checksum_rejected": true,
+  "corrupt_later_wal_crc_rejected": true,
+  "foreign_wal_system_id_rejected": true,
+  "valid_foreign_bundle_rejected_before_start": true,
+  "foreign_bundle_checksum_valid": true,
+  "pristine_inputs_unchanged": true,
+  "backup_and_wal_artifacts": {
+    "base-backup_manifest": {
+      "bytes": 312491,
+      "sha256": "c774135e1fad67f744af546def668060cb74b194166761515abb5a510f8ecac3"
+    },
+    "base-base.tar": {
+      "bytes": 36579328,
+      "sha256": "30661c1c9f49836180d52623a8995cc4dc149367fc1ade477d8daafa492656c0"
+    },
+    "base-pg_wal.tar": {
+      "bytes": 16778752,
+      "sha256": "608d1f341f75c487787f87f394c3946de6659268a4b62574b02ab826581b7ca5"
+    },
+    "wal-000000010000000000000003.partial": {
+      "bytes": 16777216,
+      "sha256": "a31443eb148801676d6925aca857e7ddfe981d950e5ae14a1cdc8280e6eb10ae"
+    },
+    "wal-000000010000000000000001": {
+      "bytes": 16777216,
+      "sha256": "0b0f36cd6cef763cacc02770beb4be3cfade610e54baf8bb767021eabc079c9e"
+    },
+    "wal-000000010000000000000002": {
+      "bytes": 16777216,
+      "sha256": "0036308ccb131d0f780d8ddd8ea23759c58ffad3c7fde1905ef3c61c8febd6c1"
+    }
+  }
+}

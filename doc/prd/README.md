@@ -32,10 +32,23 @@
 
 - [PRD-0020 Delta 三相模擬、解析與4G採集](PRD-0020-delta-edge-telemetry.md)：本機四欄管線已實作驗收；現場硬體與接收端身份綁定未驗收。
 
-- [PRD-0021 Delta 多設備與可靠補傳](PRD-0021-multi-device-edge-reliability.md)：Draft；M70A-262／RPI-M30A，8台／10秒／7天設計目標，尚未實作或實機驗收。
+- [PRD-0021 Delta 多設備與可靠補傳](PRD-0021-multi-device-edge-reliability.md)：整體 Draft；8台／10秒／7天及完整對帳未驗收。2026-11-12 §15.3／ADR-043 的 opt-in 可靠送達子集已私有驗證，未切共享部署或實機驗收。
+
+  2026-11-13 §15.5／[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)依使用者核定改成本地量測最新優先，滿容量淘汰最舊（含pending／quarantine／audit）；schema3／wire2，336短回歸通過、12專用case未重跑，未切共享。超額不再承諾所有歷史完整補傳，完整PRD仍Draft。
 
 - [PRD-0022 Simulator 統一控制與操作紀錄](PRD-0022-simulator-control-audit.md)：四個固定 simulator、BFF OPS API/CLI、持久 append-only audit、UUID/CAS/unknown 對帳；不控制真機。
 
 - [PRD-0023：資料庫帳號管理](PRD-0023-database-accounts.md) — PostgreSQL local users、CLI、稽核、逐請求版本撤銷；ADR-035。
 
 - [PRD-0024：展位 QR Code 綁定 Telegram 訪客示範告警](PRD-0024-booth-telegram-qr-binding.md) — 掃碼自助綁定唯一收件者、10 分鐘到期、台北日不重複計數、getUpdates 長輪詢；修訂 PRD-0019 Non-goal；ADR-036。
+
+
+
+
+
+
+
+
+
+
+PRD-0021 §15.8／[ADR-048](../adr/ADR-048-v2-live-backlog-fairness.md)補實作FR-2107最新／最舊成功1:1輪替；[38定點及419相鄰／12skip](../../output/no-pi-restore-load-20261113/README.md)私有通過，涵蓋真邏輯還原、接收超量恢復、1000舊資料下3新筆延遲。全PRD仍Draft、多設備／manifest／Pi field未驗收；不是中央PITR或現場SLA。

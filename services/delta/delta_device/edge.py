@@ -19,10 +19,20 @@ def next_sample_deadline(previous, now, interval):
 
 
 def run(config):
-    box = Outbox(config["outbox_path"], config["queue_limit"], config["device_id"])
+    reliable = config.get('delivery', {}).get('protocol') == 2
+    if reliable:
+        from .reliable_store import ReliableOutbox
+        from .reliable_sender import ReliableSender
+        delivery = config['delivery']
+        box = ReliableOutbox(config['outbox_path'], config['queue_limit'], delivery['gateway_id'],
+                             config['device_id'], delivery['stream_id'], delivery['config_revision'],
+                             delivery['profile_version'], delivery['queue_byte_limit'], delivery['audit_limit'])
+        publisher = ReliableSender(box, config['mqtt'], config['mode'], delivery['ack_timeout_seconds'])
+    else:
+        box = Outbox(config["outbox_path"], config["queue_limit"], config["device_id"])
+        publisher = Publisher(config["mqtt"], config["device_id"])
     clock = ClockGuard(config["mode"], config.get("clock_sync_file"), box.latest_timestamp())
-    poller = Poller(config["modbus"])
-    publisher = Publisher(config["mqtt"], config["device_id"])
+    poller = Poller(config["modbus"], mode=config['mode'])
     stop = threading.Event()
 
     def shutdown(signum, frame):
@@ -34,8 +44,8 @@ def run(config):
     def send():
         while not stop.is_set():
             try:
-                sent = drain(box, publisher.publish, config["batch_size"], stop)
-                if sent:
+                sent = publisher.step(stop) if reliable else drain(box, publisher.publish, config["batch_size"], stop)
+                if sent and not reliable:
                     LOG.info("broker_ack samples=%d", sent)
             except Exception as exc:
                 # Do not log exception strings, connection URLs, or secrets.
@@ -52,8 +62,11 @@ def run(config):
                 # Timestamp near acquisition; failed/incomplete polls are discarded.
                 sampled_ns = clock.timestamp()
                 snapshot = poller.sample()
-                payload = encode_line(config["device_id"], snapshot, sampled_ns)
-                box.enqueue(sampled_ns, payload, snapshot)
+                if reliable:
+                    box.enqueue(sampled_ns, snapshot)
+                else:
+                    payload = encode_line(config["device_id"], snapshot, sampled_ns)
+                    box.enqueue(sampled_ns, payload, snapshot)
                 LOG.info("sample_queued device_id=%s time_ns=%d pending_rows=%d",
                          config["device_id"], sampled_ns, box.pending_count())
             except OverflowError:

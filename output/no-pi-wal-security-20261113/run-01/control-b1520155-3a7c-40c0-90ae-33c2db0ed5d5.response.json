@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "request_id": "b1520155-3a7c-40c0-90ae-33c2db0ed5d5",
+  "op": "wal_resume",
+  "synchronous": true,
+  "slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC0AD8",
+    "lag_bytes": 0,
+    "active": true
+  }
+}

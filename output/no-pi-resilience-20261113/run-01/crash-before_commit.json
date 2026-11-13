@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "child_exit": -9,
+  "observed": {
+    "pid": 32,
+    "stage": "before_commit",
+    "journal_bytes": 41472,
+    "main_file_changed": true
+  },
+  "recovered_ids": [
+    "ed1f6e01-357e-4c3a-8001-b7b8e518ecdf"
+  ],
+  "recovered_sequence": 1,
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 0,
+    "unconfirmed_evicted_total": 0,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": null
+  },
+  "next_sequence": 2,
+  "integrity": "ok"
+}

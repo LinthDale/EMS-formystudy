@@ -1,0 +1,482 @@
+FFFFFFFFFFFFFF                                                           [100%]
+=================================== FAILURES ===================================
+_______ test_full_queue_keeps_newest_prefix_retirement_survives_restart ________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_full_queue_keeps_newest_p0')
+
+    def test_full_queue_keeps_newest_prefix_retirement_survives_restart(tmp_path):
+        box = make_box(tmp_path)
+>       samples = [box.enqueue(NOW+i*1000, VALUES) for i in range(9)]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:29: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/delta/tests/test_reliable_retention.py:29: in <listcomp>
+    samples = [box.enqueue(NOW+i*1000, VALUES) for i in range(9)]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8df56190>
+sampled_ns = 1794474000000003000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+______ test_full_audit_recycles_committed_history_and_accepts_new_sample _______
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_full_audit_recycles_commi0')
+
+    def test_full_audit_recycles_committed_history_and_accepts_new_sample(tmp_path):
+        box = make_box(tmp_path,audit_limit=1)
+        old = box.enqueue(NOW,VALUES)
+        box.committed(old['sample_id'],old['payload_hash'])
+>       new = box.enqueue(NOW+1000,VALUES)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:43: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e0e5090>
+sampled_ns = 1794474000000001000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+________ test_full_audit_evicts_oldest_pending_even_when_queue_has_room ________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_full_audit_evicts_oldest_0')
+
+    def test_full_audit_evicts_oldest_pending_even_when_queue_has_room(tmp_path):
+        box = make_box(tmp_path,limit=10,audit_limit=2)
+>       samples = [box.enqueue(NOW+i*1000,VALUES) for i in range(3)]
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:52: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/delta/tests/test_reliable_retention.py:52: in <listcomp>
+    samples = [box.enqueue(NOW+i*1000,VALUES) for i in range(3)]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e1740d0>
+sampled_ns = 1794474000000002000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+______ test_oldest_order_uses_capture_sequence_not_timestamp_or_ack_order ______
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_oldest_order_uses_capture0')
+
+    def test_oldest_order_uses_capture_sequence_not_timestamp_or_ack_order(tmp_path):
+        box = make_box(tmp_path,limit=10,audit_limit=2)
+        first = box.enqueue(NOW+9000,VALUES)
+        second = box.enqueue(NOW,VALUES)
+        box.committed(second['sample_id'],second['payload_hash'])
+>       new = box.enqueue(NOW+10000,VALUES)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:62: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e2a7190>
+sampled_ns = 1794474000000010000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_________ test_quarantine_can_be_retired_but_is_not_counted_committed __________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_quarantine_can_be_retired0')
+
+    def test_quarantine_can_be_retired_but_is_not_counted_committed(tmp_path):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+        box.quarantine(old['sample_id'],old['payload_hash'],'conflict')
+>       new = box.enqueue(NOW+1000,VALUES)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:71: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e278e50>
+sampled_ns = 1794474000000001000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_ test_late_resolution_of_retired_id_cannot_delete_or_modify_newest[committed] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_late_resolution_of_retire0')
+resolution = 'committed'
+
+    @pytest.mark.parametrize('resolution',['committed','quarantine'])
+    def test_late_resolution_of_retired_id_cannot_delete_or_modify_newest(tmp_path,resolution):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+>       new = box.enqueue(NOW+1000,VALUES)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e0e4550>
+sampled_ns = 1794474000000001000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_ test_late_resolution_of_retired_id_cannot_delete_or_modify_newest[quarantine] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_late_resolution_of_retire1')
+resolution = 'quarantine'
+
+    @pytest.mark.parametrize('resolution',['committed','quarantine'])
+    def test_late_resolution_of_retired_id_cannot_delete_or_modify_newest(tmp_path,resolution):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+>       new = box.enqueue(NOW+1000,VALUES)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:82: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e282cd0>
+sampled_ns = 1794474000000001000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_________ test_invalid_incoming_sample_never_evicts_old_data[values0] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_invalid_incoming_sample_n0')
+values = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': True}
+
+    @pytest.mark.parametrize('values',[dict(VALUES,voltage=True),dict(VALUES,pad='x'*16385)])
+    def test_invalid_incoming_sample_never_evicts_old_data(tmp_path,values):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+        with pytest.raises(ValueError):
+>           box.enqueue(NOW+1000,values)
+
+services/delta/tests/test_reliable_retention.py:97: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8df3a6d0>
+sampled_ns = 1794474000000001000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': True}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_________ test_invalid_incoming_sample_never_evicts_old_data[values1] __________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_invalid_incoming_sample_n1')
+values = {'current': 5, 'energy_kwh': 100, 'pad': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'power_kw': 1, ...}
+
+    @pytest.mark.parametrize('values',[dict(VALUES,voltage=True),dict(VALUES,pad='x'*16385)])
+    def test_invalid_incoming_sample_never_evicts_old_data(tmp_path,values):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+        with pytest.raises(ValueError):
+            box.enqueue(NOW+1000,values)
+        assert rows(box) == [old], 'invalid input evicted valid source'
+>       assert box.retention_status()['audit_evicted_total'] == 0, 'invalid input advanced retirement counter'
+               ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'ReliableOutbox' object has no attribute 'retention_status'
+
+services/delta/tests/test_reliable_retention.py:99: AttributeError
+___ test_new_insert_failure_rolls_back_eviction_counters_sequence_and_window ___
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_new_insert_failure_rolls_0')
+
+    def test_new_insert_failure_rolls_back_eviction_counters_sequence_and_window(tmp_path):
+        box = make_box(tmp_path,limit=1)
+        old = box.enqueue(NOW,VALUES)
+        with box.connect() as db:
+            db.execute("CREATE TRIGGER reject_insert BEFORE INSERT ON queue BEGIN SELECT RAISE(ABORT,'test insert failed'); END")
+            before = dict(db.execute('SELECT key,value FROM metadata'))
+        with pytest.raises(sqlite3.IntegrityError):
+>           box.enqueue(NOW+600000000000,VALUES)
+
+services/delta/tests/test_reliable_retention.py:109: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e1baad0>
+sampled_ns = 1794474600000000000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+_____ test_real_sqlite_full_rotates_oldest_prefix_and_keeps_newest_hashes ______
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_real_sqlite_full_rotates_0')
+
+    def test_real_sqlite_full_rotates_oldest_prefix_and_keeps_newest_hashes(tmp_path):
+        box = make_box(tmp_path,limit=100,audit_limit=100,byte_limit=65536)
+>       expected = [box.enqueue(NOW+i*1000,dict(VALUES,pad='x'*12000)) for i in range(20)]
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:118: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+services/delta/tests/test_reliable_retention.py:118: in <listcomp>
+    expected = [box.enqueue(NOW+i*1000,dict(VALUES,pad='x'*12000)) for i in range(20)]
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8df39b50>
+sampled_ns = 1794474000000002000
+snapshot = {'current': 5, 'energy_kwh': 100, 'pad': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx...xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx', 'power_kw': 1, ...}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+                raise OverflowError('queue or audit capacity')
+            seq = int(db.execute("SELECT value FROM metadata WHERE key='sequence'").fetchone()[0]) + 1
+            bucket = sampled_ns // 300000000000
+            db.execute('INSERT OR IGNORE INTO windows VALUES (?,?)', (bucket, str(uuid4())))
+            window = db.execute('SELECT window_id FROM windows WHERE bucket=?', (bucket,)).fetchone()[0]
+            sample = dict(self.identity, sample_id=str(uuid4()), capture_seq=seq, window_id=window,
+                          sampled_at_us=sampled_ns // 1000, time_quality='trusted',
+                          measurements={key: snapshot[key] for key in FIELDS})
+            # Normalize before signing; bools are rejected rather than coerced.
+            for key, value in sample['measurements'].items():
+                if type(value) not in (int, float) or not 0 <= value <= 1e15:
+                    raise ValueError('measurement type')
+                sample['measurements'][key] = float(value) if value else 0.0
+            sample['payload_hash'] = sample_hash(sample)
+            sample = validate_sample(sample, self.identity['gateway_id'])
+>           db.execute('INSERT INTO queue VALUES (?,?,?,?,?,?)',
+                       (sample['sample_id'], seq, sample['payload_hash'], canonical(sample).decode(), 'pending', rich_snapshot))
+E           sqlite3.OperationalError: database or disk is full
+
+services/delta/delta_device/reliable_store.py:119: OperationalError
+___________ test_unused_window_history_is_bounded_with_rolling_queue ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_unused_window_history_is_0')
+
+    def test_unused_window_history_is_bounded_with_rolling_queue(tmp_path):
+        box = make_box(tmp_path,limit=2,audit_limit=2)
+        for i in range(35):
+>           box.enqueue(NOW+i*300000000000,VALUES)
+
+services/delta/tests/test_reliable_retention.py:131: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e270990>
+sampled_ns = 1794474600000000000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+___ test_concurrent_enqueue_serializes_retirement_and_never_reuses_sequence ____
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_concurrent_enqueue_serial0')
+
+    def test_concurrent_enqueue_serializes_retirement_and_never_reuses_sequence(tmp_path):
+        box = make_box(tmp_path,limit=3,audit_limit=3)
+        with ThreadPoolExecutor(max_workers=3) as pool:
+>           samples = list(pool.map(lambda i:box.enqueue(NOW+i*1000,VALUES),range(15)))
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:139: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/concurrent/futures/_base.py:619: in result_iterator
+    yield _result_or_cancel(fs.pop())
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:317: in _result_or_cancel
+    return fut.result(timeout)
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:456: in result
+    return self.__get_result()
+           ^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/concurrent/futures/_base.py:401: in __get_result
+    raise self._exception
+/usr/local/lib/python3.11/concurrent/futures/thread.py:58: in run
+    result = self.fn(*self.args, **self.kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/delta/tests/test_reliable_retention.py:139: in <lambda>
+    samples = list(pool.map(lambda i:box.enqueue(NOW+i*1000,VALUES),range(15)))
+                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7c8e8e14da10>
+sampled_ns = 1794474000000000000
+snapshot = {'current': 5, 'energy_kwh': 100, 'power_kw': 1, 'voltage': 230}
+
+    def enqueue(self, sampled_ns, snapshot):
+        if type(sampled_ns) is not int or sampled_ns % 1000:
+            raise ValueError('microsecond aligned source time required')
+        rich_snapshot = json.dumps(snapshot, allow_nan=False, separators=(',', ':'))
+        if len(rich_snapshot.encode()) > 16384:
+            raise ValueError('snapshot size')
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            if (db.execute('SELECT COUNT(*) FROM queue').fetchone()[0] >= self.limit
+                    or db.execute('SELECT COUNT(*) FROM audit').fetchone()[0] >= self.audit_limit):
+>               raise OverflowError('queue or audit capacity')
+E               OverflowError: queue or audit capacity
+
+services/delta/delta_device/reliable_store.py:104: OverflowError
+__ test_legacy_schema_two_upgrades_without_losing_sample_and_old_code_refuses __
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_legacy_schema_two_upgrade0')
+
+    def test_legacy_schema_two_upgrades_without_losing_sample_and_old_code_refuses(tmp_path):
+        # The archived module is independent pre-change code, not current constants.
+        root=Path(__file__).resolve().parents[3]
+        saved=root/'output/newest-first-retention-20261113/before/services/delta/delta_device/reliable_store.py'
+        spec=importlib.util.spec_from_file_location('delta_device._old_retention_store',saved)
+        old_module=importlib.util.module_from_spec(spec);spec.loader.exec_module(old_module)
+        identity=dict(gateway_id='g1',device_id='d1',stream_id=str(uuid4()),config_revision='r1',profile_version='v135')
+        old=old_module.ReliableOutbox(tmp_path/'old'/'q.db',3,**identity)
+        sample=old.enqueue(NOW,VALUES)
+        new=ReliableOutbox(old.path,3,**identity)
+>       assert rows(new)==[sample] and new.retention_status()['audit_evicted_total']==0, 'upgrade lost source identity'
+                                       ^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: 'ReliableOutbox' object has no attribute 'retention_status'
+
+services/delta/tests/test_reliable_retention.py:156: AttributeError
+-------------------- generated xml file: /evidence/red.xml ---------------------
+=========================== short test summary info ============================
+FAILED services/delta/tests/test_reliable_retention.py::test_full_queue_keeps_newest_prefix_retirement_survives_restart
+FAILED services/delta/tests/test_reliable_retention.py::test_full_audit_recycles_committed_history_and_accepts_new_sample
+FAILED services/delta/tests/test_reliable_retention.py::test_full_audit_evicts_oldest_pending_even_when_queue_has_room
+FAILED services/delta/tests/test_reliable_retention.py::test_oldest_order_uses_capture_sequence_not_timestamp_or_ack_order
+FAILED services/delta/tests/test_reliable_retention.py::test_quarantine_can_be_retired_but_is_not_counted_committed
+FAILED services/delta/tests/test_reliable_retention.py::test_late_resolution_of_retired_id_cannot_delete_or_modify_newest[committed]
+FAILED services/delta/tests/test_reliable_retention.py::test_late_resolution_of_retired_id_cannot_delete_or_modify_newest[quarantine]
+FAILED services/delta/tests/test_reliable_retention.py::test_invalid_incoming_sample_never_evicts_old_data[values0]
+FAILED services/delta/tests/test_reliable_retention.py::test_invalid_incoming_sample_never_evicts_old_data[values1]
+FAILED services/delta/tests/test_reliable_retention.py::test_new_insert_failure_rolls_back_eviction_counters_sequence_and_window
+FAILED services/delta/tests/test_reliable_retention.py::test_real_sqlite_full_rotates_oldest_prefix_and_keeps_newest_hashes
+FAILED services/delta/tests/test_reliable_retention.py::test_unused_window_history_is_bounded_with_rolling_queue
+FAILED services/delta/tests/test_reliable_retention.py::test_concurrent_enqueue_serializes_retirement_and_never_reuses_sequence
+FAILED services/delta/tests/test_reliable_retention.py::test_legacy_schema_two_upgrades_without_losing_sample_and_old_code_refuses
+14 failed in 0.11s

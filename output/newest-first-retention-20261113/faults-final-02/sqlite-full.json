@@ -1,0 +1,27 @@
+{
+  "passed": true,
+  "enqueued": 20,
+  "retained_after_reopen": 1,
+  "integrity": "ok",
+  "database_bytes": 57344,
+  "retention": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 19,
+    "unconfirmed_evicted_total": 19,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 1,
+      "first_seq": 19,
+      "last_seq": 19,
+      "sample_id": "92312f6f-e85f-4955-8a8d-55ac2fc5c66f",
+      "payload_hash": "6e2b0ca47e0e5a928a269f79dc62d1a314ede8d9e96a9ef3615996280790917f",
+      "state": "pending",
+      "sampled_at_us": 1794536447591038
+    }
+  },
+  "retained_ids": [
+    "e93ba241-6f61-4c97-8e40-aa03a8fd5d10"
+  ]
+}

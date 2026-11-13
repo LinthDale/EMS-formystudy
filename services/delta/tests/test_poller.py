@@ -1,4 +1,5 @@
 from types import SimpleNamespace
+from pymodbus.pdu import ExceptionResponse
 import pytest
 from delta_device.poller import Poller, ReadError, make_client
 from test_protocol import fixture
@@ -14,7 +15,7 @@ class Client:
     def read_input_registers(self, address, count, slave):
         self.calls.append((address,count,slave))
         if address == 40994 and self.exception:
-            return SimpleNamespace(isError=lambda: True, exception_code=self.exception)
+            return ExceptionResponse(4, self.exception)
         regs = dict(fixture(), **{})
         regs.update({40995:self.scale,40962:42,53250:0,53251:0,53254:0,53255:0})
         return SimpleNamespace(isError=lambda: False,

@@ -1,0 +1,5 @@
+{
+  "passed": false,
+  "status": "SETUP_FAILED",
+  "reason": "PowerShell provider-qualified path passed to native File API; neither browser probe ran. Prior null-based initial assessment invalid."
+}

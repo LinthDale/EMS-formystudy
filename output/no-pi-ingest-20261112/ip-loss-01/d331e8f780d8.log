@@ -1,0 +1,16 @@
+1794474665: mosquitto version 2.1.2 starting
+1794474665: Config loaded from /qa.conf.
+1794474665: Bridge support available.
+1794474665: Persistence support available.
+1794474665: TLS support available.
+1794474665: TLS-PSK support available.
+1794474665: Websockets support available.
+1794474665: Opening ipv4 listen socket on port 1883.
+1794474665: mosquitto version 2.1.2 running
+1794474716: New connection from 127.0.0.1:47865 on port 1883.
+1794474716: New client connected from 127.0.0.1:47865 as sink-run (p4, c1, k30).
+1794474717: New connection from 127.0.0.1:34850 on port 1883.
+1794474717: New client connected from 127.0.0.1:34850 as sender-run (p4, c1, k30).
+1794474781: Client sender-run [127.0.0.1:34850] disconnected.
+1794474781: Client sink-run [127.0.0.1:47865] disconnected.
+1794474665: Info: running mosquitto as user id: 1000.

@@ -1,0 +1,24 @@
+{
+  "expected": 3600,
+  "database": {
+    "expected": 3600,
+    "received": 3600,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 3600,
+    "received": 3600,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "scope": "fresh read-only recheck after Windows reboot; existing completed 1h run"
+}

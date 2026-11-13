@@ -1,5 +1,19 @@
 # synaiq EMS
 
+## 接手入口與資料地圖
+
+
+
+
+
+## 模擬先行的 EMS 演進方案（2026-11-10）
+
+
+
+
+
+長線 AI 控制能力以候選意圖、既定授權與站端確定性約束為邊界；設備自動分類不自動取得控制權。第一個切片為 PV＋負載＋BESS＋PCC 閉環，實機驗收留待設備取得後。
+
 [![CI](https://github.com/LinthDale/EMS-formystudy/actions/workflows/ci.yml/badge.svg?branch=dev)](https://github.com/LinthDale/EMS-formystudy/actions/workflows/ci.yml)
 
 自主研發的商用 **EMS（Energy Management System）** —— 從電力資料採集、可視化、告警，一路延伸到工廠環境監測、**裝置自動登錄與 AI 輔助分類**，以及 AI 控制面（MCP）。
@@ -221,6 +235,7 @@ docker compose down -v && docker compose up -d
 ```text
 .
 ├── README.md                # 系統能力總覽與快速入口（本檔）
+├── AGENTS.md                # Agent 接手與必讀入口
 ├── project_rules.md         # 專案規定；重要變更後需同步文件
 ├── docker-compose.yml       # 一條龍啟動所有服務
 ├── .env.example             # 環境變數範本
@@ -228,6 +243,7 @@ docker compose down -v && docker compose up -d
 │   └── openapi.yml          # 對外 API schema
 ├── config/                  # 設備與服務設定
 ├── doc/                     # 規範、PRD、ADR、架構、運維文件
+│   ├── README.md            # 依任務找文件、程式及驗證紀錄的總地圖
 │   ├── PRD-架構設計-Guideline.md
 │   ├── prd/                 # 正式 PRD（含實作狀態索引）
 │   ├── architecture/        # C4 Context / Container / Data Flow
@@ -241,7 +257,7 @@ docker compose down -v && docker compose up -d
 
 ## 文件索引
 
-> **新人 / 接手工程師閱讀順序**：`project_rules.md` → `doc/PRD-架構設計-Guideline.md` → `doc/prd/`（既有 PRD 全部讀過）→ `doc/architecture/` → `doc/adr/` → 才開始動手。詳見 `project_rules.md` §14。
+> **新人 / 接手工程師閱讀順序**：`project_rules.md` → `doc/PRD-架構設計-Guideline.md` → `doc/prd/README.md`（定位並讀相關 PRD 全文）→ `doc/architecture/` → `doc/adr/` → 才開始動手。詳見 `project_rules.md` §14。
 
 ### 想知道目前進度 / 路線圖？
 
@@ -330,3 +346,104 @@ docker compose run --rm account-admin list
 docker compose run --rm account-admin create dalelin --role ops --reason "新增維運人員"
 ```
 新增／停用／改密碼／權限與備份見 [帳號管理操作手冊](doc/operations/account-management.md)。帳號異動立即在下一次請求撤銷舊 session；無網頁帳號管理入口。
+
+
+### 2026-11-12 Windows 實體 RS485 bench（無 Pi）
+
+兩台 USB–RS485 接同一台 Windows PC，COM3 從站／COM4 採集；修正 Windows 短封包後 110/110 成功。獨立 `delta-rtu-sim-001` 的 SQLite 暫存／補送、DB 與 EMS records API 15/15 通過，完整回歸 78 passed、coverage 95.20%。Pi、4G、Delta 真機與長期可靠性仍待驗證；舊紀錄的「Windows COM／實體 RS485 待驗證」僅由本次 bench 範圍更新。重現、證據及限制見 [驗證紀錄](output/delta-rtu-bench-20261112/README.md)。
+
+
+### 2026-11-12 無 Pi 驗證計畫與執行入口
+
+[單設備 Windows 台架計畫與驗收基準](doc/operations/delta-no-pi-validation-plan.md)：定義採樣槽帳本、資料正確性、USB／封包／上傳故障、程序恢復及 DB 對帳關卡。門檻為台架提議值，非已達成 SLA；中央 committed ACK／去重沿 PRD-0021 待實作。本次未新增容器、API 或 runtime 設定。
+
+
+### 無 Pi 逐關執行紀錄（2026-11-12）
+
+實際關卡狀態、帳本工具重現方式及限制見 [逐關驗證紀錄](output/delta-no-pi-validation-20261112/README.md)。測試只作用於獨立 delta-rtu-sim-001 與各 run 自有 SQLite，不新增／重啟共用容器；中央 DB committed ACK 仍未實作。
+
+### 2026-11-12 Delta RTU串口恢復修正
+
+[ADR-040](doc/adr/ADR-040-delta-rtu-listener-recovery.md)補上模擬器成功監聽後的同埠重開與背景task回收。完整Delta回歸127 passed、line coverage95.71%，修正後正常實體採集3/3及DB/API對帳通過；USB拔插恢復仍待重驗，舊FAIL保留。詳[逐關紀錄](output/delta-no-pi-validation-20261112/README.md)。
+
+2026-11-12 12:16更新（ADR-040）：COM3修正後實體拔插usb-com3-04-fixed通過，離線33.328秒，恢復上界9.672秒，原程序持續運行，52筆DB/API逐筆相符、pending0；COM4仍待獨立測試，關卡4只部分完成。實際證據以逐關紀錄為準。
+
+2026-11-12 12:22：COM4測試觀察3.047秒恢復、52/52筆DB/API一致，但COM3亦曾離線，未滿足單端隔離條件，原工具FAIL保留、COM4判讀INCONCLUSIVE待重測。COM3已通過，整個關卡4未完成。詳逐關紀錄。
+
+2026-11-12 12:30：COM4-02單端恢復上界2.516秒、55/55 DB/API對帳、pending0；離線27.235秒未達28秒預設下限，原FAIL不改，操作時長判讀INCONCLUSIVE待受控計時補驗。COM3維持已通過，整關未完成。
+
+2026-11-12使用者取消USB秒數補驗：已停usb-com4-03-timed，保留不完整證據。COM4功能恢復2.516秒及55/55對帳成立，離線27.235秒的工具原FAIL以操作時長偏差保留；不再要求人工秒數補驗，USB項目依現有證據結束。
+
+2026-11-12第5關實體RS485故障測試完成：前五類各20/20通過，遲到舊回覆20/20被下一個read誤收，第5關FAIL，資料新鮮度策略待處理。沒有向EMS發布故障值。USB秒數補驗依使用者取消。詳[逐關紀錄](output/delta-no-pi-validation-20261112/README.md)。
+
+## RTU不確定交易更新（2026-11-12，ADR-041）
+
+完整sample替身已重現跨串口close/open混入舊AC。正式Poller現於不確定交易後丟棄整筆並鎖定；未知上界不再採新值，SQLite既有可信資料仍可補送。有核定的modbus.response_lifetime_seconds與response_lifetime_source才可等待／重建client與framer／清buffer後重採；field RTU也須啟動隔離。field範本null刻意拒絕啟動，須由工程人員補足機型／韌體／USB驅動的核定依據，不可照抄台架1秒。
+
+這是本機原始碼變更，未重建共用EMS容器、未改MQTT／DB／API契約；不代表任意延遲或惡意重播皆可辨識。真機M70A-262／RPI-M30A上界未核定，風險保持Open。依據與最新實測見ADR-041及output/delta-no-pi-validation-20261112/README.md；歷史FAIL不覆寫。
+
+2026-11-12本輪最終：164項回歸通過、production line coverage96.06%；完整sample實體有界保護40/40、5分鐘上傳中斷80筆DB/API逐筆一致、10次採集child強殺30筆恢復且DB/API一致、私有SQLite容量／損壞副本故障注入通過。中央DB committed ACK仍缺、第9關BLOCKED，1h／24h與真機未驗。修正未部署共用容器。[紀錄](output/delta-no-pi-validation-20261112/README.md)。
+
+## 2026-11-12 續驗：DB確認反例與長測
+
+[最新逐關紀錄](output/delta-no-pi-validation-20261112/README.md)：第9關以私有真MQTT／production傳送端／受控SQLite重現3案，v1系統驗收FAIL；未操作共享DB，v2中央commit receipt／去重待實作。本機Monitor攔截API的5案新鮮度及圖表／卡片／表格值通過，只屬UI契約。1秒1小時於13:49啟動，通過才進5秒24小時，當前以紀錄內活動status為準；未先報長測通過。保持PC開機及兩顆USB，不再人工拔插。回歸183 passed、production coverage96.06%；無API／schema變更、未部署共享runtime。
+
+## 2026-11-12 時鐘／TLS補驗完成
+
+[補驗紀錄](output/delta-no-pi-validation-20261112/field-security-02/README.md)：正式edge加真Modbus TCP／SQLite／私有TLS broker，時鐘2案11階段、TLS10案，共12/12通過；7個憑證／認證拒絕案保留pending，同Publisher1.0274秒重連。只注入測試UTC／節拍及sender permit，不改主機時鐘或COM。首輪9/12失敗保留，工具修正後另驗；完整回歸191 passed／12 skipped，12項隔離案已另實跑，production coverage96.06%。私有容器已清理，無API／schema／production改動、未部署共享runtime。1秒／1小時已PASS、5秒／24小時仍運行；中央receipt／去重、多設備仍待實作，非Pi／4G／真機准入。
+
+## 採集測試交接（2026-11-12）
+
+[目前進度、未完成清單及接續順序](doc/operations/edge-temperature-handoff-20261112.md)：下一個整合目標是溫度貼片經 Pi 解析／暫存後傳至 EMS，日照移出本輪；ADTEK／Pi 全鏈路尚未實作驗收。既有 Windows Delta 台架的 1h PASS、24h 活動狀態及中央 receipt／去重缺口分開追蹤，接手前先看動態 status，不占用 COM3／COM4。
+
+### 2026-11-12 無 Pi 弱網與積壓補測
+
+[完整證據](output/no-pi-backlog-20261112/README.md)：10,120 筆私有積壓／同步採樣、155 筆弱網、1,000 筆線上備份前綴、110 筆真 EMS DB／API 對帳及 stale→live 介面檢查通過；Linux 自有臨時服務重啟／停止亦通過。新增測試工具，203 項回歸通過，production coverage 96.06%；未改 production／共享容器或活動 24h 長測來源。中央 receipt／去重仍待實作。
+
+### 2026-11-12 實際接收端與 IP 丟包補測
+
+[證據](output/no-pi-ingest-20261112/README.md)：私有相同 Telegraf／TimescaleDB 接收副本重現重送重複入庫、接收停機時 PUBACK 後缺筆，v1 可靠送達仍 FAIL；私有 DB 暫停 10 秒後 10／10 恢復。另以核心 netem 真正丟 17 個 IP 封包，230／230 完整；211 項回歸、production coverage 96.06%。原長測前 1,740 槽 DB／API 相符，24h 仍 RUNNING；未改 production 或活動來源，自有容器／qdisc 已清理。中央 receipt／去重及 Pi／4G／溫度全鏈路仍未完成。
+
+## 中央提交確認與重送去重修復（2026-11-12）
+
+[實作／部署／離線轉換入口](services/edge-receiver/README.md)、[ADR-043](doc/adr/ADR-043-opt-in-committed-telemetry.md)、[驗證紀錄](output/committed-delivery-fix-20261112/README.md)。新增 opt-in v2：本地保留到 DB committed ACK；穩定 ID/hash、原子 receipt＋投影、並行去重、缺列修復及權威 mTLS／ACL。259 項通過、12 項專用 clock/TLS 跳過、combined coverage 90.81%；真 MQTT停機／ACK遺失／TCP採集SIGKILL恢復、DB失敗及 mTLS負向驗證通過。舊 v1 反例保持、共享部署／原 24h 未切換；Pi、完整多設備／manifest對帳／20/s容量仍未驗收。
+
+### 2026-11-13 長測中斷稽核
+
+[實際結果](output/soak-interruption-audit-20261113/README.md)：Windows更新於11/12 22:29:14發起重開機，原24h測試停止在約7h39m／5,512筆，DB／API本日逐筆一致但**未完成24h，不能算通過**；原RUNNING已過時。1h本日重查3,600／3,600保持PASS；槽號15ms邊界異常另保留，未啟動重跑。v2昨日259項獨立證據hash相符，未切共享部署。
+
+槽號誤標已於11/13修正：[66項定點補測](output/slot-boundary-fix-20261113/README.md)。工具改按排程原定deadline標槽，保留提早／延遲；不改production scheduler或原始帳本。原五筆只做時間回放，未重跑長測，24h中斷狀態不變。
+
+### 2026-11-13 其他無Pi短測與防回歸
+
+[8個新故障＋35個槽號回歸](output/no-pi-v2-faults-20261113/README.md)共43項通過，另16個控制器反例通過。涵蓋真DB逾時／回滾、終止自有backend、雙接收端去重、衝突quarantine、SQLite滿與不受信client憑證。補測入口核對完整35案identity及DB真故障證據，不能以漏跑／替代／重複／skip／單純ACK逾時假過關。未改production／共享部署、未接COM或重跑長測。
+
+### 2026-11-13 容量滿保留最新量測
+
+使用者核定最新優先；[ADR-045](doc/adr/ADR-045-newest-first-edge-retention.md)／[驗證](output/newest-first-retention-20261113/README.md)：queue／audit／byte滿按capture_seq淘汰最舊量測（含未送／quarantine），原子存入新樣本並保留有界淘汰摘要；不假記committed。schema3本地升版、wire仍2，舊版拒開。336項短回歸通過／12專用case未重跑、coverage≥80%；23容量案、真MQTT舊ACK競態、離線12限3僅補最後3筆。寫新失敗整筆回滾；共享v1、COM與原長測未操作。容量超額後不保證舊資料完整補傳，中央對帳／缺口UI、Pi／實體SD仍待驗。
+
+### 2026-11-13 無Pi恢復與v2憑證續測
+
+[新9案＋35槽號共44通過](output/no-pi-resilience-20261113/README.md)，工具32案通過：真SIGKILL三交易邊界、SQLite BUSY／READONLY、循環寫入中的線上backup、v2錯CA／錯hostname／過期server憑證拒絕及原ID恢復中央一次。修正崩潰驗收把constructor寫入當dirty-spill的假PASS風險，marker改原子發布；本輪production未改、未切共享服務／占COM／重跑長測。不是Pi／SD／實體掉電或PITR驗收。
+
+### 2026-11-13 三項無Pi續測與空庫誤重建修復
+
+[broker重啟／SQLite損壞／client憑證輪替撤權](output/no-pi-lifecycle-20261113/README.md)：42項定點通過、零跳過；相鄰393通過／12專用case跳過、coverage91.02%。同edge程序在broker離線持續TCP採3筆、恢復各入庫一次；4損壞檔拒開且hash不變；同CN新cert可用，CRL撤oldserial＋重啟自有TLSbroker斷活動舊session，old重連拒、新cert可恢復原ID。修ReliableOutbox既有空檔／空schema不可重建reset，並保留精確READONLY_ROLLBACK的原生journal恢復；測試host檔案I/O防symlink補齊。未切共享v1、占COM或重跑長測；正式PKI／Pi／SD／4G／中央PITR仍另驗。
+
+### 2026-11-13 剩餘三項無Pi短測與公平送達修復
+
+[中央備份還原／接收超量恢復／千筆積壓新資料延遲](output/no-pi-restore-load-20261113/README.md)：38定點通過／零跳過，419相鄰通過／12專用case跳過、coverage91.04%。真pg_dump還原新庫，原pending同ID補回／舊ACK拒，backup後已ACK且local刪payload的1筆明示dump＋local不可補，不稱零遺失。200封同樣本重送達queue64/drop135/rate拒65，恢復原／新各1列。[ADR-048](doc/adr/ADR-048-v2-live-backlog-fairness.md)修FIFO為最新／最舊成功1:1交替；1000舊＋3新用原1秒sender節奏，新筆1.044／2.091／2.098秒commit、最舊亦前進，1003總帳保留。是私有短測，非WAL PITR、現場SLA或20/s驗收；共享／COM／長測未動。
+
+2026-11-13 [同步WAL與實體PITR短測](output/no-pi-wal-pitr-20261113/README.md)／[ADR-049](doc/adr/ADR-049-synchronous-wal-ack-and-pitr.md)：field ACK強制獨立WAL刷盤覆蓋固定LSN；basebackup後已ACK且local已刪的B，在原主庫停用後由WAL救回，缺WAL拒絕達標。正式[啟用與還原手冊](services/edge-receiver/WAL-PITR.md)與systemd/TLS範本已備，尚未部署共享；未用COM／重跑長測。
+
+2026-11-13 新無Pi私有短測：[受限field帳號、轉換SIGKILL、inflight clientID碰撞](output/no-pi-cutover-20261113/README.md)，5新案＋35槽號共40通過15秒，131工具／轉換單測通過。純測試與驗收工具補強，產品／共享部署／COM／長測不變。
+
+2026-11-13 [無Pi儲存一致性與正常停機修復](output/no-pi-integrity-20261113/README.md)：66定點通過、500相鄰／12既有skip，coverage91.36%；修邏輯損壞漏檢、live序號回退重用、audit缺失ACK誤刪及讀取快照／摘要溢位。另真MQTT異常批次與SIGTERM重啟11筆完整逐ID/hash／投影核對。無共享部署／COM／長測重跑。
+
+## 2026-11-13 DB／WAL安全與還原短測完成
+
+DB／WAL TLS、128MiB archive ENOSPC恢復、損壞backup／WAL及有效外cluster拒絕已私有短測；55通過62.52秒，568短回歸／12專用skip／coverage90.99%，原已ACK資料PITR36通過。修field db_tls強制驗證、021版本化TLS＋固定角色WAL predicate、外置expected_system_id及tar資源預檢。無COM／共享部署／長測重跑；正式異失效域與Pi仍待驗。 [證據與操作入口](output/no-pi-wal-security-20261113/README.md)。
+
+## 2026-11-13 高必要性強化已收尾
+
+本輪限定三項高必要性補強已完成：中央receipt資料16MiB空間真ENOSPC→retryable／原ID一次恢復；slot真lost→新slot先reserve再basebackup，跨3段／checkpoint後真PITR驗gap marker；同cluster兩分支二次PITR固定核定timeline／target。38定點通過18.00秒；616相鄰短回歸／12既有專用skip／coverage91.73%，48新單測通過（套件重疊不加總）。正式部署／Pi仍待驗，無COM／共享／長測重跑。 [完成項目與證據](output/no-pi-critical-closure-20261113/README.md)。後續只追已知未修問題與硬體驗收，不自動擴充測試範圍。

@@ -1,0 +1,238 @@
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data/pgdata ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data/pgdata -l logfile start
+
+waiting for server to start....2026-11-13 07:15:40.716 UTC [67] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 07:15:40.719 UTC [67] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-13 07:15:40.720 UTC [70] LOG:  database system was shut down at 2026-11-13 07:15:40 UTC
+2026-11-13 07:15:40.722 UTC [67] LOG:  database system is ready to accept connections
+2026-11-13 07:15:40.723 UTC [73] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: sourcing /docker-entrypoint-initdb.d/000_install_timescaledb.sh
+CREATE EXTENSION
+                                  alter_job                                   
+------------------------------------------------------------------------------
+ (1,24:00:00,00:01:40,-1,01:00:00,f,,-infinity,,f,,,"Telemetry Reporter [1]")
+(1 row)
+
+2026-11-13 07:15:41.402 UTC [103] ERROR:  background worker "TimescaleDB Background Worker Scheduler for database 1" trying to connect to template database, exiting
+CREATE EXTENSION
+                                  alter_job                                   
+------------------------------------------------------------------------------
+ (1,24:00:00,00:01:40,-1,01:00:00,f,,-infinity,,f,,,"Telemetry Reporter [1]")
+(1 row)
+
+CREATE EXTENSION
+                                  alter_job                                   
+------------------------------------------------------------------------------
+ (1,24:00:00,00:01:40,-1,01:00:00,f,,-infinity,,f,,,"Telemetry Reporter [1]")
+(1 row)
+
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/001_timescaledb_tune.sh
+effective_cache_size = 384MB
+maintenance_work_mem = 64MB
+work_mem = 2621kB
+wal_buffers = 3932kB
+min_wal_size = 512MB
+default_statistics_target = 100
+random_page_cost = 1.1
+checkpoint_completion_target = 0.9
+max_connections = 25
+max_locks_per_transaction = 128
+autovacuum_max_workers = 10
+autovacuum_naptime = 10
+default_toast_compression = lz4
+jit = off
+effective_io_concurrency = 256
+timescaledb.last_tuned = '2026-11-13T07:15:41Z'
+timescaledb.last_tuned_version = '0.18.1'
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/01.sql
+CREATE EXTENSION
+CREATE TABLE
+           create_hypertable           
+---------------------------------------
+ (1,public,electricity_measurements,t)
+(1 row)
+
+CREATE INDEX
+CREATE SCHEMA
+CREATE VIEW
+CREATE ROLE
+GRANT
+GRANT
+
+
+waiting for server to shut down....2026-11-13 07:15:41.719 UTC [67] LOG:  received fast shutdown request
+2026-11-13 07:15:41.719 UTC [67] LOG:  aborting any active transactions
+2026-11-13 07:15:41.720 UTC [73] FATAL:  terminating background worker "TimescaleDB Background Worker Launcher" due to administrator command
+2026-11-13 07:15:41.720 UTC [112] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 07:15:41.720 UTC [92] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 07:15:41.721 UTC [67] LOG:  background worker "logical replication launcher" (PID 74) exited with exit code 1
+2026-11-13 07:15:41.721 UTC [67] LOG:  background worker "TimescaleDB Background Worker Launcher" (PID 73) exited with exit code 1
+2026-11-13 07:15:41.721 UTC [67] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 112) exited with exit code 1
+2026-11-13 07:15:41.721 UTC [67] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 92) exited with exit code 1
+2026-11-13 07:15:41.721 UTC [68] LOG:  shutting down
+2026-11-13 07:15:41.721 UTC [68] LOG:  checkpoint starting: shutdown immediate
+2026-11-13 07:15:41.727 UTC [68] LOG:  checkpoint complete: wrote 1705 buffers (41.6%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.006 s, sync=0.001 s, total=0.006 s; sync files=763, longest=0.001 s, average=0.000 s; distance=9514 kB, estimate=9514 kB
+2026-11-13 07:15:41.803 UTC [67] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+********************************************************************************
+WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
+         anyone with access to the Postgres port to access your database without
+         a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
+         documentation about "trust":
+         https://www.postgresql.org/docs/current/auth-trust.html
+         In Docker's default configuration, this is effectively any other
+         container on the same system.
+
+         It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
+         it with "-e POSTGRES_PASSWORD=password" instead to set a password in
+         "docker run".
+********************************************************************************
+sh: locale: not found
+2026-11-13 07:15:40.217 UTC [43] WARNING:  no usable system locales were found
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+[37;1mUsing postgresql.conf at this path:
+[0m/var/lib/postgresql/data/pgdata/postgresql.conf
+
+[37;1mWriting backup to:
+[0m/tmp/timescaledb_tune.backup202611130715
+
+[37;1mRecommendations based on 512.00 MB of available memory and 1 CPUs for PostgreSQL 15
+[0m[37;1mSaving changes to: /var/lib/postgresql/data/pgdata/postgresql.conf
+[0mpsql:/docker-entrypoint-initdb.d/01.sql:5: NOTICE:  extension "timescaledb" already exists, skipping
+2026-11-13 07:15:41.829 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 07:15:41.831 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5432
+2026-11-13 07:15:41.841 UTC [1] LOG:  listening on IPv6 address "::", port 5432
+2026-11-13 07:15:41.852 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-13 07:15:41.853 UTC [145] LOG:  database system was shut down at 2026-11-13 07:15:41 UTC
+2026-11-13 07:15:41.858 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 07:15:41.859 UTC [148] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+2026-11-13 07:15:42.986 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:42.987 UTC [1] LOG:  parameter "ssl_cert_file" changed to "/run/pg-tls/server.crt"
+2026-11-13 07:15:42.987 UTC [1] LOG:  parameter "ssl_key_file" changed to "/run/pg-tls/server.key"
+2026-11-13 07:15:42.987 UTC [1] LOG:  parameter "ssl_ca_file" changed to "/run/pg-tls/ca.crt"
+2026-11-13 07:15:42.987 UTC [1] LOG:  parameter "ssl" changed to "on"
+2026-11-13 07:15:43.378 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:43.379 UTC [1] LOG:  parameter "synchronous_standby_names" changed to "FIRST 1 (ems_archive)"
+2026-11-13 07:15:43.580 UTC [275] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:15:43.580 UTC [275] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:15:44.919 UTC [302] LOG:  could not accept SSL connection: EOF detected
+2026-11-13 07:15:47.215 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:47.302 UTC [340] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:15:47.315 UTC [341] LOG:  could not accept SSL connection: EOF detected
+2026-11-13 07:15:47.555 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:47.671 UTC [375] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:15:50.011 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:50.173 UTC [411] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:15:50.193 UTC [412] LOG:  could not accept SSL connection: EOF detected
+2026-11-13 07:15:50.474 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:50.637 UTC [446] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:15:52.376 UTC [450] FATAL:  connection requires a valid client certificate
+2026-11-13 07:15:54.584 UTC [456] LOG:  could not accept SSL connection: certificate verify failed
+2026-11-13 07:15:56.913 UTC [461] LOG:  provided user name (qa_tls_other) and authenticated user name (qa_tls_receiver) do not match
+2026-11-13 07:15:56.913 UTC [461] FATAL:  certificate authentication failed for user "qa_tls_other"
+2026-11-13 07:15:56.913 UTC [461] DETAIL:  Connection matched pg_hba.conf line 4: "hostssl all qa_tls_receiver,qa_tls_other 127.0.0.1/32 cert"
+2026-11-13 07:15:59.455 UTC [467] LOG:  could not accept SSL connection: tlsv1 alert unknown ca
+2026-11-13 07:15:59.554 UTC [468] LOG:  could not accept SSL connection: tlsv1 alert unknown ca
+2026-11-13 07:15:59.801 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:15:59.941 UTC [500] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:00.047 UTC [501] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:00.047 UTC [501] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:02.458 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:02.601 UTC [551] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:02.845 UTC [553] LOG:  could not accept SSL connection: ssl/tls alert bad certificate
+2026-11-13 07:16:02.858 UTC [554] LOG:  could not accept SSL connection: EOF detected
+2026-11-13 07:16:03.078 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:03.201 UTC [587] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:03.336 UTC [588] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:03.336 UTC [588] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:05.374 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:05.533 UTC [639] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:05.667 UTC [640] LOG:  could not accept SSL connection: ssl/tls alert certificate expired
+2026-11-13 07:16:05.766 UTC [641] LOG:  could not accept SSL connection: ssl/tls alert certificate expired
+2026-11-13 07:16:05.775 UTC [642] LOG:  could not accept SSL connection: EOF detected
+2026-11-13 07:16:06.013 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:06.177 UTC [675] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:06.317 UTC [676] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:06.317 UTC [676] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:08.505 UTC [695] FATAL:  connection requires a valid client certificate
+2026-11-13 07:16:12.464 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:12.634 UTC [729] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:12.762 UTC [730] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:12.762 UTC [730] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:14.901 UTC [749] LOG:  could not accept SSL connection: certificate verify failed
+2026-11-13 07:16:15.195 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:15.286 UTC [782] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:15.362 UTC [783] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:15.362 UTC [783] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:17.562 UTC [802] LOG:  provided user name (postgres) and authenticated user name (ems_wal_archive) do not match
+2026-11-13 07:16:17.562 UTC [802] FATAL:  certificate authentication failed for user "postgres"
+2026-11-13 07:16:17.562 UTC [802] DETAIL:  Connection matched pg_hba.conf line 2: "hostssl replication all 127.0.0.1/32 cert"
+2026-11-13 07:16:17.802 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:17.931 UTC [836] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:18.062 UTC [837] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:18.062 UTC [837] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:20.030 UTC [856] FATAL:  pg_hba.conf rejects replication connection for host "127.0.0.1", user "ems_wal_archive", no encryption
+2026-11-13 07:16:20.320 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:20.494 UTC [889] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:20.593 UTC [890] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:20.593 UTC [890] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:22.868 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:23.009 UTC [923] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:23.009 UTC [923] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:23.281 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:23.444 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:23.606 UTC [979] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:23.742 UTC [980] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:23.742 UTC [980] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:25.848 UTC [997] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:25.848 UTC [997] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:26.186 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 07:16:26.333 UTC [1037] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:26.434 UTC [1038] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:26.434 UTC [1038] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/1000000 TIMELINE 1
+2026-11-13 07:16:28.167 UTC [143] LOG:  checkpoint starting: immediate force wait
+2026-11-13 07:16:28.168 UTC [143] LOG:  checkpoint complete: wrote 276 buffers (6.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.001 s, total=0.002 s; sync files=137, longest=0.001 s, average=0.000 s; distance=1711 kB, estimate=1711 kB
+2026-11-13 07:16:28.532 UTC [1077] LOG:  restore point "ems_ack_boundary" created at 0/3024B08
+2026-11-13 07:16:28.532 UTC [1077] STATEMENT:  SELECT pg_create_restore_point('ems_ack_boundary')::text
+2026-11-13 07:16:28.918 UTC [1085] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:28.918 UTC [1085] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/3000000 TIMELINE 1
+2026-11-13 07:16:43.475 UTC [1135] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 07:16:43.475 UTC [1135] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/4000000 TIMELINE 1
+2026-11-13 07:16:50.197 UTC [1135] LOG:  could not receive data from client: Connection reset by peer
+2026-11-13 07:16:50.197 UTC [1135] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/4000000 TIMELINE 1
+2026-11-13 07:16:50.197 UTC [1135] LOG:  unexpected EOF on standby connection
+2026-11-13 07:16:50.197 UTC [1135] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/4000000 TIMELINE 1

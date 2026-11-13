@@ -71,3 +71,34 @@
 - [ADR-035：本機帳號以 PostgreSQL 為唯一來源](ADR-035-database-local-accounts.md) — 取代 ADR-024 local env table；OIDC 保留。
 
 - [ADR-036：Telegram 訪客 QR 綁定採 BFF 長輪詢與單一綁定](ADR-036-telegram-visitor-binding-long-polling.md) — getUpdates（無 webhook）、輪替 start code、SQLite 單一綁定與每日 keyed 計數；部分取代 ADR-028。
+
+
+
+
+
+
+
+
+- [ADR-040：Delta RTU 模擬器串口斷線恢復](ADR-040-delta-rtu-listener-recovery.md) — Accepted（本機模擬器）；同埠重開、保留context、第一次開啟fail-fast。軟體回歸通過，物理USB恢復另驗。
+
+- [ADR-041：RTU 不確定交易鎖定與有界恢復](ADR-041-rtu-uncertainty-and-bounded-recovery.md) — Accepted（本機實作）；未知回覆上界停止新採樣，核定上界後隔離／重建／清buffer，field啟動也須隔離。真機上界待核定。
+
+
+
+- [ADR-043：opt-in 中央 committed telemetry](ADR-043-opt-in-committed-telemetry.md) — Accepted for implementation；PRD-0021 可靠送達子集已私有驗證，v2 UUID/hash／session ACK、原子 receipt＋投影／去重／缺列修復。共享 v1／長測不切換，完整多設備／對帳／Pi field 仍待驗收。
+
+
+
+- [ADR-045：最新量測優先的本地循環保留](ADR-045-newest-first-edge-retention.md) — Accepted；使用者核定滿容量按最舊seq淘汰量測以存新資料，含pending／quarantine／audit；schema3／wire2、原子淘汰＋新寫入、有界摘要，未切共享或重跑長測。部分取代ADR-030／043的滿容量拒新，控制稽核不變。
+
+
+
+
+
+- [ADR-048：v2最新與最舊補傳公平送達](ADR-048-v2-live-backlog-fairness.md) — Accepted／已私有驗證；FR-2107成功1:1交替max/min capture_seq，原ACK／wire2／schema3不變。38定點、419相鄰／12專用skip，千筆積壓下三筆新資料約1.04／2.09／2.10秒；非每筆固定SLA／20s吞吐，未切共享或重跑長測。
+
+- [ADR-049：同步WAL刷盤後ACK與實體PITR](ADR-049-synchronous-wal-ack-and-pitr.md) — Accepted／私有驗證；field不允許local降級，migration020受限boolean，PG15同步archive＋實體basebackup；正式異失效域／Pi仍待驗。
+
+- [ADR-050：DB／WAL TLS與還原身分](ADR-050-database-tls-and-recovery-identity.md) — Accepted／私有驗證；field db_tls必填、新021嚴格TLS＋固定角色predicate、外置cluster ID／checksum／tar界限；55定點、568短回歸、36 PITR通過，正式部署另驗。
+
+- [ADR-051：固定還原分支與lost slot重建保護鏈](ADR-051-pinned-recovery-and-slot-reseed.md) — Accepted／已私有短測；directory CLI必填外置timeline／target，先新slot reserve再備份／真新鏈PITR後開ACK。38定點／616短回歸；本輪必要強化收尾，無正式部署。

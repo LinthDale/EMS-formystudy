@@ -30,3 +30,6 @@ pyserial==3.5
 
 # BFF database account integration (runtime: services/bff/requirements.txt)
 asyncpg>=0.29,<1.0
+
+# Committed telemetry receiver reuses these dependencies; deploy pins live in
+# services/edge-receiver/requirements.txt (paho-mqtt 2.1.0 / asyncpg 0.31.0).

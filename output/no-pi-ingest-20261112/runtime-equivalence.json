@@ -1,0 +1,61 @@
+{
+  "running_ingest_image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+  "tested_ingest_image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+  "ingest_image_identical": true,
+  "running_database_image": "sha256:37499832086d01518d3afc64f9d178a1f7b3a0f498750c2b6f2f2b6b5717ad9c",
+  "tested_database_image": "sha256:37499832086d01518d3afc64f9d178a1f7b3a0f498750c2b6f2f2b6b5717ad9c",
+  "database_image_identical": true,
+  "shared_measurement_columns": [
+    {
+      "name": "time",
+      "type": "timestamp with time zone",
+      "not_null": true
+    },
+    {
+      "name": "device_id",
+      "type": "text",
+      "not_null": true
+    },
+    {
+      "name": "voltage",
+      "type": "double precision",
+      "not_null": false
+    },
+    {
+      "name": "current",
+      "type": "double precision",
+      "not_null": false
+    },
+    {
+      "name": "power_kw",
+      "type": "double precision",
+      "not_null": false
+    },
+    {
+      "name": "energy_kwh",
+      "type": "double precision",
+      "not_null": false
+    },
+    {
+      "name": "name",
+      "type": "text",
+      "not_null": false
+    },
+    {
+      "name": "slave_id",
+      "type": "text",
+      "not_null": false
+    },
+    {
+      "name": "topic",
+      "type": "text",
+      "not_null": false
+    },
+    {
+      "name": "type",
+      "type": "text",
+      "not_null": false
+    }
+  ],
+  "shared_measurement_unique_index_count": 0
+}

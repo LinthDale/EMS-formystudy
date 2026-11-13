@@ -1,0 +1,34 @@
+{
+  "passed": true,
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026533382]",
+  "cleanup": [
+    {
+      "name": "worker",
+      "container": "64a49de0d64dbd752366322495877be968fd2d9ff6de93566e71e5c8287bcf5c",
+      "passed": true
+    },
+    {
+      "name": "database",
+      "container": "c6dff717650d03bf11c4a1bee1e473671a3373b32facd2af1a380234fd9c60cc",
+      "passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "78d1c30fcd6934580574c9c2e23ac5ad8dd27521923a59d51a0a42e1f5ed7afa",
+      "passed": true
+    },
+    {
+      "name": "broker",
+      "container": "f539163c4f4c1ea9720c1e68f8ae1eeb99a4c8e7cf056b0dbe12a73722f80346",
+      "passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "1a0eccbbf98149ee62a9f8d5407e681dd17c06bb22875c7a28068ca6a08d3bee",
+      "passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

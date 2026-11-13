@@ -1,0 +1,106 @@
+{
+  "scope": "Local 4178 Monitor with intercepted synthetic API, not live ingest or public site",
+  "scenarios": [
+    {
+      "state": "live",
+      "label": "持續接收中",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 13:57:08\n電壓\n230V\n區間末筆 13:57:08\n電流\n13A\n區間末筆 13:57:08\n累計電量\n655.38kWh\n區間末筆 13:57:08",
+      "rawRows": 1,
+      "chartCount": 4,
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:57:11 · 量測 13:57:08",
+      "scenario": "fresh",
+      "expected_state": "live",
+      "fixture_measurement_time": "2026-11-12T05:57:08.372Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:57:10.372Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 13:55:11\n電壓\n230V\n區間末筆 13:55:11\n電流\n13A\n區間末筆 13:55:11\n累計電量\n655.38kWh\n區間末筆 13:55:11",
+      "rawRows": 1,
+      "chartCount": 4,
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:57:12 · 量測 13:55:11",
+      "scenario": "historical-backlog-with-fresh-registry",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T05:55:11.705Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:57:11.705Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 13:59:13\n電壓\n230V\n區間末筆 13:59:13\n電流\n13A\n區間末筆 13:59:13\n累計電量\n655.38kWh\n區間末筆 13:59:13",
+      "rawRows": 1,
+      "chartCount": 4,
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:57:14 · 量測 13:59:13",
+      "scenario": "future-measurement",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T05:59:13.059Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:57:13.059Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "empty",
+      "label": "沒有資料",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "values": {},
+      "updated": "讀取 13:57:15",
+      "scenario": "empty",
+      "expected_state": "empty",
+      "fixture_measurement_time": "2026-11-12T05:57:12.421Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:57:14.421Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "error",
+      "label": "查詢未完成",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "values": {},
+      "updated": "尚未取得量測",
+      "scenario": "backend-error",
+      "expected_state": "error",
+      "fixture_measurement_time": "2026-11-12T05:57:13.648Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:57:15.648Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

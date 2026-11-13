@@ -1,0 +1,26 @@
+{
+  "mode": "demo",
+  "device_id": "delta-rtu-sim-001",
+  "modbus": {
+    "transport": "rtu",
+    "serial_port": "COM4",
+    "baudrate": 19200,
+    "unit_id": 1,
+    "address_base": 1,
+    "timeout": 3,
+    "read_temperature": true,
+    "response_lifetime_seconds": 1,
+    "response_lifetime_source": "Local controlled simulator only: bounded fixture; not Delta field qualification",
+    "port": 502
+  },
+  "mqtt": {
+    "host": "127.0.0.1",
+    "port": 1883,
+    "client_id": "bench-smoke-five-seconds",
+    "tls": false
+  },
+  "outbox_path": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-smoke-01\\smoke-five-seconds\\state\\outbox.db",
+  "poll_interval": 5,
+  "queue_limit": 10000,
+  "batch_size": 100
+}

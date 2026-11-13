@@ -1,0 +1,51 @@
+{
+  "kind": "duplicate",
+  "expected": [
+    {
+      "sampled_ns": 1794474662027356000,
+      "voltage": 230.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.0
+    }
+  ],
+  "payloads": [
+    "electricity_measurements,device_id=delta-ingest-qa-duplicate voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474662027356000"
+  ],
+  "broker_ack": true,
+  "pending_end": 0,
+  "actual": [
+    {
+      "sampled_ns": 1794474662027356000,
+      "voltage": 230,
+      "current": 5,
+      "power_kw": 1,
+      "energy_kwh": 1000
+    },
+    {
+      "sampled_ns": 1794474662027356000,
+      "voltage": 230,
+      "current": 5,
+      "power_kw": 1,
+      "energy_kwh": 1000
+    }
+  ],
+  "checks": {
+    "setup": true
+  },
+  "errors": [],
+  "comparison": {
+    "expected": 1,
+    "received": 2,
+    "missing": [],
+    "extra": [],
+    "duplicates": [
+      1794474662027356000
+    ],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": false
+  },
+  "experiment_passed": true,
+  "system_delivery_acceptance_passed": false
+}

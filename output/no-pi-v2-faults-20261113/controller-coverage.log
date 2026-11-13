@@ -1,0 +1,16 @@
+/usr/local/lib/python3.11/site-packages/coverage/inorout.py:558: CoverageWarning: Module tools/verify_private.py was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+/usr/local/lib/python3.11/site-packages/coverage/control.py:967: CoverageWarning: No data was collected. (no-data-collected); see https://coverage.readthedocs.io/en/7.16.2/messages.html#warning-no-data-collected
+  self._warn("No data was collected.", slug="no-data-collected")
+/usr/local/lib/python3.11/site-packages/pytest_cov/plugin.py:372: CovReportWarning: Failed to generate report: No data to report.
+
+  warnings.warn(CovReportWarning(message), stacklevel=1)
+................
+WARNING: Failed to generate report: No data to report.
+
+                                                                         [100%]
+----------------- generated xml file: /evidence/controller.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+16 passed in 0.03s

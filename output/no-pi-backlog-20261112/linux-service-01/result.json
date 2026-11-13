@@ -1,0 +1,36 @@
+{
+  "scope": "WSL Linux user systemd lifecycle, adapted paths/user; not Pi boot or SD power loss",
+  "started_utc": "2026-11-12T08:49:40.231515+00:00",
+  "passed": true,
+  "before": {
+    "MainPID": "3006082",
+    "NRestarts": "0",
+    "ActiveState": "active"
+  },
+  "after_restart": {
+    "MainPID": "3010577",
+    "NRestarts": "1",
+    "ActiveState": "active"
+  },
+  "after_stop": {
+    "MainPID": "0",
+    "NRestarts": "0",
+    "ActiveState": "inactive"
+  },
+  "automatic_restart_seconds": 11.299872051924467,
+  "received": 6,
+  "pending_end": 0,
+  "sqlite_integrity": "ok",
+  "source_times_strictly_increasing": true,
+  "no_messages_after_stop": true,
+  "cleanup": [
+    {
+      "service_stop_attempted": true
+    },
+    {
+      "container": "1173bb06278d27ffbdeb9a7ea0b8a187e1370fe84ac1b620c3dd5e53a64b779c",
+      "removed": true
+    }
+  ],
+  "finished_utc": "2026-11-12T08:50:01.657269+00:00"
+}

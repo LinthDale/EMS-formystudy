@@ -1,0 +1,22 @@
+[
+  "docker",
+  "create",
+  "--label",
+  "ems.qa.run=ingest-20261112",
+  "--cpus",
+  ".5",
+  "--memory",
+  "128m",
+  "--pids-limit",
+  "128",
+  "--network",
+  "container:8634c9a275084e3c6f9548d19f119af3d76075b4d82879632b3e3a47a465dc89",
+  "--user",
+  "1000:1000",
+  "-v",
+  "/home/dalelin/synaiq/EMS/output/no-pi-ingest-20261112/receiver-01/mosquitto.conf:/qa.conf:ro",
+  "sha256:a908c65cc8e67ec9d292ef27c2c0360dbaaee7eb1b935cdd194e67697f15dea1",
+  "mosquitto",
+  "-c",
+  "/qa.conf"
+]

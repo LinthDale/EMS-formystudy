@@ -1,0 +1,8 @@
+{
+  "captured_utc": "2026-11-13T05:27:27.409694+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all completed static evidence including real private custom DB dump, RED/intermediate FAIL; final run-final and regression-final",
+  "no_active_soak": true
+}

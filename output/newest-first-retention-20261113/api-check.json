@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "path_count": 38,
+  "local_schema": 3,
+  "wire_schema": 2,
+  "new_rest_endpoint": false,
+  "new_topic": false
+}

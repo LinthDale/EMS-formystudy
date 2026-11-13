@@ -1,0 +1,11 @@
+# EXAMPLE ONLY. External mounts, readable only by the PostgreSQL server account.
+ssl = on
+ssl_min_protocol_version = 'TLSv1.2'
+ssl_ca_file = '/run/pg-tls/ca.crt'
+ssl_cert_file = '/run/pg-tls/server.crt'
+ssl_key_file = '/run/pg-tls/server.key'
+fsync = on
+synchronous_commit = on
+wal_level = replica
+synchronous_standby_names = 'FIRST 1 (ems_archive)'
+# Provision max_wal_senders/max_replication_slots and capacity per deployment.

@@ -3,6 +3,7 @@ import asyncio
 import json
 import logging
 import os
+import time
 from .config import load_config
 from .edge import run
 from .poller import Poller
@@ -56,7 +57,10 @@ def main():
         else:
             config = load_config(args.config)
             if args.once:
-                print(json.dumps(Poller(config["modbus"]).sample(), indent=2))
+                poller = Poller(config['modbus'], mode=config['mode'])
+                while poller.recovery_remaining:
+                    time.sleep(min(.1, poller.recovery_remaining))
+                print(json.dumps(poller.sample(), indent=2))
             else:
                 run(config)
     except (ValueError, OSError) as exc:

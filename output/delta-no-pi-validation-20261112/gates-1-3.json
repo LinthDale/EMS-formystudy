@@ -1,0 +1,74 @@
+[
+  {
+    "run": "baseline-01",
+    "scheduled": 120,
+    "valid": 120,
+    "db": 120,
+    "api": 120,
+    "passed": true
+  },
+  {
+    "run": "interval-10s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "passed": true
+  },
+  {
+    "run": "interval-15s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "passed": true
+  },
+  {
+    "run": "interval-1s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "passed": true
+  },
+  {
+    "run": "interval-30s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "passed": true
+  },
+  {
+    "run": "interval-5s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "passed": true
+  },
+  {
+    "run": "scenario-alarm-01",
+    "scheduled": 10,
+    "valid": 10,
+    "db": 10,
+    "api": 10,
+    "passed": true
+  },
+  {
+    "run": "scenario-night-01",
+    "scheduled": 10,
+    "valid": 10,
+    "db": 10,
+    "api": 10,
+    "passed": true
+  },
+  {
+    "run": "simulator-outage-01",
+    "scheduled": 44,
+    "valid": 20,
+    "db": 20,
+    "api": 20,
+    "passed": true
+  }
+]

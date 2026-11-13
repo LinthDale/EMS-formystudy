@@ -1,0 +1,35 @@
+{
+  "database": {
+    "expected": 3,
+    "received": 3,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 3,
+    "received": 3,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "observations": [
+    {
+      "observed_utc": "2026-11-12T01:43:53.133464+00:00",
+      "received": 2,
+      "missing": 1
+    },
+    {
+      "observed_utc": "2026-11-12T01:43:55.267582+00:00",
+      "received": 3,
+      "missing": 0
+    }
+  ],
+  "passed": true
+}

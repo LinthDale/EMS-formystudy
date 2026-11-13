@@ -86,7 +86,7 @@ def test_edge_collects_while_sender_offline_and_restart_keeps_samples(tmp_path,m
             return clock[0]
 
     class TestPoller:
-        def __init__(self,*args):
+        def __init__(self,*args,**kwargs):
             pass
         def sample(self):
             accepted.append(clock[0])

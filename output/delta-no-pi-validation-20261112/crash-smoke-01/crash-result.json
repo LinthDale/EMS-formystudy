@@ -1,0 +1,50 @@
+{
+  "cycles": [
+    {
+      "index": 0,
+      "killed_pid": 40076,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 3,
+      "uncommitted_ns": 1794461540268134000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    }
+  ],
+  "database": {
+    "expected": 3,
+    "received": 3,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 3,
+    "received": 3,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "observations": [
+    {
+      "monotonic": 2539663.921,
+      "received": 0,
+      "missing": 3
+    },
+    {
+      "monotonic": 2539664.562,
+      "received": 3,
+      "missing": 0
+    }
+  ],
+  "pending_end": 0,
+  "crash_type": "forced child termination with uncommitted fourth transaction; not host power loss",
+  "passed": true
+}

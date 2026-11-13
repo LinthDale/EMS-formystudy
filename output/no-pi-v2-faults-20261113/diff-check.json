@@ -1,0 +1,20 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check",
+    "--",
+    "README.md",
+    "api/openapi.yml",
+    "services/edge-receiver/README.md",
+    "doc/README.md",
+    "doc/prd/PRD-0021-multi-device-edge-reliability.md",
+    "doc/operations/edge-temperature-handoff-20261112.md",
+    "doc/operations/操作手冊.md",
+    "doc/operations/容器速查表.md"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "",
+  "passed": true
+}

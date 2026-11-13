@@ -1,0 +1,4 @@
+# Offline verification using existing, matching CPython 3.11 cache images.
+FROM ems-bff AS db_driver
+FROM ems-delta-test
+COPY --from=db_driver /usr/local/lib/python3.11/site-packages/asyncpg /usr/local/lib/python3.11/site-packages/asyncpg

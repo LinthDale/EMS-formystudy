@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "request_id": "74572800-50b2-4b25-bc1f-799dc0086700",
+  "op": "wal_probe_wrong_ca",
+  "kind": "wrong_ca",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "cc0c2320d7a47e618ae245a337d1e8d99da43fb89ee10fb5908e37e67d892ba4",
+  "replication_peer_absent": true
+}

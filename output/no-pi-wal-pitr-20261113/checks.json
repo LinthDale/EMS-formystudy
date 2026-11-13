@@ -1,0 +1,9 @@
+{
+  "openapi_yaml_parse": true,
+  "this_task_diff_check": true,
+  "global_preexisting_diff_check": [
+    "doc/PRD-架構設計-Guideline.md:3 trailing whitespace",
+    "doc/PRD-架構設計-Guideline.md:4 trailing whitespace"
+  ],
+  "unrelated_changes_preserved": true
+}

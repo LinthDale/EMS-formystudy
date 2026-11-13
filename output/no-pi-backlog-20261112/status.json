@@ -1,0 +1,106 @@
+{
+  "observed_utc": "2026-11-12T08:53:28.544101+00:00",
+  "scope": "new tools and no-Pi verification; no production changes",
+  "bulk": {
+    "passed": true,
+    "expected": 10120,
+    "received": 10120,
+    "duplicates": 0,
+    "pending": 0
+  },
+  "weak": {
+    "passed": true,
+    "expected": 155,
+    "received": 155,
+    "duplicates": 0,
+    "pending": 0
+  },
+  "backup": {
+    "rows": 1000,
+    "minimum_committed": 1000,
+    "exact_prefix": true,
+    "metadata_matches": true,
+    "passed": true,
+    "integrity": "ok",
+    "assessment_source_sha256": "0ec58499155dfcb154e7161add7433e1d8d2edb20f8ea7a5e4c4b28f4649d9bb",
+    "original_result_retained": true
+  },
+  "central_and_live_ui": {
+    "scope": "all 110 actual QA samples, with 40-row live Monitor snapshot traced to source",
+    "database": {
+      "expected": 110,
+      "received": 110,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "api": {
+      "expected": 110,
+      "received": 110,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "ui_rendered": {
+      "expected": 40,
+      "received": 40,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "ui_display_time": [
+      {
+        "width": 1440,
+        "passed": true
+      },
+      {
+        "width": 390,
+        "passed": true
+      }
+    ],
+    "passed": true
+  },
+  "historical_ui_passed": true,
+  "live_ui_passed": true,
+  "linux_service": {
+    "passed": true,
+    "restart_seconds": 11.299872051924467,
+    "unit_current_state": "inactive"
+  },
+  "regression": {
+    "exit_code": 0,
+    "passed": 203,
+    "skipped": 12,
+    "production_coverage_percent": 96.06
+  },
+  "shared_containers": {
+    "before": 17,
+    "after": 17,
+    "same_ids": true
+  },
+  "protected_integrity": {
+    "old_static": {
+      "files": 770,
+      "mismatches": [],
+      "passed": true
+    },
+    "soak_frozen": {
+      "files": 17,
+      "mismatches": [],
+      "passed": true
+    }
+  },
+  "central_receipt_implemented": false,
+  "hardware_qualification": false,
+  "retained_qa_identity": "delta-backlog-qa-20261112",
+  "retained_qa_measurements": 110
+}

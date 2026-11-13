@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "enqueued": 12,
+  "retired_local_unconfirmed": 9,
+  "central_rows_by_sequence": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1
+  ],
+  "pending_end": 0
+}

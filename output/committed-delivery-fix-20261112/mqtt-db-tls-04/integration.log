@@ -1,0 +1,14 @@
+...............                                                          [100%]
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                               Stmts   Miss  Cover   Missing
+--------------------------------------------------------------------------------
+services/edge-receiver/edge_receiver/__init__.py       0      0   100%
+services/edge-receiver/edge_receiver/receiver.py     168     38    77%   35, 38, 42, 46, 51, 54, 78, 96, 99-100, 115, 118, 121, 124, 131, 134, 138, 141, 143, 149, 153-159, 187-196, 200
+services/edge-receiver/edge_receiver/store.py         47      2    96%   63, 78
+--------------------------------------------------------------------------------
+TOTAL                                                215     40    81%
+Coverage JSON written to file /evidence/receiver-coverage.json
+15 passed in 7.89s

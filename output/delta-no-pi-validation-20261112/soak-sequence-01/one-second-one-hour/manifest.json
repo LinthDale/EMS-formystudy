@@ -1,0 +1,39 @@
+{
+  "python": "3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]",
+  "device_id": "delta-rtu-sim-001",
+  "ports": [
+    {
+      "port": "COM3",
+      "serial_number": "BG04PB77A"
+    },
+    {
+      "port": "COM4",
+      "serial_number": "BG04PB7RA"
+    }
+  ],
+  "cable_length": "not_measured",
+  "observer": "async ledger; CPU/RAM not sampled",
+  "scenario": "day",
+  "outages": [],
+  "count": 3600,
+  "interval": 1,
+  "sender_settle_seconds": 5,
+  "packages": {
+    "pymodbus": "3.6.9",
+    "pyserial": "3.5",
+    "paho-mqtt": "2.1.0"
+  },
+  "source_hashes": {
+    "bench_ledger.py": "da64c2d20f467984bbd0e56aad04db3726c0c89d103560d69bd547564044efa7",
+    "bench_run.py": "1007c1dada20655fb35e2979e25483e89399de402c72ba3e0299ce678746ed22",
+    "config.py": "ea0d400243bb2893fa7e9a1107b5d274a72ce1b1a9d2186b33d06526588067a7",
+    "delivery.py": "09a4a6ba6bd1649b82287abe089c67be71bfaa9e8d97ffb5bb3c66ffc4b49bed",
+    "edge.py": "607af6fb19e17eaa59f3f1221767a6e00e37a03d284fbb7b1bd488e1ae10f8a7",
+    "poller.py": "50364b0e9c8abd6c473d05f4e6ab0d16513534d74df8bcef8ca911373cd9bc12",
+    "protocol.py": "943f9a137a77fce16180bd3f5c63c4bcb9dccdcd9494291f1b7fad7d771ff0a4",
+    "publisher.py": "14014f740aa54e3d60fb979597e83b47884ebde0edf2d5d306e8cb14871b3fbb",
+    "simulator.py": "dd5f46b3d089e0ccf00814cebe9c988ca4ed8073addbb60f61d6e05e7c191023",
+    "__init__.py": "c771d42aa3fa6abb48db1bc87a1295deab11f6d70cac14547f41159fafe579df",
+    "__main__.py": "b2fc9447185ee857a6107ee854505141269a6b1342c3d90a35b79aa7751c5573"
+  }
+}

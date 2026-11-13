@@ -1,0 +1,53 @@
+{
+  "recorded_utc": "2026-11-12T09:56:19.853963+00:00",
+  "scope": "opt-in v2 committed delivery subset",
+  "code_fixed": true,
+  "private_acceptance_passed": true,
+  "shared_v1_deployed": false,
+  "shared_migration_applied": false,
+  "active_24h_switched": false,
+  "legacy_v1_risks_remain": true,
+  "regression_passed": 259,
+  "regression_skipped": 12,
+  "combined_line_coverage_percent": 90.80541696364932,
+  "private_containers_cleaned": true,
+  "run_receipts": [
+    {
+      "run": "db-01",
+      "passed": false,
+      "cleanup_passed": true
+    },
+    {
+      "run": "final-07",
+      "passed": true,
+      "cleanup_passed": true
+    },
+    {
+      "run": "full-05",
+      "passed": false,
+      "cleanup_passed": true
+    },
+    {
+      "run": "full-06",
+      "passed": true,
+      "cleanup_passed": true
+    },
+    {
+      "run": "mqtt-db-02",
+      "passed": false,
+      "cleanup_passed": true
+    },
+    {
+      "run": "mqtt-db-03",
+      "passed": true,
+      "cleanup_passed": true
+    },
+    {
+      "run": "mqtt-db-tls-04",
+      "passed": true,
+      "cleanup_passed": true
+    }
+  ],
+  "pi_field_accepted": false,
+  "full_prd_0021_implemented": false
+}

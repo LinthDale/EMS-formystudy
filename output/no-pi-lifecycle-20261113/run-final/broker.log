@@ -1,0 +1,241 @@
+1794542918: mosquitto version 2.1.2 starting
+1794542918: Config loaded from /qa.conf.
+1794542918: Bridge support available.
+1794542918: Persistence support available.
+1794542918: TLS support available.
+1794542918: TLS-PSK support available.
+1794542918: Websockets support available.
+1794542918: Opening ipv4 listen socket on port 1883.
+1794542918: mosquitto version 2.1.2 running
+1794542922: New connection from 127.0.0.1:53917 on port 1883.
+1794542922: New client connected from 127.0.0.1:53917 as receiver-g-0b96d9e0cc4a (p4, c1, k30).
+1794542922: No will message specified.
+1794542922: Sending CONNACK to receiver-g-0b96d9e0cc4a (0, 0)
+1794542922: Received SUBSCRIBE from receiver-g-0b96d9e0cc4a
+1794542922: 	ems/v2/gateways/+/samples (QoS 1)
+1794542922: receiver-g-0b96d9e0cc4a 1 ems/v2/gateways/+/samples
+1794542922: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542922: receiver-g-0b96d9e0cc4a 1 ems/v2/gateways/+/session/request
+1794542922: Sending SUBACK to receiver-g-0b96d9e0cc4a
+1794542922: New connection from 127.0.0.1:59333 on port 1883.
+1794542922: New client connected from 127.0.0.1:59333 as sender-g-0b96d9e0cc4a (p4, c1, k30).
+1794542922: No will message specified.
+1794542922: Sending CONNACK to sender-g-0b96d9e0cc4a (0, 0)
+1794542922: Received SUBSCRIBE from sender-g-0b96d9e0cc4a
+1794542922: 	ems/v2/gateways/g-0b96d9e0cc4a/acks (QoS 1)
+1794542922: sender-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/acks
+1794542922: 	ems/v2/gateways/g-0b96d9e0cc4a/session/response (QoS 1)
+1794542922: sender-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/session/response
+1794542922: Sending SUBACK to sender-g-0b96d9e0cc4a
+1794542923: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542923: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m1, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542923: Sending PUBACK to sender-g-0b96d9e0cc4a (m2, rc0)
+1794542923: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 1, RC:0)
+1794542923: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542923: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m1, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542923: Sending PUBACK to receiver-g-0b96d9e0cc4a (m2, rc0)
+1794542923: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 1, RC:0)
+1794542924: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542924: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542924: Sending PUBACK to sender-g-0b96d9e0cc4a (m3, rc0)
+1794542924: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 2, RC:0)
+1794542924: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542924: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542924: Sending PUBACK to receiver-g-0b96d9e0cc4a (m3, rc0)
+1794542924: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 2, RC:0)
+1794542924: mosquitto version 2.1.2 terminating
+1794542931: mosquitto version 2.1.2 starting
+1794542931: Config loaded from /qa.conf.
+1794542931: Bridge support available.
+1794542931: Persistence support available.
+1794542931: TLS support available.
+1794542931: TLS-PSK support available.
+1794542931: Websockets support available.
+1794542931: Opening ipv4 listen socket on port 1883.
+1794542931: mosquitto version 2.1.2 running
+1794542935: New connection from 127.0.0.1:59087 on port 1883.
+1794542935: New client connected from 127.0.0.1:59087 as receiver-g-0b96d9e0cc4a (p4, c1, k30).
+1794542935: No will message specified.
+1794542935: Sending CONNACK to receiver-g-0b96d9e0cc4a (0, 0)
+1794542935: Received SUBSCRIBE from receiver-g-0b96d9e0cc4a
+1794542935: 	ems/v2/gateways/+/samples (QoS 1)
+1794542935: receiver-g-0b96d9e0cc4a 1 ems/v2/gateways/+/samples
+1794542935: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542935: receiver-g-0b96d9e0cc4a 1 ems/v2/gateways/+/session/request
+1794542935: Sending SUBACK to receiver-g-0b96d9e0cc4a
+1794542935: New connection from 127.0.0.1:34099 on port 1883.
+1794542935: New client connected from 127.0.0.1:34099 as sender-g-0b96d9e0cc4a (p4, c1, k30).
+1794542935: No will message specified.
+1794542935: Sending CONNACK to sender-g-0b96d9e0cc4a (0, 0)
+1794542935: Received SUBSCRIBE from sender-g-0b96d9e0cc4a
+1794542935: 	ems/v2/gateways/g-0b96d9e0cc4a/acks (QoS 1)
+1794542935: sender-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/acks
+1794542935: 	ems/v2/gateways/g-0b96d9e0cc4a/session/response (QoS 1)
+1794542935: sender-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/session/response
+1794542935: Sending SUBACK to sender-g-0b96d9e0cc4a
+1794542936: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542936: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m1, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542936: Sending PUBACK to sender-g-0b96d9e0cc4a (m5, rc0)
+1794542936: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 1, RC:0)
+1794542936: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542936: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m1, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542936: Sending PUBACK to receiver-g-0b96d9e0cc4a (m5, rc0)
+1794542936: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 1, RC:0)
+1794542937: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (730 bytes))
+1794542937: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (730 bytes))
+1794542937: Sending PUBACK to sender-g-0b96d9e0cc4a (m6, rc0)
+1794542937: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 2, RC:0)
+1794542937: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542937: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542937: Sending PUBACK to receiver-g-0b96d9e0cc4a (m6, rc0)
+1794542937: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 2, RC:0)
+1794542938: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m7, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542938: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542938: Sending PUBACK to sender-g-0b96d9e0cc4a (m7, rc0)
+1794542938: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 3, RC:0)
+1794542938: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m7, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542938: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542938: Sending PUBACK to receiver-g-0b96d9e0cc4a (m7, rc0)
+1794542938: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 3, RC:0)
+1794542939: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m8, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542939: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m4, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542939: Sending PUBACK to sender-g-0b96d9e0cc4a (m8, rc0)
+1794542939: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 4, RC:0)
+1794542939: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m8, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542939: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m4, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542939: Sending PUBACK to receiver-g-0b96d9e0cc4a (m8, rc0)
+1794542939: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 4, RC:0)
+1794542940: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m9, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (730 bytes))
+1794542940: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (730 bytes))
+1794542940: Sending PUBACK to sender-g-0b96d9e0cc4a (m9, rc0)
+1794542940: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 5, RC:0)
+1794542940: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m9, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542940: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542940: Sending PUBACK to receiver-g-0b96d9e0cc4a (m9, rc0)
+1794542940: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 5, RC:0)
+1794542941: Received PUBLISH from sender-g-0b96d9e0cc4a (d0, q1, r0, m10, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542941: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542941: Sending PUBACK to sender-g-0b96d9e0cc4a (m10, rc0)
+1794542941: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 6, RC:0)
+1794542941: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m10, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542941: Sending PUBLISH to sender-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542941: Sending PUBACK to receiver-g-0b96d9e0cc4a (m10, rc0)
+1794542941: Received PUBACK from sender-g-0b96d9e0cc4a (Mid: 6, RC:0)
+1794542941: Received DISCONNECT from sender-g-0b96d9e0cc4a
+1794542941: Client sender-g-0b96d9e0cc4a [127.0.0.1:34099] disconnected.
+1794542941: New connection from 127.0.0.1:49489 on port 1883.
+1794542941: New client connected from 127.0.0.1:49489 as final-drain-g-0b96d9e0cc4a (p4, c1, k30).
+1794542941: No will message specified.
+1794542941: Sending CONNACK to final-drain-g-0b96d9e0cc4a (0, 0)
+1794542941: Received SUBSCRIBE from final-drain-g-0b96d9e0cc4a
+1794542941: 	ems/v2/gateways/g-0b96d9e0cc4a/acks (QoS 1)
+1794542941: final-drain-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/acks
+1794542941: 	ems/v2/gateways/g-0b96d9e0cc4a/session/response (QoS 1)
+1794542941: final-drain-g-0b96d9e0cc4a 1 ems/v2/gateways/g-0b96d9e0cc4a/session/response
+1794542941: Sending SUBACK to final-drain-g-0b96d9e0cc4a
+1794542941: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542941: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m7, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542941: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m2, rc0)
+1794542941: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 7, RC:0)
+1794542941: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m11, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542941: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m1, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542941: Sending PUBACK to receiver-g-0b96d9e0cc4a (m11, rc0)
+1794542941: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 1, RC:0)
+1794542941: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542941: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m8, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542941: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m3, rc0)
+1794542941: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 8, RC:0)
+1794542944: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m4, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542944: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m9, 'ems/v2/gateways/g-0b96d9e0cc4a/session/request', ... (109 bytes))
+1794542944: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m4, rc0)
+1794542944: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 9, RC:0)
+1794542944: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m12, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542944: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m2, 'ems/v2/gateways/g-0b96d9e0cc4a/session/response', ... (170 bytes))
+1794542944: Sending PUBACK to receiver-g-0b96d9e0cc4a (m12, rc0)
+1794542944: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 2, RC:0)
+1794542944: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542944: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m10, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542944: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m5, rc0)
+1794542944: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 10, RC:0)
+1794542944: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m13, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542944: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m3, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542944: Sending PUBACK to receiver-g-0b96d9e0cc4a (m13, rc0)
+1794542944: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 3, RC:0)
+1794542945: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542945: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m11, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542945: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m6, rc0)
+1794542945: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 11, RC:0)
+1794542945: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m14, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542945: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m4, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542945: Sending PUBACK to receiver-g-0b96d9e0cc4a (m14, rc0)
+1794542945: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 4, RC:0)
+1794542945: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m7, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542945: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m12, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (731 bytes))
+1794542945: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m7, rc0)
+1794542945: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 12, RC:0)
+1794542945: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m15, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542945: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m5, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542945: Sending PUBACK to receiver-g-0b96d9e0cc4a (m15, rc0)
+1794542945: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 5, RC:0)
+1794542946: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m8, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542946: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m13, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542946: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m8, rc0)
+1794542946: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 13, RC:0)
+1794542946: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m16, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542946: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m6, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542946: Sending PUBACK to receiver-g-0b96d9e0cc4a (m16, rc0)
+1794542946: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 6, RC:0)
+1794542946: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m9, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542946: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m14, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542946: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m9, rc0)
+1794542946: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 14, RC:0)
+1794542946: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m17, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542946: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m7, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542946: Sending PUBACK to receiver-g-0b96d9e0cc4a (m17, rc0)
+1794542946: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 7, RC:0)
+1794542947: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m10, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542947: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m15, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542947: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m10, rc0)
+1794542947: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 15, RC:0)
+1794542947: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m18, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542947: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m8, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542947: Sending PUBACK to receiver-g-0b96d9e0cc4a (m18, rc0)
+1794542947: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 8, RC:0)
+1794542947: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m11, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (745 bytes))
+1794542947: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m16, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (745 bytes))
+1794542947: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m11, rc0)
+1794542947: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 16, RC:0)
+1794542947: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m19, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542947: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m9, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542947: Sending PUBACK to receiver-g-0b96d9e0cc4a (m19, rc0)
+1794542947: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 9, RC:0)
+1794542948: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m12, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542948: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m17, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542948: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m12, rc0)
+1794542948: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 17, RC:0)
+1794542948: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m20, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542948: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m10, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542948: Sending PUBACK to receiver-g-0b96d9e0cc4a (m20, rc0)
+1794542948: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 10, RC:0)
+1794542948: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m13, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542948: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m18, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542948: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m13, rc0)
+1794542948: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 18, RC:0)
+1794542949: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m21, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542949: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m11, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542949: Sending PUBACK to receiver-g-0b96d9e0cc4a (m21, rc0)
+1794542949: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 11, RC:0)
+1794542949: Received PUBLISH from final-drain-g-0b96d9e0cc4a (d0, q1, r0, m14, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542949: Sending PUBLISH to receiver-g-0b96d9e0cc4a (d0, q1, r0, m19, 'ems/v2/gateways/g-0b96d9e0cc4a/samples', ... (732 bytes))
+1794542949: Sending PUBACK to final-drain-g-0b96d9e0cc4a (m14, rc0)
+1794542949: Received PUBACK from receiver-g-0b96d9e0cc4a (Mid: 19, RC:0)
+1794542949: Received PUBLISH from receiver-g-0b96d9e0cc4a (d0, q1, r0, m22, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542949: Sending PUBLISH to final-drain-g-0b96d9e0cc4a (d0, q1, r0, m12, 'ems/v2/gateways/g-0b96d9e0cc4a/acks', ... (438 bytes))
+1794542949: Sending PUBACK to receiver-g-0b96d9e0cc4a (m22, rc0)
+1794542949: Received PUBACK from final-drain-g-0b96d9e0cc4a (Mid: 12, RC:0)
+1794542949: Received DISCONNECT from final-drain-g-0b96d9e0cc4a
+1794542949: Client final-drain-g-0b96d9e0cc4a [127.0.0.1:49489] disconnected.
+1794542949: Received DISCONNECT from receiver-g-0b96d9e0cc4a
+1794542949: Client receiver-g-0b96d9e0cc4a [127.0.0.1:59087] disconnected.
+1794542918: Info: running mosquitto as user id: 1000.
+1794542931: Info: running mosquitto as user id: 1000.

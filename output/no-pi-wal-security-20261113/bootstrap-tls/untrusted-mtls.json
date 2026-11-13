@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "sample_id": "bbecfbd3-f939-41f1-8894-fb1290282914",
+  "valid_client_positive_control": true,
+  "rogue_client_rejected": true,
+  "pending": 1,
+  "projections": 0
+}

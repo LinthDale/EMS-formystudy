@@ -68,6 +68,10 @@ def test_field_security_and_transport_config(tmp_path):
     c["mqtt"].update(tls=True, username_env="MQTT_USER", password_env="MQTT_PASSWORD")
     validate(c)
     c["modbus"].update(transport="rtu", serial_port="/dev/ttyUSB0")
+    with pytest.raises(ValueError, match="response lifetime"):
+        validate(c)
+    c["modbus"].update(response_lifetime_seconds=1,
+                       response_lifetime_source="test fixture only: replies finish within 1s")
     validate(c)
     assert c["modbus"]["baudrate"] == 19200
     c["modbus"]["unit_id"] = 0

@@ -1,0 +1,555 @@
+{
+  "device_id": "delta-rtu-sim-001",
+  "samples": [
+    {
+      "phase": "online_before",
+      "sampled_ns": 1794445744177481000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.11,
+        "power_kw": 9.051,
+        "energy_kwh": 1234.56,
+        "today_energy_kwh": 15.0,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.11,
+            "power_kw": 3.017,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.11,
+            "power_kw": 3.017,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.11,
+            "power_kw": 3.017,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_before",
+      "sampled_ns": 1794445745170754000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.16,
+        "power_kw": 9.08,
+        "energy_kwh": 1234.56,
+        "today_energy_kwh": 15.0,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.16,
+            "power_kw": 3.026,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.16,
+            "power_kw": 3.026,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.16,
+            "power_kw": 3.026,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_before",
+      "sampled_ns": 1794445746167864000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.200000000000001,
+        "power_kw": 9.109,
+        "energy_kwh": 1234.56,
+        "today_energy_kwh": 15.0,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.200000000000001,
+            "power_kw": 3.036,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.200000000000001,
+            "power_kw": 3.036,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.200000000000001,
+            "power_kw": 3.036,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_before",
+      "sampled_ns": 1794445747166266000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.24,
+        "power_kw": 9.139,
+        "energy_kwh": 1234.57,
+        "today_energy_kwh": 15.01,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.24,
+            "power_kw": 3.046,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.24,
+            "power_kw": 3.046,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.24,
+            "power_kw": 3.046,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_before",
+      "sampled_ns": 1794445748176633000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.280000000000001,
+        "power_kw": 9.168,
+        "energy_kwh": 1234.57,
+        "today_energy_kwh": 15.01,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.280000000000001,
+            "power_kw": 3.056,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.280000000000001,
+            "power_kw": 3.056,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.280000000000001,
+            "power_kw": 3.056,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "offline",
+      "sampled_ns": 1794445749173388000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.32,
+        "power_kw": 9.196,
+        "energy_kwh": 1234.57,
+        "today_energy_kwh": 15.01,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.32,
+            "power_kw": 3.065,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.32,
+            "power_kw": 3.065,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.32,
+            "power_kw": 3.065,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "offline",
+      "sampled_ns": 1794445750164681000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.36,
+        "power_kw": 9.224,
+        "energy_kwh": 1234.57,
+        "today_energy_kwh": 15.01,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.36,
+            "power_kw": 3.074,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.36,
+            "power_kw": 3.074,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.36,
+            "power_kw": 3.074,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "offline",
+      "sampled_ns": 1794445751171870000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.4,
+        "power_kw": 9.252,
+        "energy_kwh": 1234.58,
+        "today_energy_kwh": 15.02,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.4,
+            "power_kw": 3.084,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.4,
+            "power_kw": 3.084,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.4,
+            "power_kw": 3.084,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "offline",
+      "sampled_ns": 1794445752168658000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.44,
+        "power_kw": 9.279,
+        "energy_kwh": 1234.58,
+        "today_energy_kwh": 15.02,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.44,
+            "power_kw": 3.093,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.44,
+            "power_kw": 3.093,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.44,
+            "power_kw": 3.093,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "offline",
+      "sampled_ns": 1794445753167001000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.48,
+        "power_kw": 9.305,
+        "energy_kwh": 1234.58,
+        "today_energy_kwh": 15.02,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.48,
+            "power_kw": 3.101,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.48,
+            "power_kw": 3.101,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.48,
+            "power_kw": 3.101,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_after",
+      "sampled_ns": 1794445754217189000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.52,
+        "power_kw": 9.331,
+        "energy_kwh": 1234.58,
+        "today_energy_kwh": 15.02,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.52,
+            "power_kw": 3.11,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.52,
+            "power_kw": 3.11,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.52,
+            "power_kw": 3.11,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_after",
+      "sampled_ns": 1794445755221625000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.55,
+        "power_kw": 9.356,
+        "energy_kwh": 1234.59,
+        "today_energy_kwh": 15.03,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.55,
+            "power_kw": 3.118,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.55,
+            "power_kw": 3.118,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.55,
+            "power_kw": 3.118,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_after",
+      "sampled_ns": 1794445756217959000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.59,
+        "power_kw": 9.38,
+        "energy_kwh": 1234.59,
+        "today_energy_kwh": 15.03,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.59,
+            "power_kw": 3.126,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.59,
+            "power_kw": 3.126,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.59,
+            "power_kw": 3.126,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_after",
+      "sampled_ns": 1794445757222149000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.620000000000001,
+        "power_kw": 9.403,
+        "energy_kwh": 1234.59,
+        "today_energy_kwh": 15.03,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.620000000000001,
+            "power_kw": 3.134,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.620000000000001,
+            "power_kw": 3.134,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.620000000000001,
+            "power_kw": 3.134,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    },
+    {
+      "phase": "online_after",
+      "sampled_ns": 1794445758216011000,
+      "snapshot": {
+        "profile": "delta-three-phase-v1.35",
+        "scale_word": 1,
+        "voltage": 230.0,
+        "current": 13.65,
+        "power_kw": 9.425,
+        "energy_kwh": 1234.6,
+        "today_energy_kwh": 15.04,
+        "state": 2,
+        "phases": [
+          {
+            "voltage": 230.0,
+            "current": 13.65,
+            "power_kw": 3.141,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.65,
+            "power_kw": 3.141,
+            "frequency_hz": 60.0
+          },
+          {
+            "voltage": 230.0,
+            "current": 13.65,
+            "power_kw": 3.141,
+            "frequency_hz": 60.0
+          }
+        ],
+        "temperature_c": 35
+      }
+    }
+  ],
+  "checkpoints": [
+    {
+      "phase": "online_before",
+      "pending": 0
+    },
+    {
+      "phase": "offline",
+      "pending": 5
+    },
+    {
+      "phase": "online_after",
+      "pending": 0
+    }
+  ],
+  "passed": true,
+  "database": {
+    "rows": 15,
+    "all_original_timestamps_match": true,
+    "all_four_metrics_match": true,
+    "duplicates": 0
+  },
+  "ems_records_api": {
+    "status": 200,
+    "rows": 15
+  }
+}

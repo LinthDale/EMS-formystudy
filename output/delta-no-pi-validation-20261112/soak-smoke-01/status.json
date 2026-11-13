@@ -1,0 +1,53 @@
+{
+  "status": "COMPLETED",
+  "plan": [
+    {
+      "name": "smoke-one-second",
+      "interval": 1,
+      "count": 3,
+      "formal": false
+    },
+    {
+      "name": "smoke-five-seconds",
+      "interval": 5,
+      "count": 3,
+      "formal": false
+    }
+  ],
+  "results": [
+    {
+      "passed": true,
+      "valid_rate": 1.0,
+      "raw_strict_pass": true,
+      "classified_failed_slots": [],
+      "measured_seconds": 3.0159999998286366,
+      "minimum_measurement_seconds": 3,
+      "name": "smoke-one-second",
+      "formal": false,
+      "verifier_exit_code": 0
+    },
+    {
+      "passed": true,
+      "valid_rate": 1.0,
+      "raw_strict_pass": true,
+      "classified_failed_slots": [],
+      "measured_seconds": 15.0,
+      "minimum_measurement_seconds": 15,
+      "name": "smoke-five-seconds",
+      "formal": false,
+      "verifier_exit_code": 0
+    }
+  ],
+  "controller_pid": 47052,
+  "local_root": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-smoke-01",
+  "archive_root": "\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\soak-smoke-01",
+  "stop_file": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-smoke-01\\STOP.txt",
+  "scope": "v1 Windows bench, not Pi/4G/field/central DB ACK",
+  "started_utc": "2026-11-12T05:48:19.061532+00:00",
+  "updated_utc": "2026-11-12T05:48:53.261731+00:00",
+  "stage": "smoke-five-seconds",
+  "expected_slots": 3,
+  "interval": 5,
+  "expected_measurement_seconds": 15,
+  "bench_pid": 57352
+}

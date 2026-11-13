@@ -1,0 +1,19 @@
+[
+  "docker",
+  "exec",
+  "d00a076ef3767a82dc6b125e21e43032b3834f73a534ed0714279f9a65599b13",
+  "python",
+  "-m",
+  "pytest",
+  "-c",
+  "/app/services/delta/pytest.ini",
+  "/app/tests/integration/test_edge_receipts_faults.py",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "--cov=edge_receiver",
+  "--cov=delta_device",
+  "--cov-report=term-missing",
+  "--cov-report=json:/evidence/receiver-coverage.json",
+  "--junitxml=/evidence/integration.xml"
+]

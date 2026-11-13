@@ -1,0 +1,9 @@
+{
+  "source_sha256": "20c0f8cccbca7c6930eb87f90c4d4a03803d865adde9f8936a2e62b07d3712ce",
+  "fixture_sha256": "444780cd0ea8fca85a2d6f590261f72e4cb2147d73c75ad887d43e5db63ce560",
+  "schema": 2,
+  "database_bytes": 61440,
+  "rows": 2,
+  "byte_limit": 65536,
+  "source": "independent archived pre-change code"
+}

@@ -1,0 +1,280 @@
+1794470472: mosquitto version 2.1.2 starting
+1794470472: Config loaded from /qa/mosquitto.conf.
+1794470472: Bridge support available.
+1794470472: Persistence support available.
+1794470472: TLS support available.
+1794470472: TLS-PSK support available.
+1794470472: Websockets support available.
+1794470472: Plugin builtin-security has registered to receive 'basic-auth' events.
+1794470472: Plugin builtin-security has registered to receive 'basic-auth' events.
+1794470472: Plugin builtin-security has registered to receive 'basic-auth' events.
+1794470472: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794470472: Plugin builtin-security has registered to receive 'acl-check' events.
+1794470472: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794470472: Plugin builtin-security has registered to receive 'acl-check' events.
+1794470472: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794470472: Plugin builtin-security has registered to receive 'acl-check' events.
+1794470472: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794470472: Plugin builtin-security has registered to receive 'acl-check' events.
+1794470472: Opening ipv4 listen socket on port 1883.
+1794470472: Opening ipv4 listen socket on port 8884.
+1794470472: Opening ipv4 listen socket on port 8885.
+1794470472: Opening ipv4 listen socket on port 8886.
+1794470472: mosquitto version 2.1.2 running
+1794470473: New connection from 127.0.0.1:52653 on port 1883.
+1794470473: New client connected from 127.0.0.1:52653 as observer-6b9419e3df4f435699efb4a052f592ba (p4, c1, k30, u'qa-edge').
+1794470473: No will message specified.
+1794470473: Client observer-6b9419e3df4f435699efb4a052f592ba negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470473: Sending CONNACK to observer-6b9419e3df4f435699efb4a052f592ba (0, 0)
+1794470473: Received SUBSCRIBE from observer-6b9419e3df4f435699efb4a052f592ba
+1794470473: 	ems/devices/# (QoS 1)
+1794470473: observer-6b9419e3df4f435699efb4a052f592ba 1 ems/devices/#
+1794470473: Sending SUBACK to observer-6b9419e3df4f435699efb4a052f592ba
+1794470473: New connection from 127.0.0.1:60469 on port 1883.
+1794470473: New client connected from 127.0.0.1:60469 as qa-62558c71cfb5450e8c439e0149e81f37 (p4, c1, k30, u'qa-edge').
+1794470473: No will message specified.
+1794470473: Client qa-62558c71cfb5450e8c439e0149e81f37 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470473: Sending CONNACK to qa-62558c71cfb5450e8c439e0149e81f37 (0, 0)
+1794470474: Received PUBLISH from qa-62558c71cfb5450e8c439e0149e81f37 (d0, q1, r0, m1, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470474: Sending PUBLISH to observer-6b9419e3df4f435699efb4a052f592ba (d0, q1, r0, m1, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470474: Sending PUBACK to qa-62558c71cfb5450e8c439e0149e81f37 (m1, rc0)
+1794470474: Received PUBACK from observer-6b9419e3df4f435699efb4a052f592ba (Mid: 1, RC:0)
+1794470475: Received PUBLISH from qa-62558c71cfb5450e8c439e0149e81f37 (d0, q1, r0, m2, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470475: Sending PUBLISH to observer-6b9419e3df4f435699efb4a052f592ba (d0, q1, r0, m2, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470475: Sending PUBACK to qa-62558c71cfb5450e8c439e0149e81f37 (m2, rc0)
+1794470475: Received PUBACK from observer-6b9419e3df4f435699efb4a052f592ba (Mid: 2, RC:0)
+1794470475: Received PUBLISH from qa-62558c71cfb5450e8c439e0149e81f37 (d0, q1, r0, m3, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470475: Sending PUBLISH to observer-6b9419e3df4f435699efb4a052f592ba (d0, q1, r0, m3, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470475: Sending PUBACK to qa-62558c71cfb5450e8c439e0149e81f37 (m3, rc0)
+1794470475: Received PUBACK from observer-6b9419e3df4f435699efb4a052f592ba (Mid: 3, RC:0)
+1794470475: Received DISCONNECT from qa-62558c71cfb5450e8c439e0149e81f37
+1794470475: Client qa-62558c71cfb5450e8c439e0149e81f37 [127.0.0.1:60469] disconnected.
+1794470475: Received DISCONNECT from observer-6b9419e3df4f435699efb4a052f592ba
+1794470475: Client observer-6b9419e3df4f435699efb4a052f592ba [127.0.0.1:52653] disconnected.
+1794470475: New connection from 127.0.0.1:33153 on port 1883.
+1794470475: New client connected from 127.0.0.1:33153 as observer-e5d02b1ec39d4ee392b2dc16025579c0 (p4, c1, k30, u'qa-edge').
+1794470475: No will message specified.
+1794470475: Client observer-e5d02b1ec39d4ee392b2dc16025579c0 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470475: Sending CONNACK to observer-e5d02b1ec39d4ee392b2dc16025579c0 (0, 0)
+1794470475: Received SUBSCRIBE from observer-e5d02b1ec39d4ee392b2dc16025579c0
+1794470475: 	ems/devices/# (QoS 1)
+1794470475: observer-e5d02b1ec39d4ee392b2dc16025579c0 1 ems/devices/#
+1794470475: Sending SUBACK to observer-e5d02b1ec39d4ee392b2dc16025579c0
+1794470475: New connection from 127.0.0.1:32927 on port 1883.
+1794470475: New client connected from 127.0.0.1:32927 as qa-ffce6b75d957425f953af707a014a32c (p4, c1, k30, u'qa-edge').
+1794470475: No will message specified.
+1794470475: Client qa-ffce6b75d957425f953af707a014a32c negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470475: Sending CONNACK to qa-ffce6b75d957425f953af707a014a32c (0, 0)
+1794470476: Received PUBLISH from qa-ffce6b75d957425f953af707a014a32c (d0, q1, r0, m1, 'ems/devices/clock-probe/measurements', ... (141 bytes))
+1794470476: Sending PUBLISH to observer-e5d02b1ec39d4ee392b2dc16025579c0 (d0, q1, r0, m1, 'ems/devices/clock-probe/measurements', ... (141 bytes))
+1794470476: Sending PUBACK to qa-ffce6b75d957425f953af707a014a32c (m1, rc0)
+1794470476: Received PUBACK from observer-e5d02b1ec39d4ee392b2dc16025579c0 (Mid: 1, RC:0)
+1794470476: Received DISCONNECT from qa-ffce6b75d957425f953af707a014a32c
+1794470476: Client qa-ffce6b75d957425f953af707a014a32c [127.0.0.1:32927] disconnected.
+1794470476: New connection from 127.0.0.1:35499 on port 1883.
+1794470476: New client connected from 127.0.0.1:35499 as qa-9ced5d527f14474c9701eef2886a50d4 (p4, c1, k30, u'qa-edge').
+1794470476: No will message specified.
+1794470476: Client qa-9ced5d527f14474c9701eef2886a50d4 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470476: Sending CONNACK to qa-9ced5d527f14474c9701eef2886a50d4 (0, 0)
+1794470477: Received PUBLISH from qa-9ced5d527f14474c9701eef2886a50d4 (d0, q1, r0, m1, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470477: Sending PUBLISH to observer-e5d02b1ec39d4ee392b2dc16025579c0 (d0, q1, r0, m2, 'ems/devices/clock-probe/measurements', ... (128 bytes))
+1794470477: Sending PUBACK to qa-9ced5d527f14474c9701eef2886a50d4 (m1, rc0)
+1794470477: Received PUBACK from observer-e5d02b1ec39d4ee392b2dc16025579c0 (Mid: 2, RC:0)
+1794470477: Received DISCONNECT from qa-9ced5d527f14474c9701eef2886a50d4
+1794470477: Client qa-9ced5d527f14474c9701eef2886a50d4 [127.0.0.1:35499] disconnected.
+1794470477: Received DISCONNECT from observer-e5d02b1ec39d4ee392b2dc16025579c0
+1794470477: Client observer-e5d02b1ec39d4ee392b2dc16025579c0 [127.0.0.1:33153] disconnected.
+1794470477: New connection from 127.0.0.1:33191 on port 1883.
+1794470477: New client connected from 127.0.0.1:33191 as observer-b5dbf72754e0471c8fc3d8ca770957a8 (p4, c1, k30, u'qa-edge').
+1794470477: No will message specified.
+1794470477: Client observer-b5dbf72754e0471c8fc3d8ca770957a8 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470477: Sending CONNACK to observer-b5dbf72754e0471c8fc3d8ca770957a8 (0, 0)
+1794470477: Received SUBSCRIBE from observer-b5dbf72754e0471c8fc3d8ca770957a8
+1794470477: 	ems/devices/# (QoS 1)
+1794470477: observer-b5dbf72754e0471c8fc3d8ca770957a8 1 ems/devices/#
+1794470477: Sending SUBACK to observer-b5dbf72754e0471c8fc3d8ca770957a8
+1794470477: New connection from 127.0.0.1:59931 on port 1883.
+1794470477: New client connected from 127.0.0.1:59931 as qa-ec2a19d10b22496bbb04a5b18ae22fc2 (p4, c1, k30, u'qa-edge').
+1794470477: No will message specified.
+1794470477: Client qa-ec2a19d10b22496bbb04a5b18ae22fc2 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470477: Sending CONNACK to qa-ec2a19d10b22496bbb04a5b18ae22fc2 (0, 0)
+1794470477: Received PUBLISH from qa-ec2a19d10b22496bbb04a5b18ae22fc2 (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470477: Sending PUBLISH to observer-b5dbf72754e0471c8fc3d8ca770957a8 (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470477: Sending PUBACK to qa-ec2a19d10b22496bbb04a5b18ae22fc2 (m1, rc0)
+1794470477: Received PUBACK from observer-b5dbf72754e0471c8fc3d8ca770957a8 (Mid: 1, RC:0)
+1794470477: Received DISCONNECT from qa-ec2a19d10b22496bbb04a5b18ae22fc2
+1794470477: Client qa-ec2a19d10b22496bbb04a5b18ae22fc2 [127.0.0.1:59931] disconnected.
+1794470477: Received DISCONNECT from observer-b5dbf72754e0471c8fc3d8ca770957a8
+1794470477: Client observer-b5dbf72754e0471c8fc3d8ca770957a8 [127.0.0.1:33191] disconnected.
+1794470477: New connection from 127.0.0.1:55247 on port 1883.
+1794470477: New client connected from 127.0.0.1:55247 as observer-c82c38493ea84ffca73e6596e8f4a63b (p4, c1, k30, u'qa-edge').
+1794470477: No will message specified.
+1794470477: Client observer-c82c38493ea84ffca73e6596e8f4a63b negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470477: Sending CONNACK to observer-c82c38493ea84ffca73e6596e8f4a63b (0, 0)
+1794470477: Received SUBSCRIBE from observer-c82c38493ea84ffca73e6596e8f4a63b
+1794470477: 	ems/devices/# (QoS 1)
+1794470477: observer-c82c38493ea84ffca73e6596e8f4a63b 1 ems/devices/#
+1794470477: Sending SUBACK to observer-c82c38493ea84ffca73e6596e8f4a63b
+1794470477: New connection from 127.0.0.1:43760 on port 1883.
+1794470477: OpenSSL Error while trying to get the error[0]: error:0A000418:SSL routines::tlsv1 alert unknown ca
+1794470477: Client 127.0.0.1 [127.0.0.1:43760] disconnected: Protocol error.
+1794470477: New connection from 127.0.0.1:56023 on port 1883.
+1794470477: OpenSSL Error while trying to get the error[0]: error:0A000418:SSL routines::tlsv1 alert unknown ca
+1794470477: Client 127.0.0.1 [127.0.0.1:56023] disconnected: Protocol error.
+1794470478: Received DISCONNECT from observer-c82c38493ea84ffca73e6596e8f4a63b
+1794470478: Client observer-c82c38493ea84ffca73e6596e8f4a63b [127.0.0.1:55247] disconnected.
+1794470478: New connection from 127.0.0.1:58617 on port 1883.
+1794470478: New client connected from 127.0.0.1:58617 as observer-731fd75c892543f498f9082c3b9b50f4 (p4, c1, k30, u'qa-edge').
+1794470478: No will message specified.
+1794470478: Client observer-731fd75c892543f498f9082c3b9b50f4 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470478: Sending CONNACK to observer-731fd75c892543f498f9082c3b9b50f4 (0, 0)
+1794470478: Received SUBSCRIBE from observer-731fd75c892543f498f9082c3b9b50f4
+1794470478: 	ems/devices/# (QoS 1)
+1794470478: observer-731fd75c892543f498f9082c3b9b50f4 1 ems/devices/#
+1794470478: Sending SUBACK to observer-731fd75c892543f498f9082c3b9b50f4
+1794470478: New connection from 127.0.0.1:58874 on port 8884.
+1794470478: OpenSSL Error while trying to get the error[0]: error:0A000412:SSL routines::ssl/tls alert bad certificate
+1794470478: Client 127.0.0.1 [127.0.0.1:58874] disconnected: Protocol error.
+1794470478: New connection from 127.0.0.1:51873 on port 8884.
+1794470478: OpenSSL Error while trying to get the error[0]: error:0A000412:SSL routines::ssl/tls alert bad certificate
+1794470478: Client 127.0.0.1 [127.0.0.1:51873] disconnected: Protocol error.
+1794470479: Received DISCONNECT from observer-731fd75c892543f498f9082c3b9b50f4
+1794470479: Client observer-731fd75c892543f498f9082c3b9b50f4 [127.0.0.1:58617] disconnected.
+1794470479: New connection from 127.0.0.1:33483 on port 1883.
+1794470479: New client connected from 127.0.0.1:33483 as observer-09e82d8a7b5d49cd8c735210bc31d93f (p4, c1, k30, u'qa-edge').
+1794470479: No will message specified.
+1794470479: Client observer-09e82d8a7b5d49cd8c735210bc31d93f negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470479: Sending CONNACK to observer-09e82d8a7b5d49cd8c735210bc31d93f (0, 0)
+1794470479: Received SUBSCRIBE from observer-09e82d8a7b5d49cd8c735210bc31d93f
+1794470479: 	ems/devices/# (QoS 1)
+1794470479: observer-09e82d8a7b5d49cd8c735210bc31d93f 1 ems/devices/#
+1794470479: Sending SUBACK to observer-09e82d8a7b5d49cd8c735210bc31d93f
+1794470479: New connection from 127.0.0.1:45216 on port 8885.
+1794470479: OpenSSL Error while trying to get the error[0]: error:0A000415:SSL routines::ssl/tls alert certificate expired
+1794470479: Client 127.0.0.1 [127.0.0.1:45216] disconnected: Protocol error.
+1794470479: New connection from 127.0.0.1:34087 on port 8885.
+1794470479: OpenSSL Error while trying to get the error[0]: error:0A000415:SSL routines::ssl/tls alert certificate expired
+1794470479: Client 127.0.0.1 [127.0.0.1:34087] disconnected: Protocol error.
+1794470480: Received DISCONNECT from observer-09e82d8a7b5d49cd8c735210bc31d93f
+1794470480: Client observer-09e82d8a7b5d49cd8c735210bc31d93f [127.0.0.1:33483] disconnected.
+1794470480: New connection from 127.0.0.1:55865 on port 1883.
+1794470480: New client connected from 127.0.0.1:55865 as observer-7540fd319db341728432fff4111a1283 (p4, c1, k30, u'qa-edge').
+1794470480: No will message specified.
+1794470480: Client observer-7540fd319db341728432fff4111a1283 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470480: Sending CONNACK to observer-7540fd319db341728432fff4111a1283 (0, 0)
+1794470481: Received SUBSCRIBE from observer-7540fd319db341728432fff4111a1283
+1794470481: 	ems/devices/# (QoS 1)
+1794470481: observer-7540fd319db341728432fff4111a1283 1 ems/devices/#
+1794470481: Sending SUBACK to observer-7540fd319db341728432fff4111a1283
+1794470481: New connection from 127.0.0.1:52457 on port 1883.
+1794470481: Sending CONNACK to qa-af4e064a942e426db9d7b08eaf8d3fca (0, 5)
+1794470481: Client qa-af4e064a942e426db9d7b08eaf8d3fca [127.0.0.1:52457] disconnected: not authorised.
+1794470482: Received DISCONNECT from observer-7540fd319db341728432fff4111a1283
+1794470482: Client observer-7540fd319db341728432fff4111a1283 [127.0.0.1:55865] disconnected.
+1794470482: New connection from 127.0.0.1:57757 on port 1883.
+1794470482: New client connected from 127.0.0.1:57757 as observer-576d4ce758ba4072bce91a53b85360e6 (p4, c1, k30, u'qa-edge').
+1794470482: No will message specified.
+1794470482: Client observer-576d4ce758ba4072bce91a53b85360e6 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470482: Sending CONNACK to observer-576d4ce758ba4072bce91a53b85360e6 (0, 0)
+1794470482: Received SUBSCRIBE from observer-576d4ce758ba4072bce91a53b85360e6
+1794470482: 	ems/devices/# (QoS 1)
+1794470482: observer-576d4ce758ba4072bce91a53b85360e6 1 ems/devices/#
+1794470482: Sending SUBACK to observer-576d4ce758ba4072bce91a53b85360e6
+1794470482: New connection from 127.0.0.1:47861 on port 1883.
+1794470482: Sending CONNACK to qa-d643774a2abc4f28afc262227c548d44 (0, 5)
+1794470482: Client qa-d643774a2abc4f28afc262227c548d44 [127.0.0.1:47861] disconnected: not authorised.
+1794470483: Received DISCONNECT from observer-576d4ce758ba4072bce91a53b85360e6
+1794470483: Client observer-576d4ce758ba4072bce91a53b85360e6 [127.0.0.1:57757] disconnected.
+1794470483: New connection from 127.0.0.1:58373 on port 1883.
+1794470483: New client connected from 127.0.0.1:58373 as observer-6ca8e8d4c8b94527b4f4e8edc02ac95d (p4, c1, k30, u'qa-edge').
+1794470483: No will message specified.
+1794470483: Client observer-6ca8e8d4c8b94527b4f4e8edc02ac95d negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470483: Sending CONNACK to observer-6ca8e8d4c8b94527b4f4e8edc02ac95d (0, 0)
+1794470483: Received SUBSCRIBE from observer-6ca8e8d4c8b94527b4f4e8edc02ac95d
+1794470483: 	ems/devices/# (QoS 1)
+1794470483: observer-6ca8e8d4c8b94527b4f4e8edc02ac95d 1 ems/devices/#
+1794470483: Sending SUBACK to observer-6ca8e8d4c8b94527b4f4e8edc02ac95d
+1794470483: New connection from 127.0.0.1:34287 on port 8886.
+1794470483: New client connected from 127.0.0.1:34287 as qa-5ab6da1e82be4f97b6bed4713b3c5156 (p4, c1, k30, u'qa-edge').
+1794470483: No will message specified.
+1794470483: Client qa-5ab6da1e82be4f97b6bed4713b3c5156 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470483: Sending CONNACK to qa-5ab6da1e82be4f97b6bed4713b3c5156 (0, 0)
+1794470483: Received PUBLISH from qa-5ab6da1e82be4f97b6bed4713b3c5156 (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470483: Sending PUBLISH to observer-6ca8e8d4c8b94527b4f4e8edc02ac95d (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470483: Sending PUBACK to qa-5ab6da1e82be4f97b6bed4713b3c5156 (m1, rc0)
+1794470483: Received PUBACK from observer-6ca8e8d4c8b94527b4f4e8edc02ac95d (Mid: 1, RC:0)
+1794470483: Received DISCONNECT from qa-5ab6da1e82be4f97b6bed4713b3c5156
+1794470483: Client qa-5ab6da1e82be4f97b6bed4713b3c5156 [127.0.0.1:34287] disconnected.
+1794470483: Received DISCONNECT from observer-6ca8e8d4c8b94527b4f4e8edc02ac95d
+1794470483: Client observer-6ca8e8d4c8b94527b4f4e8edc02ac95d [127.0.0.1:58373] disconnected.
+1794470483: New connection from 127.0.0.1:45519 on port 1883.
+1794470483: New client connected from 127.0.0.1:45519 as observer-a117dbcbaff148508a6be39dbd320466 (p4, c1, k30, u'qa-edge').
+1794470483: No will message specified.
+1794470483: Client observer-a117dbcbaff148508a6be39dbd320466 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470483: Sending CONNACK to observer-a117dbcbaff148508a6be39dbd320466 (0, 0)
+1794470483: Received SUBSCRIBE from observer-a117dbcbaff148508a6be39dbd320466
+1794470483: 	ems/devices/# (QoS 1)
+1794470483: observer-a117dbcbaff148508a6be39dbd320466 1 ems/devices/#
+1794470483: Sending SUBACK to observer-a117dbcbaff148508a6be39dbd320466
+1794470483: New connection from 127.0.0.1:54571 on port 8886.
+1794470483: OpenSSL Error while trying to get the error[0]: error:0A0000C7:SSL routines::peer did not return a certificate
+1794470483: Client 127.0.0.1 [127.0.0.1:54571] disconnected: Protocol error.
+1794470484: Received DISCONNECT from observer-a117dbcbaff148508a6be39dbd320466
+1794470484: Client observer-a117dbcbaff148508a6be39dbd320466 [127.0.0.1:45519] disconnected.
+1794470484: New connection from 127.0.0.1:42583 on port 1883.
+1794470484: New client connected from 127.0.0.1:42583 as observer-3af1a95e84384ea3b8d4bdf7b52a4307 (p4, c1, k30, u'qa-edge').
+1794470484: No will message specified.
+1794470484: Client observer-3af1a95e84384ea3b8d4bdf7b52a4307 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470484: Sending CONNACK to observer-3af1a95e84384ea3b8d4bdf7b52a4307 (0, 0)
+1794470484: Received SUBSCRIBE from observer-3af1a95e84384ea3b8d4bdf7b52a4307
+1794470484: 	ems/devices/# (QoS 1)
+1794470484: observer-3af1a95e84384ea3b8d4bdf7b52a4307 1 ems/devices/#
+1794470484: Sending SUBACK to observer-3af1a95e84384ea3b8d4bdf7b52a4307
+1794470484: New connection from 127.0.0.1:39675 on port 8886.
+1794470484: OpenSSL Error while trying to get the error[0]: error:0A000086:SSL routines::certificate verify failed
+1794470484: Client 127.0.0.1 [127.0.0.1:39675] disconnected: Protocol error.
+1794470485: Received DISCONNECT from observer-3af1a95e84384ea3b8d4bdf7b52a4307
+1794470485: Client observer-3af1a95e84384ea3b8d4bdf7b52a4307 [127.0.0.1:42583] disconnected.
+1794470485: New connection from 127.0.0.1:50255 on port 1883.
+1794470485: New client connected from 127.0.0.1:50255 as observer-6cd36a918f2a436eae7289cd6d427c76 (p4, c1, k30, u'qa-edge').
+1794470485: No will message specified.
+1794470485: Client observer-6cd36a918f2a436eae7289cd6d427c76 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470485: Sending CONNACK to observer-6cd36a918f2a436eae7289cd6d427c76 (0, 0)
+1794470485: Received SUBSCRIBE from observer-6cd36a918f2a436eae7289cd6d427c76
+1794470485: 	ems/devices/# (QoS 1)
+1794470485: observer-6cd36a918f2a436eae7289cd6d427c76 1 ems/devices/#
+1794470485: Sending SUBACK to observer-6cd36a918f2a436eae7289cd6d427c76
+1794470485: New connection from 127.0.0.1:58416 on port 1883.
+1794470485: New client connected from 127.0.0.1:58416 as qa-245417ff2415407895977a4a5cd290f7 (p4, c1, k30, u'qa-edge').
+1794470485: No will message specified.
+1794470485: Client qa-245417ff2415407895977a4a5cd290f7 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470485: Sending CONNACK to qa-245417ff2415407895977a4a5cd290f7 (0, 0)
+1794470485: OpenSSL Error while trying to get the error[0]: error:0A000126:SSL routines::unexpected eof while reading
+1794470485: Client qa-245417ff2415407895977a4a5cd290f7 [127.0.0.1:58416] disconnected: connection closed by client.
+1794470486: New connection from 127.0.0.1:58430 on port 1883.
+1794470486: New client connected from 127.0.0.1:58430 as qa-245417ff2415407895977a4a5cd290f7 (p4, c1, k30, u'qa-edge').
+1794470486: No will message specified.
+1794470486: Client qa-245417ff2415407895977a4a5cd290f7 negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794470486: Sending CONNACK to qa-245417ff2415407895977a4a5cd290f7 (0, 0)
+1794470486: Received PUBLISH from qa-245417ff2415407895977a4a5cd290f7 (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470486: Sending PUBLISH to observer-6cd36a918f2a436eae7289cd6d427c76 (d0, q1, r0, m1, 'ems/devices/tls-probe/measurements', ... (122 bytes))
+1794470486: Sending PUBACK to qa-245417ff2415407895977a4a5cd290f7 (m1, rc0)
+1794470486: Received PUBACK from observer-6cd36a918f2a436eae7289cd6d427c76 (Mid: 1, RC:0)
+1794470486: OpenSSL Error while trying to get the error[0]: error:0A000126:SSL routines::unexpected eof while reading
+1794470486: Client qa-245417ff2415407895977a4a5cd290f7 [127.0.0.1:58430] disconnected: connection closed by client.
+1794470486: Received DISCONNECT from observer-6cd36a918f2a436eae7289cd6d427c76
+1794470486: Client observer-6cd36a918f2a436eae7289cd6d427c76 [127.0.0.1:50255] disconnected.
+1794470472: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794470472: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794470472: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794470472: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794470472: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794470472: Info: running mosquitto as user id: 1000.

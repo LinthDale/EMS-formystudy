@@ -1,0 +1,9 @@
+{
+  "captured_utc": "2026-11-13T01:37:18.432290+00:00",
+  "scope": "all completed static evidence under this directory; no active long test",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "final_run": "final-04",
+  "production_changed_this_round": false
+}

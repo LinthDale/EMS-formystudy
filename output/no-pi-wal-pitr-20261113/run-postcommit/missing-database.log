@@ -1,0 +1,27 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+chmod: /var/run/postgresql: Operation not permitted
+2026-11-13 05:49:20.224 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 05:49:20.226 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5434
+2026-11-13 05:49:20.226 UTC [1] LOG:  listening on IPv6 address "::", port 5434
+2026-11-13 05:49:20.237 UTC [1] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5434"
+2026-11-13 05:49:20.241 UTC [16] LOG:  database system was interrupted; last known up at 2026-11-13 05:49:15 UTC
+2026-11-13 05:49:20.283 UTC [22] FATAL:  the database system is starting up
+2026-11-13 05:49:20.454 UTC [29] FATAL:  the database system is starting up
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 05:49:20.483 UTC [16] LOG:  starting point-in-time recovery to "ems_ack_boundary"
+2026-11-13 05:49:20.483 UTC [16] LOG:  starting backup recovery with redo LSN 0/2000028, checkpoint LSN 0/2000060, on timeline ID 1
+cp: can't stat '/archive/000000010000000000000002.partial': No such file or directory
+2026-11-13 05:49:20.489 UTC [16] LOG:  redo starts at 0/2000028
+cp: can't stat '/archive/000000010000000000000003.partial': No such file or directory
+2026-11-13 05:49:20.492 UTC [16] LOG:  completed backup recovery with redo LSN 0/2000028 and end LSN 0/2000100
+2026-11-13 05:49:20.492 UTC [16] LOG:  consistent recovery state reached at 0/2000100
+2026-11-13 05:49:20.492 UTC [1] LOG:  database system is ready to accept read-only connections
+cp: can't stat '/archive/000000010000000000000003.partial': No such file or directory
+2026-11-13 05:49:20.493 UTC [16] LOG:  redo done at 0/2000100 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-11-13 05:49:20.493 UTC [16] FATAL:  recovery ended before configured recovery target was reached
+2026-11-13 05:49:20.494 UTC [1] LOG:  startup process (PID 16) exited with exit code 1
+2026-11-13 05:49:20.494 UTC [1] LOG:  terminating any other active server processes
+2026-11-13 05:49:20.494 UTC [1] LOG:  shutting down due to startup process failure
+2026-11-13 05:49:20.495 UTC [1] LOG:  database system is shut down

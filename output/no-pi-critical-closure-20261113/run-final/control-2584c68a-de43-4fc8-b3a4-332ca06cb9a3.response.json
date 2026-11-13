@@ -1,0 +1,7 @@
+{
+  "passed": true,
+  "request_id": "2584c68a-de43-4fc8-b3a4-332ca06cb9a3",
+  "op": "db_data_free",
+  "actual_relation_enospc": true,
+  "space_freed": true
+}

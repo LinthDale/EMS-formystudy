@@ -14,6 +14,10 @@
 !services/delta/
 !services/delta/delta_device/
 !services/delta/delta_device/**
+!services/edge-receiver/
+!services/edge-receiver/requirements.txt
+!services/edge-receiver/edge_receiver/
+!services/edge-receiver/edge_receiver/**
 !external/
 !external/kc_modbus_mcp/
 !external/kc_modbus_mcp/simulator.py

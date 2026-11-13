@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "kind": "untrusted_client",
+  "actual_error": {
+    "kind": "ConnectionDoesNotExistError",
+    "verify_code": null,
+    "certificate_identity_rejected": false,
+    "client_certificate_required": false,
+    "server_rejected_client_certificate": true,
+    "client_certificate_verify_code": 20
+  },
+  "source_preserved": true,
+  "no_partial_write": true,
+  "rows": 1,
+  "pending_end": 0
+}

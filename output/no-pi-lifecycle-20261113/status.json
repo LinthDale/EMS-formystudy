@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "requested_categories": 3,
+  "new_targeted_cases": 7,
+  "mandatory_boundary_cases": 35,
+  "targeted_passed": 42,
+  "targeted_skipped": 0,
+  "targeted_elapsed_seconds": 28.4,
+  "regression_passed": 393,
+  "regression_skipped": 12,
+  "regression_elapsed_seconds": 33.0,
+  "production_line_percent": 91.01796407185628,
+  "new_lifecycle_tool_cases": 30,
+  "production_files_modified": [
+    "services/delta/delta_device/reliable_store.py"
+  ],
+  "shared_deployment_changed": false,
+  "long_test_restarted": false,
+  "pi_field_acceptance": false
+}

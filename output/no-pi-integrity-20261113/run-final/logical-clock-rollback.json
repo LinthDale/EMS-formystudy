@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "clock-rollback",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "f4652bed-ede7-47dc-a6cc-a87f0cee952a",
+  "before_sha256": "553cc25d68c791dc674f89585dfa6acfb6df0918d6034becc596b35b83c145df",
+  "after_sha256": "553cc25d68c791dc674f89585dfa6acfb6df0918d6034becc596b35b83c145df"
+}

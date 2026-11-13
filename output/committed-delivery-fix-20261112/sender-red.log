@@ -1,0 +1,44 @@
+....................FF                                                   [100%]
+=================================== FAILURES ===================================
+___________ test_sender_requires_application_ack_after_broker_puback ___________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_sender_requires_applicati0')
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x74cba952ded0>
+
+    def test_sender_requires_application_ack_after_broker_puback(tmp_path, monkeypatch):
+        import threading
+        from types import SimpleNamespace
+>       from delta_device import reliable_sender
+E       ImportError: cannot import name 'reliable_sender' from 'delta_device' (/app/delta_device/__init__.py)
+
+tests/test_reliable_delivery.py:175: ImportError
+________ test_v2_config_requires_registered_identity_and_mtls_in_field _________
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_v2_config_requires_regist0')
+
+    def test_v2_config_requires_registered_identity_and_mtls_in_field(tmp_path):
+        from delta_device.config import validate
+        from test_delivery import config
+        value = config(tmp_path)
+        value['delivery'] = dict(protocol=2, gateway_id='gateway-a', stream_id=STREAM,
+                                 config_revision='r1', profile_version='delta-v135')
+>       assert validate(value)['batch_size'] == 1, 'v2 did not bound batch to one'
+               ^^^^^^^^^^^^^^^
+
+tests/test_reliable_delivery.py:196: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+config = {'delivery': {'config_revision': 'r1', 'gateway_id': 'gateway-a', 'profile_version': 'delta-v135', 'protocol': 2, ...}, 'device_id': 'delta-sim-001', 'modbus': {'host': 'localhost', 'transport': 'tcp'}, 'mode': 'demo', ...}
+
+    def validate(config):
+        allowed = {"mode", "device_id", "modbus", "mqtt", "outbox_path",
+                   "queue_limit", "poll_interval", "batch_size", "clock_sync_file"}
+        if not isinstance(config, dict) or set(config) - allowed:
+>           raise ValueError("unknown configuration keys")
+E           ValueError: unknown configuration keys
+
+delta_device/config.py:52: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_reliable_delivery.py::test_sender_requires_application_ack_after_broker_puback
+FAILED tests/test_reliable_delivery.py::test_v2_config_requires_registered_identity_and_mtls_in_field
+2 failed, 20 passed in 0.25s

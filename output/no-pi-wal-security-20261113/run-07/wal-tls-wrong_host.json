@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "kind": "wrong_host",
+  "probe": {
+    "passed": true,
+    "request_id": "0a2ceadb-4928-419a-ad47-b63dec9d47ca",
+    "op": "wal_probe_wrong_host",
+    "kind": "wrong_host",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "843b9d3917d1151716f97df300c4955fae492d4ae9af099eccae71e113608529",
+    "replication_peer_absent": true,
+    "tls_verify_code": 64
+  },
+  "recovered_slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC1388",
+    "lag_bytes": 0,
+    "active": true
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

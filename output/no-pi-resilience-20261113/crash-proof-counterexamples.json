@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "cases": [
+    {
+      "mutation": "constructor-only-change",
+      "previous_false_pass": true,
+      "current_passed": false
+    },
+    {
+      "mutation": "wrong-baseline-stage",
+      "previous_false_pass": true,
+      "current_passed": false
+    },
+    {
+      "mutation": "committed-identity-changed",
+      "previous_false_pass": true,
+      "current_passed": false
+    }
+  ]
+}

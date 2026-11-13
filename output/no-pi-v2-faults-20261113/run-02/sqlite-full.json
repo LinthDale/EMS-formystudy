@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "committed_before_failure": 2,
+  "retained_after_reopen": 2,
+  "integrity": "ok",
+  "database_bytes": 61440,
+  "sqlite_error": "SQLITE_FULL",
+  "expected_ids": [
+    "ffa920e7-d7bd-466d-93bf-52960065eda0",
+    "b2056b9f-abe7-4e63-a74c-70ede7f32ca9"
+  ]
+}

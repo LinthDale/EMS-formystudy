@@ -1,0 +1,176 @@
+{
+  "logical-sequence-rollback": {
+    "passed": true,
+    "damage": "sequence-rollback",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "93976cf5-1b16-4e65-bb32-8eb0a5843c6c",
+    "before_sha256": "0544600cc51bc55d6df3959925cc58efe297dba7cbd4eac448a067d65656dda7",
+    "after_sha256": "0544600cc51bc55d6df3959925cc58efe297dba7cbd4eac448a067d65656dda7"
+  },
+  "logical-clock-rollback": {
+    "passed": true,
+    "damage": "clock-rollback",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "f4652bed-ede7-47dc-a6cc-a87f0cee952a",
+    "before_sha256": "553cc25d68c791dc674f89585dfa6acfb6df0918d6034becc596b35b83c145df",
+    "after_sha256": "553cc25d68c791dc674f89585dfa6acfb6df0918d6034becc596b35b83c145df"
+  },
+  "logical-missing-audit": {
+    "passed": true,
+    "damage": "missing-audit",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "bc25da5e-9e78-473d-ba8d-cc26d8a749a0",
+    "before_sha256": "bf66ca0affcb44950053f0faa91674bd4f3af4839c75f2c55300fd9ab7cf8931",
+    "after_sha256": "bf66ca0affcb44950053f0faa91674bd4f3af4839c75f2c55300fd9ab7cf8931"
+  },
+  "logical-audit-hash": {
+    "passed": true,
+    "damage": "audit-hash",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "b5eb9e70-728c-4256-8243-a6675e050f63",
+    "before_sha256": "482e7a1f146b86e03e1122c3005ca371fdee5ec2d3728dd905227a1421450ca8",
+    "after_sha256": "482e7a1f146b86e03e1122c3005ca371fdee5ec2d3728dd905227a1421450ca8"
+  },
+  "logical-audit-state": {
+    "passed": true,
+    "damage": "audit-state",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "c7038650-287c-40e9-91d6-6eefc531e467",
+    "before_sha256": "8bdd85d9cb05c486e20f246be302efec8cee912000d8f430601a3c04af20b056",
+    "after_sha256": "8bdd85d9cb05c486e20f246be302efec8cee912000d8f430601a3c04af20b056"
+  },
+  "logical-orphan-audit": {
+    "passed": true,
+    "damage": "orphan-audit",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "1657f69f-11c8-4bbd-936d-381ec857f0a5",
+    "before_sha256": "4edb1fc8cac9b22fa93e0f25f9486a373b5537fd0e21a4ebb964e47ab95a6a98",
+    "after_sha256": "4edb1fc8cac9b22fa93e0f25f9486a373b5537fd0e21a4ebb964e47ab95a6a98"
+  },
+  "logical-audit-sequence": {
+    "passed": true,
+    "damage": "audit-sequence",
+    "quick_check": "ok",
+    "rejected": true,
+    "original_sample_id": "c29ab2d6-ab9b-4be7-930a-60e75ec5515d",
+    "before_sha256": "95e43995c79c505700209b8c370bd034123798d5860a067f6e9050355f6c768f",
+    "after_sha256": "95e43995c79c505700209b8c370bd034123798d5860a067f6e9050355f6c768f"
+  },
+  "malformed-bad-hash": {
+    "passed": true,
+    "kind": "bad-hash",
+    "actual_parser_observed": true,
+    "acks_before_recovery": 0,
+    "rows_before": [
+      0,
+      0
+    ],
+    "rows_after": [
+      1,
+      1
+    ],
+    "pending_end": 0,
+    "receiver_survived": true
+  },
+  "malformed-duplicate-id": {
+    "passed": true,
+    "kind": "duplicate-id",
+    "actual_parser_observed": true,
+    "acks_before_recovery": 0,
+    "rows_before": [
+      0,
+      0
+    ],
+    "rows_after": [
+      1,
+      1
+    ],
+    "pending_end": 0,
+    "receiver_survived": true
+  },
+  "malformed-duplicate-key": {
+    "passed": true,
+    "kind": "duplicate-key",
+    "actual_parser_observed": true,
+    "acks_before_recovery": 0,
+    "rows_before": [
+      0,
+      0
+    ],
+    "rows_after": [
+      1,
+      1
+    ],
+    "pending_end": 0,
+    "receiver_survived": true
+  },
+  "malformed-invalid-utf8": {
+    "passed": true,
+    "kind": "invalid-utf8",
+    "actual_parser_observed": true,
+    "acks_before_recovery": 0,
+    "rows_before": [
+      0,
+      0
+    ],
+    "rows_after": [
+      1,
+      1
+    ],
+    "pending_end": 0,
+    "receiver_survived": true
+  },
+  "malformed-excess-depth": {
+    "passed": true,
+    "kind": "excess-depth",
+    "actual_parser_observed": true,
+    "acks_before_recovery": 0,
+    "rows_before": [
+      0,
+      0
+    ],
+    "rows_after": [
+      1,
+      1
+    ],
+    "pending_end": 0,
+    "receiver_survived": true
+  },
+  "sigterm-db-wait": {
+    "passed": true,
+    "real_db_lock_observed": true,
+    "wait_still_active_at_exit": true,
+    "first_exit": 0,
+    "restart_exit": 0,
+    "graceful_exit_seconds": 0.11352566099958494,
+    "saved_before_restart": [
+      {
+        "sample_id": "d7d35452-cb5f-433d-ae4d-dffcd8babf88",
+        "payload_hash": "d5da793949a49eea7b3c807c3a1e8838546dba2239c0d7ba8061e5694b063b4f"
+      },
+      {
+        "sample_id": "9574c106-1754-4471-a915-041edf3d12f2",
+        "payload_hash": "94a68d069449a77b1884617d5b58b9046be793ab6a52ce67a27f2ae5099be224"
+      },
+      {
+        "sample_id": "ffda4a52-190f-4c56-8485-951a21dc8284",
+        "payload_hash": "67b0cc2bc1f55b2e6e4a96e440307d6edf402175f32d5e357ebdebd789391e97"
+      }
+    ],
+    "total_acquired": 11,
+    "receipts": 11,
+    "projections": 11,
+    "all_projection_counts_one": true,
+    "projection_ids_match": true,
+    "projection_values_match": true,
+    "original_canonical_unchanged": true,
+    "ledger_hashes_match": true,
+    "pending_end": 0
+  }
+}

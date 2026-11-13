@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "request_id": "9eaa1103-af2e-46a2-84a4-9f2f1ea16d77",
+  "op": "wal_missing",
+  "container_id": "dffcb406263f52a9676f81cb5c51e5581062280de66aeb708f9306288c0ea6c6",
+  "target_not_reached": true,
+  "promoted": false
+}

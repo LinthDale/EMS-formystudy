@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "retained_audit_rows": 1,
+  "new_sample_accepted": true,
+  "sequence": 2,
+  "retention": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 1,
+    "unconfirmed_evicted_total": 0,
+    "committed_audit_evicted_total": 1,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 0,
+      "first_seq": 1,
+      "last_seq": 1,
+      "sample_id": "c0311455-3702-4ff1-8b2e-94c2adf1a2eb",
+      "payload_hash": "147c090dd5333ea163340fb94e06f5951d270a9185468030d9270c470ca916d1",
+      "state": "committed",
+      "sampled_at_us": 1794535733108399
+    }
+  }
+}

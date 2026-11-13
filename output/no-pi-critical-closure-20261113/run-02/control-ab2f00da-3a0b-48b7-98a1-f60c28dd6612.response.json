@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "request_id": "ab2f00da-3a0b-48b7-98a1-f60c28dd6612",
+  "op": "db_data_clean",
+  "tablespace_removed": true
+}

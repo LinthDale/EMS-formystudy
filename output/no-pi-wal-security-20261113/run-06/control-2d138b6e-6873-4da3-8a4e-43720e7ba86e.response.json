@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "request_id": "2d138b6e-6873-4da3-8a4e-43720e7ba86e",
+  "op": "wal_probe_wrong_host",
+  "kind": "wrong_host",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "a2cf843f97c0d7bac0206939ddc5ae3d23204697095a4f6570271d1ffde96030",
+  "replication_peer_absent": true,
+  "tls_verify_code": 64
+}

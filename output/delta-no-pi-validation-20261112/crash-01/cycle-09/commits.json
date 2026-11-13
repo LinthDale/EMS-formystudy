@@ -1,0 +1,38 @@
+[
+  {
+    "row": [
+      28,
+      1794461593107210000,
+      "electricity_measurements,device_id=delta-rtu-sim-001 voltage=230.0,current=13.88,power_kw=9.584,energy_kwh=1234.65 1794461593107210000"
+    ],
+    "sampled_ns": 1794461593107210000,
+    "voltage": 230.0,
+    "current": 13.88,
+    "power_kw": 9.584,
+    "energy_kwh": 1234.65
+  },
+  {
+    "row": [
+      29,
+      1794461594111240000,
+      "electricity_measurements,device_id=delta-rtu-sim-001 voltage=230.0,current=13.870000000000001,power_kw=9.576,energy_kwh=1234.65 1794461594111240000"
+    ],
+    "sampled_ns": 1794461594111240000,
+    "voltage": 230.0,
+    "current": 13.870000000000001,
+    "power_kw": 9.576,
+    "energy_kwh": 1234.65
+  },
+  {
+    "row": [
+      30,
+      1794461595125920000,
+      "electricity_measurements,device_id=delta-rtu-sim-001 voltage=230.0,current=13.86,power_kw=9.567,energy_kwh=1234.65 1794461595125920000"
+    ],
+    "sampled_ns": 1794461595125920000,
+    "voltage": 230.0,
+    "current": 13.86,
+    "power_kw": 9.567,
+    "energy_kwh": 1234.65
+  }
+]

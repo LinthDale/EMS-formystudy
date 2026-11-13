@@ -1,0 +1,159 @@
+................EEEEEEEEEEEE............................................ [ 26%]
+........................................................................ [ 53%]
+........................................................................ [ 80%]
+....................................................                     [100%]
+==================================== ERRORS ====================================
+_ ERROR at setup of test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains _
+file /app/services/delta/tests/field_checks/test_clock_runtime.py, line 137
+  def test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains(monkeypatch,modbus_server,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, modbus_server, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_clock_runtime.py:137
+_________ ERROR at setup of test_restart_uses_persisted_last_timestamp _________
+file /app/services/delta/tests/field_checks/test_clock_runtime.py, line 160
+  def test_restart_uses_persisted_last_timestamp(monkeypatch,modbus_server,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, modbus_server, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_clock_runtime.py:160
+_____ ERROR at setup of test_valid_password_tls_delivers_original_payload ______
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 66
+  def test_valid_password_tls_delivers_original_payload(receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:66
+_ ERROR at setup of test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-19] _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 70
+  @pytest.mark.parametrize('case,port,ca,verify_code',[
+      ('untrusted-ca',1883,'rogue-ca.crt',19),
+      ('wrong-host',8884,'ca.crt',64),
+      ('expired',8885,'ca.crt',10),
+  ])
+  def test_invalid_server_certificate_preserves_pending(case,port,ca,verify_code,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:70
+_ ERROR at setup of test_invalid_server_certificate_preserves_pending[wrong-host-8884-ca.crt-64] _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 70
+  @pytest.mark.parametrize('case,port,ca,verify_code',[
+      ('untrusted-ca',1883,'rogue-ca.crt',19),
+      ('wrong-host',8884,'ca.crt',64),
+      ('expired',8885,'ca.crt',10),
+  ])
+  def test_invalid_server_certificate_preserves_pending(case,port,ca,verify_code,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:70
+_ ERROR at setup of test_invalid_server_certificate_preserves_pending[expired-8885-ca.crt-10] _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 70
+  @pytest.mark.parametrize('case,port,ca,verify_code',[
+      ('untrusted-ca',1883,'rogue-ca.crt',19),
+      ('wrong-host',8884,'ca.crt',64),
+      ('expired',8885,'ca.crt',10),
+  ])
+  def test_invalid_server_certificate_preserves_pending(case,port,ca,verify_code,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:70
+___ ERROR at setup of test_wrong_password_rejected_without_deleting_pending ____
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 84
+  def test_wrong_password_rejected_without_deleting_pending(monkeypatch,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:84
+____ ERROR at setup of test_missing_auth_rejected_without_deleting_pending _____
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 89
+  def test_missing_auth_rejected_without_deleting_pending(receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:89
+_________ ERROR at setup of test_valid_mtls_without_password_delivers __________
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 93
+  def test_valid_mtls_without_password_delivers(receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:93
+_ ERROR at setup of test_missing_or_untrusted_client_certificate_preserves_pending[none-client] _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 97
+  @pytest.mark.parametrize('auth,client',[('none','client'),('certificate','rogue-client')])
+  def test_missing_or_untrusted_client_certificate_preserves_pending(auth,client,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:97
+_ ERROR at setup of test_missing_or_untrusted_client_certificate_preserves_pending[certificate-rogue-client] _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 97
+  @pytest.mark.parametrize('auth,client',[('none','client'),('certificate','rogue-client')])
+  def test_missing_or_untrusted_client_certificate_preserves_pending(auth,client,receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:97
+_ ERROR at setup of test_same_tls_publisher_reconnects_and_replays_original_data _
+file /app/services/delta/tests/field_checks/test_tls_transport.py, line 102
+  def test_same_tls_publisher_reconnects_and_replays_original_data(receiver,record):
+E       fixture 'receiver' not found
+>       available fixtures: capfd, capfdbinary, caplog, capsys, capsysbinary, capteesys, cov, doctest_namespace, monkeypatch, no_cover, pytestconfig, record_property, record_testsuite_property, record_xml_attribute, recwarn, tmp_path, tmp_path_factory, tmpdir, tmpdir_factory
+>       use 'pytest --fixtures [testpath]' for help on them.
+
+/app/services/delta/tests/field_checks/test_tls_transport.py:102
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                                Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------
+services/delta/delta_device/__init__.py                 0      0   100%
+services/delta/delta_device/__main__.py                60      3    95%   54, 65, 71
+services/delta/delta_device/config.py                 120      4    97%   30, 33, 134, 146
+services/delta/delta_device/delivery.py                91      1    99%   23
+services/delta/delta_device/edge.py                    63      9    86%   24-30, 50-52, 66, 73
+services/delta/delta_device/migrate_delivery.py        73     19    74%   23, 25, 34, 37, 54, 71-85, 89
+services/delta/delta_device/poller.py                 101      4    96%   45, 54, 123-124
+services/delta/delta_device/protocol.py                54      1    98%   18
+services/delta/delta_device/publisher.py               62      6    90%   26, 51-52, 62, 74-75
+services/delta/delta_device/reliable_sender.py        125      8    94%   86-87, 106, 114-116, 134-135
+services/delta/delta_device/reliable_store.py         110      8    93%   21, 26, 34, 39, 43, 69, 77, 80
+services/delta/delta_device/reliable_transport.py      23      6    74%   12, 14, 21-24
+services/delta/delta_device/reliable_wire.py          131     14    89%   56, 88, 91, 98, 125-126, 129, 135, 155, 165-169
+services/delta/delta_device/simulator.py              142      6    96%   26, 49, 118-119, 148, 180
+services/edge-receiver/edge_receiver/__init__.py        0      0   100%
+services/edge-receiver/edge_receiver/receiver.py      183     43    77%   36, 40, 45, 48, 50, 52, 55, 59, 63, 68, 71, 95, 113, 116-117, 132, 135, 138, 141, 148, 151, 155, 158, 160, 166, 170-176, 204-213, 217
+services/edge-receiver/edge_receiver/store.py          47      2    96%   63, 78
+---------------------------------------------------------------------------------
+TOTAL                                                1385    134    90%
+Coverage JSON written to file /evidence/receiver-coverage.json
+Required test coverage of 80% reached. Total coverage: 90.32%
+=========================== short test summary info ============================
+ERROR services/delta/tests/field_checks/test_clock_runtime.py::test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains
+ERROR services/delta/tests/field_checks/test_clock_runtime.py::test_restart_uses_persisted_last_timestamp
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_valid_password_tls_delivers_original_payload
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-19]
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_invalid_server_certificate_preserves_pending[wrong-host-8884-ca.crt-64]
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_invalid_server_certificate_preserves_pending[expired-8885-ca.crt-10]
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_wrong_password_rejected_without_deleting_pending
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_missing_auth_rejected_without_deleting_pending
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_valid_mtls_without_password_delivers
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_missing_or_untrusted_client_certificate_preserves_pending[none-client]
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_missing_or_untrusted_client_certificate_preserves_pending[certificate-rogue-client]
+ERROR services/delta/tests/field_checks/test_tls_transport.py::test_same_tls_publisher_reconnects_and_replays_original_data
+256 passed, 12 errors in 25.41s

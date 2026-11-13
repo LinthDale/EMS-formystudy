@@ -1,0 +1,25 @@
+2026-11-12T09:10:56Z I! Loading config: /qa.conf
+2026-11-12T09:10:56Z I! Starting Telegraf 1.30.3 brought to you by InfluxData the makers of InfluxDB
+2026-11-12T09:10:56Z I! Available plugins: 233 inputs, 9 aggregators, 31 processors, 24 parsers, 60 outputs, 6 secret-stores
+2026-11-12T09:10:56Z I! Loaded inputs: mqtt_consumer
+2026-11-12T09:10:56Z I! Loaded aggregators: 
+2026-11-12T09:10:56Z I! Loaded processors: 
+2026-11-12T09:10:56Z I! Loaded secretstores: 
+2026-11-12T09:10:56Z I! Loaded outputs: postgresql
+2026-11-12T09:10:56Z I! Tags enabled: 
+2026-11-12T09:10:56Z I! [agent] Config: Interval:10s, Quiet:false, Hostname:"", Flush Interval:5s
+2026-11-12T09:10:56Z I! [inputs.mqtt_consumer] Connected [tcp://127.0.0.1:1883]
+2026-11-12T09:11:10Z I! [agent] Hang on, flushing any cached metrics before shutdown
+2026-11-12T09:11:10Z I! [agent] Stopping running outputs
+2026-11-12T09:11:11Z I! Loading config: /qa.conf
+2026-11-12T09:11:11Z I! Starting Telegraf 1.30.3 brought to you by InfluxData the makers of InfluxDB
+2026-11-12T09:11:11Z I! Available plugins: 233 inputs, 9 aggregators, 31 processors, 24 parsers, 60 outputs, 6 secret-stores
+2026-11-12T09:11:11Z I! Loaded inputs: mqtt_consumer
+2026-11-12T09:11:11Z I! Loaded aggregators: 
+2026-11-12T09:11:11Z I! Loaded processors: 
+2026-11-12T09:11:11Z I! Loaded secretstores: 
+2026-11-12T09:11:11Z I! Loaded outputs: postgresql
+2026-11-12T09:11:11Z I! Tags enabled: 
+2026-11-12T09:11:11Z I! [agent] Config: Interval:10s, Quiet:false, Hostname:"", Flush Interval:5s
+2026-11-12T09:11:11Z I! [inputs.mqtt_consumer] Connected [tcp://127.0.0.1:1883]
+2026-11-12T09:11:28Z W! [agent] ["outputs.postgresql"] did not complete within its flush interval

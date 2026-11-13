@@ -1,0 +1,6 @@
+{
+  "scope": "only static boundary-fix artifacts in this new output",
+  "exclude": [
+    "artifact-sha256.json"
+  ]
+}

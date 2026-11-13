@@ -1,0 +1,8 @@
+{
+  "captured_utc": "2026-11-13T06:08:28.244504+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all static cutover evidence including original RED, earlier weaker collision versions, definitive run-inflight, tools-inflight.xml, frozen code and validation/review",
+  "no_active_soak": true
+}

@@ -1,0 +1,9 @@
+{
+  "ca.crt": "sha256 Fingerprint=27:34:0C:16:44:1A:9F:1A:40:65:0C:CB:5E:D1:78:76:01:7C:BD:F3:64:67:A8:6F:7E:B2:EF:49:00:C2:CF:BE\nsubject=CN = EMS-QA-ca\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 12 08:01:08 2026 GMT\nnotAfter=Nov 14 08:01:08 2026 GMT",
+  "wrong-host.crt": "sha256 Fingerprint=D1:B3:EC:CD:B0:FC:94:84:6F:F6:52:4B:EA:DC:C2:21:18:A3:E2:75:F3:FA:F7:FE:88:6A:FF:00:7B:A0:E8:26\nsubject=CN = wrong-host.invalid\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 12 08:01:09 2026 GMT\nnotAfter=Nov 14 08:01:09 2026 GMT",
+  "expired.crt": "sha256 Fingerprint=0C:79:2A:C4:8D:7C:93:BA:6B:61:89:55:F3:51:56:BA:6A:59:3D:DE:28:82:09:AE:BE:FB:BC:E2:87:DB:59:43\nsubject=CN = localhost\nissuer=CN = EMS-QA-ca\nnotBefore=Jan  1 00:00:00 2020 GMT\nnotAfter=Jan  2 00:00:00 2020 GMT",
+  "client.crt": "sha256 Fingerprint=A1:11:03:5D:BC:E0:E8:34:0A:47:EC:21:96:2B:7C:23:00:AD:F0:DC:0E:00:67:42:50:71:B1:68:78:58:69:2F\nsubject=CN = qa-edge\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 12 08:01:12 2026 GMT\nnotAfter=Nov 14 08:01:12 2026 GMT",
+  "rogue-client.crt": "sha256 Fingerprint=3C:57:DB:5B:A3:FB:C5:F5:1C:8A:CE:C9:2A:93:51:E5:05:A2:62:F8:AB:D0:E7:E2:07:35:EE:5C:81:28:97:B5\nsubject=CN = qa-edge\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 12 08:01:12 2026 GMT\nnotAfter=Nov 14 08:01:12 2026 GMT",
+  "rogue-ca.crt": "sha256 Fingerprint=66:82:B5:B9:67:0B:63:95:06:B1:3A:18:BC:B0:1F:D7:56:25:56:2B:78:54:99:34:F1:9F:C6:BE:41:F0:03:8B\nsubject=CN = EMS-QA-rogue-ca\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 12 08:01:08 2026 GMT\nnotAfter=Nov 14 08:01:08 2026 GMT",
+  "server.crt": "sha256 Fingerprint=62:1E:1C:5E:7F:AD:67:42:76:87:85:79:88:74:C5:60:A0:79:13:5D:6F:E8:3C:9A:D8:6B:C5:FD:EF:8B:9D:59\nsubject=CN = localhost\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 12 08:01:08 2026 GMT\nnotAfter=Nov 14 08:01:08 2026 GMT"
+}

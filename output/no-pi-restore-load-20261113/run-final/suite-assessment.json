@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 38,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 38,
+  "observed_tests": 38,
+  "evidence_checks": {
+    "database_restore": true,
+    "receiver_overload": true,
+    "live_backlog_delay": true
+  }
+}

@@ -1,0 +1,78 @@
+1794548613: mosquitto version 2.1.2 starting
+1794548613: Config loaded from /qa.conf.
+1794548613: Bridge support available.
+1794548613: Persistence support available.
+1794548613: TLS support available.
+1794548613: TLS-PSK support available.
+1794548613: Websockets support available.
+1794548613: Opening ipv4 listen socket on port 1883.
+1794548613: mosquitto version 2.1.2 running
+1794548621: New connection from 127.0.0.1:59287 on port 1883.
+1794548621: New client connected from 127.0.0.1:59287 as receiver-g-915e2f5ee8f0 (p4, c1, k30).
+1794548621: No will message specified.
+1794548621: Sending CONNACK to receiver-g-915e2f5ee8f0 (0, 0)
+1794548621: Received SUBSCRIBE from receiver-g-915e2f5ee8f0
+1794548621: 	ems/v2/gateways/+/samples (QoS 1)
+1794548621: receiver-g-915e2f5ee8f0 1 ems/v2/gateways/+/samples
+1794548621: 	ems/v2/gateways/+/session/request (QoS 1)
+1794548621: receiver-g-915e2f5ee8f0 1 ems/v2/gateways/+/session/request
+1794548621: Sending SUBACK to receiver-g-915e2f5ee8f0
+1794548621: New connection from 127.0.0.1:57695 on port 1883.
+1794548621: New client connected from 127.0.0.1:57695 as sender-g-915e2f5ee8f0 (p4, c1, k30).
+1794548621: No will message specified.
+1794548621: Sending CONNACK to sender-g-915e2f5ee8f0 (0, 0)
+1794548621: Received SUBSCRIBE from sender-g-915e2f5ee8f0
+1794548621: 	ems/v2/gateways/g-915e2f5ee8f0/acks (QoS 1)
+1794548621: sender-g-915e2f5ee8f0 1 ems/v2/gateways/g-915e2f5ee8f0/acks
+1794548621: 	ems/v2/gateways/g-915e2f5ee8f0/session/response (QoS 1)
+1794548621: sender-g-915e2f5ee8f0 1 ems/v2/gateways/g-915e2f5ee8f0/session/response
+1794548621: Sending SUBACK to sender-g-915e2f5ee8f0
+1794548621: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m2, 'ems/v2/gateways/g-915e2f5ee8f0/session/request', ... (109 bytes))
+1794548621: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m1, 'ems/v2/gateways/g-915e2f5ee8f0/session/request', ... (109 bytes))
+1794548621: Sending PUBACK to sender-g-915e2f5ee8f0 (m2, rc0)
+1794548621: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 1, RC:0)
+1794548621: Received PUBLISH from receiver-g-915e2f5ee8f0 (d0, q1, r0, m2, 'ems/v2/gateways/g-915e2f5ee8f0/session/response', ... (170 bytes))
+1794548621: Sending PUBLISH to sender-g-915e2f5ee8f0 (d0, q1, r0, m1, 'ems/v2/gateways/g-915e2f5ee8f0/session/response', ... (170 bytes))
+1794548621: Sending PUBACK to receiver-g-915e2f5ee8f0 (m2, rc0)
+1794548621: Received PUBACK from sender-g-915e2f5ee8f0 (Mid: 1, RC:0)
+1794548621: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m3, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548621: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m2, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548621: Sending PUBACK to sender-g-915e2f5ee8f0 (m3, rc0)
+1794548621: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 2, RC:0)
+1794548621: Received PUBLISH from receiver-g-915e2f5ee8f0 (d0, q1, r0, m3, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (412 bytes))
+1794548621: Sending PUBLISH to sender-g-915e2f5ee8f0 (d0, q1, r0, m2, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (412 bytes))
+1794548621: Sending PUBACK to receiver-g-915e2f5ee8f0 (m3, rc0)
+1794548621: Received PUBACK from sender-g-915e2f5ee8f0 (Mid: 2, RC:0)
+1794548623: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m4, 'ems/v2/gateways/g-915e2f5ee8f0/session/request', ... (109 bytes))
+1794548623: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m3, 'ems/v2/gateways/g-915e2f5ee8f0/session/request', ... (109 bytes))
+1794548623: Sending PUBACK to sender-g-915e2f5ee8f0 (m4, rc0)
+1794548623: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 3, RC:0)
+1794548623: Received PUBLISH from receiver-g-915e2f5ee8f0 (d0, q1, r0, m4, 'ems/v2/gateways/g-915e2f5ee8f0/session/response', ... (170 bytes))
+1794548623: Sending PUBLISH to sender-g-915e2f5ee8f0 (d0, q1, r0, m3, 'ems/v2/gateways/g-915e2f5ee8f0/session/response', ... (170 bytes))
+1794548623: Sending PUBACK to receiver-g-915e2f5ee8f0 (m4, rc0)
+1794548623: Received PUBACK from sender-g-915e2f5ee8f0 (Mid: 3, RC:0)
+1794548623: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m5, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548623: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m4, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548623: Sending PUBACK to sender-g-915e2f5ee8f0 (m5, rc0)
+1794548623: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 4, RC:0)
+1794548623: Received PUBLISH from receiver-g-915e2f5ee8f0 (d0, q1, r0, m5, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (438 bytes))
+1794548623: Sending PUBLISH to sender-g-915e2f5ee8f0 (d0, q1, r0, m4, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (438 bytes))
+1794548623: Sending PUBACK to receiver-g-915e2f5ee8f0 (m5, rc0)
+1794548623: Received PUBACK from sender-g-915e2f5ee8f0 (Mid: 4, RC:0)
+1794548624: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m6, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548624: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m5, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548624: Sending PUBACK to sender-g-915e2f5ee8f0 (m6, rc0)
+1794548624: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 5, RC:0)
+1794548624: Received PUBLISH from receiver-g-915e2f5ee8f0 (d0, q1, r0, m6, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (438 bytes))
+1794548624: Sending PUBLISH to sender-g-915e2f5ee8f0 (d0, q1, r0, m5, 'ems/v2/gateways/g-915e2f5ee8f0/acks', ... (438 bytes))
+1794548624: Sending PUBACK to receiver-g-915e2f5ee8f0 (m6, rc0)
+1794548624: Received PUBACK from sender-g-915e2f5ee8f0 (Mid: 5, RC:0)
+1794548624: Received PUBLISH from sender-g-915e2f5ee8f0 (d0, q1, r0, m7, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548624: Sending PUBLISH to receiver-g-915e2f5ee8f0 (d0, q1, r0, m6, 'ems/v2/gateways/g-915e2f5ee8f0/samples', ... (725 bytes))
+1794548624: Sending PUBACK to sender-g-915e2f5ee8f0 (m7, rc0)
+1794548624: Received PUBACK from receiver-g-915e2f5ee8f0 (Mid: 6, RC:0)
+1794548625: Received DISCONNECT from sender-g-915e2f5ee8f0
+1794548625: Client sender-g-915e2f5ee8f0 [127.0.0.1:57695] disconnected.
+1794548626: Received DISCONNECT from receiver-g-915e2f5ee8f0
+1794548626: Client receiver-g-915e2f5ee8f0 [127.0.0.1:59287] disconnected.
+1794548613: Info: running mosquitto as user id: 1000.

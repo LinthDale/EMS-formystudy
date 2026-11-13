@@ -1,0 +1,158 @@
+ M .dockerignore
+ M README.md
+ M api/openapi.yml
+ M "doc/PRD-\346\236\266\346\247\213\350\250\255\350\250\210-Guideline.md"
+ M doc/adr/ADR-007-mqtt-topic-naming.md
+ M doc/adr/ADR-030-edge-durable-receipts.md
+ M doc/adr/ADR-031-delta-rtu-simulator.md
+ M doc/adr/README.md
+ M doc/architecture/README.md
+ M doc/architecture/bess-operating-mode-state-machine.md
+ M doc/architecture/c4-container.md
+ M doc/architecture/c4-context.md
+ M doc/architecture/data-flow.md
+ M doc/architecture/ems-edge-cloud-platform-architecture.md
+ M doc/governance/nfr.md
+ M doc/governance/risk-register.md
+ M doc/governance/threat-model.md
+ M doc/governance/tunable-parameters.md
+ M doc/operations/delta-edge.md
+ M doc/operations/ems-public-local-20260923.md
+ M "doc/operations/\345\256\271\345\231\250\351\200\237\346\237\245\350\241\250.md"
+ M "doc/operations/\346\223\215\344\275\234\346\211\213\345\206\212.md"
+ M doc/prd/PRD-0006-Generic-Measurement-Pipeline-Dynamic-Visualization.md
+ M doc/prd/PRD-0020-delta-edge-telemetry.md
+ M doc/prd/PRD-0021-multi-device-edge-reliability.md
+ M doc/prd/README.md
+ M doc/program/README.md
+ M output/ems-public-local/README.md
+ M requirements-inventory.md
+ M requirements.txt
+ M services/delta/README.md
+ M services/delta/config/field-rtu.example.json
+ M services/delta/delta_device/__main__.py
+ M services/delta/delta_device/config.py
+ M services/delta/delta_device/delivery.py
+ M services/delta/delta_device/edge.py
+ M services/delta/delta_device/poller.py
+ M services/delta/delta_device/simulator.py
+ M services/delta/tests/test_delivery.py
+ M services/delta/tests/test_poller.py
+ M services/delta/tests/test_runtime.py
+ M services/delta/tests/test_simulator_rtu.py
+ M services/delta/validation.md
+ M tests/integration/test_migrations.py
+?? AGENTS.md
+?? compose.edge-receiver.yml
+?? doc/README.md
+?? doc/adr/ADR-037-simulation-first-site-control.md
+?? doc/adr/ADR-038-disk-budgeted-retention.md
+?? doc/adr/ADR-039-microgrid-contract-hardening.md
+?? doc/adr/ADR-040-delta-rtu-listener-recovery.md
+?? doc/adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md
+?? doc/adr/ADR-042-dajia-row-water-control.md
+?? doc/adr/ADR-043-opt-in-committed-telemetry.md
+?? doc/adr/ADR-044-dajia-plc-mailbox-v02.md
+?? doc/adr/ADR-045-newest-first-edge-retention.md
+?? doc/adr/ADR-046-dajia-zone-water-control.md
+?? doc/adr/ADR-047-dajia-simple-plc-requests.md
+?? doc/adr/ADR-048-v2-live-backlog-fairness.md
+?? doc/adr/ADR-049-synchronous-wal-ack-and-pitr.md
+?? doc/architecture/adversarial-review-resolution-20261110.md
+?? doc/architecture/edge-committed-telemetry.md
+?? doc/architecture/independent-adversarial-review-20261110.md
+?? doc/architecture/microgrid-control-contracts.md
+?? doc/architecture/simulation-first-adversarial-review.md
+?? doc/architecture/simulation-first-ems-evolution.md
+?? doc/architecture/storage-budget-and-retention.md
+?? doc/architecture/storage-revision-review-20261110.md
+?? doc/archive/README.md
+?? doc/archive/architecture-review-20260903/
+?? doc/archive/dajia-water/
+?? doc/interfaces/
+?? doc/maintenance/
+?? doc/operations/delta-no-pi-validation-plan.md
+?? doc/operations/edge-temperature-handoff-20261112.md
+?? doc/prd/PRD-0025-simulation-first-microgrid-core.md
+?? doc/prd/PRD-0026-dajia-row-water-control.md
+?? infra/timescaledb/migrations/019_edge_committed_receipts.sql
+?? infra/timescaledb/migrations/020_edge_synchronous_wal.sql
+?? output/committed-delivery-fix-20261112/
+?? output/dajia-protocol-adversarial-review-20261113/
+?? output/dajia-wash-cooling-audit-20261112/
+?? output/dajia-water-control-spec-20261112/
+?? output/dajia-water-v02-20261113/
+?? output/delta-no-pi-validation-20261112/
+?? output/delta-rtu-bench-20261112/
+?? output/newest-first-retention-20261113/
+?? output/no-pi-backlog-20261112/
+?? output/no-pi-cutover-20261113/
+?? output/no-pi-ingest-20261112/
+?? output/no-pi-integrity-20261113/
+?? output/no-pi-lifecycle-20261113/
+?? output/no-pi-resilience-20261113/
+?? output/no-pi-restore-load-20261113/
+?? output/no-pi-takeover-20261112-1600/
+?? output/no-pi-v2-faults-20261113/
+?? output/no-pi-wal-pitr-20261113/
+?? output/slot-5109-verification-20261113/
+?? output/slot-boundary-fix-20261113/
+?? output/soak-interruption-audit-20261113/
+?? outputs/
+?? services/delta/config/reliable-field.example.json
+?? services/delta/delta_device/migrate_delivery.py
+?? services/delta/delta_device/reliable_sender.py
+?? services/delta/delta_device/reliable_store.py
+?? services/delta/delta_device/reliable_transport.py
+?? services/delta/delta_device/reliable_wire.py
+?? services/delta/pytest.ini
+?? services/delta/tests/field_checks/
+?? services/delta/tests/fixtures/
+?? services/delta/tests/test_bench_ack.py
+?? services/delta/tests/test_bench_backlog.py
+?? services/delta/tests/test_bench_field_checks.py
+?? services/delta/tests/test_bench_frames.py
+?? services/delta/tests/test_bench_ingest.py
+?? services/delta/tests/test_bench_job.py
+?? services/delta/tests/test_bench_ledger.py
+?? services/delta/tests/test_bench_network.py
+?? services/delta/tests/test_bench_recovery.py
+?? services/delta/tests/test_bench_slot_boundary.py
+?? services/delta/tests/test_bench_soak.py
+?? services/delta/tests/test_bench_storage.py
+?? services/delta/tests/test_bench_usb.py
+?? services/delta/tests/test_reliable_consistency.py
+?? services/delta/tests/test_reliable_corruption.py
+?? services/delta/tests/test_reliable_delivery.py
+?? services/delta/tests/test_reliable_fairness.py
+?? services/delta/tests/test_reliable_migration.py
+?? services/delta/tests/test_reliable_resilience.py
+?? services/delta/tests/test_reliable_retention.py
+?? services/delta/tests/test_rtu_uncertainty.py
+?? services/delta/tests/test_serial_recovery.py
+?? services/delta/tests/test_windows_rtu.py
+?? services/delta/tools/bench_ack.py
+?? services/delta/tools/bench_backlog.py
+?? services/delta/tools/bench_field_checks.py
+?? services/delta/tools/bench_frames.py
+?? services/delta/tools/bench_ingest.py
+?? services/delta/tools/bench_job.py
+?? services/delta/tools/bench_ledger.py
+?? services/delta/tools/bench_network.py
+?? services/delta/tools/bench_recovery.py
+?? services/delta/tools/bench_run.py
+?? services/delta/tools/bench_soak.py
+?? services/delta/tools/bench_storage.py
+?? services/delta/tools/bench_ui_freshness.cjs
+?? services/delta/tools/bench_usb.py
+?? services/delta/tools/bench_verify.py
+?? services/edge-receiver/
+?? tests/integration/test_edge_cutover.py
+?? tests/integration/test_edge_integrity.py
+?? tests/integration/test_edge_lifecycle.py
+?? tests/integration/test_edge_receipts.py
+?? tests/integration/test_edge_receipts_faults.py
+?? tests/integration/test_edge_receipts_mqtt.py
+?? tests/integration/test_edge_resilience.py
+?? tests/integration/test_edge_restore_load.py
+?? tests/integration/test_edge_wal_pitr.py

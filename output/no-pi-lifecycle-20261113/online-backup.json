@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "rotation_committed_during_copy": true,
+  "retained_sequences": [
+    16,
+    17,
+    18,
+    19,
+    20
+  ],
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 15,
+    "unconfirmed_evicted_total": 15,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 1,
+      "first_seq": 15,
+      "last_seq": 15,
+      "sample_id": "38a9ade4-00bb-42be-af62-6706598f7689",
+      "payload_hash": "bd25cf85c9e6ec4f5adb9b3693bc0db241e6dba3be462b9a2a0e58f3bfeae730",
+      "state": "pending",
+      "sampled_at_us": 1794474000000014
+    }
+  },
+  "integrity": "ok",
+  "scope": "SQLite online backup consistency; not a restore stream/PITR drill"
+}

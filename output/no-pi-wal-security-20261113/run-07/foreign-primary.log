@@ -1,0 +1,120 @@
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locale "en_US.utf8".
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/data/pgdata ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... UTC
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgresql/data/pgdata -l logfile start
+
+waiting for server to start....2026-11-13 07:16:32.858 UTC [74] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 07:16:32.861 UTC [74] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-13 07:16:32.862 UTC [77] LOG:  database system was shut down at 2026-11-13 07:16:32 UTC
+2026-11-13 07:16:32.920 UTC [74] LOG:  database system is ready to accept connections
+2026-11-13 07:16:32.921 UTC [85] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+ done
+server started
+CREATE DATABASE
+
+
+/usr/local/bin/docker-entrypoint.sh: sourcing /docker-entrypoint-initdb.d/000_install_timescaledb.sh
+CREATE EXTENSION
+CREATE EXTENSION
+2026-11-13 07:16:33.621 UTC [121] ERROR:  background worker "TimescaleDB Background Worker Scheduler for database 1" trying to connect to template database, exiting
+CREATE EXTENSION
+
+/usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/001_timescaledb_tune.sh
+effective_cache_size = 384MB
+maintenance_work_mem = 64MB
+work_mem = 2621kB
+wal_buffers = 3932kB
+min_wal_size = 512MB
+default_statistics_target = 100
+random_page_cost = 1.1
+checkpoint_completion_target = 0.9
+max_connections = 25
+max_locks_per_transaction = 128
+autovacuum_max_workers = 10
+autovacuum_naptime = 10
+default_toast_compression = lz4
+jit = off
+effective_io_concurrency = 256
+timescaledb.last_tuned = '2026-11-13T07:16:33Z'
+timescaledb.last_tuned_version = '0.18.1'
+
+waiting for server to shut down....2026-11-13 07:16:33.925 UTC [74] LOG:  received fast shutdown request
+2026-11-13 07:16:33.925 UTC [74] LOG:  aborting any active transactions
+2026-11-13 07:16:33.925 UTC [131] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 07:16:33.925 UTC [103] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 07:16:33.925 UTC [85] FATAL:  terminating background worker "TimescaleDB Background Worker Launcher" due to administrator command
+2026-11-13 07:16:33.925 UTC [153] FATAL:  terminating background worker "Job History Log Retention Policy [3]" due to administrator command
+2026-11-13 07:16:33.925 UTC [153] CONTEXT:  SQL statement "SELECT set_config('lock_timeout', coalesce(config->>'lock_timeout', '5s'), true /* is local */)"
+	PL/pgSQL function _timescaledb_functions.policy_job_stat_history_retention(integer,jsonb) line 6 at PERFORM
+2026-11-13 07:16:33.927 UTC [74] LOG:  background worker "logical replication launcher" (PID 86) exited with exit code 1
+2026-11-13 07:16:33.927 UTC [74] LOG:  background worker "TimescaleDB Background Worker Launcher" (PID 85) exited with exit code 1
+2026-11-13 07:16:33.927 UTC [74] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 103) exited with exit code 1
+2026-11-13 07:16:33.927 UTC [74] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 131) exited with exit code 1
+2026-11-13 07:16:33.927 UTC [74] LOG:  background worker "Job History Log Retention Policy [3]" (PID 153) exited with exit code 1
+....2026-11-13 07:16:38.325 UTC [107] FATAL:  terminating background worker "Telemetry Reporter [1]" due to administrator command
+2026-11-13 07:16:38.327 UTC [74] LOG:  background worker "Telemetry Reporter [1]" (PID 107) exited with exit code 1
+2026-11-13 07:16:38.924 UTC [75] LOG:  shutting down
+2026-11-13 07:16:38.924 UTC [75] LOG:  checkpoint starting: shutdown immediate
+2026-11-13 07:16:38.929 UTC [75] LOG:  checkpoint complete: wrote 1225 buffers (59.8%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.004 s, sync=0.001 s, total=0.005 s; sync files=751, longest=0.001 s, average=0.000 s; distance=9481 kB, estimate=9481 kB
+2026-11-13 07:16:38.932 UTC [74] LOG:  database system is shut down
+ done
+server stopped
+
+PostgreSQL init process complete; ready for start up.
+
+********************************************************************************
+WARNING: POSTGRES_HOST_AUTH_METHOD has been set to "trust". This will allow
+         anyone with access to the Postgres port to access your database without
+         a password, even if POSTGRES_PASSWORD is set. See PostgreSQL
+         documentation about "trust":
+         https://www.postgresql.org/docs/current/auth-trust.html
+         In Docker's default configuration, this is effectively any other
+         container on the same system.
+
+         It is not recommended to use POSTGRES_HOST_AUTH_METHOD=trust. Replace
+         it with "-e POSTGRES_PASSWORD=password" instead to set a password in
+         "docker run".
+********************************************************************************
+sh: locale: not found
+2026-11-13 07:16:32.338 UTC [44] WARNING:  no usable system locales were found
+initdb: warning: enabling "trust" authentication for local connections
+initdb: hint: You can change this by editing pg_hba.conf or using the option -A, or --auth-local and --auth-host, the next time you run initdb.
+[37;1mUsing postgresql.conf at this path:
+[0m/var/lib/postgresql/data/pgdata/postgresql.conf
+
+[37;1mWriting backup to:
+[0m/tmp/timescaledb_tune.backup202611130716
+
+[37;1mRecommendations based on 512.00 MB of available memory and 1 CPUs for PostgreSQL 15
+[0m[37;1mSaving changes to: /var/lib/postgresql/data/pgdata/postgresql.conf
+[0m2026-11-13 07:16:38.942 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 07:16:38.944 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5435
+2026-11-13 07:16:38.954 UTC [1] LOG:  listening on IPv6 address "::", port 5435
+2026-11-13 07:16:38.965 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5435"
+2026-11-13 07:16:38.966 UTC [346] LOG:  database system was shut down at 2026-11-13 07:16:38 UTC
+2026-11-13 07:16:38.971 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 07:16:38.972 UTC [349] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+2026-11-13 07:16:39.255 UTC [386] LOG:  restore point "ems_ack_boundary" created at 0/20000D0
+2026-11-13 07:16:39.255 UTC [386] STATEMENT:  SELECT pg_logical_emit_message(false,'ems_qa','foreign'); SELECT pg_create_restore_point('ems_ack_boundary')
+2026-11-13 07:16:39.309 UTC [344] LOG:  checkpoint starting: immediate force wait
+2026-11-13 07:16:39.314 UTC [344] LOG:  checkpoint complete: wrote 28 buffers (1.4%); 0 WAL file(s) added, 0 removed, 2 recycled; write=0.001 s, sync=0.001 s, total=0.006 s; sync files=18, longest=0.001 s, average=0.000 s; distance=18128 kB, estimate=18128 kB

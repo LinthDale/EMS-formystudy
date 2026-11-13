@@ -1,0 +1,17 @@
+2026-11-13 06:23:04,050 INFO sample_queued device_id=d1 time_ns=1794550984042894000 pending_rows=1
+2026-11-13 06:23:05,048 INFO sample_queued device_id=d1 time_ns=1794550985043123000 pending_rows=2
+2026-11-13 06:23:06,050 INFO sample_queued device_id=d1 time_ns=1794550986042976000 pending_rows=3
+2026-11-13 06:23:06,557 INFO sample_queued device_id=d1 time_ns=1794550986551249000 pending_rows=4
+2026-11-13 06:23:07,558 INFO sample_queued device_id=d1 time_ns=1794550987551293000 pending_rows=5
+2026-11-13 06:23:08,559 INFO sample_queued device_id=d1 time_ns=1794550988551414000 pending_rows=6
+2026-11-13 06:23:08,600 INFO central_committed sample_id=cd3a6f82-0c5b-49b0-90f3-88c4d3e31f45
+2026-11-13 06:23:09,558 INFO sample_queued device_id=d1 time_ns=1794550989551393000 pending_rows=6
+2026-11-13 06:23:09,651 INFO central_committed sample_id=d7d35452-cb5f-433d-ae4d-dffcd8babf88
+2026-11-13 06:23:10,558 INFO sample_queued device_id=d1 time_ns=1794550990551338000 pending_rows=6
+2026-11-13 06:23:10,700 INFO central_committed sample_id=7f9d51ad-d96d-4938-af78-030de0b8d0cb
+2026-11-13 06:23:11,557 INFO sample_queued device_id=d1 time_ns=1794550991551339000 pending_rows=6
+2026-11-13 06:23:11,750 INFO central_committed sample_id=9574c106-1754-4471-a915-041edf3d12f2
+2026-11-13 06:23:12,557 INFO sample_queued device_id=d1 time_ns=1794550992551376000 pending_rows=6
+2026-11-13 06:23:12,800 INFO central_committed sample_id=b6c74761-7ac5-4253-913b-88c5cfee01ef
+2026-11-13 06:23:13,559 INFO sample_queued device_id=d1 time_ns=1794550993551337000 pending_rows=6
+2026-11-13 06:23:13,854 INFO central_committed sample_id=ffda4a52-190f-4c56-8485-951a21dc8284

@@ -1,0 +1,117 @@
+{
+  "passed": true,
+  "wal_outage_kept_source": true,
+  "migration_least_privilege": true,
+  "postbackup_acked_payload_absent": true,
+  "original_primary_stopped": true,
+  "original_pgdata_not_used": true,
+  "backup_and_wal_identity_match": true,
+  "pitr_excluded_after_target": true,
+  "old_ack_rejected": true,
+  "missing_wal_failed_closed": true,
+  "recovered_sync_wal_ready": true,
+  "final_rows": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "pending_end": 0,
+  "recovered_acked_after_backup_sample_id": "632af8e8-b244-4a63-af2d-659adaf56765",
+  "pending_replayed_sample_id": "98fd3f50-16a9-4d0e-8db4-813b0de2097f",
+  "stopped": {
+    "passed": true,
+    "request_id": "d3d7e395-73a0-4625-8041-01c4593dafd6",
+    "op": "wal_stop",
+    "running": false,
+    "container_id": "b864de9e92c1ca2678f0674038fbf5e05c7ea0765083e871afe49445934ec6cc"
+  },
+  "started": {
+    "passed": true,
+    "request_id": "a59f82ca-770a-457c-996f-1378afaa338c",
+    "op": "wal_start",
+    "running": true,
+    "container_id": "b864de9e92c1ca2678f0674038fbf5e05c7ea0765083e871afe49445934ec6cc"
+  },
+  "backup": {
+    "passed": true,
+    "request_id": "803427f0-cd56-4fcb-92ec-a8b52e1678ea",
+    "op": "wal_basebackup",
+    "files": {
+      "backup_manifest": {
+        "bytes": 312283,
+        "sha256": "ea8144fbd55caa9292248770f7d9767179342ffe79f077fb40d53903e00cd6d6"
+      },
+      "base.tar": {
+        "bytes": 36283392,
+        "sha256": "a2cf47df095529c1665d63ef5930b15ba57f7eaee694e412479cc04e7e51e8af"
+      },
+      "pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "b6ef4e4f085ec07ff259461c7db0f8d2bf4fe2744eaffc663a5535a6b8dbe8ba"
+      }
+    },
+    "format": "physical-basebackup-tar"
+  },
+  "restore_point": {
+    "passed": true,
+    "request_id": "d248119b-d203-4c29-95dc-4e9440574481",
+    "op": "wal_restorepoint",
+    "restore_point": "ems_ack_boundary",
+    "target_lsn": "0/30BD180",
+    "independent_flush_verified": true
+  },
+  "primary_loss": {
+    "passed": true,
+    "request_id": "da72d356-58c7-417d-8b68-2d6e2ca6358a",
+    "op": "wal_primary_loss",
+    "original_primary_stopped": true,
+    "container_id": "cd7c1491e1fbf1d9c5952923e1a5b817ef7120af6b417396eed4553495b05b22",
+    "artifacts": {
+      "base-backup_manifest": {
+        "bytes": 312283,
+        "sha256": "ea8144fbd55caa9292248770f7d9767179342ffe79f077fb40d53903e00cd6d6"
+      },
+      "base-base.tar": {
+        "bytes": 36283392,
+        "sha256": "a2cf47df095529c1665d63ef5930b15ba57f7eaee694e412479cc04e7e51e8af"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "b6ef4e4f085ec07ff259461c7db0f8d2bf4fe2744eaffc663a5535a6b8dbe8ba"
+      },
+      "wal-000000010000000000000003.partial": {
+        "bytes": 16777216,
+        "sha256": "b6392872e8a8d8be53bebe68441cd86853a2238309d1e07ffd0c029855fef287"
+      },
+      "wal-000000010000000000000001": {
+        "bytes": 16777216,
+        "sha256": "a2d307251cccd8219c5f39b07ab623718db005c75d607e445eaba65e93fe5be4"
+      },
+      "wal-000000010000000000000002": {
+        "bytes": 16777216,
+        "sha256": "d6531674f726289969b2d740c137efdcff2850649bf6a652e58e0dd88ed20319"
+      }
+    },
+    "original_pgdata_used_for_recovery": false
+  },
+  "missing_wal": {
+    "passed": true,
+    "request_id": "ed6b5871-2d52-46b8-9b3e-c38e0a3ebda1",
+    "op": "wal_missing",
+    "container_id": "d8c7df9d109eca3d88d847537472c98e361b601e53b918bd0ecd89a2e733aa4d",
+    "target_not_reached": true,
+    "promoted": false
+  },
+  "recovery": {
+    "passed": true,
+    "request_id": "67789a52-df45-48f6-919b-7e34e3a09c54",
+    "op": "wal_recover",
+    "container_id": "6de8abfd9faeb07cfaf10f56f72a07a1b8685b1d1d2a2588a8fe6aa336181d10",
+    "target_reached": true,
+    "promoted": true,
+    "port": 5433,
+    "backup_verified": true
+  },
+  "scope": "same-host isolated containers; physical basebackup+independently fsynced WAL, not site failure/RPO/RTO certification"
+}

@@ -1,0 +1,27 @@
+# Explicit opt-in only. Broker, credentials, migration and authority config must
+# be commissioned first; this file does not change any legacy service.
+services:
+  edge-receiver:
+    profiles: [edge-v2]
+    build:
+      context: .
+      dockerfile: services/edge-receiver/Dockerfile
+    environment:
+      - EDGE_RECEIVER_DSN
+    command: ["--config", "/etc/edge-receiver/config.json"]
+    volumes:
+      - ${EDGE_RECEIVER_CONFIG:?set config path}:/etc/edge-receiver/config.json:ro
+      - ${EDGE_RECEIVER_GENERATION:?set external generation file}:/run/edge-receiver/generation:ro
+      - ${EDGE_RECEIVER_CERTS:?set certificate directory}:/run/secrets:ro
+    networks: [existing-ems]
+    read_only: true
+    tmpfs: [/tmp]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    pids_limit: 128
+    mem_limit: 256m
+    restart: unless-stopped
+networks:
+  existing-ems:
+    external: true
+    name: ${EMS_NETWORK:-ems_default}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "request_id": "601dd1c1-14be-428b-b818-35a87c9b9ba4",
+  "op": "wal_probe_expired",
+  "kind": "expired",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "c4abbaf6a84aea4b552f0c18c8af9d4e60a916cb1162f6e2620a1b2e114e14b0",
+  "replication_peer_absent": true,
+  "tls_verify_code": 10
+}

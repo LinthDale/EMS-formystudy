@@ -1,0 +1,12 @@
+................................                                         [100%]
+-------------- generated xml file: /evidence/controller-final.xml --------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                             Stmts   Miss  Cover   Missing
+------------------------------------------------------------------------------
+services/edge-receiver/tools/verify_private.py     207    126    39%   18-33, 64-65, 112-115, 122, 173-318, 322-326
+------------------------------------------------------------------------------
+TOTAL                                              207    126    39%
+Coverage JSON written to file /evidence/controller-coverage.json
+32 passed in 0.07s

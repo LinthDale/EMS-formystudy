@@ -1,0 +1,8 @@
+{
+  "pg-client/postgres.crt": "sha256 Fingerprint=91:1E:C7:04:04:C5:E2:A4:A5:E0:57:37:4B:7D:14:86:B8:B7:24:84:27:B9:9C:79:B9:17:AA:DC:D6:01:A2:89\nsubject=CN = postgres\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 07:15:38 2026 GMT\nnotAfter=Nov 15 07:15:38 2026 GMT",
+  "pg-client/archive.crt": "sha256 Fingerprint=95:0E:8D:22:22:6E:0C:10:A0:E7:E9:E8:DC:36:9C:15:EA:66:A9:1D:92:32:28:40:4F:E8:E5:82:5C:C9:B8:4F\nsubject=CN = ems_wal_archive\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 07:15:38 2026 GMT\nnotAfter=Nov 15 07:15:38 2026 GMT",
+  "pg-client/ca.crt": "sha256 Fingerprint=D6:0D:70:42:19:A6:58:4F:6E:3E:4D:D1:6B:78:12:9E:1D:C7:92:BF:22:0F:D2:A9:1E:6D:C8:DB:24:F9:9B:CC\nsubject=CN = EMS-QA-ca\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 07:15:37 2026 GMT\nnotAfter=Nov 15 07:15:37 2026 GMT",
+  "pg-client/rogue-ca.crt": "sha256 Fingerprint=17:97:F5:28:0C:62:ED:4F:B0:AA:5A:FF:F0:FD:C7:6A:9A:B5:06:7C:BA:BF:E8:1A:7C:66:B3:C9:62:76:97:20\nsubject=CN = EMS-QA-rogue-ca\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 13 07:15:37 2026 GMT\nnotAfter=Nov 15 07:15:37 2026 GMT",
+  "pg-client/receiver.crt": "sha256 Fingerprint=50:A9:8D:DD:28:F5:2D:82:1F:41:58:75:28:DA:DB:58:F3:7E:45:59:8E:F9:14:35:79:B7:1C:B5:3A:8F:8B:7C\nsubject=CN = qa_tls_receiver\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 07:15:38 2026 GMT\nnotAfter=Nov 15 07:15:38 2026 GMT",
+  "pg-client/rogue-receiver.crt": "sha256 Fingerprint=7E:95:2F:A1:76:20:9D:A0:47:66:F3:6B:CC:E7:D0:7B:6C:56:CD:DE:B6:38:76:3B:3B:C2:9A:32:46:48:20:9F\nsubject=CN = qa_tls_receiver\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 13 07:15:38 2026 GMT\nnotAfter=Nov 15 07:15:38 2026 GMT"
+}

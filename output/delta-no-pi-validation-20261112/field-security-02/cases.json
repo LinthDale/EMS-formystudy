@@ -1,0 +1,200 @@
+[
+  {
+    "case": "test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains",
+    "passed": true,
+    "phases": [
+      {
+        "phase": "cold-start-unsynchronized",
+        "injected_time_ns": 1800000000000000000,
+        "synchronized": false,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "synchronized-valid",
+        "injected_time_ns": 1800000000000000000,
+        "synchronized": true,
+        "accepted": true,
+        "polls": 1,
+        "commits": 1
+      },
+      {
+        "phase": "sync-lost",
+        "injected_time_ns": 1800000001000000000,
+        "synchronized": false,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "sync-restored",
+        "injected_time_ns": 1800000002000000000,
+        "synchronized": true,
+        "accepted": true,
+        "polls": 1,
+        "commits": 1
+      },
+      {
+        "phase": "time-backward",
+        "injected_time_ns": 1800000001000000000,
+        "synchronized": true,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "same-time",
+        "injected_time_ns": 1800000002000000000,
+        "synchronized": true,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "pre-2025-time",
+        "injected_time_ns": 1600000000000000000,
+        "synchronized": true,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "time-recovered",
+        "injected_time_ns": 1800000003000000000,
+        "synchronized": true,
+        "accepted": true,
+        "polls": 1,
+        "commits": 1
+      }
+    ],
+    "committed": 3,
+    "received": 3,
+    "pending": 0,
+    "scope": "production edge + real TCP Poller/SQLite/TLS; injected UTC and sender permit"
+  },
+  {
+    "case": "test_restart_uses_persisted_last_timestamp",
+    "passed": true,
+    "phases": [
+      {
+        "phase": "first-boot",
+        "injected_time_ns": 1800000010000000000,
+        "synchronized": true,
+        "accepted": true,
+        "polls": 1,
+        "commits": 1
+      },
+      {
+        "phase": "restart-time-behind-last-commit",
+        "injected_time_ns": 1800000009000000000,
+        "synchronized": true,
+        "accepted": false,
+        "polls": 0,
+        "commits": 0
+      },
+      {
+        "phase": "restart-time-recovered",
+        "injected_time_ns": 1800000011000000000,
+        "synchronized": true,
+        "accepted": true,
+        "polls": 1,
+        "commits": 1
+      }
+    ],
+    "boots": 2,
+    "committed": 2,
+    "received": 2,
+    "pending": 0
+  },
+  {
+    "case": "test_valid_password_tls_delivers_original_payload",
+    "passed": true,
+    "received": 1,
+    "pending": 0,
+    "source_time_ns": 1800000000000000000
+  },
+  {
+    "case": "test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-19]",
+    "passed": true,
+    "verify_code": 19,
+    "connection_events": [
+      "connect_fail"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_invalid_server_certificate_preserves_pending[wrong-host-8884-ca.crt-64]",
+    "passed": true,
+    "verify_code": 64,
+    "connection_events": [
+      "connect_fail"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_invalid_server_certificate_preserves_pending[expired-8885-ca.crt-10]",
+    "passed": true,
+    "verify_code": 10,
+    "connection_events": [
+      "connect_fail"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_wrong_password_rejected_without_deleting_pending",
+    "passed": true,
+    "connection_events": [
+      "connack:Not authorized",
+      "disconnect"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_missing_auth_rejected_without_deleting_pending",
+    "passed": true,
+    "connection_events": [
+      "connack:Not authorized",
+      "disconnect"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_valid_mtls_without_password_delivers",
+    "passed": true,
+    "received": 1,
+    "pending": 0,
+    "source_time_ns": 1800000000000000000
+  },
+  {
+    "case": "test_missing_or_untrusted_client_certificate_preserves_pending[none-client]",
+    "passed": true,
+    "connection_events": [
+      "disconnect"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_missing_or_untrusted_client_certificate_preserves_pending[certificate-rogue-client]",
+    "passed": true,
+    "connection_events": [
+      "disconnect"
+    ],
+    "pending": 1,
+    "received": 0
+  },
+  {
+    "case": "test_same_tls_publisher_reconnects_and_replays_original_data",
+    "passed": true,
+    "publisher_instances": 1,
+    "reconnect_seconds": 1.0273988209664822,
+    "received": 1,
+    "pending": 0
+  }
+]

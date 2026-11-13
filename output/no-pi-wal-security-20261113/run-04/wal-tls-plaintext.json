@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "kind": "plaintext",
+  "probe": {
+    "passed": true,
+    "request_id": "3788282b-be51-4a52-ac48-aa248713991c",
+    "op": "wal_probe_plaintext",
+    "kind": "plaintext",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "d971cf34761cd734db8a7f0545fd9332259242f2463cd4aabcc0fea7eee5414d",
+    "replication_peer_absent": true,
+    "tls_verify_code": null
+  },
+  "recovered_slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC3390",
+    "lag_bytes": 0,
+    "active": true
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

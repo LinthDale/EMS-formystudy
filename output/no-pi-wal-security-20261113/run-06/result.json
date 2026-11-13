@@ -1,0 +1,159 @@
+{
+  "passed": false,
+  "suite": "wal-security",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "ValueError",
+  "cleanup": [
+    {
+      "name": "foreign-wal-database",
+      "container": "909c6a0438d94ed6cd58d81f45f8d7ebe6c186542e41ad1a579c88628c8d025d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-foreign-wal",
+      "container": "73e901f172140374c41f8ee5cc3d027a76fe71b7d5f356bf893592b2408ded5c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-foreign-bundle",
+      "container": "7720c7d3a8ffa593d9ae8a6908783227dc5a13beaed0c47b64d584e9cef54cb9",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "foreign-primary",
+      "container": "e9609168976c27bab897f6f75f9532863cef5947bb82d93d0b41fc782d29b78b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "bad-wal-database",
+      "container": "5ff7ce33f6538468685c5964c627650026a447472a0432414d4aba45e3539bba",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-wal",
+      "container": "de10c5499a1d037b2f5b1e0038f0194dac3b785fe7823de617e60ed405799b55",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-backup",
+      "container": "4fbc909b9252c64c00d98984aa7f71cfea28241f86087374d05d15c14594edbe",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "good-restore-database",
+      "container": "0e3fc6f5a9fc19d53d63ace9853057f582845a5963edc3d2b0161a8d7341ec53",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-good-restore",
+      "container": "cd04d99cbc8ebea258cc209327358da5cdb45d28172fc45c60bdc088bcca6204",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "69fd9e607eef4346e3f907196a7a429c31b3e8b2ddd691e6f7bd50cf4e907f6b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-wrong_role",
+      "container": "ac073908409e215be734c47a0225f0ae402c7d7d0fd9befa1eb6c0c0a9f6e9df",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-plaintext",
+      "container": "c62680b910b6f153f9f8be2bceb32ee86e78e7de3b554ff8882dab86aa26e1f6",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-plaintext",
+      "container": "f59afbbb3ce8f950d3637f17b2cfbc79cf930ccbc61fa480ff6b1e335e56548f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_user",
+      "container": "7479ffa0fd2356ba2e598ac5a8d1a0db379d079745267168b53d7e87991f081a",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-untrusted_client",
+      "container": "bee87e7615a5a0c8b5ca83ba370c534c7f257a33caaa4f217fd0560fd183d4fc",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-missing_client",
+      "container": "716544c1322da76b3c3d8173e4f4a707efa2f3c7514ac5d0d804f2f82ec2a8b6",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-expired",
+      "container": "1605926154a41df136a732c44a5c4d0fd1fd72b104f7039f064190e4f778ff31",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_host",
+      "container": "a2cf843f97c0d7bac0206939ddc5ae3d23204697095a4f6570271d1ffde96030",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_ca",
+      "container": "0d6a8f00c0964f4ed27081a50488b2b62c6404e11c8ace7c6eefcb11041f32ff",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "cabadc96a9fb6dd75adefe7f7415b9c2b929e76e86e0a877ff44419715559e66",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "5143a27ace12f923672456e4dec6f805e3d9ce717f2afdbdfc53007baaa7a471",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "947cc7a3bf0d50e6eedbbe88087004c071a1c748ba6cc791e4e51e245389498f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "8a72e8246f955793289bd3b10909637814c0a0b6a4771731faa7f5571110083b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "f9dff15e6fa7ae1749b97f40be75caa3d9273d667ca52732f80f9510f735ae6f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "3be9ee5f5665430ea93c10aca22ae99296ddc27cf228fa98f3e52de6f532dca0",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

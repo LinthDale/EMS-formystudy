@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "sample_id": "4e515be5-8fd2-4adc-9a5c-c071146c8bdb",
+  "terminated_own_backend": 181,
+  "after_failure": [
+    0,
+    0
+  ],
+  "after_retry": [
+    1,
+    1
+  ],
+  "source_still_pending": true
+}

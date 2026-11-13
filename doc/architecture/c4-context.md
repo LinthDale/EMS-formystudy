@@ -1,6 +1,10 @@
 # C4 Level 1 — System Context
 
+2026-11-13 [ADR-045](../adr/ADR-045-newest-first-edge-retention.md)：量測本地容量滿改最舊淘汰保最新；OT／IT、身分／權限邊界不變，未切共享部署。新版三圖與schema3見[子集架構](edge-committed-telemetry.md)。
+
 > 範圍：EMS 作為一個整體，與外部 Actor / System 的互動關係。
+
+2026-11-12 [v2 committed telemetry Context](edge-committed-telemetry.md)：新增 opt-in 的 outbound mTLS／中央 commit ACK 子集，程式私有驗證通過；共享 v1 與 Pi field 狀態不變。三圖、Owner及維護入口統一於該文件。
 
 ```mermaid
 flowchart TB
@@ -100,3 +104,20 @@ flowchart LR
   BFF --> IdP[OIDC IdP]
 ```
 帳號資料不再從 .env 提供；OIDC 維持既有流程。詳 PRD-0023 / ADR-035。
+
+
+## 2026-11-10 演進設計：模擬先行（尚未實作）
+
+
+
+
+
+### ADR-041內部狀態更新（2026-11-12）
+
+Delta RTU採集器新增不確定交易鎖定／已核定上界的隔離恢復。此為既有edge內部狀態，C4拓樸／連線／權限邊界不變；不新增API、容器、MQTT topic或DB欄位。未知上界停新採樣、可信outbox sender保持；field啟動須上界與來源及啟動隔離。詳[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)。
+
+### 2026-11-13 DB／WAL TLS與還原準入
+
+沿原receiver→PostgreSQL與PostgreSQL→WAL archive連線，field雙向驗證TLS；WAL ACK須唯一同步ems_wal_archive、TLS＋client DN且flush覆蓋固定LSN。021新函式缺失拒絕，不回舊版。維運backup_preflight先tar layout／資源界限，再外置可信cluster ID＋checksum，最後PG真recovery至核定timeline／target；滿載保留原slot修復，不降級。依[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)，[55案／相鄰回歸證據](../../output/no-pi-wal-security-20261113/README.md)；元件及wire2/schema3不變，正式異失效域／Pi另驗。
+
+2026-11-13：[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md) 僅補維運還原準入：外置核定timeline／target、slot先reserve→basebackup→新archive接手→真新鏈PITR驗證→generation換代／重新開ACK；沿原元件／資料流，無新增自動reseed/failover服務。中央資料滿與同ID分支短測已驗，[證據](../../output/no-pi-critical-closure-20261113/README.md)。

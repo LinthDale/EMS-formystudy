@@ -1,0 +1,166 @@
+{
+  "scope": "Local 4178 Monitor with intercepted synthetic API, not live ingest or public site",
+  "scenarios": [
+    {
+      "state": "live",
+      "label": "持續接收中",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 13:59:37\n電壓\n230V\n區間末筆 13:59:37\n電流\n13A\n區間末筆 13:59:37\n累計電量\n655.38kWh\n區間末筆 13:59:37",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [
+          9
+        ],
+        "voltage": [
+          230
+        ],
+        "current": [
+          13
+        ],
+        "energy_kwh": [
+          655.38
+        ]
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:59:40 · 量測 13:59:37",
+      "scenario": "fresh",
+      "expected_state": "live",
+      "fixture_measurement_time": "2026-11-12T05:59:37.280Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:59:39.280Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 13:57:40\n電壓\n230V\n區間末筆 13:57:40\n電流\n13A\n區間末筆 13:57:40\n累計電量\n655.38kWh\n區間末筆 13:57:40",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [
+          9
+        ],
+        "voltage": [
+          230
+        ],
+        "current": [
+          13
+        ],
+        "energy_kwh": [
+          655.38
+        ]
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:59:41 · 量測 13:57:40",
+      "scenario": "historical-backlog-with-fresh-registry",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T05:57:40.633Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:59:40.633Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 14:01:41\n電壓\n230V\n區間末筆 14:01:41\n電流\n13A\n區間末筆 14:01:41\n累計電量\n655.38kWh\n區間末筆 14:01:41",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [],
+        "voltage": [],
+        "current": [],
+        "energy_kwh": []
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 13:59:43 · 量測 14:01:41",
+      "scenario": "future-measurement",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T06:01:41.929Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:59:41.929Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "empty",
+      "label": "沒有資料",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "chartValues": {},
+      "rawCells": [],
+      "values": {},
+      "updated": "讀取 13:59:44",
+      "scenario": "empty",
+      "expected_state": "empty",
+      "fixture_measurement_time": "2026-11-12T05:59:41.246Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:59:43.246Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "error",
+      "label": "查詢未完成",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "chartValues": {},
+      "rawCells": [],
+      "values": {},
+      "updated": "尚未取得量測",
+      "scenario": "backend-error",
+      "expected_state": "error",
+      "fixture_measurement_time": "2026-11-12T05:59:42.503Z",
+      "fixture_registry_last_seen_at": "2026-11-12T05:59:44.503Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    }
+  ],
+  "completed": true,
+  "source_verified": true,
+  "cleanup": true,
+  "error": null,
+  "passed": true
+}

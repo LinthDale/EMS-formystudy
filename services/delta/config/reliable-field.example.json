@@ -1,0 +1,20 @@
+{
+  "mode": "field", "device_id": "delta-meter-001", "poll_interval": 10,
+  "batch_size": 1, "queue_limit": 10000, "outbox_path": "/var/lib/ems-delta-v2/outbox.db",
+  "modbus": {
+    "transport": "rtu", "serial_port": "/dev/serial/by-id/REPLACE_WITH_QUALIFIED_ADAPTER",
+    "baudrate": 19200, "unit_id": 1, "address_base": 1, "timeout": 3,
+    "response_lifetime_seconds": null, "response_lifetime_source": null
+  },
+  "mqtt": {
+    "host": "mqtt-v2.example.invalid", "port": 8883, "client_id": "qa-edge",
+    "tls": true, "ca_file": "/etc/ems/certs/edge-ca.crt",
+    "cert_file": "/etc/ems/certs/gateway.crt", "key_file": "/etc/ems/certs/gateway.key"
+  },
+  "delivery": {
+    "protocol": 2, "gateway_id": "qa-edge",
+    "stream_id": "d2dde436-a1d3-44d3-a337-969c6a132987",
+    "config_revision": "r1", "profile_version": "delta-v135",
+    "ack_timeout_seconds": 30, "queue_byte_limit": 4294967296, "audit_limit": 600000
+  }
+}

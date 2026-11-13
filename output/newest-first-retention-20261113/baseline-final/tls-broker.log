@@ -1,0 +1,95 @@
+1794536360: mosquitto version 2.1.2 starting
+1794536360: Config loaded from /qa/tls.conf.
+1794536360: Bridge support available.
+1794536360: Persistence support available.
+1794536360: TLS support available.
+1794536360: TLS-PSK support available.
+1794536360: Websockets support available.
+1794536360: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794536360: Plugin builtin-security has registered to receive 'acl-check' events.
+1794536360: Opening ipv4 listen socket on port 8886.
+1794536360: mosquitto version 2.1.2 running
+1794536374: New connection from 127.0.0.1:36969 on port 8886.
+1794536374: New client connected from 127.0.0.1:36969 as qa-observer (p4, c1, k60, u'qa-observer').
+1794536374: No will message specified.
+1794536374: Client qa-observer negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794536374: Sending CONNACK to qa-observer (0, 0)
+1794536374: New connection from 127.0.0.1:42963 on port 8886.
+1794536374: New client connected from 127.0.0.1:42963 as acl-attacker (p4, c1, k60, u'qa-edge').
+1794536374: No will message specified.
+1794536374: Client acl-attacker negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794536374: Sending CONNACK to acl-attacker (0, 0)
+1794536374: Received SUBSCRIBE from qa-observer
+1794536374: 	ems/v2/# (QoS 1)
+1794536374: qa-observer 1 ems/v2/#
+1794536374: Sending SUBACK to qa-observer
+1794536374: Received PUBLISH from acl-attacker (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/samples', ... (16 bytes))
+1794536374: Sending PUBLISH to qa-observer (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/samples', ... (16 bytes))
+1794536374: Sending PUBACK to acl-attacker (m1, rc0)
+1794536374: Received PUBACK from qa-observer (Mid: 1, RC:0)
+1794536374: Denied PUBLISH from acl-attacker (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (20 bytes))
+1794536374: Sending PUBACK to acl-attacker (m2, rc135)
+1794536374: Denied PUBLISH from acl-attacker (d0, q1, r0, m3, 'ems/v2/gateways/other/samples', ... (20 bytes))
+1794536374: Sending PUBACK to acl-attacker (m3, rc135)
+1794536374: Denied PUBLISH from acl-attacker (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/session/response', ... (20 bytes))
+1794536374: Sending PUBACK to acl-attacker (m4, rc135)
+1794536374: Denied PUBLISH from acl-attacker (d0, q1, r0, m5, 'ems/v2/gateways/other/acks', ... (20 bytes))
+1794536374: Sending PUBACK to acl-attacker (m5, rc135)
+1794536374: New connection from 127.0.0.1:42823 on port 8886.
+1794536374: New client connected from 127.0.0.1:42823 as receiver-qa-edge (p4, c1, k30, u'edge-receiver').
+1794536374: No will message specified.
+1794536374: Client receiver-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794536374: Sending CONNACK to receiver-qa-edge (0, 0)
+1794536374: Received SUBSCRIBE from receiver-qa-edge
+1794536374: 	ems/v2/gateways/+/samples (QoS 1)
+1794536374: receiver-qa-edge 1 ems/v2/gateways/+/samples
+1794536374: 	ems/v2/gateways/+/session/request (QoS 1)
+1794536374: receiver-qa-edge 1 ems/v2/gateways/+/session/request
+1794536374: Sending SUBACK to receiver-qa-edge
+1794536375: New connection from 127.0.0.1:48117 on port 8886.
+1794536375: New client connected from 127.0.0.1:48117 as sender-qa-edge (p4, c1, k30, u'qa-edge').
+1794536375: No will message specified.
+1794536375: Client sender-qa-edge negotiated TLSv1.3 cipher TLS_AES_256_GCM_SHA384
+1794536375: Sending CONNACK to sender-qa-edge (0, 0)
+1794536375: Received SUBSCRIBE from sender-qa-edge
+1794536375: 	ems/v2/gateways/qa-edge/acks (QoS 1)
+1794536375: sender-qa-edge 1 ems/v2/gateways/qa-edge/acks
+1794536375: 	ems/v2/gateways/qa-edge/session/response (QoS 1)
+1794536375: sender-qa-edge 1 ems/v2/gateways/qa-edge/session/response
+1794536375: Sending SUBACK to sender-qa-edge
+1794536375: Received PUBLISH from sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794536375: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794536375: Sending PUBLISH to qa-observer (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/request', ... (102 bytes))
+1794536375: Sending PUBACK to sender-qa-edge (m2, rc0)
+1794536375: Received PUBACK from qa-observer (Mid: 2, RC:0)
+1794536375: Received PUBACK from receiver-qa-edge (Mid: 1, RC:0)
+1794536375: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794536375: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m1, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794536375: Sending PUBLISH to qa-observer (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/session/response', ... (163 bytes))
+1794536375: Sending PUBACK to receiver-qa-edge (m2, rc0)
+1794536375: Received PUBACK from sender-qa-edge (Mid: 1, RC:0)
+1794536375: Received PUBACK from qa-observer (Mid: 3, RC:0)
+1794536375: Received PUBLISH from sender-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794536375: Sending PUBLISH to receiver-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794536375: Sending PUBLISH to qa-observer (d0, q1, r0, m4, 'ems/v2/gateways/qa-edge/samples', ... (711 bytes))
+1794536375: Sending PUBACK to sender-qa-edge (m3, rc0)
+1794536375: Received PUBACK from receiver-qa-edge (Mid: 2, RC:0)
+1794536375: Received PUBACK from qa-observer (Mid: 4, RC:0)
+1794536375: Received PUBLISH from receiver-qa-edge (d0, q1, r0, m3, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794536375: Sending PUBLISH to sender-qa-edge (d0, q1, r0, m2, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794536375: Sending PUBLISH to qa-observer (d0, q1, r0, m5, 'ems/v2/gateways/qa-edge/acks', ... (431 bytes))
+1794536375: Sending PUBACK to receiver-qa-edge (m3, rc0)
+1794536375: Received PUBACK from qa-observer (Mid: 5, RC:0)
+1794536375: Received PUBACK from sender-qa-edge (Mid: 2, RC:0)
+1794536375: Received DISCONNECT from sender-qa-edge
+1794536375: Client sender-qa-edge [127.0.0.1:48117] disconnected.
+1794536375: Received DISCONNECT from receiver-qa-edge
+1794536375: Client receiver-qa-edge [127.0.0.1:42823] disconnected.
+1794536375: Received DISCONNECT from acl-attacker
+1794536375: Client acl-attacker [127.0.0.1:42963] disconnected.
+1794536375: Received DISCONNECT from qa-observer
+1794536375: Client qa-observer [127.0.0.1:36969] disconnected.
+1794536360: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794536360: Info: running mosquitto as user id: 1000.

@@ -1,0 +1,47 @@
+{
+  "scope": "local-ems",
+  "device_id": "delta-backlog-qa-20261112",
+  "started_utc": "2026-11-12T08:48:39.119733+00:00",
+  "production_db_ack": false,
+  "passed": true,
+  "configured": {
+    "output": "/evidence/local-live-ui-window",
+    "scope": "local-ems",
+    "device": "delta-backlog-qa-20261112",
+    "preload": 0,
+    "live_count": 20,
+    "deadline": 45.0,
+    "rtt_ms": 0,
+    "jitter_ms": 0,
+    "rate_kib": 0,
+    "initial_offline": 0,
+    "flaps": ""
+  },
+  "prefill_seconds": 1.7416663467884064e-05,
+  "prefill_rows": 0,
+  "expected": 20,
+  "received": 20,
+  "missing_count": 0,
+  "unexpected_count": 0,
+  "duplicate_count": 0,
+  "pending_end": 0,
+  "completion_passed": true,
+  "unique_delivery_passed": true,
+  "live_committed": 20,
+  "runtime_seconds": 19.248603449203074,
+  "publisher_connections": [
+    2360400.583176472
+  ],
+  "network_events": [],
+  "gate_stats": {
+    "chunks": 43,
+    "bytes": 4120,
+    "delayed_seconds": 0.0
+  },
+  "max_pending": 1,
+  "errors": [],
+  "observed_receive_per_second": 1.0479884933199357,
+  "sources_unchanged": true,
+  "cleanup_errors": [],
+  "finished_utc": "2026-11-12T08:49:01.667356+00:00"
+}

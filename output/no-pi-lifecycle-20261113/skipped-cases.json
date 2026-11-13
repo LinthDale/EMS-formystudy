@@ -1,0 +1,62 @@
+[
+  {
+    "module": "tests.field_checks.test_clock_runtime",
+    "name": "test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_clock_runtime",
+    "name": "test_restart_uses_persisted_last_timestamp",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_valid_password_tls_delivers_original_payload",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-19]",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_invalid_server_certificate_preserves_pending[wrong-host-8884-ca.crt-64]",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_invalid_server_certificate_preserves_pending[expired-8885-ca.crt-10]",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_wrong_password_rejected_without_deleting_pending",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_missing_auth_rejected_without_deleting_pending",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_valid_mtls_without_password_delivers",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_missing_or_untrusted_client_certificate_preserves_pending[none-client]",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_missing_or_untrusted_client_certificate_preserves_pending[certificate-rogue-client]",
+    "reason": "dedicated network-none TLS bench required"
+  },
+  {
+    "module": "tests.field_checks.test_tls_transport",
+    "name": "test_same_tls_publisher_reconnects_and_replays_original_data",
+    "reason": "dedicated network-none TLS bench required"
+  }
+]

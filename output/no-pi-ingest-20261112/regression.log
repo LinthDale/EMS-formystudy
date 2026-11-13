@@ -1,0 +1,23 @@
+ssssssssssss............................................................ [ 32%]
+........................................................................ [ 64%]
+........................................................................ [ 96%]
+.......                                                                  [100%]
+----------------- generated xml file: /evidence/regression.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                        Stmts   Miss  Cover   Missing
+---------------------------------------------------------
+delta_device/__init__.py        0      0   100%
+delta_device/__main__.py       60      3    95%   54, 65, 71
+delta_device/config.py        100      2    98%   30, 33
+delta_device/delivery.py       87      1    99%   23
+delta_device/edge.py           54      3    94%   40-42, 60
+delta_device/poller.py        101      4    96%   45, 54, 123-124
+delta_device/protocol.py       54      1    98%   18
+delta_device/publisher.py      62      6    90%   26, 51-52, 62, 74-75
+delta_device/simulator.py     142      6    96%   26, 49, 118-119, 148, 180
+---------------------------------------------------------
+TOTAL                         660     26    96%
+Required test coverage of 80% reached. Total coverage: 96.06%
+211 passed, 12 skipped in 11.35s

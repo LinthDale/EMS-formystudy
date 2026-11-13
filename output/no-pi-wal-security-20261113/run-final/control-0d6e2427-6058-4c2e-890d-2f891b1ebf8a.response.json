@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "request_id": "0d6e2427-6058-4c2e-890d-2f891b1ebf8a",
+  "op": "wal_probe_wrong_user",
+  "kind": "wrong_user",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "9a3525c34983a937725aa3da86dfb642cc76ab05fd70972b21748b585b722160",
+  "replication_peer_absent": true,
+  "tls_verify_code": null,
+  "client_verify_code": null
+}

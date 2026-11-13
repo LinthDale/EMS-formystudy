@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "request_id": "36a1c4c2-4ba0-4590-80d5-bf83b6124b3e",
+  "op": "wal_probe_wrong_host",
+  "kind": "wrong_host",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "92335a125c6c7b08f49d5b21cf3c260eec1ca059697bcde0894c8533a649a587",
+  "replication_peer_absent": true
+}

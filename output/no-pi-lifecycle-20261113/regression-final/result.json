@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "suite": "baseline",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532320]",
+  "suite_assessment": {
+    "passed": true,
+    "observed_tests": 405,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "cleanup": [
+    {
+      "name": "worker",
+      "container": "0f4848a011afe8edbaac4b777d5785cbbbd9f14229fb8e827fd365610912d875",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "e086e937eee37075b3d2cb55cd3bfa6509cbe58fe4c47d6277aa9e94ab60029d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "debad3e32edf3193d714bc3d44881810cb7f910f5f8a2143c88240d4e760357e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "c156bbcff0b237d53eaad3147413ff84fde64c2efacb8f8d94884440321ecd0e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "7d1c3b3aa5feeab9237fbca4f3e73c43425885f0313bc8ff500e06b467492598",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

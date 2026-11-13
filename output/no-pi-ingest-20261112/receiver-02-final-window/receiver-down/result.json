@@ -1,0 +1,40 @@
+{
+  "kind": "receiver-down",
+  "expected": [
+    {
+      "sampled_ns": 1794474786524683000,
+      "voltage": 230.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.0
+    }
+  ],
+  "payloads": [
+    "electricity_measurements,device_id=delta-ingest-qa-receiver-down voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474786524683000"
+  ],
+  "broker_ack": true,
+  "pending_end": 0,
+  "actual": [],
+  "checks": {
+    "setup": true,
+    "receiver_down_at_send": true,
+    "database_before_restart": 0,
+    "receiver_restarted": true,
+    "settled_seconds": 10.000053584109992
+  },
+  "errors": [],
+  "comparison": {
+    "expected": 1,
+    "received": 0,
+    "missing": [
+      1794474786524683000
+    ],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": false
+  },
+  "experiment_passed": true,
+  "system_delivery_acceptance_passed": false
+}

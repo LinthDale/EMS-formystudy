@@ -1,0 +1,7 @@
+{
+  "pid": 4564,
+  "started_utc": "2026-11-12T05:49:42.2894556Z",
+  "mode": "full",
+  "local_root": "C:/Users/User/AppData/Local/Temp/ems-no-pi-20261112/soak-sequence-01",
+  "archive_root": "\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\soak-sequence-01"
+}

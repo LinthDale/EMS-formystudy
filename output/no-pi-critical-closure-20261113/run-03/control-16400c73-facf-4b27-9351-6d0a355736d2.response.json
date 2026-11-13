@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "request_id": "16400c73-facf-4b27-9351-6d0a355736d2",
+  "op": "timeline_matrix",
+  "system_id": "7707563248297758762",
+  "branch_timelines": [
+    2,
+    3
+  ],
+  "target": "ems_branch_target",
+  "approved_timeline": 2,
+  "pinned_rows": "branch-two",
+  "unsafe_latest_rows": "branch-three",
+  "latest_rejected": true,
+  "second_pitr_promoted": true,
+  "backup_verified": true,
+  "pristine_inputs_unchanged": true,
+  "pinned_recovery": {
+    "system_id": "7707563248297758762",
+    "timeline": 4
+  },
+  "unsafe_recovery": {
+    "system_id": "7707563248297758762",
+    "timeline": 4
+  }
+}

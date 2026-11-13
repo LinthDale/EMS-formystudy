@@ -8,7 +8,9 @@
     "unit_id": 1,
     "address_base": 1,
     "timeout": 3,
-    "read_temperature": false
+    "read_temperature": false,
+    "response_lifetime_seconds": null,
+    "response_lifetime_source": null
   },
   "mqtt": {
     "host": "mqtt.example.com",

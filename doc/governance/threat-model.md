@@ -1,5 +1,11 @@
 # Threat Model — EMS
 
+## 2026-11-13 ADR-045量測容量淘汰邊界
+
+[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)核定最新量測優先，本地受信採集器可因queue／audit／byte壓力淘汰最舊量測。遠端ACK／reconcile不新增任意刪除權，中央receipt與控制帳本不循環淘汰。所有新樣本型別／finite／hash與本地奈秒int64驗證在淘汰前完成；非法新樣本不造成刪舊。淘汰、新寫、seq與摘要同交易；摘要固定大小，不另造無界log表。
+
+已淘汰原UUID收到真ACK返回False、不以seq／row位置解析為replacement；保留當前session／generation／batch／ID/hash與mTLS。schema3阻舊版開啟，部署須停舊writer與備份，不靠只改檔案版本號完成回滾。主機root／本地配置者仍受信；外部占滿磁碟／卡損無法保證最新可持久化，失敗必須回滾而不宣稱成功。中央上傳摘要／缺口UI與正式硬體／容量SLA仍未驗收。
+
 > 對齊：`doc/PRD-架構設計-Guideline.md` §3 & §4.4  
 > 方法論：STRIDE（Spoofing / Tampering / Repudiation / Information Disclosure / Denial of Service / Elevation of Privilege）  
 > 範圍：Demo 階段（Cloudflare Tunnel 對外、mock 資料）與其過渡到 POC 的安全要求  
@@ -268,3 +274,71 @@ DoS：4096-byte body、16KiB串流response、3秒hop總期限、单台busy立即
 - 角色、密碼及enable/disable更新version；每請求驗UUID/version/role/enabled；DB outage 503，OIDC provider分流。
 - 共同transaction advisory lock + READ COMMITTED、atomic audit、UUID重送抑制、拒絕NULL/非法PHC匯入。
 - 審查發現的RR舊快照、PHC解碼、重複取消資源上限已以回歸測試覆蓋；詳account-management-verification.md。
+
+
+### 2026-11-12 台架回覆新鮮度補充（未修改runtime邊界）
+
+合法CRC、站號與長度只驗格式，不能單獨證明回覆屬當前RTU查詢；R20-BENCH-01已有記憶體與實體台架重現、真機尚未驗證。資料品質與現場准入需保留這個限制，不能以本機正常採樣PASS宣稱抗舊封包／重播能力已完成。既有串口隔離、唯讀操作及PUBACK非DBACK限制維持。
+### ADR-040 串口恢復邊界
+
+重開僅限operator明確指定的原本機端點，沿用local_serial_port限制，不自動枚舉或切換COM，不增加網路listener。首次開啟失敗退出；同端點移除後再現可能是不同設備，COM號不提供密碼學身分驗證，現場仍需設備profile與盤點。CRC／站號／長度及R20-BENCH-01遲到封包限制保持，恢復不構成資料新鮮度保證。
+
+2026-11-12新鮮度證據更新：第5關已用兩顆實體USB-RS485確認20/20舊回覆可被下一次Poller.read接受；R20-BENCH-01未解除。僅CRC／站號／長度及收包現在時間不提供交易身分／來源新鮮度；完整sample與真機仍需另驗。現有資料不能宣稱抵抗遲到／重播，測試沒有將故障值發往EMS。
+
+### ADR-041：隔離恢復的信任假設
+
+未知回覆上界的不確定交易不再送下一個讀取；field必須核定上界且啟動等待，防重啟清除記憶體鎖定的旁路。受信operator提供response_lifetime_source只作依據紀錄，不能防錯誤核定、設備超界或惡意延遲／重播。此機制不增加來源認證、遠端解鎖、總線多主仲裁或DB ACK；單主與本機端點邊界保持。台架值不得當成Delta真機核定值；詳[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)。
+
+### 送達／重放測試邊界（2026-11-12）
+
+[第9關](../../output/delta-no-pi-validation-20261112/ack-isolated-01/README.md)以私有真broker與受控SQLite重現v1遺失／重複，未新增認證、receipt或去重。UI按量測時間拒標歷史補傳為live的synthetic API測試，不等於全系統heartbeat分離或防重播完成。PRD-0021未部署控制維持Open。
+
+### TLS拒絕與時間邊界實證（2026-11-12）
+
+[隔離實測](../../output/delta-no-pi-validation-20261112/field-security-02/README.md)驗證production Publisher拒絕不受信憑證及認證失敗時保留資料，未增加權限。私有ACL不證明field gateway/device身分綁定；注入UTC只驗現有ClockGuard，不能取代可信時間來源。無production契約或共享runtime變更。
+
+### 實際接收程式反例補證（2026-11-12）
+
+[私有實際接收副本](../../output/no-pi-ingest-20261112/README.md)重現重複入庫及接收停機時 PUBACK 後缺筆；未實作中央 receipt、去重或新認證。另一 network-none namespace 的 IP 丟包恢復不證明抗重播或 4G／field ACL 完成。所有故障限自有副本與 namespace，production／共享設定不變，既有 Open 控制保持。
+
+### ADR-043 已實作可靠送達子集（2026-11-12）
+
+v2四欄canonical樣本strict schema、bytes/depth/finite/重複key限制；DB UTC時間窗與server重算hash後原子receipt／投影，衝突不覆寫。ACK只接受當前gateway/session/generation/batch/pending ID/hash，reconnect與驗證／SQLite刪除共lock，retained／混合結果拒絕；PUBACK只計診斷。field mandatory mTLS、CN→gateway、權威device/stream/revision/profile／生效時段，只有receiver可發布ACK/sessionresponse。獨立TLS topic plane的真ACL正反測試見[證據](../../output/committed-delivery-fix-20261112/README.md)，不向Pi交DB／OPS金鑰。
+
+demo v2驗namespace且只有lo；驗證worker不掛Docker socket／COM／hostports，PKI臨時清除；入站queue與registry／速率有界。初始化／執行錯誤只記類型，DSN不進log。正式部署不得留匿名listener繞過v2 ACL；主機root／DB管理員仍受信任，非防管理員竄改。PITR須外置generation換代與強制重連，實站撤權輪替／PITR／中央備援未驗；未切共享v1。
+
+### 2026-11-13 私有生命週期測試與空庫防護（ADR-045）
+
+[本輪](../../output/no-pi-lifecycle-20261113/README.md)新host-worker測試控制僅三個固定op映射本run owned IDs，不接受CID／host path／任意命令；worker無Docker socket／serial／hostport。request／XML／proof拒symlink／非regular／超限，host writes採exclusive random FD→rename、stdout持匿名FD讀，不follow worker替換路徑。此為受信測試程式邊界；worker可讀測試CA材料，不宣稱正式最小憑證部署或完全不受信worker隔離。私有CA撤client serial後CRL verify error23，restart broker迫使活動old連線斷／重連拒，新cert同CN可用；非正式撤權SLA。
+
+production store不自動重建已存在的zero／empty／damaged queue；只對精確SQLITE_READONLY_ROLLBACK以mode=rw交SQLite原生回滾，其他損壞不fallback、不刪journal、不resetseq。未知尾端仍須復原／新stream治理，不能以建空庫讓資料完整性檢查假PASS；wire／認證與中央DB邊界不變。
+
+### 2026-11-13 ADR-048與私有DB restore控制
+
+sender只改原pending選取，latest／oldest依固定ASC/DESC，不接受SQL排序輸入、不改UUID/hash或當前session/generation/batch驗證；只有本地resolved committed換成功輪次，retiredACK不冒充成功。host DB控制只固定op→當輪owned database，ems備份到新ems_restore、不drop原庫，worker無任意SQL／DSN／path／CID權。
+
+docker cp可把容器symlink帶到host，本輪因此改fresh private copydir＋NOFOLLOW|NONBLOCK FD／regular／16MiB雙限binary讀、核SHA256後原子發布，拒symlink／FIFO／oversize。worker是受信測試程式，可讀私有PKI，不宣稱完整惡意worker隔離。還原後外generation與新session拒真舊ACK，但已ACK且dump未含／localpayload已刪仍不可補，不能當RPO0／WAL PITR防護。[本輪證據](../../output/no-pi-restore-load-20261113/README.md)。
+
+### ADR-049 同步WAL信任／私有工具邊界
+
+020以pg_catalog固定search_path／SECURITY DEFINER僅回boolean，撤PUBLIC execute，只授receiver；不授read_all_stats或複寫憑證。field禁止local降級，具名唯一sync peer／固定LSN覆蓋後ACK。flush報告仍信任DB管理員及受限TLS複寫端，不能靠application_name證明真fsync或獨立失效域。archive按systemID/timeline隔離，basebackup/WAL含營運資料須限權。
+
+PITR工具只用本輪owned IDs／固定op，prepare非root，WAL/base檔名白名單＋NOFOLLOW有界讀，postworker create的commands.json也改exclusive random FD→rename避免symlink外檔覆寫。恢復點未達／缺WAL不能promote當成功；外generation與重連保護未決樣本。正式部署仍待驗，詳[ADR049](../adr/ADR-049-synchronous-wal-ack-and-pitr.md)。
+
+### 2026-11-13 無Pi切換短測信任邊界
+
+受限field DB LOGIN僅繼承ems_edge_receiver，四個真管理／刪除／改內容操作拒絕；撤INSERT故障限當輪私有DB固定表，finally恢復，產品權限未改。v1轉換SIGKILL僅當輪Popen子PID、驗marker PID/stage，來源bytes不變；同mTLS principal用相同clientID造成的可用性中斷仍可能發生，但真inflight斷線清session、新challenge／舊ACK拒／來源保留已驗。不是抵抗持有合法私鑰者DoS；正式私鑰治理仍需維運。控制器只增cutover測試白名單／閘門，無新host op。[證據](../../output/no-pi-cutover-20261113/README.md)。
+
+### 2026-11-13 量測本地語意一致性防護
+
+reliable_store對已存在庫不止quick_check：驗queue/audit／水位與重複seq；enqueue同BEGIN IMMEDIATE且退休前比現存audit MAX，ACK同write tx對sample/hash/SQL/audit/window再驗才刪；pending一致read snapshot並驗選中payload。固定SQL／參數化ID，不新增角色／遠端控制／自動修復。retention累加後先驗界避免提交不可讀摘要；optional audit_time只是效能index，FULL fallback不放寬安全。
+
+測試限當輪自建DB、TCP模擬器、broker與owned Popen子程序；五malformed MQTT批次真parser零部分入庫，SIGTERM真DBlock仍存時退出、再啟全edge，ledger／receipt／projection逐ID/hash/time/device/四值一致。不能防DBadmin完整偽造或整份一致舊備份替換，也不是全庫持續cryptographic bitrot掃描／實體SD驗收。[證據](../../output/no-pi-integrity-20261113/README.md)。
+
+### 2026-11-13 DB／WAL與備份邊界
+
+DB TLS client與archive principal分離，驗CA／hostname／client cert；固定WAL角色＋pg_stat_ssl/client_dn納入受限SECURITY DEFINER boolean，沒有統計全讀。缺021拒絕。restore將bundle視為不可信：先bounded tar header拒PAX/sparse/link/device/穿越，再外置可信system ID＋pg_verifybackup，才PG到核定target；同ID分支仍需timeline核定。server key在PGDATA外，證據不得封私鑰。QA控制只接受owned固定op；沒有主張防受管PG／CA管理員偽造或正式撤權SLA。[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)。
+
+### 2026-11-13 還原分支與新保護鏈
+
+還原目標不從untrusted archive的latest自動推定；CLI外置timeline正uint32／target安全ASCII63字白名單，拒引號／換行及缺值，設定輸出不自動寫檔或起PG。新slot在base之前reserve，全段保留到接手，外置generation換代才開ACK；同ID錯分支由維運核定與實際還原資料核對，並非checksum可證。critical控制6固定op＋UUID、無worker選CID/SQL/path/timeline，中央資料僅owned16MiB quota。server key仍外置PGDATA；[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md)。

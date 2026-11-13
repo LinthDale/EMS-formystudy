@@ -1,0 +1,51 @@
+{
+  "observed_utc": "2026-11-13T01:07:18.928390+00:00",
+  "verification_passed": true,
+  "scope": "only disputed sample and its 4 neighboring samples; read-only original evidence and DB/API",
+  "suspect_ordinal_zero_based": 5109,
+  "recorded_slot": 5108,
+  "nominal_sequence_slot": 5109,
+  "sampled_ns": 1794491738631664000,
+  "local_time": "2026-11-12T21:55:38.631664+08:00",
+  "monotonic_elapsed_seconds": 25544.985000000335,
+  "nominal_boundary_seconds": 25545,
+  "early_seconds": 0.014999999664723873,
+  "replayed_original_slot": 5108,
+  "original_attempt": true,
+  "original_read": true,
+  "original_sqlite_commit": true,
+  "original_broker_ack": true,
+  "source_timestamp_unique": true,
+  "db_rows_for_sample": 1,
+  "api_rows_for_sample": 1,
+  "golden_errors": [],
+  "context_comparison": {
+    "database": {
+      "expected": 5,
+      "received": 5,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "api": {
+      "expected": 5,
+      "received": 5,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    }
+  },
+  "conclusion": "sample acquired and delivered exactly once; elapsed-floor slot label assigned previous slot 15ms before boundary",
+  "original_slot_strict_fail_preserved": true,
+  "formal_24h_still_interrupted": true,
+  "started_hardware_test": false,
+  "changed_runtime_or_verifier": false,
+  "original_event_snapshot_sha256": "f18a263d64639f90a5e4861e78a0f146e4203ff27cd3893c0daebaabed46f02c",
+  "frozen_bench_run_sha256": "1007c1dada20655fb35e2979e25483e89399de402c72ba3e0299ce678746ed22"
+}

@@ -1,0 +1,8 @@
+{
+  "services\\delta\\delta_device\\poller.py": "65abce0bc9282b82af2b9a57bcdf6a120c91d33aee0ac0484da6d7a58e618ee6",
+  "services\\delta\\tests\\test_windows_rtu.py": "632cba2732e9630b9b9e7b5d13aa607c96381f0c0b4a2eb5a77f35c36083f790",
+  "output\\delta-rtu-bench-20261112\\delivery-result.json": "662595480eb7363d523d7be3d390ab66e22223353fd0cd461f40b58ffe083d81",
+  "output\\delta-rtu-bench-20261112\\physical-110.json": "57af2ff721960ccd711d82b6ad4c50fbb335878153f55b81d5faf4baebf81525",
+  "output\\delta-rtu-bench-20261112\\strict-ab.json": "282f8df5e4aa67eba00e908038775aff1255bedcfd6ee7fd84755c2a956e38f5",
+  "output\\delta-rtu-bench-20261112\\windows-bench.json": "19bf5c72ef71d0376c9162055baa46e9cd01ef701aa05368f865d0299bce5e5b"
+}

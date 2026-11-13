@@ -1,5 +1,6 @@
 """Integration: verify migration scripts are idempotent and produce correct schema."""
 from pathlib import Path
+import os
 
 import psycopg2
 import pytest
@@ -643,3 +644,61 @@ class TestDeviceRegistryChainIdempotent:
     def test_chain_runs_twice(self, db_conn):
         _apply_registry_chain(db_conn)
         _apply_registry_chain(db_conn)  # second pass must not raise
+
+
+class TestEdgeCommittedReceiptsMigration:
+    """019 has an explicit private-DB gate; never use the shared-stack fixture."""
+
+    @pytest.mark.skipif(not os.environ.get('EDGE_V2_TEST_DSN'), reason='private receipt DB required')
+    def test_run_twice_keeps_legacy_view_and_private_receipt_schema(self):
+        expected = os.environ.get('EMS_V2_DEMO_NETNS')
+        assert expected and os.readlink('/proc/self/ns/net') == expected, 'private namespace required'
+        with psycopg2.connect(os.environ['EDGE_V2_TEST_DSN']) as db:
+            _run_sql_file(db, '019_edge_committed_receipts.sql')
+            _run_sql_file(db, '019_edge_committed_receipts.sql')
+            with db.cursor() as cur:
+                cur.execute("SELECT has_table_privilege('web_anon','edge_ingest.receipts','SELECT')")
+                assert cur.fetchone()[0] is False, 'receipt exposed to read-only public role'
+                cur.execute("SELECT count(*) FROM information_schema.columns WHERE table_schema='api' AND table_name='electricity_measurements'")
+                assert cur.fetchone()[0] == 6, 'legacy six-column projection changed'
+
+
+class TestEdgeSynchronousWalMigration:
+    """020 reruns only in the explicit private namespace; no shared fixture."""
+
+    @pytest.mark.skipif(not os.environ.get('EDGE_V2_TEST_DSN'),reason='private receipt DB required')
+    def test_rerun_and_limited_boolean_permission(self):
+        expected=os.environ.get('EMS_V2_DEMO_NETNS')
+        assert expected and os.readlink('/proc/self/ns/net')==expected, 'private namespace required'
+        with psycopg2.connect(os.environ['EDGE_V2_TEST_DSN']) as db:
+            _run_sql_file(db,'020_edge_synchronous_wal.sql')
+            _run_sql_file(db,'020_edge_synchronous_wal.sql')
+            with db.cursor() as cur:
+                cur.execute("SELECT has_function_privilege('web_anon','edge_ingest.sync_wal_flushed(text,pg_lsn)','EXECUTE'), pg_has_role('ems_edge_receiver','pg_read_all_stats','MEMBER')")
+                assert cur.fetchone()==(False,False), 'durability check exposes statistics or public execution'
+                cur.execute('SET ROLE ems_edge_receiver')
+                cur.execute("SELECT edge_ingest.sync_wal_flushed('ems_archive',NULL)")
+                assert type(cur.fetchone()[0]) is bool, 'receiver cannot call limited predicate'
+
+
+class TestEdgeTlsWalMigration:
+    """021 remains idempotent and exposes only its boolean durability gate."""
+
+    @pytest.mark.skipif(not os.environ.get('EDGE_V2_TEST_DSN'),reason='private receipt DB required')
+    def test_rerun_keeps_role_settings_and_requires_dedicated_certificate_peer(self):
+        expected=os.environ.get('EMS_V2_DEMO_NETNS')
+        assert expected and os.readlink('/proc/self/ns/net')==expected, 'private namespace required'
+        with psycopg2.connect(os.environ['EDGE_V2_TEST_DSN']) as db:
+            _run_sql_file(db,'021_edge_tls_wal.sql')
+            with db.cursor() as cur:
+                cur.execute("SELECT rolcanlogin FROM pg_roles WHERE rolname='ems_wal_archive'")
+                login=cur.fetchone()[0]
+            _run_sql_file(db,'021_edge_tls_wal.sql')
+            with db.cursor() as cur:
+                cur.execute("SELECT rolsuper,rolreplication,rolcanlogin FROM pg_roles WHERE rolname='ems_wal_archive'")
+                assert cur.fetchone()==(False,True,login), 'rerun changed operator login policy or granted superuser'
+                cur.execute("SELECT has_function_privilege('web_anon','edge_ingest.sync_wal_flushed(text,pg_lsn)','EXECUTE')")
+                assert cur.fetchone()[0] is False, 'public can inspect durability predicate'
+                cur.execute('SET ROLE ems_edge_receiver')
+                cur.execute("SELECT edge_ingest.sync_wal_flushed('ems_archive',NULL)")
+                assert cur.fetchone()[0] is True, 'verified private TLS peer not accepted'

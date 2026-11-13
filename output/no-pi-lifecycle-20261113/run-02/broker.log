@@ -1,0 +1,241 @@
+1794542812: mosquitto version 2.1.2 starting
+1794542812: Config loaded from /qa.conf.
+1794542812: Bridge support available.
+1794542812: Persistence support available.
+1794542812: TLS support available.
+1794542812: TLS-PSK support available.
+1794542812: Websockets support available.
+1794542812: Opening ipv4 listen socket on port 1883.
+1794542812: mosquitto version 2.1.2 running
+1794542816: New connection from 127.0.0.1:40289 on port 1883.
+1794542816: New client connected from 127.0.0.1:40289 as receiver-g-690068d79cc3 (p4, c1, k30).
+1794542816: No will message specified.
+1794542816: Sending CONNACK to receiver-g-690068d79cc3 (0, 0)
+1794542816: Received SUBSCRIBE from receiver-g-690068d79cc3
+1794542816: 	ems/v2/gateways/+/samples (QoS 1)
+1794542816: receiver-g-690068d79cc3 1 ems/v2/gateways/+/samples
+1794542816: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542816: receiver-g-690068d79cc3 1 ems/v2/gateways/+/session/request
+1794542816: Sending SUBACK to receiver-g-690068d79cc3
+1794542817: New connection from 127.0.0.1:44497 on port 1883.
+1794542817: New client connected from 127.0.0.1:44497 as sender-g-690068d79cc3 (p4, c1, k30).
+1794542817: No will message specified.
+1794542817: Sending CONNACK to sender-g-690068d79cc3 (0, 0)
+1794542817: Received SUBSCRIBE from sender-g-690068d79cc3
+1794542817: 	ems/v2/gateways/g-690068d79cc3/acks (QoS 1)
+1794542817: sender-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/acks
+1794542817: 	ems/v2/gateways/g-690068d79cc3/session/response (QoS 1)
+1794542817: sender-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/session/response
+1794542817: Sending SUBACK to sender-g-690068d79cc3
+1794542818: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542818: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m1, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542818: Sending PUBACK to sender-g-690068d79cc3 (m2, rc0)
+1794542818: Received PUBACK from receiver-g-690068d79cc3 (Mid: 1, RC:0)
+1794542821: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542821: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m1, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542821: Sending PUBACK to receiver-g-690068d79cc3 (m2, rc0)
+1794542821: Received PUBACK from sender-g-690068d79cc3 (Mid: 1, RC:0)
+1794542822: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542822: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542822: Sending PUBACK to sender-g-690068d79cc3 (m3, rc0)
+1794542822: Received PUBACK from receiver-g-690068d79cc3 (Mid: 2, RC:0)
+1794542822: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542822: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542822: Sending PUBACK to receiver-g-690068d79cc3 (m3, rc0)
+1794542822: Received PUBACK from sender-g-690068d79cc3 (Mid: 2, RC:0)
+1794542822: mosquitto version 2.1.2 terminating
+1794542825: mosquitto version 2.1.2 starting
+1794542825: Config loaded from /qa.conf.
+1794542825: Bridge support available.
+1794542825: Persistence support available.
+1794542825: TLS support available.
+1794542825: TLS-PSK support available.
+1794542825: Websockets support available.
+1794542825: Opening ipv4 listen socket on port 1883.
+1794542825: mosquitto version 2.1.2 running
+1794542829: New connection from 127.0.0.1:36621 on port 1883.
+1794542829: New client connected from 127.0.0.1:36621 as receiver-g-690068d79cc3 (p4, c1, k30).
+1794542829: No will message specified.
+1794542829: Sending CONNACK to receiver-g-690068d79cc3 (0, 0)
+1794542829: Received SUBSCRIBE from receiver-g-690068d79cc3
+1794542829: 	ems/v2/gateways/+/samples (QoS 1)
+1794542829: receiver-g-690068d79cc3 1 ems/v2/gateways/+/samples
+1794542829: 	ems/v2/gateways/+/session/request (QoS 1)
+1794542829: receiver-g-690068d79cc3 1 ems/v2/gateways/+/session/request
+1794542829: Sending SUBACK to receiver-g-690068d79cc3
+1794542829: New connection from 127.0.0.1:55497 on port 1883.
+1794542829: New client connected from 127.0.0.1:55497 as sender-g-690068d79cc3 (p4, c1, k30).
+1794542829: No will message specified.
+1794542829: Sending CONNACK to sender-g-690068d79cc3 (0, 0)
+1794542829: Received SUBSCRIBE from sender-g-690068d79cc3
+1794542829: 	ems/v2/gateways/g-690068d79cc3/acks (QoS 1)
+1794542829: sender-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/acks
+1794542829: 	ems/v2/gateways/g-690068d79cc3/session/response (QoS 1)
+1794542829: sender-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/session/response
+1794542829: Sending SUBACK to sender-g-690068d79cc3
+1794542830: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542830: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m1, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542830: Sending PUBACK to sender-g-690068d79cc3 (m5, rc0)
+1794542830: Received PUBACK from receiver-g-690068d79cc3 (Mid: 1, RC:0)
+1794542830: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542830: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m1, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542830: Sending PUBACK to receiver-g-690068d79cc3 (m5, rc0)
+1794542830: Received PUBACK from sender-g-690068d79cc3 (Mid: 1, RC:0)
+1794542831: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/samples', ... (730 bytes))
+1794542831: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/samples', ... (730 bytes))
+1794542831: Sending PUBACK to sender-g-690068d79cc3 (m6, rc0)
+1794542831: Received PUBACK from receiver-g-690068d79cc3 (Mid: 2, RC:0)
+1794542831: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542831: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542831: Sending PUBACK to receiver-g-690068d79cc3 (m6, rc0)
+1794542831: Received PUBACK from sender-g-690068d79cc3 (Mid: 2, RC:0)
+1794542832: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m7, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542832: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542832: Sending PUBACK to sender-g-690068d79cc3 (m7, rc0)
+1794542832: Received PUBACK from receiver-g-690068d79cc3 (Mid: 3, RC:0)
+1794542832: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m7, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542832: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542832: Sending PUBACK to receiver-g-690068d79cc3 (m7, rc0)
+1794542832: Received PUBACK from sender-g-690068d79cc3 (Mid: 3, RC:0)
+1794542833: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m8, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542833: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m4, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542833: Sending PUBACK to sender-g-690068d79cc3 (m8, rc0)
+1794542833: Received PUBACK from receiver-g-690068d79cc3 (Mid: 4, RC:0)
+1794542833: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m8, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542833: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m4, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542833: Sending PUBACK to receiver-g-690068d79cc3 (m8, rc0)
+1794542833: Received PUBACK from sender-g-690068d79cc3 (Mid: 4, RC:0)
+1794542834: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m9, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542834: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542834: Sending PUBACK to sender-g-690068d79cc3 (m9, rc0)
+1794542834: Received PUBACK from receiver-g-690068d79cc3 (Mid: 5, RC:0)
+1794542834: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m9, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542834: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542834: Sending PUBACK to receiver-g-690068d79cc3 (m9, rc0)
+1794542834: Received PUBACK from sender-g-690068d79cc3 (Mid: 5, RC:0)
+1794542835: Received PUBLISH from sender-g-690068d79cc3 (d0, q1, r0, m10, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542835: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542835: Sending PUBACK to sender-g-690068d79cc3 (m10, rc0)
+1794542835: Received PUBACK from receiver-g-690068d79cc3 (Mid: 6, RC:0)
+1794542835: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m10, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542835: Sending PUBLISH to sender-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542835: Sending PUBACK to receiver-g-690068d79cc3 (m10, rc0)
+1794542835: Received PUBACK from sender-g-690068d79cc3 (Mid: 6, RC:0)
+1794542835: Received DISCONNECT from sender-g-690068d79cc3
+1794542835: Client sender-g-690068d79cc3 [127.0.0.1:55497] disconnected.
+1794542835: New connection from 127.0.0.1:48695 on port 1883.
+1794542835: New client connected from 127.0.0.1:48695 as final-drain-g-690068d79cc3 (p4, c1, k30).
+1794542835: No will message specified.
+1794542835: Sending CONNACK to final-drain-g-690068d79cc3 (0, 0)
+1794542835: Received SUBSCRIBE from final-drain-g-690068d79cc3
+1794542835: 	ems/v2/gateways/g-690068d79cc3/acks (QoS 1)
+1794542835: final-drain-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/acks
+1794542835: 	ems/v2/gateways/g-690068d79cc3/session/response (QoS 1)
+1794542835: final-drain-g-690068d79cc3 1 ems/v2/gateways/g-690068d79cc3/session/response
+1794542835: Sending SUBACK to final-drain-g-690068d79cc3
+1794542835: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542835: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m7, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542835: Sending PUBACK to final-drain-g-690068d79cc3 (m2, rc0)
+1794542835: Received PUBACK from receiver-g-690068d79cc3 (Mid: 7, RC:0)
+1794542835: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m11, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542835: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m1, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542835: Sending PUBACK to receiver-g-690068d79cc3 (m11, rc0)
+1794542835: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 1, RC:0)
+1794542835: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542835: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m8, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542835: Sending PUBACK to final-drain-g-690068d79cc3 (m3, rc0)
+1794542835: Received PUBACK from receiver-g-690068d79cc3 (Mid: 8, RC:0)
+1794542838: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m4, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542838: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m9, 'ems/v2/gateways/g-690068d79cc3/session/request', ... (109 bytes))
+1794542838: Sending PUBACK to final-drain-g-690068d79cc3 (m4, rc0)
+1794542838: Received PUBACK from receiver-g-690068d79cc3 (Mid: 9, RC:0)
+1794542838: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m12, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542838: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m2, 'ems/v2/gateways/g-690068d79cc3/session/response', ... (170 bytes))
+1794542838: Sending PUBACK to receiver-g-690068d79cc3 (m12, rc0)
+1794542838: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 2, RC:0)
+1794542838: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542838: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m10, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542838: Sending PUBACK to final-drain-g-690068d79cc3 (m5, rc0)
+1794542838: Received PUBACK from receiver-g-690068d79cc3 (Mid: 10, RC:0)
+1794542838: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m13, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542838: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m3, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542838: Sending PUBACK to receiver-g-690068d79cc3 (m13, rc0)
+1794542838: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 3, RC:0)
+1794542839: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542839: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m11, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542839: Sending PUBACK to final-drain-g-690068d79cc3 (m6, rc0)
+1794542839: Received PUBACK from receiver-g-690068d79cc3 (Mid: 11, RC:0)
+1794542839: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m14, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542839: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m4, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542839: Sending PUBACK to receiver-g-690068d79cc3 (m14, rc0)
+1794542839: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 4, RC:0)
+1794542840: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m7, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542840: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m12, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542840: Sending PUBACK to final-drain-g-690068d79cc3 (m7, rc0)
+1794542840: Received PUBACK from receiver-g-690068d79cc3 (Mid: 12, RC:0)
+1794542840: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m15, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542840: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m5, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542840: Sending PUBACK to receiver-g-690068d79cc3 (m15, rc0)
+1794542840: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 5, RC:0)
+1794542840: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m8, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542840: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m13, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542840: Sending PUBACK to final-drain-g-690068d79cc3 (m8, rc0)
+1794542840: Received PUBACK from receiver-g-690068d79cc3 (Mid: 13, RC:0)
+1794542840: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m16, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542840: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m6, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542840: Sending PUBACK to receiver-g-690068d79cc3 (m16, rc0)
+1794542840: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 6, RC:0)
+1794542841: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m9, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542841: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m14, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542841: Sending PUBACK to final-drain-g-690068d79cc3 (m9, rc0)
+1794542841: Received PUBACK from receiver-g-690068d79cc3 (Mid: 14, RC:0)
+1794542841: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m17, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542841: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m7, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542841: Sending PUBACK to receiver-g-690068d79cc3 (m17, rc0)
+1794542841: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 7, RC:0)
+1794542841: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m10, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542841: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m15, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542841: Sending PUBACK to final-drain-g-690068d79cc3 (m10, rc0)
+1794542841: Received PUBACK from receiver-g-690068d79cc3 (Mid: 15, RC:0)
+1794542841: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m18, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542841: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m8, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542841: Sending PUBACK to receiver-g-690068d79cc3 (m18, rc0)
+1794542841: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 8, RC:0)
+1794542842: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m11, 'ems/v2/gateways/g-690068d79cc3/samples', ... (745 bytes))
+1794542842: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m16, 'ems/v2/gateways/g-690068d79cc3/samples', ... (745 bytes))
+1794542842: Sending PUBACK to final-drain-g-690068d79cc3 (m11, rc0)
+1794542842: Received PUBACK from receiver-g-690068d79cc3 (Mid: 16, RC:0)
+1794542842: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m19, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542842: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m9, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542842: Sending PUBACK to receiver-g-690068d79cc3 (m19, rc0)
+1794542842: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 9, RC:0)
+1794542842: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m12, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542842: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m17, 'ems/v2/gateways/g-690068d79cc3/samples', ... (731 bytes))
+1794542842: Sending PUBACK to final-drain-g-690068d79cc3 (m12, rc0)
+1794542842: Received PUBACK from receiver-g-690068d79cc3 (Mid: 17, RC:0)
+1794542842: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m20, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542842: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m10, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542842: Sending PUBACK to receiver-g-690068d79cc3 (m20, rc0)
+1794542842: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 10, RC:0)
+1794542843: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m13, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542843: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m18, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542843: Sending PUBACK to final-drain-g-690068d79cc3 (m13, rc0)
+1794542843: Received PUBACK from receiver-g-690068d79cc3 (Mid: 18, RC:0)
+1794542843: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m21, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542843: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m11, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542843: Sending PUBACK to receiver-g-690068d79cc3 (m21, rc0)
+1794542843: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 11, RC:0)
+1794542843: Received PUBLISH from final-drain-g-690068d79cc3 (d0, q1, r0, m14, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542843: Sending PUBLISH to receiver-g-690068d79cc3 (d0, q1, r0, m19, 'ems/v2/gateways/g-690068d79cc3/samples', ... (732 bytes))
+1794542843: Sending PUBACK to final-drain-g-690068d79cc3 (m14, rc0)
+1794542843: Received PUBACK from receiver-g-690068d79cc3 (Mid: 19, RC:0)
+1794542844: Received PUBLISH from receiver-g-690068d79cc3 (d0, q1, r0, m22, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542844: Sending PUBLISH to final-drain-g-690068d79cc3 (d0, q1, r0, m12, 'ems/v2/gateways/g-690068d79cc3/acks', ... (438 bytes))
+1794542844: Sending PUBACK to receiver-g-690068d79cc3 (m22, rc0)
+1794542844: Received PUBACK from final-drain-g-690068d79cc3 (Mid: 12, RC:0)
+1794542844: Received DISCONNECT from final-drain-g-690068d79cc3
+1794542844: Client final-drain-g-690068d79cc3 [127.0.0.1:48695] disconnected.
+1794542844: Received DISCONNECT from receiver-g-690068d79cc3
+1794542844: Client receiver-g-690068d79cc3 [127.0.0.1:36621] disconnected.
+1794542812: Info: running mosquitto as user id: 1000.
+1794542825: Info: running mosquitto as user id: 1000.

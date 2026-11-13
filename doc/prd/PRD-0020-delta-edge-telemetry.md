@@ -112,3 +112,53 @@ FR2008：PC simulator 必須以指定本機串口、站號 1–247、9600/19200/
 
 ### 2026-09-29：Simulator 控制改由 PRD-0022 / ADR-033
 四台固定模擬器的設定與故障注入統一至 BFF OPS API/CLI、持久 SQLite audit。舊 meter :8001 POST、PLC/MCP raw Modbus 寫入停用，遙測與真機唯讀採集不變。runtime 設定重啟還原，操作紀錄保留；詳 operations/simulator-control.md。
+
+
+### 2026-11-12 Windows 實體 RS485 bench（無 Pi）
+
+兩台 USB–RS485 接同一台 Windows PC，COM3 從站／COM4 採集；修正 Windows 短封包後 110/110 成功。獨立 `delta-rtu-sim-001` 的 SQLite 暫存／補送、DB 與 EMS records API 15/15 通過，完整回歸 78 passed、coverage 95.20%。Pi、4G、Delta 真機與長期可靠性仍待驗證；舊紀錄的「Windows COM／實體 RS485 待驗證」僅由本次 bench 範圍更新。重現、證據及限制見 [驗證紀錄](../../output/delta-rtu-bench-20261112/README.md)。
+
+
+### 2026-11-12 測試補強：無Pi逐關驗收
+
+依§13新增正式edge旁路帳本、bounded bench、DB/API逐筆核對及受控故障測試工具；不擴充FR或中央ACK契約。各關狀態見 [逐關執行紀錄](../../output/delta-no-pi-validation-20261112/README.md)；樣本替身、實體台架及真機驗收分開記錄。
+
+### 2026-11-12 FR-2008：RTU 模擬器同埠拔插恢復
+
+依 [ADR-040](../adr/ADR-040-delta-rtu-listener-recovery.md)，第一次開啟失敗維持立即退出；成功監聽後串口斷線則關閉失效transport並定期重開同一個明確指定端點，保留資料context與累積電量，取消時釋放資源。延遲設定由config集中驗證，不自動尋找COM改號。先以實際pymodbus搭配Windows記憶體串口測試重現、修正與回歸，再做物理USB重驗；未通過前關卡4維持FAIL。採集器、MQTT及DB契約不變。
+
+### 2026-11-12 FR-2003：RTU不確定交易與有界恢復
+
+依[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)，無法確認已送請求的回覆時鎖定後續讀取；合法Modbus exception2 fallback保持。只有明示response_lifetime_seconds與source才可等待完整上界、重建client／清除接收資料後開始新sample，不能從timeout推導上界。未知上界停止新採樣，sender續送既有可信樣本。Field RTU必須先核定上界且啟動隔離等待，CLI once亦適用；demo初始乾淨bus為台架假設。這限制採集器自動恢復的profile範圍，不改ADR-040模擬器復原或MQTT／DB；不宣稱排除超出核定上界的任意遲到回覆。先RED完整sample反例再GREEN及有界實體驗證。
+
+### 2026-11-12 驗證續篇：第9關反例／第10關長測
+
+依既有§13及無Pi計畫補驗，未增FR／API／schema。[第9關](../../output/delta-no-pi-validation-20261112/ack-isolated-01/README.md)證明v1未commit即可刪本地及重送重複，系統FAIL；不冒稱正式接收端或v2 ACK驗證，PRD-0021待實作。Monitor synthetic API契約5/5；[長測序列](../../output/delta-no-pi-validation-20261112/soak-sequence-01/README.md)啟動1s/1h，通過才進5s/24h，未結束不報驗收。來源、程序樹回收、資源及逐筆對帳由工具保存，不是現場准入。
+
+### 2026-11-12 FR-2005／2006補驗：時鐘與真TLS
+
+依既有§13補驗，無FR／資料流／schema／API變更。正式edge／TCP Poller／SQLite加隔離真broker，時鐘2案、TLS10案12/12通過；錯認證保留pending、失同步補舊資料、重啟拒舊時間、同Publisher重連保留payload。[證據及限制](../../output/delta-no-pi-validation-20261112/field-security-02/README.md)。首輪失敗保留，僅修測試工具；非中央receipt、正式ACL／4G／RTC精度／真機驗收。回歸191 passed／12 skipped，12項隔離案已另實跑。
+
+### 2026-11-12 接手範圍說明（非新增已實作需求）
+
+[採集交接](../operations/edge-temperature-handoff-20261112.md)集中既有 Delta 台架進度與未完成事項。使用者下一個整合目標為 U701-A-10／CS1-TP1-8-A → Pi → EMS，日照移出本輪；本 PRD 的 Delta parser 不代表 ADTEK profile 已存在。新增整合仍須按 PRD-first 補足規格及驗收，中央 receipt／去重依 PRD-0021 保持待實作。此段不變更 FR、API／schema 或 runtime。
+
+### 2026-11-12 16:06 無 Pi 接手補驗
+
+使用者確認 Pi 未到，先續無 Pi 驗證。依既有 §13 實跑 191 項回歸、12 項私有時鐘／TLS；長測已完成前 863 槽與 DB／API 逐筆一致，真實本機 Monitor 的 100 筆紀錄與採樣帳本／DB 相符（1440／390px，非手機實機）。[本輪證據](../../output/no-pi-takeover-20261112-1600/README.md)另存，原始失敗與舊 manifest 保留；24h 仍進行中，中央 receipt／去重仍未實作。未變更 FR、API、schema、production 或活動長測來源。
+
+### 2026-11-12 16:51 FR-2003／2005 無 Pi 補測
+
+依既有 §13 新增 [bench_backlog](../../services/delta/tools/bench_backlog.py) 及判定反例，未更改 FR／API／schema／production。私有積壓與弱網 10,120／155 筆完整、線上備份 1,000 筆前綴、真 EMS 110 筆跨層對帳及 stale→live、Linux 自有 user service 重啟／停止通過；203 項回歸、96.06% coverage。範圍、原工具判定修正與限制見 [證據](../../output/no-pi-backlog-20261112/README.md)。PUBACK 非 DB committed receipt 保持；24h／Pi／4G 另驗。
+
+### 2026-11-12 17:20 FR-2003／2005 實際接收端補測
+
+依 §13 新增 [bench_ingest](../../services/delta/tools/bench_ingest.py) 與 8 項判定反例。[證據](../../output/no-pi-ingest-20261112/README.md)確認私有相同接收 image／設定的重送重複入庫及接收停機缺筆，系統驗收 FAIL 保持；DB 暫停恢復 10／10，另一私有 netem 真 IP 丟包 17 個後 230／230 完整。211 項回歸、96.06% coverage；原 24h 前 1,740 槽對帳通過但全窗仍待驗。無 FR／API／schema／production 或活動來源變更，receipt／去重尚未實作。
+
+### 2026-11-12 可靠送達 opt-in 修復
+
+[ADR-043](../adr/ADR-043-opt-in-committed-telemetry.md)及 [PRD-0021 §15.3](PRD-0021-multi-device-edge-reliability.md)新增 v2 子集：顯式 delivery.protocol=2 的獨立 SQLite／topic／receiver，中央 commit 後才刪及重送去重；本批覆蓋 v2 的 FR-2005 送達行為，既有 v1 與活動長測保持 broker-ACK 基線。四欄 projection／解析／唯讀契約不變，新增 nullable 身分欄及私有 receipts migration019；259 項測試通過，90.81% coverage，未切共享部署。[證據與限制](../../output/committed-delivery-fix-20261112/README.md)。歷史 v1 FAIL 不改成 PASS。
+
+### 2026-11-13 §13 測試觀察器槽號修正
+
+只修bench_run觀察器：以production scheduler回傳的原定deadline標槽，start_delay保留正負；不改實際scheduler、FR、API/schema或採集行為。15ms／ULP／漏槽／重複／終界／虛擬接線及相鄰判定66項通過，[證據](../../output/slot-boundary-fix-20261113/README.md)。沒有重跑長測或替換原frozen／verifier；原24h中斷及舊嚴格FAIL保持。本次是測試工具bug fix，不新增架構決策。

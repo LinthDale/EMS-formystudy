@@ -1,0 +1,83 @@
+{
+  "baseline-01": {
+    "status": "no_source_snapshot_at_run_start"
+  },
+  "interval-10s-01": {
+    "checked": 13,
+    "mismatched": []
+  },
+  "interval-15s-01": {
+    "checked": 14,
+    "mismatched": []
+  },
+  "interval-1s-01": {
+    "checked": 12,
+    "mismatched": []
+  },
+  "interval-30s-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "interval-5s-01": {
+    "checked": 12,
+    "mismatched": []
+  },
+  "post-usb-restart-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "recovery-fix-smoke-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "scenario-alarm-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "scenario-night-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "simulator-outage-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "smoke-01": {
+    "status": "no_source_snapshot_at_run_start"
+  },
+  "smoke-02": {
+    "status": "no_source_snapshot_at_run_start"
+  },
+  "usb-com3-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com3-02": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com3-03": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com3-04-fixed": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com4-01": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com4-02": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "usb-com4-03-timed": {
+    "checked": 15,
+    "mismatched": []
+  },
+  "frames-01": {
+    "checked": 4,
+    "mismatched": []
+  }
+}

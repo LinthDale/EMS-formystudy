@@ -1,0 +1,203 @@
+{
+  "passed": true,
+  "suite": "wal-security",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532318]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 55,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 55,
+    "observed_tests": 55,
+    "evidence_checks": {
+      "positive": true,
+      "db-wrong_ca": true,
+      "db-wrong_host": true,
+      "db-expired": true,
+      "db-missing_client": true,
+      "db-untrusted_client": true,
+      "db-expired_client": true,
+      "db-wrong_user": true,
+      "wal-wrong_ca": true,
+      "wal-wrong_host": true,
+      "wal-expired": true,
+      "wal-missing_client": true,
+      "wal-untrusted_client": true,
+      "wal-expired_client": true,
+      "wal-wrong_user": true,
+      "wal-plaintext": true,
+      "gate-plaintext": true,
+      "gate-wrong_role": true,
+      "recovery": true,
+      "enospc": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "foreign-wal-database",
+      "container": "b492f18bdfd7b5a028de956aacc4129a6f2c1a29ca75c645c87a63ad6940d133",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-foreign-wal",
+      "container": "581612487a92a0c9a30a7c33c32fc32e03537ed2d07f95357fd3d2b9c77165f1",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-foreign-bundle",
+      "container": "86cd42b5a0dc026969d943c7663183b02916c373519e1272d3efec10bd5ce7cc",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "foreign-primary",
+      "container": "c72391a424791bc3c2b1217b5c7a82e695e74b8db368f9f7d3ac6573926c6104",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "bad-wal-database",
+      "container": "b98750dbc2205405609199d058d3231a906cab1b10ec60e709204db0e12b984c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-wal",
+      "container": "e9155cedfb41ea7f185a26fd13ceb4498a52b7e1d21e6078b679287a8ce69b32",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-backup",
+      "container": "adcfac34285d73cd1587468dfcf5b0776513ab9f1aa5eda2b5e509836998c3ca",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "good-restore-database",
+      "container": "ac0c92f2a6bf9c9196ef1f9cee1fef5568c3d7361aede6a7e874375d2ad0e04e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-good-restore",
+      "container": "20a2ad8f6b9fd25c179e2a7ea02fbeb25caab427b57f750bb32be84e4f3f9fa3",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "c1d4ec618eb63296cfb6faa1aaaf2aca863765d96d842fbdb38eb63473eec2fa",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-wrong_role",
+      "container": "f7af7cfebc57bbe45ce7e24655268a756675dee0ffa8a58b7726ff6bc75cb93f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-plaintext",
+      "container": "c9887d393371e9117a08f2e7b33b12d25239b7a59a5e19f2c5215a7ba56c37f2",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-plaintext",
+      "container": "bef21252c3ceebe7b13a6be647d48a95b2bb3185e457c73521d29517874a5029",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_user",
+      "container": "3c85343f4acc708774fbf7f5c317da6bdebb1203ac6a99a3fb5b0bcda81f8ee6",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-expired_client",
+      "container": "9b5c05c8e6eda8e315f41c1a1084e597fedee4e5a754b7999da01d9a4549032e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-untrusted_client",
+      "container": "137cfedc4d1496fe5383ab8d5bfe133cac721c67fc656ac208412837af064f8e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-missing_client",
+      "container": "0eea47f37f3dfaf34157c59cbc6710750c53ea33dfbb2d22aaaa27a8f1d942cc",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-expired",
+      "container": "750d71540b3fd5304e0ce4281692b8bfc5d989213b999c9fbb4af8aacd7e3c9c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_host",
+      "container": "aa623c3b91fe66c996e672a0dda5b79f66b1f5547d374095e2aefcc36ed2aaa4",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_ca",
+      "container": "2c977e90c3794a588b9fe6c8c0a181a04477c4fa00ace8cf5a45c0221ae9d237",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "ce8bb3620681bf433e6ac1b51dcf2180a9d5dcb806bccd94435a2246894ba2ac",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "4b1664655cb862dceb2f114a362f9ddfd78d6a54b4a279f0c1eb0b4c7c654870",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "f059da50e768874c3c6110efeaa91a12bb8ea956d6cf7d084625ba7d93ff4292",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "6257126a040393c32def634e430fff98faf2e681d92561e269b6e9dca9ff832c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "2bf4396983f4b014adf18e582b9ed0b2d47cdf4edfba200dab8d0b1ffe29fc6d",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "b38eac0639e9f4a45749c4d7c6f940dc78c2b92b7849ad55345d419dcc45454b",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

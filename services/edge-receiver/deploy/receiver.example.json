@@ -1,0 +1,27 @@
+{
+  "mode": "field",
+  "mqtt": {
+    "host": "mqtt-v2.example.invalid", "port": 8883, "client_id": "edge-receiver",
+    "tls": true, "ca_file": "/run/secrets/edge-ca.crt",
+    "cert_file": "/run/secrets/receiver.crt", "key_file": "/run/secrets/receiver.key"
+  },
+  "dsn_env": "EDGE_RECEIVER_DSN",
+  "db_tls": {
+    "ca_file": "/run/secrets/db-ca.crt",
+    "cert_file": "/run/secrets/receiver-db.crt",
+    "key_file": "/run/secrets/receiver-db.key"
+  },
+  "generation_file": "/run/edge-receiver/generation",
+  "db_timeout_seconds": 5,
+  "ack_durability": "sync_wal",
+  "wal_standby_name": "ems_archive",
+  "bindings": {
+    "qa-edge": {
+      "delta-meter-001": {
+        "stream_id": "d2dde436-a1d3-44d3-a337-969c6a132987",
+        "config_revision": "r1", "profile_version": "delta-v135",
+        "not_before_us": 1794412800000000, "not_after_us": 1825948800000000
+      }
+    }
+  }
+}

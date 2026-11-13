@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "audit-state",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "30985447-99d1-4a44-939b-8ec4bac11b1a",
+  "before_sha256": "28adebd2da74784e9181098d9200f6d3d2590bbc2dc3d1995787841d61374bb6",
+  "after_sha256": "28adebd2da74784e9181098d9200f6d3d2590bbc2dc3d1995787841d61374bb6"
+}

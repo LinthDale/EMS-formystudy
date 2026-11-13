@@ -1,0 +1,13 @@
+{
+  "anchor": "317aae35b7f217f639b7b6398993cae2413efa57409236f3bfcb447c88d7aa71",
+  "broker": "d331e8f780d8aec1aae94fe2cf41a64bbc170875c2326931d9cd3ddbd19bc748",
+  "namespace": "net:[4026533469]",
+  "owned": [
+    "317aae35b7f217f639b7b6398993cae2413efa57409236f3bfcb447c88d7aa71",
+    "d331e8f780d8aec1aae94fe2cf41a64bbc170875c2326931d9cd3ddbd19bc748",
+    "14600f8893ac2d9152c8a7e5ad5d1d3b52b27640938167402e639330ebb0dc01"
+  ],
+  "network": "none",
+  "host_ports": [],
+  "worker": "14600f8893ac2d9152c8a7e5ad5d1d3b52b27640938167402e639330ebb0dc01"
+}
