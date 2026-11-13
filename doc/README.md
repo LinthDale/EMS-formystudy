@@ -18,3 +18,7 @@
 ### 2026-11-13 main合併與部署現況
 
 main已合併9b61aef並推送；CI路徑修復c6f652a後六job全過。Delta採集映像已更新，原TCP/v1路由保持；公開EMS由原504恢復200，登入／量測與DB核對通過。**完整v2 receiver/WAL切換仍待獨立WAL主機及SSH入口**；現有主庫尚未套019–021或啟TLS，同步保護鏈未齊前不強行切換。未重跑長測。詳[部署紀錄](releases/edge-reliability-main-deployment-20261113.md)。
+
+### 2026-11-13 單機部署政策更新
+
+外部WAL複寫／第二台主機需求依使用者決定暫停，不再等待DGX主機或SSH資料。保留主庫本機WAL、fsync及正常寫入；現行單機Delta TCP/v1與公開服務繼續運行，v2 field仍未啟用，沒有自動降級。無服務重啟或長測重跑。詳[單機政策](releases/edge-single-host-policy-20261113.md)。

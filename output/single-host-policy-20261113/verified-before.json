@@ -1,0 +1,136 @@
+{
+  "captured_utc": "2026-11-13T08:53:26.850619+00:00",
+  "passed": true,
+  "policy": "one EMS computer; external WAL replication deployment deferred by user",
+  "external_wal_enabled": false,
+  "local_postgresql_wal_preserved": true,
+  "database": {
+    "fsync": "on",
+    "synchronous_commit": "on",
+    "synchronous_standby_names": "",
+    "replication_peers": 0,
+    "replication_slots": 0,
+    "v2_receipts_present": false
+  },
+  "services": [
+    {
+      "name": "ems-delta-edge",
+      "id": "4638cc0cb92cfcd60b34ae081f24fcfd10f815c029d679525efe55246e26373a",
+      "image": "sha256:db574722ead0d2f7df652b76100d81bef1256ec8762cf7f01d512a8c9cb9c680",
+      "status": "running"
+    },
+    {
+      "name": "ems-bff",
+      "id": "52a3815f3536fcffdad6ad57f2f2e5d906b380ed660afb40c62f87dbaee4809d",
+      "image": "sha256:bb8f2c7e2fac0e25aa1d2f050b7bfb5fa01371446ac3fbc73b2986b087bdfd85",
+      "status": "running"
+    },
+    {
+      "name": "ems-delta-simulator",
+      "id": "285ea656c9c24307689f5b2c85b27386b5043142b5b7c302f997098b8a01fe2c",
+      "image": "sha256:03755dce0864da46aab8a19ea867b92986aa4ae9b3372855b7c9b291c93d05f1",
+      "status": "running"
+    },
+    {
+      "name": "ems-simulator",
+      "id": "d36bf7e3b0f0f9d94211626a2a11a7c089523860e9d86b098a4da65c18bccf87",
+      "image": "sha256:354a733b9050544e40e99e67a344e8a9bbf9eab500df5649c6aab367708dbd83",
+      "status": "running"
+    },
+    {
+      "name": "ems-kc-modbus-sim",
+      "id": "3923ff011a08b097f0d602590e6bba8edd7b50b5e932c6ad8fa0912b7d4de6f6",
+      "image": "sha256:48443e8559fb0f1ee64518deb94096e04647b924175d46f7edc43d0060483f90",
+      "status": "running"
+    },
+    {
+      "name": "ems-kc-mqtt-sim",
+      "id": "57570d740f618a4fadd6f57c0c9229cc155a9eea96e08a196b2c20ad10646b79",
+      "image": "sha256:6fc045204221edbc3a703cd08c83aa90fc23f80be48d8e585e5bef7e77caa1ee",
+      "status": "running"
+    },
+    {
+      "name": "ems-device-service",
+      "id": "4545eced008c976929b983bc616fd3ea58ad9da92880213436c3e020eb4de29e",
+      "image": "sha256:680663069ed0b0c59ca633441433b0c2f6cb12cd0071c26d38ac6cf108310a41",
+      "status": "running"
+    },
+    {
+      "name": "ems-device-service-mcp",
+      "id": "b816d1aaef60158c7f8d4a2e7d42f4e35928b62b5762708d36bf779ce4129547",
+      "image": "sha256:168f4d4b6b9801c4b4d8a7968215e91dc413898e8673afe6832506a2c192db48",
+      "status": "running"
+    },
+    {
+      "name": "ems-kc-mcp-server",
+      "id": "60f107e6b2f819075fd9eeb49d4aa8aaf9c5cd658cb5721363e1183b18c1a228",
+      "image": "sha256:d38ef63a9e39cf9137c787c9c7068329163763693237bbe1e20cf6aa24abdc60",
+      "status": "running"
+    },
+    {
+      "name": "ems-kc-gateway",
+      "id": "201e02763932157af447109c57d4574a7db93cd0043d4f9999cce253324627dd",
+      "image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+      "status": "running"
+    },
+    {
+      "name": "ems-kc-ingest",
+      "id": "985cf9a88504bb947e9cfe30fa4d0e3807f602889e0605b5b637ef1b03634366",
+      "image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+      "status": "running"
+    },
+    {
+      "name": "ems-gateway",
+      "id": "3d44ba72abea8470010728bde732fc807bf9379cda7fca3d8e8ed74510be6b82",
+      "image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+      "status": "running"
+    },
+    {
+      "name": "ems-grafana",
+      "id": "09ff6c584b4923e33691522bcd2d8af75adc6644d217ca8ad524f214ee488ceb",
+      "image": "sha256:a0f881232a6fb71a0554a47d0fe2203b6888fe77f4cefb7ea62bed7eb54e13c3",
+      "status": "running"
+    },
+    {
+      "name": "ems-ingest",
+      "id": "05d1d87834178ffed1776ff857f1306b2070f4877fc2d5edf35570ccd2469fa8",
+      "image": "sha256:a05b4b4ce2678bfc94e6ccfcbaebc4ce1d30906c1d93ee6595522e5519dc31a6",
+      "status": "running"
+    },
+    {
+      "name": "ems-query",
+      "id": "26397ce0c78e1806b367cf32a1fda376a22be4f55472a0dc1a3338e6ea9b5f23",
+      "image": "sha256:bca3f86f69d8ef7aa1e5ee65e66ce9a20c6c147be637517a7be8399e102901d1",
+      "status": "running"
+    },
+    {
+      "name": "ems-timescaledb",
+      "id": "b4d14d7ada3c305b580be92a029cdd46a40f66695662257f8e77fd4c1aa7e502",
+      "image": "sha256:37499832086d01518d3afc64f9d178a1f7b3a0f498750c2b6f2f2b6b5717ad9c",
+      "status": "running"
+    },
+    {
+      "name": "ems-mosquitto",
+      "id": "bc96fbd67fbca6b0df5b0b6508cfe826d19a2bcea63e076de2d03649a117deaa",
+      "image": "sha256:a908c65cc8e67ec9d292ef27c2c0360dbaaee7eb1b935cdd194e67697f15dea1",
+      "status": "running"
+    }
+  ],
+  "health": [
+    {
+      "url": "https://synaiq-ai.com/ems/",
+      "status": 200
+    },
+    {
+      "url": "https://synaiq-ai.com/ems/api/auth/session",
+      "status": 401
+    },
+    {
+      "url": "http://127.0.0.1:8003/healthz",
+      "status": 200
+    }
+  ],
+  "no_runtime_change_required": true,
+  "no_long_soak_rerun": true,
+  "main_worktree": "/tmp/ems-main-deploy-20261113-_se63upr"
+}

@@ -26,3 +26,4 @@
 # Deliberate small schema-compatibility test fixture, not a runtime database.
 /services/delta/tests/fixtures/schema2-full.db binary
 /output/main-deployment-20261113/** -text
+/output/single-host-policy-20261113/** -text

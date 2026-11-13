@@ -347,3 +347,7 @@ R-EDGE-TLS：錯CA／hostname／過期／錯client／錯角色與明文peer可�
 ### 2026-11-13 高必要性資料保護
 
 R-EDGE-RESEED-GAP：base完成後才reserve新slot會留下無保護窗口，已修成先reserve再base；以backup後三切段/checkpoint及真新鏈PITR查marker驗證，gate拒舊弱PASS。R-EDGE-TIMELINE：同ID／同target名可存在不同合法分支，directory CLI拒latest/current／缺pin，維運外置核定並套用；仍不能抵抗操作者核錯業務分支。R-EDGE-DB-FULL：真中央receipt擴檔ENOSPC只retryable、來源保留、清空間同ID一次恢復；非全庫pg_wal滿。依[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md)，有限三項已收尾，正式部署／硬體另驗。
+
+### 2026-11-13 單機部署範圍
+
+使用者暫停外部WAL複寫，現行單機v1／本機WAL持久化保留，無異機容災保證。v2 field仍未啟用，未放寬TLS／同步確認或允許local自動降級；第二WAL主機與SSH需求移出當前範圍。此為部署暫停，既有v1的PUBACK非DB commit限制維持。

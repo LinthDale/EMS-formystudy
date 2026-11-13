@@ -2,6 +2,10 @@
 
 > 規則見 [api-contract-governance](../doc/governance/api-contract-governance.md)。每次 API 變更一條：版本 / 日期 / 級別 / 摘要 / 對應 PRD。
 
+## 2.2.3 — 2026-11-13（PATCH，單機部署規劃）
+- 依使用者決定暫停外部WAL／第二主機部署，不再等待DGX SSH資料；主庫本機WAL與fsync保留。
+- 現行單機服務不重啟，v2 field未啟用；REST、MQTT及durability程式契約不變。[政策](../doc/releases/edge-single-host-policy-20261113.md)。
+
 ## 2.2.2 — 2026-11-13（PATCH，部署狀態紀錄）
 - 登記main合併、CI來源路徑修復、Delta映像更新及公開入口恢復；REST／MQTT契約不變。
 - 完整field v2 receiver／WAL尚待獨立主機與連線，不將既有v1服務正常當作v2正式啟用。[紀錄](../doc/releases/edge-reliability-main-deployment-20261113.md)。

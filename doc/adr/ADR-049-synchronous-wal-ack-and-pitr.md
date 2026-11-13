@@ -17,3 +17,7 @@ ADR-048 邏輯還原實證：備份後已 committed ACK 的 B，edge 已刪 payl
 權威入口：PRD-0021 §15.9、edge-receiver/store.py、receiver.py、migration020、部署範本與獨立 WAL 操作手冊。MQTT wire2、local schema3與最新／最舊成功1:1公平不變；無REST/UI。新增工具均只控制當輪owned ID／固定命令，證據目錄沿用 NOFOLLOW／有界讀／原子寫。驗收要求 RED→GREEN、migration兩次與最小權限、WAL停機不假ACK且恢復一次、basebackup後ACK且本地已刪B在原主庫停用後從WAL回來、目標後C保持pending並重送、缺WAL不能達標。
 
 來源：[PG15 pg_receivewal](https://www.postgresql.org/docs/15/app-pgreceivewal.html)、[同步複寫](https://www.postgresql.org/docs/15/warm-standby.html)、[持續封存與PITR](https://www.postgresql.org/docs/15/continuous-archiving.html)。
+
+### 2026-11-13 使用者核定單機運行
+
+外部同步WAL部署暫停，第二主機／SSH待辦取消；本機WAL及現行服務維持，沒有修改field sync_wal契約或以local降級啟用v2。先前部署前置條件保留為未來參考，非本階段待提供資料。詳[單機政策](../releases/edge-single-host-policy-20261113.md)。

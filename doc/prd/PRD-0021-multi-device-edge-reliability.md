@@ -472,3 +472,7 @@ FR-2104／2106／2109既有拒絕損壞與重連契約補測：[定點42通過�
 ### 15.13 2026-11-13 必要性高的資料保護強化收尾
 
 沿FR-2106／ADR-049／050，以[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md)固定還原CLI的外置核定timeline／target及lost slot維運順序，無receiver wire／角色／schema／API或容量公平變更。本輪限定三項高必要性補強已完成：中央receipt資料16MiB空間真ENOSPC→retryable／原ID一次恢復；slot真lost→新slot先reserve再basebackup，跨3段／checkpoint後真PITR驗gap marker；同cluster兩分支二次PITR固定核定timeline／target。38定點通過18.00秒；616相鄰短回歸／12既有專用skip／coverage91.73%，48新單測通過（套件重疊不加總）。正式部署／Pi仍待驗，無COM／共享／長測重跑。 [證據](../../output/no-pi-critical-closure-20261113/README.md)。修補原CLI不能固定分支的準入缺口，並關閉初版reseed先base後slot的保護空窗；新base之前reserve，刻意在backup→pickup間真commit／3切段checkpoint，最後以新鏈還原marker。latest僅隔離負例，不能自動辨識業務正確分支；CLI只輸出設定不自動起PG。有限高必要性三項全過即結束，不將所有能測情境視為本輪阻擋。
+
+### 2026-11-13 使用者核定單機運行
+
+外部同步WAL部署暫停，第二主機／SSH待辦取消；本機WAL及現行服務維持，沒有修改field sync_wal契約或以local降級啟用v2。先前部署前置條件保留為未來參考，非本階段待提供資料。詳[單機政策](../releases/edge-single-host-policy-20261113.md)。

@@ -342,3 +342,7 @@ DB TLS client與archive principal分離，驗CA／hostname／client cert；固�
 ### 2026-11-13 還原分支與新保護鏈
 
 還原目標不從untrusted archive的latest自動推定；CLI外置timeline正uint32／target安全ASCII63字白名單，拒引號／換行及缺值，設定輸出不自動寫檔或起PG。新slot在base之前reserve，全段保留到接手，外置generation換代才開ACK；同ID錯分支由維運核定與實際還原資料核對，並非checksum可證。critical控制6固定op＋UUID、無worker選CID/SQL/path/timeline，中央資料僅owned16MiB quota。server key仍外置PGDATA；[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md)。
+
+### 2026-11-13 單機部署範圍
+
+使用者暫停外部WAL複寫，現行單機v1／本機WAL持久化保留，無異機容災保證。v2 field仍未啟用，未放寬TLS／同步確認或允許local自動降級；第二WAL主機與SSH需求移出當前範圍。此為部署暫停，既有v1的PUBACK非DB commit限制維持。
