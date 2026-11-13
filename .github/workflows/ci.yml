@@ -53,12 +53,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build & start simulator container
         run: docker compose up -d --build simulator
-      - name: Inject tests + device_service package into the container
-        # The simulator image ships only src/ (services/simulator/Dockerfile).
-        # tests/conftest.py resolves device_service at /app/device_service in the
-        # container layout, so the package is copied alongside the tests.
+      - name: Inject test sources into the simulator wrapper
+        # The meter wrapper ships meter_source.py rather than src/main.py.
+        # Unit fixtures also load scripts/simulator_control.py by repository path.
         run: |
           docker cp tests ems-simulator:/app/tests
+          docker cp services/simulator/src ems-simulator:/app/src
+          docker cp scripts ems-simulator:/app/scripts
           docker cp services/device-service/device_service ems-simulator:/app/device_service
           docker cp services/device-service/requirements.txt ems-simulator:/tmp/device-service-requirements.txt
       - name: Install test + device-service deps in the container
