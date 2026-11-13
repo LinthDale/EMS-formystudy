@@ -15,7 +15,7 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 2.2.1
+  version: 2.2.2
   contact:
     name: EMS Development Team
   license:
@@ -1859,3 +1859,7 @@ x-edge-critical-recovery-closure:
   preflight_output: Verified backup plus recovery_settings JSON; operator must apply settings; no automatic startup
   slot_reseed: Fence ACK; reserve new physical slot before basebackup; preserve all WAL until pickup; verify new backup and actual chain PITR; rotate generation before reopening ACK
   scope: Three bounded private failure drills passed; no new REST or MQTT contracts; no automatic failover or shared deployment
+
+# 2026-11-13 main deployment: Delta image and public relay updated; full v2
+# activation still awaits independent WAL target/access. No REST/topic change.
+# See doc/releases/edge-reliability-main-deployment-20261113.md.

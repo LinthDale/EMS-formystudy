@@ -1,0 +1,14 @@
+[
+  {
+    "service": "edge-receiver",
+    "tag": "ems-edge-receiver:9b61aef",
+    "image": "sha256:474e221eaacc9acdc63f05722d844ae67eaee242545da477518c21b32a3eebdf",
+    "commit": "9b61aef2b095ef02036f09d35aba6ddc58a47659"
+  },
+  {
+    "service": "delta-edge",
+    "tag": "ems-delta-edge:9b61aef",
+    "image": "sha256:db574722ead0d2f7df652b76100d81bef1256ec8762cf7f01d512a8c9cb9c680",
+    "commit": "9b61aef2b095ef02036f09d35aba6ddc58a47659"
+  }
+]

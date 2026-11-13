@@ -1,0 +1,134 @@
+{
+  "passed": true,
+  "checks": [
+    {
+      "check": "new-image-source-to-db-progress",
+      "before": "2026-11-13 08:41:42.93695+00",
+      "after": "2026-11-13 08:41:47.936886+00",
+      "passed": true
+    },
+    {
+      "target": "https://synaiq-ai.com/ems",
+      "check": "/api/auth/session",
+      "status": 200,
+      "passed": true,
+      "rows": null,
+      "json_keys": []
+    },
+    {
+      "target": "https://synaiq-ai.com/ems",
+      "check": "/api/devices",
+      "status": 200,
+      "passed": true,
+      "rows": 6,
+      "json_keys": [
+        "device_id",
+        "device_type",
+        "status",
+        "protocol",
+        "vendor",
+        "model",
+        "location",
+        "gateway_id",
+        "classified_by",
+        "created_at",
+        "updated_at",
+        "last_seen_at",
+        "confirmed_at"
+      ]
+    },
+    {
+      "target": "https://synaiq-ai.com/ems",
+      "check": "/api/devices/delta-sim-001/measurements",
+      "status": 200,
+      "passed": true,
+      "rows": 1,
+      "json_keys": [
+        "time",
+        "device_id",
+        "voltage",
+        "current",
+        "power_kw",
+        "energy_kwh"
+      ]
+    },
+    {
+      "target": "https://synaiq-ai.com/ems",
+      "check": "/api/devices/delta-sim-001/records",
+      "status": 200,
+      "passed": true,
+      "rows": null,
+      "json_keys": []
+    },
+    {
+      "target": "https://synaiq-ai.com/ems",
+      "check": "logout",
+      "status": 204,
+      "passed": true
+    },
+    {
+      "target": "http://127.0.0.1:4179/ems",
+      "check": "/api/auth/session",
+      "status": 200,
+      "passed": true,
+      "rows": null,
+      "json_keys": []
+    },
+    {
+      "target": "http://127.0.0.1:4179/ems",
+      "check": "/api/devices",
+      "status": 200,
+      "passed": true,
+      "rows": 6,
+      "json_keys": [
+        "device_id",
+        "device_type",
+        "status",
+        "protocol",
+        "vendor",
+        "model",
+        "location",
+        "gateway_id",
+        "classified_by",
+        "created_at",
+        "updated_at",
+        "last_seen_at",
+        "confirmed_at"
+      ]
+    },
+    {
+      "target": "http://127.0.0.1:4179/ems",
+      "check": "/api/devices/delta-sim-001/measurements",
+      "status": 200,
+      "passed": true,
+      "rows": 1,
+      "json_keys": [
+        "time",
+        "device_id",
+        "voltage",
+        "current",
+        "power_kw",
+        "energy_kwh"
+      ]
+    },
+    {
+      "target": "http://127.0.0.1:4179/ems",
+      "check": "/api/devices/delta-sim-001/records",
+      "status": 200,
+      "passed": true,
+      "rows": null,
+      "json_keys": []
+    },
+    {
+      "target": "http://127.0.0.1:4179/ems",
+      "check": "logout",
+      "status": 204,
+      "passed": true
+    },
+    {
+      "check": "delta-container-running-without-restart",
+      "passed": true,
+      "image": "ems-delta-edge:9b61aef"
+    }
+  ]
+}

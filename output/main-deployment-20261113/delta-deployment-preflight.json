@@ -1,0 +1,13 @@
+{
+  "old_container": "c83ca771f3ea7f5ab88388d0c3636f5c7295cf3b40368cbbd7dceb3f6ab3342c",
+  "old_image": "sha256:bc03d417cb448dfe2d1af3200c125de8352ba083fdddfdfd7b10a3d3b625d866",
+  "old_image_tag": "ems-delta-one-second:20260929",
+  "new_image_tag": "ems-delta-edge:9b61aef",
+  "source_commit": "9b61aef2b095ef02036f09d35aba6ddc58a47659",
+  "config": "existing demo TCP/v1 unchanged; no Pi/RTU or v2 cutover",
+  "queue_backup": "/home/dalelin/synaiq/EMS/.local/main-deployment-20261113/delta-outbox-before.db",
+  "queue_backup_sha256": "311854716f2b6493d2368b90fd084fbee8edd937ec3aa278ed32bfa4671804aa",
+  "backup_pending_rows": 0,
+  "rollback_overlay": "/home/dalelin/synaiq/EMS/output/main-deployment-20261113/delta-rollback.yml",
+  "base_compose": "/home/dalelin/synaiq/EMS/output/delta-one-second-20260929/compose.yaml"
+}

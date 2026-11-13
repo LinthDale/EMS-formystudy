@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "device_id": "delta-sim-001",
+  "sample_time": "2026-11-13T08:42:58.125445+00:00",
+  "matching_database_rows": 1,
+  "source_timestamp_and_four_measurements_equal": true,
+  "public_response_sha256": "0c4cb6a60f06d354418a01e5d77cc7778cdcdb3c0f37a980a3b8107fd10d9057",
+  "deployed_delta_image": "ems-delta-edge:9b61aef"
+}

@@ -1,0 +1,12 @@
+{
+  "deployed_utc": "2026-11-13T08:41:05.244083+00:00",
+  "container": "4638cc0cb92cfcd60b34ae081f24fcfd10f815c029d679525efe55246e26373a",
+  "image": "sha256:db574722ead0d2f7df652b76100d81bef1256ec8762cf7f01d512a8c9cb9c680",
+  "image_tag": "ems-delta-edge:9b61aef",
+  "source_commit": "9b61aef2b095ef02036f09d35aba6ddc58a47659",
+  "running": true,
+  "restart_count": 0,
+  "queue_backup_verified": true,
+  "preserved_legacy_route": true,
+  "receiver_sync_wal_not_yet_enabled": true
+}

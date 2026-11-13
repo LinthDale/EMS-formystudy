@@ -1,0 +1,3 @@
+services:
+  delta-edge:
+    image: ems-delta-one-second:20260929

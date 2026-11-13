@@ -14,3 +14,7 @@
 | 開始工作／工作規範 | [AGENTS](../AGENTS.md)、[project_rules](../project_rules.md) |
 
 正式部署、Pi／ADTEK／SD掉電／4G未由本輪驗收。原24h測試中斷，不以短測抵充。
+
+### 2026-11-13 main合併與部署現況
+
+main已合併9b61aef並推送；CI路徑修復c6f652a後六job全過。Delta採集映像已更新，原TCP/v1路由保持；公開EMS由原504恢復200，登入／量測與DB核對通過。**完整v2 receiver/WAL切換仍待獨立WAL主機及SSH入口**；現有主庫尚未套019–021或啟TLS，同步保護鏈未齊前不強行切換。未重跑長測。詳[部署紀錄](releases/edge-reliability-main-deployment-20261113.md)。

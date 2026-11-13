@@ -2,6 +2,10 @@
 
 > 規則見 [api-contract-governance](../doc/governance/api-contract-governance.md)。每次 API 變更一條：版本 / 日期 / 級別 / 摘要 / 對應 PRD。
 
+## 2.2.2 — 2026-11-13（PATCH，部署狀態紀錄）
+- 登記main合併、CI來源路徑修復、Delta映像更新及公開入口恢復；REST／MQTT契約不變。
+- 完整field v2 receiver／WAL尚待獨立主機與連線，不將既有v1服務正常當作v2正式啟用。[紀錄](../doc/releases/edge-reliability-main-deployment-20261113.md)。
+
 ## 2.2.1 — 2026-11-13（PATCH，REST契約不變）
 - PRD-0020／0021、ADR-040／041／043／045／048–051：登錄opt-in可靠送達、最新優先容量、成功新舊公平、同步WAL／TLS及還原目標限制的非HTTP契約與驗證狀態。
 - 既有REST paths/components/servers/tags不變；MQTT wire2、本地schema3。僅私有隔離驗證，未正式部署、未核定Pi／ADTEK全鏈路。

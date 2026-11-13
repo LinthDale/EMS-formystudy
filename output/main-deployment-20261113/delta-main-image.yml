@@ -1,0 +1,5 @@
+services:
+  delta-edge:
+    image: ems-delta-edge:9b61aef
+    labels:
+      ems.release.commit: 9b61aef2b095ef02036f09d35aba6ddc58a47659

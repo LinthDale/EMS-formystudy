@@ -1,0 +1,14 @@
+[
+  {
+    "url": "http://127.0.0.1:4179/ems/",
+    "status": 200
+  },
+  {
+    "url": "https://synaiq-ai.com/ems/",
+    "status": 200
+  },
+  {
+    "url": "https://synaiq-ai.com/ems/api/auth/session",
+    "status": 401
+  }
+]

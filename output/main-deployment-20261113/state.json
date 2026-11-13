@@ -1,0 +1,14 @@
+{
+  "started_utc": "2026-11-13T08:34:21.328893+00:00",
+  "original_head": "79427c6e160832d297972b8c651604f4bd0ecf84",
+  "main_before": "670a99f5afc27caa3ed45ba1962bbc97d0d6b046",
+  "source_branch": "codex/edge-reliability-20261113",
+  "source_commit": "c7ac2e9ab63bf419a9c43382431f7941e0a5b565",
+  "mergebase": "fbb9333e83084e8d30f54ae53f09d4daf354e921",
+  "worktree": "/tmp/ems-main-deploy-20261113-_se63upr",
+  "merge_commit": "9b61aef2b095ef02036f09d35aba6ddc58a47659",
+  "main_backup_tag": "pre-edge-reliability-main-20261113",
+  "merge_tree_identical_to_validated_source": true,
+  "main_remote_verified": "9b61aef2b095ef02036f09d35aba6ddc58a47659",
+  "ci_fix_commit": "c6f652a895966461470786d5dbe6898035738c71"
+}

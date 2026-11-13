@@ -1,0 +1,22 @@
+[
+  {
+    "url": "http://127.0.0.1:8003/health",
+    "status": 404
+  },
+  {
+    "url": "http://127.0.0.1:3000/api/health",
+    "status": 200
+  },
+  {
+    "url": "http://127.0.0.1:3001/",
+    "status": 200
+  },
+  {
+    "url": "https://synaiq-ai.com/ems/",
+    "status": 504
+  },
+  {
+    "url": "https://synaiq-ai.com/ems/api/auth/session",
+    "status": 504
+  }
+]

@@ -1,0 +1,31 @@
+{
+  "url": "https://github.com/LinthDale/EMS-formystudy/actions/runs/43394953911",
+  "conclusion": "success",
+  "headSha": "c6f652a895966461470786d5dbe6898035738c71",
+  "jobs": [
+    {
+      "name": "Lint (ruff)",
+      "conclusion": "success"
+    },
+    {
+      "name": "API version-bump gate (api-contract-governance §2/§6)",
+      "conclusion": "success"
+    },
+    {
+      "name": "API contract drift (openapi.yml ↔ device-service routes)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Frontend tests + build (frontend, PRD-0005 §6.4)",
+      "conclusion": "success"
+    },
+    {
+      "name": "BFF tests (services/bff, PRD-0005 §9)",
+      "conclusion": "success"
+    },
+    {
+      "name": "Unit tests (ems-simulator container, project_rules §7)",
+      "conclusion": "success"
+    }
+  ]
+}
