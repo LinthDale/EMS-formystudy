@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="5" time="0.027" timestamp="2026-11-13T04:01:49.091187+00:00" hostname="ff77f381b69e"><testcase classname="tests.test_reliable_corruption" name="test_damaged_existing_queue_fails_without_reset_or_modification[header]" time="0.003" /><testcase classname="tests.test_reliable_corruption" name="test_damaged_existing_queue_fails_without_reset_or_modification[truncated]" time="0.001" /><testcase classname="tests.test_reliable_corruption" name="test_damaged_existing_queue_fails_without_reset_or_modification[zero-length]" time="0.001"><failure message="Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'sqlite3.DatabaseError'&gt;)">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_damaged_existing_queue_fa2')
+damage = 'zero-length'
+
+    @pytest.mark.parametrize('damage',['header','truncated','zero-length','empty-sqlite'])
+    def test_damaged_existing_queue_fails_without_reset_or_modification(tmp_path,damage):
+        path=tmp_path/'source'/'q.db'
+        identity=dict(gateway_id='g1',device_id='d1',stream_id=str(uuid4()),config_revision='r1',profile_version='v135')
+        box=ReliableOutbox(path,5,**identity)
+        original=box.enqueue(1794474000000000000,dict(voltage=230,current=5,power_kw=1,energy_kwh=100))
+        good=path.read_bytes()
+        if damage=='header':
+            path.write_bytes(b'BROKEN-SQLITE!!!'+good[16:])
+        elif damage=='truncated':
+            path.write_bytes(good[:len(good)//2])
+        elif damage=='zero-length':
+            path.write_bytes(b'')
+        else:
+            replacement=tmp_path/'replacement.db'
+            with closing(sqlite3.connect(replacement)) as db:
+                db.execute('PRAGMA user_version=0');db.commit()
+            path.write_bytes(replacement.read_bytes())
+        damaged=path.read_bytes()
+&gt;       with pytest.raises((ValueError,sqlite3.DatabaseError)) as error:
+E       Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'sqlite3.DatabaseError'&gt;)
+
+services/delta/tests/test_reliable_corruption.py:35: Failed</failure></testcase><testcase classname="tests.test_reliable_corruption" name="test_damaged_existing_queue_fails_without_reset_or_modification[empty-sqlite]" time="0.001"><failure message="Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'sqlite3.DatabaseError'&gt;)">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_damaged_existing_queue_fa3')
+damage = 'empty-sqlite'
+
+    @pytest.mark.parametrize('damage',['header','truncated','zero-length','empty-sqlite'])
+    def test_damaged_existing_queue_fails_without_reset_or_modification(tmp_path,damage):
+        path=tmp_path/'source'/'q.db'
+        identity=dict(gateway_id='g1',device_id='d1',stream_id=str(uuid4()),config_revision='r1',profile_version='v135')
+        box=ReliableOutbox(path,5,**identity)
+        original=box.enqueue(1794474000000000000,dict(voltage=230,current=5,power_kw=1,energy_kwh=100))
+        good=path.read_bytes()
+        if damage=='header':
+            path.write_bytes(b'BROKEN-SQLITE!!!'+good[16:])
+        elif damage=='truncated':
+            path.write_bytes(good[:len(good)//2])
+        elif damage=='zero-length':
+            path.write_bytes(b'')
+        else:
+            replacement=tmp_path/'replacement.db'
+            with closing(sqlite3.connect(replacement)) as db:
+                db.execute('PRAGMA user_version=0');db.commit()
+            path.write_bytes(replacement.read_bytes())
+        damaged=path.read_bytes()
+&gt;       with pytest.raises((ValueError,sqlite3.DatabaseError)) as error:
+E       Failed: DID NOT RAISE any of (&lt;class 'ValueError'&gt;, &lt;class 'sqlite3.DatabaseError'&gt;)
+
+services/delta/tests/test_reliable_corruption.py:35: Failed</failure></testcase><testcase classname="tests.test_reliable_corruption" name="test_genuinely_new_path_still_initializes_and_sequences_from_one" time="0.001" /></testsuite></testsuites>

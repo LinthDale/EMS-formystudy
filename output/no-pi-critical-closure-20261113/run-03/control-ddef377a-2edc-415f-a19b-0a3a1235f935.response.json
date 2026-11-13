@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "request_id": "ddef377a-2edc-415f-a19b-0a3a1235f935",
+  "op": "slot_lose",
+  "before": {
+    "slot": "ems_archive_slot",
+    "active": true,
+    "restart_lsn": "0/1F7E618",
+    "wal_status": "reserved",
+    "peer_tls": true,
+    "flush_lsn": "0/1F7E618"
+  },
+  "lost": {
+    "slot": "ems_archive_slot",
+    "active": false,
+    "restart_lsn": null,
+    "wal_status": "lost",
+    "peer_tls": null,
+    "flush_lsn": null
+  },
+  "child_exit": 1,
+  "gate_rejected": true
+}

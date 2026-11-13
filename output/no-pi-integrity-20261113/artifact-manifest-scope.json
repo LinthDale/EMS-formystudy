@@ -1,0 +1,8 @@
+{
+  "captured_utc": "2026-11-13T06:26:50.731833+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all static logical-integrity evidence including original RED, intermediate versions, run-final, regression-final, tools-final, latest tool-fixture snapshots and checks",
+  "no_active_soak": true
+}

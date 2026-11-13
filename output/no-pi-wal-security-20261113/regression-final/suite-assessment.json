@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "observed_tests": 580,
+  "boundary_cases": 35,
+  "missing_groups": {},
+  "boundary_failed_or_skipped": false,
+  "missing_case_ids": [],
+  "unexpected_case_ids": [],
+  "duplicate_case_ids": []
+}

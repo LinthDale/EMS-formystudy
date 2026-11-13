@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "sqlite_error": "SQLITE_READONLY",
+  "old_preserved": true,
+  "next_sequence": 2
+}

@@ -1,0 +1,10 @@
+{
+  "services/delta/delta_device/reliable_store.py": "20c0f8cccbca7c6930eb87f90c4d4a03803d865adde9f8936a2e62b07d3712ce",
+  "services/delta/delta_device/reliable_sender.py": "80334326bcc6d04f13e1975fdf79fb6751b0ef5ce8806cf3c6262b55bc73ca37",
+  "services/delta/delta_device/migrate_delivery.py": "e4cb6cbc63444502da5b1fffe6addab7d4ba307d724697a7bc37b7953c78d9cc",
+  "services/delta/tests/test_reliable_delivery.py": "05923c72995b152b6cee89b6bd5bf36cfb1d47698c08c59bd3546c58d62a9fd9",
+  "tests/integration/test_edge_receipts_faults.py": "c40493b6f4bae083d852e3ff80043cd5abedcc32a92d4364e5251f06bea93aa8",
+  "tests/integration/test_edge_receipts_mqtt.py": "af5f7cdc5bbe0f507dcc137e4e477a23ff4dc4b526b2ca85e5dd53732fe21f9e",
+  "services/edge-receiver/tools/verify_private.py": "a9d962f730aa66cb6aaf904c75483a4c54044dfa87f72624f2b784ee4cfa79de",
+  "services/edge-receiver/tests/fixtures/faults-and-boundary.xml": "8685b52e6fbf1c9d13792b758322bc841bdf3ddaf0c571e06561cc0bdb98314d"
+}

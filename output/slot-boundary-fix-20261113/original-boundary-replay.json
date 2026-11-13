@@ -1,0 +1,58 @@
+{
+  "passed": true,
+  "scope": "five recorded observations replayed only; no hardware/long test",
+  "origin": 2544316.218,
+  "rows": [
+    {
+      "expected_slot": 5107,
+      "old_slot": 5107,
+      "corrected_slot": 5107,
+      "scheduled_monotonic": 2569851.218,
+      "observed_monotonic": 2569851.218,
+      "signed_delay_seconds": 0.0,
+      "sampled_ns": 1794491728633570000,
+      "closed": false
+    },
+    {
+      "expected_slot": 5108,
+      "old_slot": 5108,
+      "corrected_slot": 5108,
+      "scheduled_monotonic": 2569856.218,
+      "observed_monotonic": 2569856.218,
+      "signed_delay_seconds": 0.0,
+      "sampled_ns": 1794491733646420000,
+      "closed": false
+    },
+    {
+      "expected_slot": 5109,
+      "old_slot": 5108,
+      "corrected_slot": 5109,
+      "scheduled_monotonic": 2569861.218,
+      "observed_monotonic": 2569861.203,
+      "signed_delay_seconds": -0.014999999664723873,
+      "sampled_ns": 1794491738631664000,
+      "closed": false
+    },
+    {
+      "expected_slot": 5110,
+      "old_slot": 5110,
+      "corrected_slot": 5110,
+      "scheduled_monotonic": 2569866.218,
+      "observed_monotonic": 2569866.218,
+      "signed_delay_seconds": 0.0,
+      "sampled_ns": 1794491743638980000,
+      "closed": false
+    },
+    {
+      "expected_slot": 5111,
+      "old_slot": 5111,
+      "corrected_slot": 5111,
+      "scheduled_monotonic": 2569871.218,
+      "observed_monotonic": 2569871.234,
+      "signed_delay_seconds": 0.016000000294297934,
+      "sampled_ns": 1794491748649157000,
+      "closed": false
+    }
+  ],
+  "original_evidence_changed": false
+}

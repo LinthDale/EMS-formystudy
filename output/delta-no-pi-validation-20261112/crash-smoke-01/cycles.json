@@ -1,0 +1,13 @@
+[
+  {
+    "index": 0,
+    "killed_pid": 40076,
+    "exit_code": 1,
+    "committed": 3,
+    "pending": 3,
+    "uncommitted_ns": 1794461540268134000,
+    "integrity_check": "ok",
+    "recovered_exactly": true,
+    "passed": true
+  }
+]

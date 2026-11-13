@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "stage": "before_publish",
+  "child_exit": -9,
+  "published_at_crash": false,
+  "original_sha256": "ce754e0f15c27999559381e44390af224b96778202cf0e4253df16462187cfa0",
+  "source_unchanged": true,
+  "rows": 2,
+  "central_rows": [
+    1,
+    1
+  ],
+  "pending_end": 0,
+  "stable_mapping": true,
+  "scope": "process SIGKILL only, not storage/power-cut durability"
+}

@@ -1,0 +1,111 @@
+{
+  "passed": true,
+  "suite": "wal-pitr",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532320]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 36,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 36,
+    "observed_tests": 36,
+    "evidence_checks": {
+      "wal_outage_kept_source": true,
+      "postcommit_wal_loss_kept_source": true,
+      "migration_least_privilege": true,
+      "postbackup_acked_payload_absent": true,
+      "original_primary_stopped": true,
+      "original_pgdata_not_used": true,
+      "backup_and_wal_identity_match": true,
+      "pitr_excluded_after_target": true,
+      "old_ack_rejected": true,
+      "missing_wal_failed_closed": true,
+      "recovered_sync_wal_ready": true,
+      "recovered_once": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "wal-receiver-recovered",
+      "container": "a41ee3e9d1b69058eb1767e4192b0da18a8a8a33643ddd7c6b4c0c72f37b82ce",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "recovered-database",
+      "container": "5ecc95010e03361d9a40adadb223078234352171322afff230103ee168254ab9",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-recovered",
+      "container": "192d328811700a82558ac1713f414fe33a89a227859b922cb2ed05113bde10b9",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "missing-database",
+      "container": "88edde065ef404025a34cc221d2c04333434635c13af3f6ffdc7fe5010f09ea4",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-missing",
+      "container": "2da882d95d9af3418d6b49d5e33b4e928685b2817f126b0b83fe08cb7e27804b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "de095883f86a175a583c965583d347c27f611ca27fcb2c642116534838241b7e",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "03f7699378bbc6ebad9e104aefee916f7f8e12c246e4972141dd8cb57a287045",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "9ae8ec5dbfa086b939f562f783ea7fb9315cb4a5e11fe08ba2bf06c2edf8cede",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "b26c8a4552007ce5eeb473e70ed3b281fb07b2d5849bcdd49e10876516d53d38",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "906bba413fffa5523f6ea66afdb29f046219d44074c2ea59be6cdb881be0ed99",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "d6813c3a0ba82072f94ecc384599ae35260b0a69ea7fb6a9a33606d7de8e9446",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "003fc00264cb10c1097a693c5f651cb116daab9898bcfbfc0b620e66a5fcdf91",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

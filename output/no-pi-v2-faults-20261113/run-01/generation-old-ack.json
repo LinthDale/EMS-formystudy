@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "sample_id": "c4c89267-f097-4b24-9527-30637000a7a0",
+  "old_generation": "f6e52331-fb74-4f48-ade0-115317158613",
+  "new_generation": "843e21cd-9b17-4784-85e6-2bde3655a14a",
+  "old_ack_delivered": true,
+  "old_ack_accepted": false,
+  "projections": 1,
+  "pending_end": 0,
+  "scope": "ordinary receiver restart/rotation; not DB PITR"
+}

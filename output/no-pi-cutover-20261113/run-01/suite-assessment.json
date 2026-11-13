@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 40,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 40,
+  "observed_tests": 40,
+  "evidence_checks": {
+    "field-limited-role": true,
+    "conversion-after_first_row": true,
+    "conversion-before_publish": true,
+    "conversion-after_publish": true,
+    "duplicate-client-id": true
+  }
+}

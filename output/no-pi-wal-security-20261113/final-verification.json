@@ -1,0 +1,132 @@
+{
+  "captured_utc": "2026-11-13T07:39:31.244684+00:00",
+  "passed": true,
+  "checks": {
+    "run-verified": true,
+    "regression-final": true,
+    "pitr-regression": true,
+    "security-unit-verified.xml": true,
+    "gate-final.xml": true,
+    "current_python_sql_match_tested_sources": true,
+    "all_13_prior_sealed_archives_unchanged": true,
+    "same_17_shared_running_containers": true,
+    "no_private_key_files_or_backup_tar_contents": true,
+    "openapi_yaml_valid": true,
+    "new_document_relative_links_valid": true,
+    "tracked_diff_whitespace_check_passed_excluding_preexisting_guideline": true,
+    "evidence_readme_nonempty": true
+  },
+  "runs": {
+    "run-verified": {
+      "passed": 55,
+      "skipped": 0,
+      "cleanup": 26,
+      "sources_unchanged": true,
+      "seconds": "62.520"
+    },
+    "regression-final": {
+      "passed": 568,
+      "skipped": 12,
+      "cleanup": 6,
+      "sources_unchanged": true,
+      "seconds": "34.709"
+    },
+    "pitr-regression": {
+      "passed": 36,
+      "skipped": 0,
+      "cleanup": 12,
+      "sources_unchanged": true,
+      "seconds": "12.319"
+    }
+  },
+  "coverage_percent": 90.99208764455265,
+  "current_tested_python_sql_files": {
+    "run-verified": 97,
+    "regression-final": 98,
+    "pitr-regression": 98
+  },
+  "current_core_source_mismatches": {
+    "run-verified": [],
+    "regression-final": [],
+    "pitr-regression": []
+  },
+  "prior_archives": [
+    {
+      "archive": "delta-no-pi-validation-20261112",
+      "verified_files": 770,
+      "unchanged": true
+    },
+    {
+      "archive": "committed-delivery-fix-20261112",
+      "verified_files": 752,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-backlog-20261112",
+      "verified_files": 384,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-ingest-20261112",
+      "verified_files": 321,
+      "unchanged": true
+    },
+    {
+      "archive": "slot-boundary-fix-20261113",
+      "verified_files": 20,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-v2-faults-20261113",
+      "verified_files": 526,
+      "unchanged": true
+    },
+    {
+      "archive": "newest-first-retention-20261113",
+      "verified_files": 670,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-resilience-20261113",
+      "verified_files": 305,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-lifecycle-20261113",
+      "verified_files": 595,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-restore-load-20261113",
+      "verified_files": 581,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-wal-pitr-20261113",
+      "verified_files": 814,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-cutover-20261113",
+      "verified_files": 446,
+      "unchanged": true
+    },
+    {
+      "archive": "no-pi-integrity-20261113",
+      "verified_files": 506,
+      "unchanged": true
+    }
+  ],
+  "shared_running_containers": 17,
+  "private_key_audit": {
+    "loose_private_key_files": [],
+    "tar_archives_inspected": 14,
+    "tar_entries_inspected": 11178,
+    "private_key_findings": []
+  },
+  "no_long_soak_rerun": true,
+  "no_COM_access": true,
+  "no_shared_fault_injection": true,
+  "documentation_only_after_final_tests": true,
+  "current_source_manifest": "current-source-sha256.json"
+}

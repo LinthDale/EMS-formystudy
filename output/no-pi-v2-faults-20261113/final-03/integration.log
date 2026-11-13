@@ -1,0 +1,28 @@
+...........................................                              [100%]
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                                Stmts   Miss  Cover   Missing
+---------------------------------------------------------------------------------
+services/delta/delta_device/__init__.py                 0      0   100%
+services/delta/delta_device/__main__.py                60     60     0%   1-75
+services/delta/delta_device/config.py                 120    108    10%   14-21, 26-38, 42-45, 49-126, 130-146
+services/delta/delta_device/delivery.py                91     62    32%   15-24, 34, 37, 44-66, 71-76, 79-88, 92-94, 97-98, 102-103, 106-107, 111-117
+services/delta/delta_device/edge.py                    63     49    22%   22-82
+services/delta/delta_device/migrate_delivery.py        73     73     0%   2-89
+services/delta/delta_device/poller.py                 101     78    23%   28-36, 41-49, 53-57, 60-63, 66-83, 86-105, 108-127
+services/delta/delta_device/protocol.py                54     41    24%   11-13, 17-19, 33-48, 53-91
+services/delta/delta_device/publisher.py               62     50    19%   10-33, 36-39, 42, 46-48, 51-52, 55-71, 74-75
+services/delta/delta_device/reliable_sender.py        125      7    94%   74, 86-87, 106, 114-116
+services/delta/delta_device/reliable_store.py         124     18    85%   21, 26, 34, 37, 40, 50, 53, 56, 58, 62, 66, 88, 96, 99, 115, 141-142, 149
+services/delta/delta_device/reliable_transport.py      23      6    74%   12, 14, 21-24
+services/delta/delta_device/reliable_wire.py          131     29    78%   28, 34, 40, 46, 51, 55-56, 60, 77, 79, 86, 88, 91, 95, 98, 100, 122, 125-126, 129, 135, 148, 151, 155, 160, 165-167, 169
+services/delta/delta_device/simulator.py              142    142     0%   2-192
+services/edge-receiver/edge_receiver/__init__.py        0      0   100%
+services/edge-receiver/edge_receiver/receiver.py      187     43    77%   36, 40, 45, 48, 50, 52, 55, 59, 63, 68, 71, 95, 113, 116-117, 132, 135, 138, 141, 148, 151, 155, 158, 160, 166, 173, 196-197, 204-217, 221
+services/edge-receiver/edge_receiver/store.py          47      5    89%   29, 43, 57, 68, 78
+---------------------------------------------------------------------------------
+TOTAL                                                1403    771    45%
+Coverage JSON written to file /evidence/receiver-coverage.json
+43 passed in 9.08s

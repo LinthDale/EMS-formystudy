@@ -1,0 +1,9 @@
+{
+  "scope": "new slot_observation function only; not whole bench or production",
+  "covered_statements": 11,
+  "missing_statements": [
+    48,
+    49
+  ],
+  "line_coverage_percent": 84.61538461538461
+}

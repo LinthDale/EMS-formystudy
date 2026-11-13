@@ -1,0 +1,20 @@
+........................................................................ [ 56%]
+.......................................................                  [100%]
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                        Stmts   Miss  Cover   Missing
+---------------------------------------------------------
+delta_device/__init__.py        0      0   100%
+delta_device/__main__.py       56      6    89%   53-61, 67
+delta_device/config.py         83      0   100%
+delta_device/delivery.py       87      1    99%   23
+delta_device/edge.py           54      3    94%   40-42, 60
+delta_device/poller.py         45      2    96%   61-62
+delta_device/protocol.py       54      1    98%   18
+delta_device/publisher.py      62      6    90%   26, 51-52, 62, 74-75
+delta_device/simulator.py     142      6    96%   26, 49, 118-119, 148, 180
+---------------------------------------------------------
+TOTAL                         583     25    96%
+Required test coverage of 80% reached. Total coverage: 95.71%
+127 passed in 7.41s

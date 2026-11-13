@@ -1,0 +1,40 @@
+{
+  "sharedClockGaps": [
+    {
+      "start": 1790671390886,
+      "end": 1790671395473,
+      "seconds": 4.587
+    },
+    {
+      "start": 1790671427473,
+      "end": 1790671432057,
+      "seconds": 4.584
+    },
+    {
+      "start": 1790671463057,
+      "end": 1790671467640,
+      "seconds": 4.583
+    }
+  ],
+  "since": "2026-09-29T08:42:47.725Z",
+  "until": "2026-09-29T08:44:47.725Z",
+  "rows": 110,
+  "intervalSeconds": {
+    "min": 1,
+    "median": 1,
+    "max": 4.587
+  },
+  "voltage": {
+    "min": 226,
+    "max": 234.10000000000002,
+    "unique": 50
+  },
+  "power": {
+    "min": 0,
+    "max": 9.634
+  },
+  "originalMeterRows": 111,
+  "graphBucketSeconds": 2,
+  "graphRecentVaryingBuckets": 56,
+  "errors": []
+}

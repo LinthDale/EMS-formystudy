@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="2" time="0.024" timestamp="2026-11-13T06:19:31.787868+00:00" hostname="df526bc89cab"><testcase classname="" name="test_integrity_suite_has_new_real_cases_and_all_original_boundary_cases" time="0.000"><failure message="ValueError: unknown private suite">services/edge-receiver/tests/test_integrity_suite.py:11: in test_integrity_suite_has_new_real_cases_and_all_original_boundary_cases
+    assert verifier.suite_targets('integrity')==('/app/tests/integration/test_edge_integrity.py',
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+services/edge-receiver/tools/verify_private.py:63: in suite_targets
+    raise ValueError('unknown private suite')
+E   ValueError: unknown private suite</failure></testcase><testcase classname="" name="test_integrity_suite_rejects_old_passing_xml_without_new_scenarios_or_proofs" time="0.001"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_integrity_report'">services/edge-receiver/tests/test_integrity_suite.py:18: in test_integrity_suite_rejects_old_passing_xml_without_new_scenarios_or_proofs
+    assert not verifier.assess_integrity_report(xml,0,{})['passed'], 'old successful cases replaced new integrity scenarios'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'verify_private' has no attribute 'assess_integrity_report'</failure></testcase></testsuite></testsuites>

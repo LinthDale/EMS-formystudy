@@ -1,0 +1,12 @@
+{
+  "captured_utc": "2026-11-12T08:53:57.350206+00:00",
+  "files": 384,
+  "excluded": [
+    "**/__pycache__/**",
+    "**/*.pyc",
+    "**/*.coverage",
+    "artifact-sha256.json",
+    "artifact-manifest-scope.json"
+  ],
+  "scope": "new no-Pi backlog test evidence only; live 24h run is separate and untouched"
+}

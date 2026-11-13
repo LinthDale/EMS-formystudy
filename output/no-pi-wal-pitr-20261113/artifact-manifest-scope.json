@@ -1,0 +1,9 @@
+{
+  "captured_utc": "2026-11-13T05:52:07.135093+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all static test evidence, original RED and failed/earlier runs, private trust basebackup/WAL and frozen sources; run-postcommit is definitive PITR; tools-postcommit.xml; regression-01 production source unchanged",
+  "no_active_soak": true,
+  "private_pki_keys_not_included": true
+}

@@ -1,0 +1,108 @@
+[
+  {
+    "passed": true,
+    "request_id": "c35b30d4-56b5-435a-8589-c051574e28a8",
+    "op": "db_data_full",
+    "actual_enospc": true,
+    "limit_bytes": 16777216,
+    "receipt_relation": "pg_tblspc/18562/PG_15_202209061/16384/18563"
+  },
+  {
+    "passed": true,
+    "request_id": "aa60bec1-bf0d-414e-8e7c-4ffba3b741af",
+    "op": "db_data_free",
+    "actual_relation_enospc": true,
+    "space_freed": true
+  },
+  {
+    "passed": true,
+    "request_id": "c4cc35c1-e0fd-4a23-8215-bc7a15f7e96b",
+    "op": "db_data_clean",
+    "tablespace_removed": true
+  },
+  {
+    "passed": true,
+    "request_id": "7c588f49-7e8f-45a3-9b1b-e2c0cc15c17a",
+    "op": "slot_lose",
+    "before": {
+      "slot": "ems_archive_slot",
+      "active": true,
+      "restart_lsn": "0/1FB2538",
+      "wal_status": "reserved",
+      "peer_tls": true,
+      "flush_lsn": "0/1FB2538"
+    },
+    "lost": {
+      "slot": "ems_archive_slot",
+      "active": false,
+      "restart_lsn": null,
+      "wal_status": "lost",
+      "peer_tls": null,
+      "flush_lsn": null
+    },
+    "child_exit": 1,
+    "gate_rejected": true
+  },
+  {
+    "passed": true,
+    "request_id": "2c3cc3f4-0694-4907-8c26-1b908e91ee40",
+    "op": "slot_reseed",
+    "base_verified": true,
+    "expected_system_id": "7707563597702295594",
+    "old_slot_preserved": "ems_archive_slot",
+    "replacement_slot": {
+      "slot": "ems_archive_reseed",
+      "active": true,
+      "restart_lsn": "0/7039010",
+      "wal_status": "reserved",
+      "peer_tls": true,
+      "flush_lsn": "0/7039010"
+    },
+    "fixed_lsn": "0/70000D8",
+    "flush_fence_satisfied": true,
+    "reserved_before_backup": "0/2000028",
+    "forced_gap_segments": 3,
+    "reseed_chain_pitr_verified": true,
+    "recovered_gap_marker": "reseed-gap",
+    "base_artifacts": {
+      "base-backup_manifest": {
+        "bytes": 313085,
+        "sha256": "8b16ee86f9e10cba0ea8ed385b4e1c58e2c2418a53a8dc81276a1f456e7eabb0"
+      },
+      "base-base.tar": {
+        "bytes": 36515328,
+        "sha256": "4df12cc7c9b27bef91f197f75ce8e88c3ecf6a4f770dc6983699aff377d1ee07"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "71d21150266109fe507d448b5c38e7ab930d1488e57cee75842d51bfbe358ba6"
+      }
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "d3090310-a935-4992-a27d-fe110ebbc5f8",
+    "op": "timeline_matrix",
+    "system_id": "7707563597702295594",
+    "branch_timelines": [
+      2,
+      3
+    ],
+    "target": "ems_branch_target",
+    "approved_timeline": 2,
+    "pinned_rows": "branch-two",
+    "unsafe_latest_rows": "branch-three",
+    "latest_rejected": true,
+    "second_pitr_promoted": true,
+    "backup_verified": true,
+    "pristine_inputs_unchanged": true,
+    "pinned_recovery": {
+      "system_id": "7707563597702295594",
+      "timeline": 4
+    },
+    "unsafe_recovery": {
+      "system_id": "7707563597702295594",
+      "timeline": 4
+    }
+  }
+]

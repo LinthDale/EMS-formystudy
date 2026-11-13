@@ -1,0 +1,20 @@
+{
+  "checked_utc": "2026-11-12T06:05:11.274863+00:00",
+  "markdown_links_checked": 300,
+  "broken_local_links": [],
+  "frozen_soak_sources_unchanged": true,
+  "verifier_dependencies_unchanged": true,
+  "ui_negative_probe": {
+    "source_exit": 1,
+    "source_passed": false,
+    "source_verified": false,
+    "source_cases": 5,
+    "cleanup_exit": 1,
+    "cleanup_passed": false,
+    "cleanup_complete": false,
+    "cleanup_cases": 5,
+    "passed": true
+  },
+  "unit_tests": 183,
+  "production_line_coverage_percent": 96.06
+}

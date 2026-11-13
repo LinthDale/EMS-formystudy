@@ -1,0 +1,8 @@
+{
+  "scope": "local source and isolated Windows two-adapter bench; no shared runtime deployment",
+  "code_review": "Approve after field test compatibility, marker publication, asynchronous DB wait, private child configuration, cleanup and artifact consistency fixes",
+  "python_review": "Approve after bounded outbox test, actual guard deadline, atomic marker, independent cleanup and private parent/run containment fixes",
+  "hardware_access_by_reviewers": false,
+  "unresolved_field_risk": "response lifetime not yet qualified for M70A-262/RPI-M30A; arbitrary out-of-bound stale frames cannot be identified by RTU FC04 alone",
+  "historical_failures_preserved": true
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "run": "baseline-01",
+    "scheduled": 120,
+    "valid": 120,
+    "db": 120,
+    "api": 120,
+    "p99_seconds": 0.3440000000409782,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "interval-1s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "p99_seconds": 0.32799999974668026,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "interval-5s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "p99_seconds": 0.3440000000409782,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "interval-10s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "p99_seconds": 0.35899999970570207,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "interval-15s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "p99_seconds": 0.32899999991059303,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "interval-30s-01",
+    "scheduled": 30,
+    "valid": 30,
+    "db": 30,
+    "api": 30,
+    "p99_seconds": 0.32800000021234155,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "scenario-night-01",
+    "scheduled": 10,
+    "valid": 10,
+    "db": 10,
+    "api": 10,
+    "p99_seconds": 0.3130000000819564,
+    "pending": 0,
+    "passed": true
+  },
+  {
+    "run": "scenario-alarm-01",
+    "scheduled": 10,
+    "valid": 10,
+    "db": 10,
+    "api": 10,
+    "p99_seconds": 0.3440000000409782,
+    "pending": 0,
+    "passed": true
+  }
+]

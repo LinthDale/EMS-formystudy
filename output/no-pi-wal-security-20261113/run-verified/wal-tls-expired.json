@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "kind": "expired",
+  "probe": {
+    "passed": true,
+    "request_id": "a6a9d0c4-a752-4599-943c-11656f7c87ba",
+    "op": "wal_probe_expired",
+    "kind": "expired",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "750d71540b3fd5304e0ce4281692b8bfc5d989213b999c9fbb4af8aacd7e3c9c",
+    "replication_peer_absent": true,
+    "tls_verify_code": 10,
+    "client_verify_code": null
+  },
+  "recovered_slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC6D18",
+    "lag_bytes": 0,
+    "slot_retained_bytes": 0,
+    "active": true,
+    "peer_tls": true,
+    "peer_role": "ems_wal_archive",
+    "peer_client_dn": "/CN=ems_wal_archive",
+    "flush_lsn": "0/1FC6D18"
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

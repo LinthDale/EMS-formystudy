@@ -1,0 +1,72 @@
+{
+  "evidence_kind": "MEMORY_SERIAL_SUBSTITUTE_NOT_PHYSICAL_RS485",
+  "finding_reproduced": true,
+  "python": "3.11.15 (main, May 19 2026, 23:49:45) [GCC 14.2.0]",
+  "host_platform": "linux",
+  "poller_platform_override": "win32",
+  "packages": {
+    "pymodbus": "3.6.9",
+    "pyserial": "3.5"
+  },
+  "source_sha256": {
+    "bench_frames.py": "cda076e3b5e6a3228fe30a6842eba8149a0673f5babc8183222745ecd734e695",
+    "poller.py": "65abce0bc9282b82af2b9a57bcdf6a120c91d33aee0ac0484da6d7a58e618ee6",
+    "reproduce.py": "43639f2d80fdbc95ab931417691cd52b1e9496fe9d484e13e0ad6a328fa76fdb"
+  },
+  "serial_factory_calls": [
+    {
+      "factory": "Serial",
+      "endpoint": "MEMORY_SLAVE"
+    },
+    {
+      "factory": "serial_for_url",
+      "endpoint": "MEMORY_MASTER"
+    },
+    {
+      "factory": "serial_for_url",
+      "endpoint": "MEMORY_MASTER"
+    }
+  ],
+  "checks": {
+    "first_read_rejected": true,
+    "stale_2300_accepted_by_second_read": true,
+    "late_event_order_verified": true,
+    "bench_correctly_reports_failure": true,
+    "both_memory_endpoints_closed": true,
+    "no_new_worker_left_alive": true
+  },
+  "case_result": {
+    "kind": "late",
+    "requests": [
+      "0104c00000010dca",
+      "0104c00100015c0a"
+    ],
+    "request_times": [
+      2338178.859638082,
+      2338179.863490901
+    ],
+    "sends": [
+      {
+        "monotonic": 2338179.863526881,
+        "hex": "01040208fcbeb1"
+      }
+    ],
+    "errors": [],
+    "first": {
+      "accepted": false,
+      "values": null,
+      "seconds": 1.0018576397560537,
+      "finished": 2338179.861417516
+    },
+    "recovery": {
+      "accepted": true,
+      "values": [
+        2300
+      ],
+      "seconds": 0.006423960905522108,
+      "finished": 2338179.867842673
+    },
+    "passed": false,
+    "late_order_verified": true
+  }
+}

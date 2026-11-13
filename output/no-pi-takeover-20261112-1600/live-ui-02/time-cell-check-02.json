@@ -1,0 +1,18 @@
+{
+  "method": "parse displayed zh-TW date into explicit UTC+08:00; compare instants to API truncated to displayed seconds",
+  "checks": [
+    {
+      "width": 1440,
+      "rows": 100,
+      "mismatches": [],
+      "passed": true
+    },
+    {
+      "width": 390,
+      "rows": 100,
+      "mismatches": [],
+      "passed": true
+    }
+  ],
+  "passed": true
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="7" time="0.024" timestamp="2026-11-13T07:04:11.130519+00:00" hostname="8ec93a03341a"><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[/outside-file]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[../outside-file]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[base/../../outside-file]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[safe-link-symlink]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[hard-link-hardlink]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_rejects_escape_links_and_devices[device-device]" time="0.001"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:19: in test_backup_archive_rejects_escape_links_and_devices
+    with pytest.raises(ValueError):backup_preflight.inspect_archive(path)
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase><testcase classname="" name="test_backup_archive_validates_regular_files_without_extracting" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'">services/edge-receiver/tests/test_backup_archives.py:27: in test_backup_archive_validates_regular_files_without_extracting
+    result=backup_preflight.inspect_archive(path)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'inspect_archive'</failure></testcase></testsuite></testsuites>

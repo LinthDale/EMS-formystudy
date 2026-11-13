@@ -1,0 +1,32 @@
+{
+  "passed": true,
+  "requested_categories": 3,
+  "mandatory_boundary_cases": 35,
+  "targeted_passed": 38,
+  "targeted_skipped": 0,
+  "targeted_elapsed_seconds": 18.9,
+  "regression_passed": 419,
+  "regression_skipped": 12,
+  "regression_elapsed_seconds": 33.49,
+  "production_line_percent": 91.04180491041805,
+  "new_fairness_cases": 3,
+  "new_controller_cases": 23,
+  "production_files_modified": [
+    "services/delta/delta_device/reliable_sender.py",
+    "services/delta/delta_device/reliable_store.py"
+  ],
+  "shared_deployment_changed": false,
+  "long_test_restarted": false,
+  "pi_field_acceptance": false,
+  "logical_restore_tested": true,
+  "wal_pitr_tested": false,
+  "acked_after_backup_loss_recoverable_from_dump_and_local": false,
+  "new_sample_commit_seconds": [
+    1.0443374780006707,
+    2.091162931999861,
+    2.097782131000713
+  ],
+  "burst_messages": 200,
+  "receiver_queue_peak": 64,
+  "receiver_queue_drops": 135
+}

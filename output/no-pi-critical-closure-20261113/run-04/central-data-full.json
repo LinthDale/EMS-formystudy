@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "full": {
+    "passed": true,
+    "request_id": "c35b30d4-56b5-435a-8589-c051574e28a8",
+    "op": "db_data_full",
+    "actual_enospc": true,
+    "limit_bytes": 16777216,
+    "receipt_relation": "pg_tblspc/18562/PG_15_202209061/16384/18563"
+  },
+  "freed": {
+    "passed": true,
+    "request_id": "aa60bec1-bf0d-414e-8e7c-4ffba3b741af",
+    "op": "db_data_free",
+    "actual_relation_enospc": true,
+    "space_freed": true
+  },
+  "statuses_during_failure": [
+    "retryable"
+  ],
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0,
+  "tablespace_removed": true
+}

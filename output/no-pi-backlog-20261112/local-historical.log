@@ -1,0 +1,24 @@
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+sample_rejected kind=WindowComplete
+{"scope": "local-ems", "device_id": "delta-backlog-qa-20261112", "started_utc": "2026-11-12T08:44:10.521858+00:00", "production_db_ack": false, "passed": true, "configured": {"output": "/evidence/local-historical-01", "scope": "local-ems", "device": "delta-backlog-qa-20261112", "preload": 60, "live_count": 0, "deadline": 60.0, "rtt_ms": 100.0, "jitter_ms": 0, "rate_kib": 0, "initial_offline": 8.0, "flaps": ""}, "prefill_seconds": 0.17958535812795162, "prefill_rows": 60, "backup": {"rows": 60, "minimum_committed": 60, "exact_prefix": true, "metadata_matches": true, "passed": true, "integrity": "ok", "wrong_identity_rejected": true}, "expected": 60, "received": 60, "missing_count": 0, "unexpected_count": 0, "duplicate_count": 0, "pending_end": 0, "completion_passed": true, "unique_delivery_passed": true, "live_committed": 0, "runtime_seconds": 22.446713062934577, "publisher_connections": [2360167.844145935], "network_events": [{"kind": "offline", "monotonic": 2360152.610239872}, {"kind": "online", "monotonic": 2360160.722782187}], "gate_stats": {"chunks": 122, "bytes": 12196, "delayed_seconds": 6.099999999999986}, "max_pending": 60, "errors": [], "observed_receive_per_second": 9.34840654974399, "sources_unchanged": true, "cleanup_errors": [], "finished_utc": "2026-11-12T08:44:33.487513+00:00"}

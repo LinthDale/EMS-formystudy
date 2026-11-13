@@ -1,0 +1,66 @@
+{
+  "passed": true,
+  "suite": "resilience",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532318]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 44,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 44,
+    "observed_tests": 44,
+    "evidence_checks": {
+      "crash-after_retire": true,
+      "crash-before_commit": true,
+      "crash-after_commit": true,
+      "sqlite-busy": true,
+      "sqlite-readonly": true,
+      "online-backup": true,
+      "tls-server-untrusted-ca": true,
+      "tls-server-wrong-host": true,
+      "tls-server-expired": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "worker",
+      "container": "cfc898817afb3ca0555da6aa8a8f4b150021fe86dc439a9045b0cf8124161077",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "709adc29e736333d9402ecbd2d51c9f303234ad3026776e5b4eed6ab01c604ed",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "27d97e6618aad44ae019621486c07a2957e57f155b7daab1ec1eb70603cda207",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "b065e22918e34f98a6861f38ecdb1fd72c03b8a9fe60ae2e6a818f8a77c35671",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "337841524b3852413495d9c4c726aae343fce277c5b34125388d8757e51db045",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

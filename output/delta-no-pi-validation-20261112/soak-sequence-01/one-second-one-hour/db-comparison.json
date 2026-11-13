@@ -1,0 +1,30 @@
+{
+  "database": {
+    "expected": 3600,
+    "received": 3600,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 3600,
+    "received": 3600,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "observations": [
+    {
+      "observed_utc": "2026-11-12T06:49:50.847222+00:00",
+      "received": 3600,
+      "missing": 0
+    }
+  ],
+  "passed": true
+}

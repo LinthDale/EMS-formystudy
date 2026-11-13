@@ -1,0 +1,146 @@
+[
+  {
+    "event": "private_setup_ready",
+    "utc": "2026-11-12T09:10:56.574767+00:00",
+    "monotonic": 2361619.149068883,
+    "anchor": "8634c9a275084e3c6f9548d19f119af3d76075b4d82879632b3e3a47a465dc89",
+    "namespace": "net:[4026533384]",
+    "network_mode": "none",
+    "host_ports": [],
+    "config_changes": [
+      "loopback endpoint substitution only"
+    ]
+  },
+  {
+    "event": "case_start",
+    "utc": "2026-11-12T09:10:56.574942+00:00",
+    "monotonic": 2361619.14923314,
+    "kind": "baseline"
+  },
+  {
+    "event": "sender_confirmed",
+    "utc": "2026-11-12T09:10:56.751134+00:00",
+    "monotonic": 2361619.325435554,
+    "kind": "baseline",
+    "broker_ack": true,
+    "pending": 0
+  },
+  {
+    "event": "case_end",
+    "utc": "2026-11-12T09:11:01.914932+00:00",
+    "monotonic": 2361624.489231114,
+    "kind": "baseline",
+    "comparison": {
+      "expected": 3,
+      "received": 3,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": true
+  },
+  {
+    "event": "case_start",
+    "utc": "2026-11-12T09:11:01.915131+00:00",
+    "monotonic": 2361624.489422702,
+    "kind": "duplicate"
+  },
+  {
+    "event": "sender_confirmed",
+    "utc": "2026-11-12T09:11:02.054306+00:00",
+    "monotonic": 2361624.628607481,
+    "kind": "duplicate",
+    "broker_ack": true,
+    "pending": 0
+  },
+  {
+    "event": "case_end",
+    "utc": "2026-11-12T09:11:10.812768+00:00",
+    "monotonic": 2361629.802544786,
+    "kind": "duplicate",
+    "comparison": {
+      "expected": 1,
+      "received": 2,
+      "missing": [],
+      "extra": [],
+      "duplicates": [
+        1794474662027356000
+      ],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": false
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": false
+  },
+  {
+    "event": "case_start",
+    "utc": "2026-11-12T09:11:10.812940+00:00",
+    "monotonic": 2361629.802707649,
+    "kind": "receiver-down"
+  },
+  {
+    "event": "sender_confirmed",
+    "utc": "2026-11-12T09:11:11.027581+00:00",
+    "monotonic": 2361630.017359435,
+    "kind": "receiver-down",
+    "broker_ack": true,
+    "pending": 0
+  },
+  {
+    "event": "case_end",
+    "utc": "2026-11-12T09:11:21.418965+00:00",
+    "monotonic": 2361640.40874104,
+    "kind": "receiver-down",
+    "comparison": {
+      "expected": 1,
+      "received": 0,
+      "missing": [
+        1794474670997909000
+      ],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": false
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": false
+  },
+  {
+    "event": "case_start",
+    "utc": "2026-11-12T09:11:21.419114+00:00",
+    "monotonic": 2361640.408882211,
+    "kind": "db-pause"
+  },
+  {
+    "event": "sender_confirmed",
+    "utc": "2026-11-12T09:11:21.637574+00:00",
+    "monotonic": 2361640.627351527,
+    "kind": "db-pause",
+    "broker_ack": true,
+    "pending": 0
+  },
+  {
+    "event": "case_end",
+    "utc": "2026-11-12T09:11:31.792163+00:00",
+    "monotonic": 2361650.781938789,
+    "kind": "db-pause",
+    "comparison": {
+      "expected": 10,
+      "received": 10,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": true
+  }
+]

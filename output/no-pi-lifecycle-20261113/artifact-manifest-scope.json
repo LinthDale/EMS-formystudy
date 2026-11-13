@@ -1,0 +1,8 @@
+{
+  "captured_utc": "2026-11-13T04:12:48.643644+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all completed static lifecycle evidence including failed/intermediate runs; final run-final and regression-final",
+  "no_active_soak": true
+}

@@ -1,0 +1,8 @@
+{
+  "captured_utc": "2026-11-13T02:53:19.655065+00:00",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "scope": "all completed static evidence; final run is run-final, old run proof defect retained",
+  "no_active_soak": true
+}

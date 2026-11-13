@@ -1,0 +1,7 @@
+{
+  "tests/integration/test_edge_receipts_faults.py": "c40493b6f4bae083d852e3ff80043cd5abedcc32a92d4364e5251f06bea93aa8",
+  "services/edge-receiver/tools/verify_private.py": "a9d962f730aa66cb6aaf904c75483a4c54044dfa87f72624f2b784ee4cfa79de",
+  "services/edge-receiver/tools/boundary-cases.json": "8aa4a85fdb5324589a77dc5167f743ff7124f8658b465756e2f54f362ec948ad",
+  "services/edge-receiver/tests/test_private_suite.py": "c3e72e3e9ecb3fae16533a85d2272b330f19e6afde4f02a129b3cee5efa8581f",
+  "services/edge-receiver/tests/fixtures/faults-and-boundary.xml": "8685b52e6fbf1c9d13792b758322bc841bdf3ddaf0c571e06561cc0bdb98314d"
+}

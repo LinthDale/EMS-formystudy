@@ -1,0 +1,22 @@
+[
+  {
+    "passed": true,
+    "request_id": "e1dc15b6-2afd-49b2-ab98-2a44dcb655f6",
+    "op": "db_backup",
+    "container_id": "4b37879fca8e5389d22b2dc2381927f7fd01940b65fde50db8f211bfaa0fd204",
+    "format": "pg_dump-custom",
+    "backup_sha256": "cdfc802eac54c9ebad76dc2c9a1fe312a7bbb847aeb60c5765ff732c69f4598b",
+    "backup_bytes": 19573,
+    "source_database": "ems"
+  },
+  {
+    "passed": true,
+    "request_id": "11411d57-7f29-4750-a367-65562c01492e",
+    "op": "db_restore",
+    "container_id": "4b37879fca8e5389d22b2dc2381927f7fd01940b65fde50db8f211bfaa0fd204",
+    "target_database": "ems_restore",
+    "source_database_preserved": true,
+    "restore_method": "pg_restore-to-new-database",
+    "counts": "1|1"
+  }
+]

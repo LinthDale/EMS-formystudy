@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "child_exit": -9,
+  "observed": {
+    "pid": 31,
+    "stage": "after_retire",
+    "journal_bytes": 35336,
+    "main_file_changed": true
+  },
+  "recovered_ids": [
+    "03730d9e-091e-4a95-b164-9fdc229d42ed"
+  ],
+  "recovered_sequence": 1,
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 0,
+    "unconfirmed_evicted_total": 0,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": null
+  },
+  "next_sequence": 2,
+  "integrity": "ok"
+}

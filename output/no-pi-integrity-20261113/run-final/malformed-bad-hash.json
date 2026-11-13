@@ -1,0 +1,16 @@
+{
+  "passed": true,
+  "kind": "bad-hash",
+  "actual_parser_observed": true,
+  "acks_before_recovery": 0,
+  "rows_before": [
+    0,
+    0
+  ],
+  "rows_after": [
+    1,
+    1
+  ],
+  "pending_end": 0,
+  "receiver_survived": true
+}

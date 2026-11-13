@@ -1,0 +1,8 @@
+2026-11-12 13:48:32,913 INFO sample_queued device_id=delta-rtu-sim-001 time_ns=1794462512603158000 pending_rows=1
+2026-11-12 13:48:33,614 INFO broker_ack samples=1
+2026-11-12 13:48:37,911 INFO sample_queued device_id=delta-rtu-sim-001 time_ns=1794462517610886000 pending_rows=1
+2026-11-12 13:48:38,986 INFO broker_ack samples=1
+2026-11-12 13:48:42,917 INFO sample_queued device_id=delta-rtu-sim-001 time_ns=1794462522617721000 pending_rows=1
+2026-11-12 13:48:43,941 INFO broker_ack samples=1
+{"scheduled": 3, "attempted": 3, "valid": 3, "committed": 3, "missing_slots": [], "failed_slots": [], "duplicate_attempt_slots": [], "duplicate_read_slots": [], "duplicate_commit_slots": [], "outside_slots": [], "poll_seconds": {"p50": 0.29700000025331974, "p95": 0.29700000025331974, "p99": 0.29700000025331974, "max": 0.29700000025331974}, "pass": true, "ledger_error": null, "outages_restarted": 0, "control_errors": [], "golden_errors": [], "normal_sampling_pass": true, "pending_end": 0, "sqlite_bytes": 16384}
+{"database": {"expected": 3, "received": 3, "missing": [], "extra": [], "duplicates": [], "source_duplicates": [], "mismatched": [], "pass": true}, "api": {"expected": 3, "received": 3, "missing": [], "extra": [], "duplicates": [], "source_duplicates": [], "mismatched": [], "pass": true}, "observations": [{"observed_utc": "2026-11-12T05:48:53.086063+00:00", "received": 3, "missing": 0}], "passed": true}

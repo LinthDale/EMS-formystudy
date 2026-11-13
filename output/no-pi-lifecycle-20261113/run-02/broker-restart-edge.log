@@ -1,0 +1,22 @@
+2026-11-13 04:06:57,158 INFO sample_queued device_id=d1 time_ns=1794542817100308000 pending_rows=1
+2026-11-13 04:06:58,107 INFO sample_queued device_id=d1 time_ns=1794542818100533000 pending_rows=2
+2026-11-13 04:07:02,453 INFO sample_queued device_id=d1 time_ns=1794542822447112000 pending_rows=3
+2026-11-13 04:07:02,496 INFO central_committed sample_id=9a1b07eb-2d20-4bd2-be3e-ccc16237d7da
+2026-11-13 04:07:03,454 INFO sample_queued device_id=d1 time_ns=1794542823447130000 pending_rows=3
+2026-11-13 04:07:04,455 INFO sample_queued device_id=d1 time_ns=1794542824447110000 pending_rows=4
+2026-11-13 04:07:05,455 INFO sample_queued device_id=d1 time_ns=1794542825447107000 pending_rows=5
+2026-11-13 04:07:06,454 INFO sample_queued device_id=d1 time_ns=1794542826447109000 pending_rows=6
+2026-11-13 04:07:07,453 INFO sample_queued device_id=d1 time_ns=1794542827447092000 pending_rows=7
+2026-11-13 04:07:08,455 INFO sample_queued device_id=d1 time_ns=1794542828447107000 pending_rows=8
+2026-11-13 04:07:09,454 INFO sample_queued device_id=d1 time_ns=1794542829447133000 pending_rows=9
+2026-11-13 04:07:10,453 INFO sample_queued device_id=d1 time_ns=1794542830447097000 pending_rows=10
+2026-11-13 04:07:11,454 INFO sample_queued device_id=d1 time_ns=1794542831447141000 pending_rows=11
+2026-11-13 04:07:11,544 INFO central_committed sample_id=3543048a-ac85-42f6-8564-24ce2a8826d4
+2026-11-13 04:07:12,454 INFO sample_queued device_id=d1 time_ns=1794542832447148000 pending_rows=11
+2026-11-13 04:07:12,598 INFO central_committed sample_id=2e08c071-6c79-49d7-a0ca-f133a35a0b02
+2026-11-13 04:07:13,457 INFO sample_queued device_id=d1 time_ns=1794542833447139000 pending_rows=11
+2026-11-13 04:07:13,648 INFO central_committed sample_id=a2062b0a-ac5e-4986-aadd-6be47d9f406f
+2026-11-13 04:07:14,455 INFO sample_queued device_id=d1 time_ns=1794542834447125000 pending_rows=11
+2026-11-13 04:07:14,701 INFO central_committed sample_id=e142c814-7125-4f89-abb3-8ef6988b2018
+2026-11-13 04:07:15,455 INFO sample_queued device_id=d1 time_ns=1794542835447107000 pending_rows=11
+2026-11-13 04:07:15,749 INFO central_committed sample_id=c2940742-6490-4888-a0db-2771ff986023

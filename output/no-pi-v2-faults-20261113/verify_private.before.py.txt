@@ -1,0 +1,177 @@
+"""Provision only owned network-none resources for committed-delivery tests."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from uuid import uuid4
+
+
+def cleanup_owned(owned, output, runner=subprocess.run):
+    results = []
+    for name, cid in reversed(owned):
+        item = dict(name=name, container=cid, passed=False, logs_passed=False)
+        try:
+            logs = runner(['docker', 'logs', cid], text=True, capture_output=True, timeout=15)
+            (output / (name + '.log')).write_text(logs.stdout + logs.stderr)
+            item['logs_passed'] = logs.returncode == 0
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            item['logs_error_kind'] = type(exc).__name__
+        try:
+            removed = runner(['docker', 'rm', '-f', cid], capture_output=True, text=True, timeout=15)
+            item['passed'] = removed.returncode == 0
+        except (OSError, subprocess.TimeoutExpired) as exc:
+            item['remove_error_kind'] = type(exc).__name__
+        results.append(item)
+    return results
+
+
+def main(output):
+    # Includes PKI generation, provisioning and every failure/cleanup path.
+    with tempfile.TemporaryDirectory(prefix='ems-committed-pki-') as temp:
+        return run_private(output, Path(temp))
+
+
+def run_private(output, private):
+    root = Path(__file__).resolve().parents[3]
+    output = output.resolve()
+    output.mkdir(parents=True, exist_ok=False)
+    owned, cleanup, commands = [], [], []
+    label = 'committed-' + uuid4().hex
+
+    def call(args, timeout=30, input_text=None):
+        result = subprocess.run(args, text=True, input=input_text, capture_output=True, timeout=timeout)
+        if result.returncode:
+            raise RuntimeError('private command failed: ' + str(args[:3]))
+        return result.stdout.strip()
+
+    images = {name: call(['docker', 'image', 'inspect', name, '--format', '{{.Id}}'])
+              for name in ('alpine', 'eclipse-mosquitto:2', 'timescale/timescaledb:latest-pg15',
+                           'ems-receipts-test-20261112')}
+    (output / 'images.json').write_text(json.dumps(images, indent=2))
+    (output / 'containers-before.jsonl').write_text(call(['docker', 'ps', '--format', '{{json .}}']))
+    source = output / 'source'
+    for rel in ('services/delta', 'services/edge-receiver'):
+        shutil.copytree(root / rel, source / rel, ignore=shutil.ignore_patterns('__pycache__', '.pytest_cache', '.coverage'))
+    for rel in ('infra/timescaledb/init.sql', 'infra/timescaledb/migrations/019_edge_committed_receipts.sql',
+                'tests/integration/test_edge_receipts.py', 'tests/integration/test_edge_receipts_mqtt.py'):
+        path = root / rel
+        if path.exists():
+            (source / rel).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, source / rel)
+    hashes = {p.relative_to(source).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+              for p in source.rglob('*') if p.is_file()}
+    (output / 'source-sha256.json').write_text(json.dumps(hashes, indent=2))
+    (output / 'mosquitto.conf').write_text('listener 1883 127.0.0.1\nallow_anonymous true\npersistence false\nlog_dest stdout\nlog_type all\n')
+    sys.path.insert(0, str(root / 'services/delta/tools'))
+    from bench_field_checks import pki
+    pki(private)
+    for name in ('edge-receiver', 'qa-observer'):
+        call(['openssl', 'req', '-new', '-newkey', 'rsa:2048', '-nodes', '-subj', '/CN=' + name,
+              '-keyout', str(private / (name + '.key')), '-out', str(private / (name + '.csr'))])
+        call(['openssl', 'x509', '-req', '-in', str(private / (name + '.csr')), '-CA', str(private / 'ca.crt'),
+              '-CAkey', str(private / 'ca.key'), '-CAcreateserial', '-days', '2', '-sha256',
+              '-extfile', str(private / 'client.ext'), '-out', str(private / (name + '.crt'))])
+    for key in private.glob('*.key'):
+        key.chmod(0o600)
+    acl = (root / 'services/edge-receiver/deploy/edge-v2.acl.example').read_text()
+    acl += '\n# Private QA observer only, never in the deployment ACL.\nuser qa-observer\ntopic read ems/v2/#\n'
+    (private / 'acl').write_text(acl)
+    tls = ('listener 8886 127.0.0.1\nallow_anonymous false\nrequire_certificate true\n'
+           'use_identity_as_username true\ncafile /qa/ca.crt\ncertfile /qa/server.crt\n'
+           'keyfile /qa/server.key\nacl_file /qa/acl\nmessage_size_limit 65536\n'
+           'persistence false\nlog_dest stdout\nlog_type all\n')
+    (private / 'tls.conf').write_text(tls)
+    (output / 'tls-broker-config.txt').write_text(tls)
+    (output / 'tls-acl.txt').write_text(acl)
+    (output / 'certificate-metadata.json').write_text(json.dumps({p.name: call(['openssl','x509','-in',str(p),
+        '-noout','-fingerprint','-sha256','-subject','-issuer','-dates']) for p in private.glob('*.crt')}, indent=2))
+
+    def create(name, image, args, command):
+        cmd = ['docker', 'create', '--label', 'ems.qa.run=' + label, '--cpus', '.5',
+               '--memory', '512m', '--pids-limit', '128'] + args + [images[image]] + command
+        cid = call(cmd)
+        owned.append((name, cid))
+        commands.append(dict(name=name, command=cmd, container=cid))
+        (output / 'commands.json').write_text(json.dumps(commands, indent=2))
+        call(['docker', 'start', cid])
+        return cid
+
+    result = dict(passed=False, scope='private real MQTT/PostgreSQL; no shared fault injection')
+    try:
+        anchor = create('anchor', 'alpine', ['--network', 'none'], ['sleep', '1800'])
+        namespace = call(['docker', 'exec', anchor, 'readlink', '/proc/self/ns/net'])
+        network = ['--network', 'container:' + anchor]
+        uid = f'{os.getuid()}:{os.getgid()}'
+        create('broker', 'eclipse-mosquitto:2', network + ['--user', uid,
+               '-v', str(output / 'mosquitto.conf') + ':/qa.conf:ro'], ['mosquitto', '-c', '/qa.conf'])
+        # A separate broker process prevents the demo anonymous listener from
+        # bypassing mTLS ACLs through a shared topic plane.
+        create('tls-broker', 'eclipse-mosquitto:2', network + ['--user', uid,
+               '-v', str(private) + ':/qa:ro'], ['mosquitto', '-c', '/qa/tls.conf'])
+        db = create('database', 'timescale/timescaledb:latest-pg15', network + [
+            '-e', 'POSTGRES_HOST_AUTH_METHOD=trust', '-e', 'POSTGRES_DB=ems',
+            '-e', 'PGDATA=/var/lib/postgresql/data/pgdata', '-e', 'TIMESCALEDB_TELEMETRY=off',
+            '--tmpfs', '/var/lib/postgresql/data:rw,size=256m',
+            '-v', str(source / 'infra/timescaledb/init.sql') + ':/docker-entrypoint-initdb.d/01.sql:ro'],
+            ['postgres', '-c', 'shared_buffers=32MB', '-c', 'max_connections=20'])
+        deadline = time.monotonic() + 45
+        while time.monotonic() < deadline:
+            ready = subprocess.run(['docker', 'exec', db, 'psql', '-h', '127.0.0.1', '-U', 'postgres', '-d', 'ems', '-At', '-c',
+                                    "SELECT to_regclass('public.electricity_measurements') IS NOT NULL"],
+                                   capture_output=True, text=True, timeout=5)
+            if ready.returncode == 0 and ready.stdout.strip() == 't':
+                break
+            time.sleep(.2)
+        else:
+            raise TimeoutError('private database startup')
+        migration = (source / 'infra/timescaledb/migrations/019_edge_committed_receipts.sql').read_text()
+        for index in range(2):
+            text = call(['docker', 'exec', '-i', db, 'psql', '-U', 'postgres', '-d', 'ems', '-v', 'ON_ERROR_STOP=1'],
+                        input_text=migration)
+            (output / f'migration-{index + 1}.log').write_text(text)
+        worker = create('worker', 'ems-receipts-test-20261112', network + [
+            '--user', uid, '-e', 'PYTHONDONTWRITEBYTECODE=1', '-e', 'EMS_V2_DEMO_NETNS=' + namespace,
+            '-e', 'EDGE_V2_TEST_DSN=postgresql://postgres@127.0.0.1:5432/ems',
+            '-e', 'PYTHONPATH=/app/services/delta:/app/services/edge-receiver',
+            '-e', 'COVERAGE_FILE=/evidence/receiver.coverage',
+            '-e', 'EDGE_V2_EVIDENCE=/evidence',
+            '-e', 'EDGE_V2_TEST_PKI=/qa', '-v', str(private) + ':/qa:ro',
+            '-v', str(source) + ':/app:ro', '-v', str(output) + ':/evidence', '-w', '/app'], ['sleep', '1800'])
+        tests = ['/app/tests/integration/test_edge_receipts.py']
+        if (source / 'tests/integration/test_edge_receipts_mqtt.py').exists():
+            tests.append('/app/tests/integration/test_edge_receipts_mqtt.py')
+        # Snapshot contains no shared-stack conftest. Preserve Delta's private
+        # field fixtures so their dedicated environment gate can skip safely.
+        cmd = ['docker', 'exec', worker, 'python', '-m', 'pytest', '-c', '/app/services/delta/pytest.ini', *tests,
+               '/app/services/edge-receiver/tests', '/app/services/delta/tests', '-q', '-p', 'no:cacheprovider',
+               '--cov=edge_receiver', '--cov=delta_device', '--cov-fail-under=80',
+               '--cov-report=term-missing', '--cov-report=json:/evidence/receiver-coverage.json',
+               '--junitxml=/evidence/integration.xml']
+        done = subprocess.run(cmd, text=True, capture_output=True, timeout=600)
+        (output / 'integration.log').write_text(done.stdout + done.stderr)
+        (output / 'test-command.json').write_text(json.dumps(cmd, indent=2))
+        result.update(passed=done.returncode == 0, exit_code=done.returncode, namespace=namespace)
+        print(done.stdout + done.stderr, flush=True)
+    except Exception as exc:
+        result['error_kind'] = type(exc).__name__
+        raise
+    finally:
+        cleanup = cleanup_owned(owned, output)
+        result['cleanup'] = cleanup
+        result['sources_unchanged'] = all(hashlib.sha256((root / p).read_bytes()).hexdigest() == value
+                                         for p, value in hashes.items())
+        result['passed'] = result['passed'] and all(x['passed'] and x['logs_passed'] for x in cleanup) and result['sources_unchanged']
+        (output / 'result.json').write_text(json.dumps(result, indent=2))
+    return result['passed']
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--output', type=Path, required=True)
+    raise SystemExit(0 if main(parser.parse_args().output) else 1)

@@ -1,0 +1,20 @@
+.ems-header .ems-product-heading{display:inline-flex;align-items:center;gap:12px;min-width:0;line-height:1.3}
+.ems-header .ems-product-logo{display:block;width:3.5em;height:auto;flex-shrink:0}
+.ems-header .ems-product-heading>span{white-space:nowrap}
+.ems-live-header{min-height:74px;font:400 14px/1.5 Manrope,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+.ems-live-header .ems-brand>svg{flex-shrink:0}
+.ems-live-header .ems-header-actions>button{padding-block:0}
+.ems-live-header .ems-header-actions>a{flex-shrink:0;text-decoration:none}
+.ems-live-header .ems-header-actions>button[aria-label^="目前專案"]{width:clamp(210px,22vw,360px)!important;min-width:0;cursor:default}
+.ems-live-header #session-name{margin-left:0;max-width:112px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ems-account-menu{position:relative;flex-shrink:0}
+.ems-account-menu summary{list-style:none}
+.ems-account-menu summary::-webkit-details-marker{display:none}
+.ems-account-menu summary>span:first-child{flex-shrink:0}
+.ems-account-menu summary:focus-visible,.ems-live-header a:focus-visible{outline:2px solid #cca858;outline-offset:2px}
+.ems-account-options{position:absolute;right:0;top:calc(100% + 8px);z-index:20;min-width:132px;padding:6px;background:#292a2e;border:1px solid #45474c;border-radius:10px;box-shadow:0 8px 24px #0003}
+.ems-account-options button{display:block;width:100%;min-height:42px;border:0;background:transparent;color:#f4f4f2;text-align:left}
+.ems-account-options button:hover{background:#34383a}
+.heading .live-label{margin-left:10px;letter-spacing:0;color:#576a4a;background:#e5ebdc;font-size:11px}
+@media(max-width:1180px){.ems-live-header .ems-header-actions>button[aria-label^="目前專案"]{width:210px!important}}
+@media(max-width:650px){.ems-header .ems-product-heading{display:grid;justify-items:start;gap:5px}.ems-live-header .ems-header-actions>button[aria-label^="目前專案"]{width:auto!important;flex:1}.ems-live-header .ems-header-actions>button>span{min-width:0}.ems-live-header .ems-header-actions>button>span>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ems-live-header #session-name{max-width:68px}}

@@ -1,0 +1,95 @@
+FFFFFFFFFFFFFFFFF                                                        [100%]
+=================================== FAILURES ===================================
+___ test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound ____
+tests/test_rtu_uncertainty.py:96: in test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound
+    with pytest.raises(ReadError):
+E   Failed: DID NOT RAISE <class 'delta_device.poller.ReadError'>
+_________ test_unknown_bound_lock_survives_reconnect_and_elapsed_time __________
+tests/test_rtu_uncertainty.py:128: in test_unknown_bound_lock_survives_reconnect_and_elapsed_time
+    assert len(device.requests) == before, 'reconnect or elapsed time bypassed unknown bound'
+E   AssertionError: reconnect or elapsed time bypassed unknown bound
+E   assert 3 == 2
+E    +  where 3 = len([(40994, 1), (49151, 13), (49151, 13)])
+E    +    where [(40994, 1), (49151, 13), (49151, 13)] = <test_rtu_uncertainty.MemoryDevice object at 0x7af4e13bb810>.requests
+____ test_qualified_guard_discards_queued_old_frame_then_reads_fresh_sample ____
+tests/test_rtu_uncertainty.py:142: in test_qualified_guard_discards_queued_old_frame_then_reads_fresh_sample
+    with pytest.raises(ReadError):
+E   Failed: DID NOT RAISE <class 'delta_device.poller.ReadError'>
+------------------------------ Captured log call -------------------------------
+WARNING  pymodbus.logging:logging.py:109 Cleanup recv buffer before send: 0x1 0x4 0x1a 0x23 0x28 0x8 0xfc 0x5 0x14 0xb 0xb8 0x17 0x70 0x8 0xfc 0x5 0x14 0xb 0xb8 0x17 0x70 0x8 0xfc 0x5 0x14 0xb 0xb8 0x17 0x70 0x37 0xaa
+___________ test_field_startup_requires_bound_before_opening_serial ____________
+tests/test_rtu_uncertainty.py:156: in test_field_startup_requires_bound_before_opening_serial
+    Poller(rtu_config(), mode='field')
+E   TypeError: Poller.__init__() got an unexpected keyword argument 'mode'
+____________ test_field_restart_waits_lifetime_before_first_request ____________
+tests/test_rtu_uncertainty.py:162: in test_field_restart_waits_lifetime_before_first_request
+    poller = Poller(bounded_config(), mode='field')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: Poller.__init__() got an unexpected keyword argument 'mode'
+_____________ test_invalid_response_lifetime_never_opens_serial[0] _____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___________ test_invalid_response_lifetime_never_opens_serial[-0.1] ____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+___________ test_invalid_response_lifetime_never_opens_serial[True] ____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____________ test_invalid_response_lifetime_never_opens_serial[nan] ____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____________ test_invalid_response_lifetime_never_opens_serial[inf] ____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____________ test_invalid_response_lifetime_never_opens_serial[121] ____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____________ test_invalid_response_lifetime_never_opens_serial[1] _____________
+tests/test_rtu_uncertainty.py:183: in test_invalid_response_lifetime_never_opens_serial
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____________ test_response_lifetime_requires_traceable_source[None] ____________
+tests/test_rtu_uncertainty.py:192: in test_response_lifetime_requires_traceable_source
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+______________ test_response_lifetime_requires_traceable_source[] ______________
+tests/test_rtu_uncertainty.py:192: in test_response_lifetime_requires_traceable_source
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_____________ test_response_lifetime_requires_traceable_source[ ] ______________
+tests/test_rtu_uncertainty.py:192: in test_response_lifetime_requires_traceable_source
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+____________ test_response_lifetime_requires_traceable_source[123] _____________
+tests/test_rtu_uncertainty.py:192: in test_response_lifetime_requires_traceable_source
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+_ test_response_lifetime_requires_traceable_source[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx] _
+tests/test_rtu_uncertainty.py:192: in test_response_lifetime_requires_traceable_source
+    with pytest.raises(ValueError):
+E   Failed: DID NOT RAISE <class 'ValueError'>
+=========================== short test summary info ============================
+FAILED tests/test_rtu_uncertainty.py::test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound
+FAILED tests/test_rtu_uncertainty.py::test_unknown_bound_lock_survives_reconnect_and_elapsed_time
+FAILED tests/test_rtu_uncertainty.py::test_qualified_guard_discards_queued_old_frame_then_reads_fresh_sample
+FAILED tests/test_rtu_uncertainty.py::test_field_startup_requires_bound_before_opening_serial
+FAILED tests/test_rtu_uncertainty.py::test_field_restart_waits_lifetime_before_first_request
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[0]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[-0.1]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[True]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[nan]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[inf]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[121]
+FAILED tests/test_rtu_uncertainty.py::test_invalid_response_lifetime_never_opens_serial[1]
+FAILED tests/test_rtu_uncertainty.py::test_response_lifetime_requires_traceable_source[None]
+FAILED tests/test_rtu_uncertainty.py::test_response_lifetime_requires_traceable_source[]
+FAILED tests/test_rtu_uncertainty.py::test_response_lifetime_requires_traceable_source[ ]
+FAILED tests/test_rtu_uncertainty.py::test_response_lifetime_requires_traceable_source[123]
+FAILED tests/test_rtu_uncertainty.py::test_response_lifetime_requires_traceable_source[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+17 failed in 0.13s

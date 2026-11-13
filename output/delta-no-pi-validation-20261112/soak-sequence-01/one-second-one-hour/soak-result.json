@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "valid_rate": 1.0,
+  "raw_strict_pass": true,
+  "classified_failed_slots": [],
+  "measured_seconds": 3600.0,
+  "minimum_measurement_seconds": 3600,
+  "name": "one-second-one-hour",
+  "formal": true,
+  "verifier_exit_code": 0
+}

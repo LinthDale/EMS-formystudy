@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="13" skipped="0" tests="13" time="0.045" timestamp="2026-11-13T02:45:18.488229+00:00" hostname="018caa6efa4d"><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_suite_selects_only_new_short_cases_and_original_boundary" time="0.000"><failure message="ValueError: unknown private suite">def test_resilience_suite_selects_only_new_short_cases_and_original_boundary():
+&gt;       assert suite_targets('resilience')==('/app/tests/integration/test_edge_resilience.py',
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            '/app/services/delta/tests/test_reliable_resilience.py',
+            '/app/services/delta/tests/test_bench_slot_boundary.py'), 'resilience scope includes long tests or omits required cases'
+
+services/edge-receiver/tests/test_private_suite.py:12: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suite = 'resilience'
+
+    def suite_targets(suite):
+        suites = {
+            'baseline': ('/app/tests/integration/test_edge_receipts.py',
+                         '/app/tests/integration/test_edge_receipts_mqtt.py',
+                         '/app/services/edge-receiver/tests', '/app/services/delta/tests'),
+            'faults': ('/app/tests/integration/test_edge_receipts_faults.py',
+                       '/app/services/delta/tests/test_bench_slot_boundary.py'),
+        }
+        if suite not in suites:
+&gt;           raise ValueError('unknown private suite')
+E           ValueError: unknown private suite
+
+services/edge-receiver/tools/verify_private.py:45: ValueError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_accepts_complete_independent_proof" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">def test_resilience_assessment_accepts_complete_independent_proof():
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:47: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[skip]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'skip'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[missing-case]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'missing-case'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[duplicate-case]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'duplicate-case'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[crash-was-not-sigkill]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'crash-was-not-sigkill'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[no-dirty-pages]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'no-dirty-pages'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[wrong-crash-recovery]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'wrong-crash-recovery'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[no-real-lock]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'no-real-lock'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[backup-not-concurrent]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'backup-not-concurrent'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[wrong-certificate-cause]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'wrong-certificate-cause'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[no-real-client-rejection]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'no-real-client-rejection'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase><testcase classname="services.edge-receiver.tests.test_private_suite" name="test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof[missing-proof]" time="0.000"><failure message="ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)">mutation = 'missing-proof'
+
+    @pytest.mark.parametrize('mutation',['skip','missing-case','duplicate-case','crash-was-not-sigkill','no-dirty-pages',
+        'wrong-crash-recovery','no-real-lock','backup-not-concurrent','wrong-certificate-cause','no-real-client-rejection','missing-proof'])
+    def test_resilience_assessment_rejects_incomplete_or_wrong_fault_proof(mutation):
+&gt;       from verify_private import assess_resilience_report
+E       ImportError: cannot import name 'assess_resilience_report' from 'verify_private' (/app/services/edge-receiver/tools/verify_private.py)
+
+services/edge-receiver/tests/test_private_suite.py:55: ImportError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,23 @@
+{
+  "mode": "demo",
+  "device_id": "delta-sim-001",
+  "modbus": {
+    "transport": "tcp",
+    "host": "delta-simulator",
+    "port": 5021,
+    "unit_id": 1,
+    "address_base": 1,
+    "timeout": 3,
+    "read_temperature": true
+  },
+  "mqtt": {
+    "host": "mosquitto",
+    "port": 1883,
+    "client_id": "delta-demo-edge-001",
+    "tls": false
+  },
+  "outbox_path": "/data/delta/outbox.db",
+  "poll_interval": 10,
+  "queue_limit": 10000,
+  "batch_size": 100
+}

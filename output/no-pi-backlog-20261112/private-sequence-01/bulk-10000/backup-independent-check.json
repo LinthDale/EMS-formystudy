@@ -1,0 +1,10 @@
+{
+  "rows": 1000,
+  "minimum_committed": 1000,
+  "exact_prefix": true,
+  "metadata_matches": true,
+  "passed": true,
+  "integrity": "ok",
+  "assessment_source_sha256": "0ec58499155dfcb154e7161add7433e1d8d2edb20f8ea7a5e4c4b28f4649d9bb",
+  "original_result_retained": true
+}

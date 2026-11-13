@@ -1,0 +1,18 @@
+# Dedicated authenticated listener. Do not expose an anonymous listener to the
+# same v2 topic plane: it would bypass these principal permissions.
+listener 8883
+allow_anonymous false
+require_certificate true
+use_identity_as_username true
+cafile /run/secrets/edge-ca.crt
+certfile /run/secrets/broker.crt
+keyfile /run/secrets/broker.key
+acl_file /etc/mosquitto/edge-v2.acl
+message_size_limit 65536
+max_queued_messages 128
+persistence true
+persistence_location /mosquitto/data/
+log_dest stdout
+log_type error
+log_type warning
+

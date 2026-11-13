@@ -1,0 +1,14 @@
+{
+  "unknown": {
+    "count": 20,
+    "passed": 20
+  },
+  "bounded": {
+    "count": 20,
+    "passed": 20
+  },
+  "passed": true,
+  "timeout": 3,
+  "lab_response_lifetime_seconds": 1.0,
+  "mqtt_connected": false
+}

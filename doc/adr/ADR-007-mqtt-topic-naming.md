@@ -72,3 +72,7 @@ factory/sensor/temp_01
 - 新增第三方來源走 `mqtt_consumer.json_v2` + tag override 模式
 - 啟用 Mosquitto ACL 時，按 `ems/<domain>` 切權限
 - `commands` 子層上線時新增專屬 ADR 規範格式
+
+## 2026-11-12 v2 可靠送達例外（ADR-043）
+
+[ADR-043](ADR-043-opt-in-committed-telemetry.md)實作 PRD-0021 的 `ems/v2/gateways/{gateway_id}/samples`、`acks`、`session/request`、`session/response` 子集。QoS1／retain=false、JSON、gateway 憑證 principal 與權威 device/stream/revision/profile 綁定。只有 receiver 可寫 ACK／session response，gateway 僅寫自有 samples／session request。此 namespace 不被舊 Telegraf 訂閱，禁止同樣本再發 v1，避免雙寫。reconcile／health topics 仍未實作；既有主規範與第三方例外維持。

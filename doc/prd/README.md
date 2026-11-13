@@ -10,7 +10,7 @@
 | [PRD-0002](PRD-0002-KC-Factory-Integration.md) | KC Factory 工廠 PLC 整合 | Implemented (Phase 1-6) | services/{kc-gateway,kc-ingest}, external/{kc_iot_gateway,kc_modbus_mcp} |
 | [PRD-0003](PRD-0003-Device-Registry-Auto-Discovery.md) | Device Registry & Auto-Discovery — 裝置自動登錄與 AI 輔助分類 | Implemented (Phase 1.1–1.4 + FR-340 L2 budget metering) | services/device-service（REST :8002 + device-service-mcp :8766）, infra/timescaledb/migrations 003–015, api/openapi.yml |
 | [PRD-0004](PRD-0004-device-service-observability-alerting.md) | Device-Service 營運可觀測性 — 預算告警與分類健康度 Dashboards | Draft | infra/grafana/provisioning（alerting + dashboards，承接 PRD-0003 follow-ups；跨-provider L2 另見 ADR-019） |
-| [PRD-0005](PRD-0005-ems-frontend.md) | EMS 自建前端 — 產品級操作介面（Web App）| Draft（骨架）| 還原原始計畫自寫前端；消費 device-service REST/MCP + PostgREST；與 PRD-0004 Grafana 內部 ops 觀測分工並存 |
+| [PRD-0005](PRD-0005-ems-frontend.md) | EMS 自建前端 — 產品級操作介面（Web App）| Approved（2026-06-11）| 還原原始計畫自寫前端；消費 device-service REST/MCP + PostgREST；與 PRD-0004 Grafana 內部 ops 觀測分工並存 |
 | [PRD-0006](PRD-0006-Generic-Measurement-Pipeline-Dynamic-Visualization.md) | 通用量測管線與動態可視化 — 窄表儲存、AI 識別升格、Registry 驅動儀表板 | Draft | infra/timescaledb（migration 016，ADR-020/021/022）+ services/ingest-generic + device-service 升格/路由 config 化 + infra/grafana Device Explorer；採集端 codegen → PRD-0007 |
 
 > 既有 `doc/archive/plan/EMS實作計畫.md` 與 `doc/archive/plan/kc_integration_plan.md` 為**原始規劃文件**（過程紀錄、取捨討論），保留於 archive 下不刪除；PRD-0001 / PRD-0002 為對應的**正式 PRD 形式**，提供 Guideline 15 章節結構。兩者衝突時以 PRD 為準。
@@ -25,3 +25,30 @@
 ## PRD 提交前自查
 
 於 PR 描述勾選 Guideline §10 完整 checklist，缺項說明理由。
+
+- [PRD-0018 監控趨勢與歷史紀錄](PRD-0018-monitor-history.md)：本機已部署並通過真實資料驗證。
+
+- [PRD-0019 Telegram 示範警報](PRD-0019-telegram-demo-alarm.md)：警報中心按鈕、OPS session、固定通知通道。
+
+- [PRD-0020 Delta 三相模擬、解析與4G採集](PRD-0020-delta-edge-telemetry.md)：本機四欄管線已實作驗收；現場硬體與接收端身份綁定未驗收。
+
+- [PRD-0021 Delta 多設備與可靠補傳](PRD-0021-multi-device-edge-reliability.md)：整體 Draft；8台／10秒／7天及完整對帳未驗收。2026-11-12 §15.3／ADR-043 的 opt-in 可靠送達子集已私有驗證，未切共享部署或實機驗收。
+
+  2026-11-13 §15.5／[ADR-045](../adr/ADR-045-newest-first-edge-retention.md)依使用者核定改成本地量測最新優先，滿容量淘汰最舊（含pending／quarantine／audit）；schema3／wire2，336短回歸通過、12專用case未重跑，未切共享。超額不再承諾所有歷史完整補傳，完整PRD仍Draft。
+
+- [PRD-0022 Simulator 統一控制與操作紀錄](PRD-0022-simulator-control-audit.md)：四個固定 simulator、BFF OPS API/CLI、持久 append-only audit、UUID/CAS/unknown 對帳；不控制真機。
+
+- [PRD-0023：資料庫帳號管理](PRD-0023-database-accounts.md) — PostgreSQL local users、CLI、稽核、逐請求版本撤銷；ADR-035。
+
+- [PRD-0024：展位 QR Code 綁定 Telegram 訪客示範告警](PRD-0024-booth-telegram-qr-binding.md) — 掃碼自助綁定唯一收件者、10 分鐘到期、台北日不重複計數、getUpdates 長輪詢；修訂 PRD-0019 Non-goal；ADR-036。
+
+
+
+
+
+
+
+
+
+
+PRD-0021 §15.8／[ADR-048](../adr/ADR-048-v2-live-backlog-fairness.md)補實作FR-2107最新／最舊成功1:1輪替；[38定點及419相鄰／12skip](../../output/no-pi-restore-load-20261113/README.md)私有通過，涵蓋真邏輯還原、接收超量恢復、1000舊資料下3新筆延遲。全PRD仍Draft、多設備／manifest／Pi field未驗收；不是中央PITR或現場SLA。

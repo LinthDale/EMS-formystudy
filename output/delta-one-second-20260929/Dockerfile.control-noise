@@ -1,0 +1,2 @@
+FROM ems-delta-control-base:20260929-083907
+COPY services/delta/delta_device /app/delta_device

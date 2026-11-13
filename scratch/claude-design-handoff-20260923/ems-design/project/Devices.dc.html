@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>設備分析 · tAIstro EMS</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Noto+Sans+TC:wght@400;500&amp;family=Noto+Serif+TC:wght@300;400&amp;display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#282825}
+a{color:#576a4a}a:hover{color:#345e40}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1200px; box-sizing: border-box; display: grid; grid-template-columns: 208px minmax(0, 1fr); grid-template-rows: 74px minmax(0, 1fr); background: #f4f4f2; color: #282825;">
+
+<header style="grid-column: 1 / 3; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 28px; background: #292a2e;">
+<div style="display: flex; align-items: center; gap: 20px;">
+<svg viewBox="235.88 409.41 370.13 72.54" role="img" aria-label="tAIstro" style="height: 26px; width: auto; display: block;">
+<path fill="#cca858" d="M587.83,430.46h-23.75c-10.03,0-18.18,8.16-18.18,18.18v14.45c0,10.03,8.16,18.18,18.18,18.18h23.75c10.03,0,18.18-8.16,18.18-18.18v-14.45c0-10.03-8.16-18.18-18.18-18.18ZM595.46,463.1c0,4.21-3.42,7.63-7.63,7.63h-23.75c-4.21,0-7.63-3.42-7.63-7.63v-14.45c0-4.21,3.42-7.63,7.63-7.63h23.75c4.21,0,7.63,3.42,7.63,7.63v14.45Z"></path>
+<path fill="#cca858" d="M253.59,419.13h-10.55v10.94h-7.16v10.55h7.16v22.47c0,4.86,1.89,9.42,5.33,12.86,3.43,3.43,8,5.33,12.86,5.33h10.97v-10.55h-10.97c-2.04,0-3.95-.79-5.39-2.23-1.44-1.44-2.23-3.36-2.23-5.4v-22.47h18.81v-10.55h-18.81v-10.94Z"></path>
+<path fill="#cca858" d="M447.16,454.25c-1.41-1.42-3.06-2.53-4.9-3.3-1.9-.81-3.93-1.21-6.01-1.21h-25c-.66,0-1.3-.13-1.9-.38-.58-.24-1.1-.6-1.55-1.04-.45-.45-.8-.97-1.05-1.55-.25-.6-.38-1.23-.38-1.9s.13-1.3.38-1.9c.25-.58.6-1.1,1.05-1.55s.97-.8,1.55-1.04c.6-.25,1.24-.38,1.9-.38h37.14v-10.55h-37.14c-2.08,0-4.1.41-6.01,1.21-1.84.78-3.49,1.89-4.9,3.3-1.42,1.41-2.53,3.06-3.3,4.9-.81,1.9-1.21,3.93-1.21,6.01s.41,4.1,1.21,6.01c.78,1.84,1.89,3.49,3.3,4.9,1.42,1.42,3.07,2.53,4.9,3.3,1.91.81,3.93,1.22,6.01,1.22h25c.66,0,1.3.13,1.9.38.58.25,1.1.6,1.55,1.05s.8.97,1.05,1.55c.25.6.38,1.24.38,1.9s-.13,1.3-.38,1.9c-.25.58-.6,1.1-1.05,1.55s-.97.8-1.55,1.05c-.6.25-1.23.38-1.9.38h-41.36v10.55h41.36c2.08,0,4.1-.41,6.01-1.21,1.84-.78,3.49-1.89,4.9-3.3,1.42-1.41,2.53-3.06,3.31-4.9.81-1.91,1.21-3.93,1.21-6.01s-.41-4.1-1.21-6.01c-.78-1.84-1.89-3.49-3.3-4.9Z"></path>
+<path fill="#cca858" d="M476.09,468.49c-1.44-1.44-2.23-3.36-2.23-5.4v-22.6h19.12v-10.55h-19.12v-10.81h-10.55v43.97c0,4.86,1.89,9.42,5.33,12.86,3.44,3.43,8,5.32,12.86,5.32h11.87v-10.55h-11.87c-2.04,0-3.95-.79-5.39-2.23Z"></path>
+<path fill="#cca858" d="M505.24,448.65v33.3h10.55v-33.3c0-4.21,3.42-7.63,7.63-7.63h17.12v-10.55h-17.12c-10.03,0-18.18,8.16-18.18,18.18Z"></path>
+<rect fill="#cca858" x="371.02" y="431.67" width="10.55" height="49.49"></rect>
+<circle fill="#cca858" cx="376.3" cy="420.6" r="6.88"></circle>
+<g>
+<polygon fill="#cca858" points="317.83 456.72 320.97 409.41 281.74 481.94 317.83 456.72"></polygon>
+<polygon fill="#cca858" points="325.48 456.72 322.35 409.41 361.58 481.94 325.48 456.72"></polygon>
+</g>
+</svg>
+<span aria-hidden="true" style="display: block; width: 1px; height: 30px; background: #5a503b;"></span>
+<span style="font-family: Newsreader, Noto Serif TC, Songti TC, serif; font-weight: 400; font-size: 24px; letter-spacing: 0.12em; color: #cca858; white-space: nowrap;">EMS 能源管理系統</span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;">
+<button type="button" aria-haspopup="listbox" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 320px; height: 44px; box-sizing: border-box; padding: 0 14px; background: transparent; border: 1px solid #45474c; border-radius: 10px; color: #f4f4f2; font-family: inherit; font-size: 14px; cursor: pointer;">
+<span style="display: flex; align-items: center; gap: 10px;">
+<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4 21V5a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v16 M15 10h4a1 1 0 0 1 1 1v10 M3 21h18 M8 8h3 M8 12h3 M8 16h3"></path></svg>
+<span>台北南港展覽館專案</span>
+</span>
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+<button type="button" aria-label="通知，2 則未讀" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; border-radius: 10px; color: #c4c4be; cursor: pointer;">
+<svg viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15z M10 20.5a2 2 0 0 0 4 0"></path></svg>
+<span aria-hidden="true" style="position: absolute; top: 10px; right: 11px; width: 8px; height: 8px; border-radius: 999px; background: #cca858; box-shadow: 0 0 0 2px #292a2e;"></span>
+</button>
+<button type="button" aria-haspopup="menu" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 4px; background: transparent; border: 0; border-radius: 10px; color: #f4f4f2; font-family: inherit; cursor: pointer;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #34383a; color: #c4c4be;">
+<svg viewBox="0 0 24 24" width="18" height="18" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z M4 21a8 8 0 0 1 16 0"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+<span style="font-size: 14px;">使用者</span>
+<span style="font-size: 12px; color: #c4c4be;">維運</span>
+</span>
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6 9l6 6 6-6"></path></svg>
+</button>
+</div>
+</header>
+
+<nav aria-label="主選單" style="grid-column: 1; grid-row: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; box-sizing: border-box; padding: 20px 0 22px; background: #1d1e20; overflow: hidden;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 10.5 12 3l9 7.5 M5 9.5V21h14V9.5 M10 21v-6h4v6"></path></svg>
+<span>能源總覽</span>
+</a>
+<a href="Monitor.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 12h4l3-8 4 16 3-8h4"></path></svg>
+<span>即時監控</span>
+</a>
+<a href="Demand.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4 18a8 8 0 1 1 16 0 M12 18l4-5 M3 18h18"></path></svg>
+<span>需量管理</span>
+</a>
+<a href="Storage.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 8h15a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z M22 11v2 M6 11v2 M9.5 11v2 M13 11v2"></path></svg>
+<span>儲能管理</span>
+</a>
+<a href="Alarms.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7 18v-6a5 5 0 0 1 10 0v6 M4 21h16 M5 18h14 M12 3v2 M4.2 6.2l1.4 1.4 M19.8 6.2l-1.4 1.4"></path></svg>
+<span>警報中心</span>
+</a>
+<a href="Devices.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; background: #2d3229; box-shadow: inset 2px 0 0 #cca858; color: #f4f4f2; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: #cca858; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7 7h10v10H7z M10 3v4 M14 3v4 M10 17v4 M14 17v4 M3 10h4 M3 14h4 M17 10h4 M17 14h4"></path></svg>
+<span>設備分析</span>
+</a>
+<a href="Reports.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.6px; stroke-linecap: round; stroke-linejoin: round;"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z M14 3v5h5 M9 13h6 M9 17h6"></path></svg>
+<span>報表中心</span>
+</a>
+</div>
+<sc-if value="{{showSketch}}" hint-placeholder-val="{{true}}">
+<div aria-hidden="true" style="display: flex; justify-content: center; padding: 0 12px;">
+<svg viewBox="0 0 184 170" width="184" height="170" style="display: block; opacity: 0.32; fill: none; stroke: #c4c4be; stroke-width: 0.8px; stroke-linecap: round; stroke-linejoin: round;">
+<path d="M4 150H180 M14 150V104Q52 84 92 100Q132 116 170 96V150 M14 108Q52 88 92 104Q132 120 170 100 M14 128H170"></path>
+<path d="M26 150V100 M38 150V96 M50 150V94 M62 150V94 M74 150V96 M86 150V99 M98 150V103 M110 150V106 M122 150V108 M134 150V107 M146 150V104 M158 150V100"></path>
+<path d="M80 128V120H112V128 M84 128V150 M108 128V150"></path>
+<path d="M24 22L84 10L96 60L36 72Z M44 18L56 68 M64 14L76 64 M30 46L90 34"></path>
+<circle cx="150" cy="38" r="16"></circle>
+<path d="M150 26L154 38L150 35L146 38Z M150 50V54 M134 38H138 M162 38H166"></path>
+<path d="M6 92Q60 62 122 72" style="stroke-dasharray: 1 4;"></path>
+<path d="M14 160H170 M14 156V164 M170 156V164"></path>
+</svg>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 22px; font-size: 12px; line-height: 1.5; color: #c4c4be;">
+<span>星洋智能科技股份有限公司</span>
+<span style="font-family: Newsreader, serif; letter-spacing: 0.06em;">tAistro co., ltd.</span>
+</div>
+</nav>
+
+<main style="grid-column: 2; grid-row: 2; min-width: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; height: 60px;">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-size: 13px; letter-spacing: 0.08em; color: #64645e;">DEVICES &amp; PROFILES</span>
+<h1 style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 300; font-size: 33px; line-height: 1.1; letter-spacing: -0.02em; color: #282825;">設備分析</h1>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; padding-bottom: 4px;">
+<span style="font-size: 14px; color: #64645e;">裝置清單、通訊狀態與 AI 確認佇列</span>
+<span style="display: inline-flex; align-items: center; padding: 3px 10px 2px; background: #f2f0e8; border: 1px solid #afafa0; border-bottom-width: 3px; font-size: 12px; letter-spacing: 0.06em; color: #64645e; transform: rotate(-1.2deg); box-shadow: 3px 5px 0 #dedfd477;">示意資料 · SAMPLE</span>
+</div>
+</div>
+
+<section aria-label="裝置統計" style="height: 96px; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px;">
+<span style="font-size: 13px; color: #64645e;">裝置總數</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">24</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px; border-left: 1px solid #d5d5ce;">
+<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #64645e;"><span aria-hidden="true" style="display: block; width: 7px; height: 7px; border-radius: 999px; background: #426d4b;"></span>通訊正常</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">22</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px; border-left: 1px solid #d5d5ce;">
+<span style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #8a5f21;"><svg viewBox="0 0 24 24" width="12" height="12" aria-hidden="true" style="fill: none; stroke: #a5762e; stroke-width: 2.2px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 4 2.5 20h19z M12 10v4"></path></svg>資料延遲 STALE</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">1</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 13px; color: #64645e;">維護中／離線</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">1</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 13px; color: #64645e;">待人工確認</span>
+<span style="display: flex; align-items: baseline; gap: 6px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">{{queueLeft}}</span><span style="font-size: 12px; color: #64645e;">AI 候選</span></span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 20px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 13px; color: #64645e;">30 天平均可用率</span>
+<span style="display: flex; align-items: baseline; gap: 4px;"><span style="font-family: Newsreader, serif; font-weight: 300; font-size: 33px; line-height: 1; letter-spacing: -0.04em; font-variant-numeric: lining-nums;">99.4</span><span style="font-family: Newsreader, serif; font-size: 14px;">%</span></span>
+</div>
+</section>
+
+<section aria-labelledby="devTitle" style="height: 512px; box-sizing: border-box; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 40px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="devTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">裝置清單</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">DEVICE LIST</span>
+</div>
+<div style="display: flex; align-items: center; gap: 14px;">
+<div role="radiogroup" aria-label="裝置篩選" style="display: flex; gap: 8px;">
+<label for="fAll" style="position: relative; display: flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13px; cursor: pointer; background: {{flt.allBg}}; color: {{flt.allFg}}; border: 1px solid {{flt.allBd}};"><input id="fAll" type="radio" name="devFilter" checked="{{flt.allOn}}" onChange="{{flt.pickAll}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">全部 24</label>
+<label for="fComm" style="position: relative; display: flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13px; cursor: pointer; background: {{flt.commBg}}; color: {{flt.commFg}}; border: 1px solid {{flt.commBd}};"><input id="fComm" type="radio" name="devFilter" checked="{{flt.commOn}}" onChange="{{flt.pickComm}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">通訊異常 2</label>
+<label for="fMaint" style="position: relative; display: flex; align-items: center; height: 34px; padding: 0 12px; border-radius: 999px; font-size: 13px; cursor: pointer; background: {{flt.maintBg}}; color: {{flt.maintFg}}; border: 1px solid {{flt.maintBd}};"><input id="fMaint" type="radio" name="devFilter" checked="{{flt.maintOn}}" onChange="{{flt.pickMaint}}" style="position: absolute; opacity: 0; width: 1px; height: 1px; margin: 0;">維護中 1</label>
+</div>
+<div style="display: flex; align-items: center; gap: 8px;">
+<label for="devSearch" style="font-size: 13px; color: #64645e;">搜尋</label>
+<span style="display: flex; align-items: center; gap: 8px; width: 220px; height: 40px; box-sizing: border-box; padding: 0 12px; background: #f8f8f7; border: 1px solid #b4b4ac; border-radius: 10px;">
+<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="flex: 0 0 16px; fill: none; stroke: #64645e; stroke-width: 1.7px; stroke-linecap: round; stroke-linejoin: round;"><path d="M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14z M20 20l-4-4"></path></svg>
+<input id="devSearch" type="search" placeholder="名稱、代號或位置" style="flex: 1 1 auto; min-width: 0; height: 36px; padding: 0; background: transparent; border: 0; font-family: inherit; font-size: 13px; color: #282825;">
+</span>
+</div>
+</div>
+</div>
+<div role="table" aria-label="裝置清單" style="display: flex; flex-direction: column;">
+<div role="row" style="display: grid; grid-template-columns: minmax(0, 2.2fr) 120px 104px 110px 108px 110px 100px 150px; column-gap: 12px; align-items: center; height: 34px; padding: 0 14px; background: #e9e9e3; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">
+<span role="columnheader">裝置</span><span role="columnheader">類型</span><span role="columnheader">協定</span><span role="columnheader">位置</span><span role="columnheader">生命週期</span><span role="columnheader">通訊</span><span role="columnheader">最後上線</span><span role="columnheader">30 天可用率</span>
+</div>
+<sc-for list="{{devices}}" as="d" hint-placeholder-count="8">
+<div role="row" style="display: grid; grid-template-columns: minmax(0, 2.2fr) 120px 104px 110px 108px 110px 100px 150px; column-gap: 12px; align-items: center; height: 38px; padding: 0 14px; border-bottom: 1px solid #d5d5ce; font-size: 13px;">
+<span role="cell" style="display: flex; align-items: baseline; gap: 8px; min-width: 0; white-space: nowrap; overflow: hidden;"><span>{{d.name}}</span><span style="font-size: 12px; color: #64645e;">{{d.id}}</span></span>
+<span role="cell" style="font-size: 12px; color: #282825; letter-spacing: 0.02em;">{{d.type}}</span>
+<span role="cell" style="color: #64645e;">{{d.proto}}</span>
+<span role="cell" style="color: #64645e;">{{d.loc}}</span>
+<span role="cell"><span style="display: inline-flex; align-items: center; height: 22px; padding: 0 8px; border-radius: 999px; background: {{d.lcBg}}; color: {{d.lcFg}}; font-size: 12px; font-weight: 500;">{{d.lc}}</span></span>
+<span role="cell" style="display: flex; align-items: center; gap: 6px; color: {{d.cmFg}};"><span aria-hidden="true" style="display: block; width: 7px; height: 7px; border-radius: 999px; background: {{d.cmDot}};"></span>{{d.comm}}</span>
+<span role="cell" style="color: #64645e; font-variant-numeric: tabular-nums;">{{d.seen}}</span>
+<span role="cell" style="display: flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="position: relative; display: block; width: 64px; height: 6px; border-radius: 999px; background: #e1e7dc;"><span style="position: absolute; left: 0; top: 0; display: block; height: 6px; width: {{d.availW}}; border-radius: 999px; background: {{d.availC}};"></span></span><span style="font-variant-numeric: tabular-nums;">{{d.avail}} %</span></span>
+</div>
+</sc-for>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; font-size: 12px; color: #64645e;">
+<span>顯示 {{shown}} 筆 · 共 24 筆 · 候選裝置列於 AI 確認佇列</span>
+<div style="display: flex; align-items: center; gap: 8px;">
+<button type="button" aria-label="上一頁" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 32px; background: transparent; border: 1px solid #b4b4ac; border-radius: 8px; color: #64645e; cursor: pointer;"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round;"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<span>第 1／3 頁</span>
+<button type="button" aria-label="下一頁" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 32px; background: transparent; border: 1px solid #b4b4ac; border-radius: 8px; color: #282825; cursor: pointer;"><svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.8px; stroke-linecap: round; stroke-linejoin: round;"><path d="M9 6l6 6-6 6"></path></svg></button>
+</div>
+</div>
+</section>
+
+<div style="display: flex; gap: 16px; height: 362px;">
+<section aria-labelledby="queueTitle" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 362px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="queueTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">AI 確認佇列</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">CONFIRMATION QUEUE</span>
+</div>
+<span style="font-size: 12px; color: #64645e;">自動探索的候選裝置，需人工確認後才進入 confirmed</span>
+</div>
+<sc-for list="{{queue}}" as="c" hint-placeholder-count="3">
+<div style="display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 280px; column-gap: 18px; align-items: center; min-height: 84px; padding: 0 4px; border-bottom: 1px solid #d5d5ce;">
+<div style="display: flex; flex-direction: column; gap: 6px; min-width: 0;">
+<span style="display: flex; align-items: baseline; gap: 8px; font-size: 14px;"><span>推測為 {{c.type}}</span><span style="font-size: 12px; color: #64645e;">{{c.typeZh}}</span></span>
+<span style="font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{c.sig}}</span>
+<span style="font-size: 12px; color: #282825;">依據訊號 {{c.signalText}}</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px;">
+<span style="display: flex; justify-content: space-between; font-size: 12px;"><span style="color: #64645e;">AI 信心</span><span style="font-variant-numeric: tabular-nums; color: #282825;">{{c.conf}} · {{c.band}}</span></span>
+<div role="meter" aria-label="AI 信心" aria-valuemin="0" aria-valuemax="1" aria-valuenow="{{c.confNum}}" style="position: relative; height: 8px; border-radius: 999px; background: #e9e9e3;">
+<div style="width: {{c.confW}}; height: 8px; border-radius: 999px; background: {{c.confC}};"></div>
+<span aria-hidden="true" style="position: absolute; left: 60%; top: -3px; width: 1px; height: 14px; background: #b4b4ac;"></span>
+<span aria-hidden="true" style="position: absolute; left: 85%; top: -3px; width: 1px; height: 14px; background: #b4b4ac;"></span>
+</div>
+</div>
+<div style="display: flex; justify-content: flex-end; gap: 8px;">
+<sc-if value="{{c.open}}" hint-placeholder-val="{{true}}">
+<button type="button" onClick="{{c.confirm}}" style="height: 42px; padding: 0 16px; background: #282825; border: 1px solid #282825; border-radius: 12px; color: #f4f4f2; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">確認</button>
+<button type="button" style="height: 42px; padding: 0 14px; background: transparent; border: 1px solid #282825; border-radius: 12px; color: #282825; font-family: inherit; font-size: 13px; font-weight: 500; cursor: pointer;">修正類型</button>
+<button type="button" onClick="{{c.reject}}" style="height: 42px; padding: 0 10px; background: transparent; border: 0; border-radius: 12px; color: #64645e; font-family: inherit; font-size: 13px; cursor: pointer;">退回</button>
+</sc-if>
+<sc-if value="{{c.done}}" hint-placeholder-val="{{false}}">
+<span style="display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 12px; border-radius: 999px; background: {{c.resBg}}; color: {{c.resFg}}; font-size: 12px; font-weight: 500;">{{c.result}}</span>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</section>
+
+<section aria-labelledby="fleetTitle" style="flex: 0 0 380px; box-sizing: border-box; height: 362px; padding: 20px; display: flex; flex-direction: column; gap: 16px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;">
+<div style="display: flex; align-items: center; gap: 10px; height: 28px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="fleetTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">裝置狀態分布</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">FLEET</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<span style="font-size: 13px; color: #64645e;">生命週期（24）</span>
+<div role="img" aria-label="生命週期：active 20、confirmed 2、maintenance 1、retired 1" style="display: flex; gap: 2px; height: 14px; border-radius: 4px; overflow: hidden;">
+<span style="display: block; width: 83.3%; background: #647956;"></span>
+<span style="display: block; width: 8.3%; background: #a9bc99;"></span>
+<span style="display: block; width: 4.2%; background: #cca858;"></span>
+<span style="display: block; flex: 1 1 auto; background: #b4b4ac;"></span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 6px; column-gap: 12px; font-size: 12px;">
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #647956;"></span>active 20</span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #a9bc99;"></span>confirmed 2</span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #cca858;"></span>maintenance 1</span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #b4b4ac;"></span>retired 1</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 8px;">
+<span style="font-size: 13px; color: #64645e;">通訊品質（24）</span>
+<div role="img" aria-label="通訊品質：GOOD 22、STALE 1、離線 1" style="display: flex; gap: 2px; height: 14px; border-radius: 4px; overflow: hidden;">
+<span style="display: block; width: 91.7%; background: #426d4b;"></span>
+<span style="display: block; width: 4.2%; background: #a5762e;"></span>
+<span style="display: block; flex: 1 1 auto; background: #a55445;"></span>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 6px; column-gap: 12px; font-size: 12px;">
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #426d4b;"></span>GOOD 22</span>
+<span style="display: flex; align-items: center; gap: 6px;"><svg viewBox="0 0 24 24" width="11" height="11" aria-hidden="true" style="fill: none; stroke: #a5762e; stroke-width: 2.4px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 4 2.5 20h19z"></path></svg>STALE 1 · HVAC-01</span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #a55445;"></span>離線 1 · FP-01</span>
+</div>
+</div>
+<span style="font-size: 12px; line-height: 1.6; color: #64645e;">資料品質旗標：GOOD／UNCERTAIN／BAD／STALE／SUBSTITUTED；可用率以 30 天內有效取樣比例計。</span>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showSketch":{"editor":"boolean","default":true,"section":"質感"},"$preview":{"width":1440,"height":1200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var props = this.props || {};
+    var st = this.state || {};
+    var self = this;
+    var showSketch = props.showSketch == null ? true : props.showSketch;
+
+    // Device registry sample (示意資料) - first page of 24.
+    var LC = {
+      active: { bg: '#e5ebdc', fg: '#426d4b' },
+      maintenance: { bg: '#f6ecd7', fg: '#8a5f21' },
+      confirmed: { bg: '#e9e9e3', fg: '#282825' }
+    };
+    var CM = {
+      GOOD: { fg: '#426d4b', dot: '#426d4b' },
+      STALE: { fg: '#8a5f21', dot: '#a5762e' },
+      '離線': { fg: '#96493e', dot: '#a55445' }
+    };
+    var ALL = [
+      { name: '台電受電點電表', id: 'M-01', type: 'grid_meter', proto: 'Modbus TCP', loc: '配電室 B1', lc: 'active', comm: 'GOOD', seen: '3 秒前', avail: 99.98 },
+      { name: '儲能電池管理', id: 'BMS-01', type: 'battery', proto: 'Modbus TCP', loc: '儲能櫃', lc: 'active', comm: 'GOOD', seen: '1 秒前', avail: 99.95 },
+      { name: '儲能變流器', id: 'PCS-01', type: 'battery', proto: 'Modbus TCP', loc: '儲能櫃', lc: 'active', comm: 'GOOD', seen: '1 秒前', avail: 99.93 },
+      { name: '太陽能逆變器', id: 'INV-01', type: 'solar_inverter', proto: 'Modbus TCP', loc: '屋頂 A 區', lc: 'active', comm: 'GOOD', seen: '5 秒前', avail: 99.61 },
+      { name: '太陽能逆變器', id: 'INV-03', type: 'solar_inverter', proto: 'Modbus TCP', loc: '屋頂 B 區', lc: 'active', comm: 'GOOD', seen: '5 秒前', avail: 98.87 },
+      { name: '空調控制器', id: 'HVAC-01', type: 'hvac', proto: 'Modbus RTU', loc: '機房 3F', lc: 'active', comm: 'STALE', seen: '2 分 17 秒前', avail: 97.4 },
+      { name: '溫濕度感測器', id: 'ENV-02', type: 'temperature', proto: 'MQTT', loc: '儲能櫃', lc: 'active', comm: 'GOOD', seen: '12 秒前', avail: 99.2 },
+      { name: '消防盤', id: 'FP-01', type: 'unknown', proto: '乾接點', loc: '防災中心', lc: 'maintenance', comm: '離線', seen: '3 小時前', avail: 91.3 }
+    ];
+    var f = st.filter || 'all';
+    var rows = ALL.filter(function (d) {
+      if (f === 'comm') { return d.comm !== 'GOOD'; }
+      if (f === 'maint') { return d.lc === 'maintenance'; }
+      return true;
+    });
+    var devices = rows.map(function (d) {
+      var lc = LC[d.lc], cm = CM[d.comm];
+      return {
+        name: d.name, id: d.id, type: d.type, proto: d.proto, loc: d.loc, lc: d.lc, lcBg: lc.bg, lcFg: lc.fg,
+        comm: d.comm, cmFg: cm.fg, cmDot: cm.dot, seen: d.seen,
+        avail: d.avail.toFixed(2), availW: Math.max(4, Math.round((d.avail - 90) / 10 * 64)) + 'px',
+        availC: d.avail >= 99 ? '#647956' : (d.avail >= 95 ? '#a5762e' : '#a55445')
+      };
+    });
+    var chip = function (key) {
+      var on = f === key;
+      return { bg: on ? '#282825' : 'transparent', fg: on ? '#f4f4f2' : '#282825', bd: on ? '#282825' : '#b4b4ac', on: on };
+    };
+    var cA = chip('all'), cC = chip('comm'), cM = chip('maint');
+    var flt = {
+      allBg: cA.bg, allFg: cA.fg, allBd: cA.bd, allOn: cA.on,
+      commBg: cC.bg, commFg: cC.fg, commBd: cC.bd, commOn: cC.on,
+      maintBg: cM.bg, maintFg: cM.fg, maintBd: cM.bd, maintOn: cM.on,
+      pickAll: function () { self.setState({ filter: 'all' }); },
+      pickComm: function () { self.setState({ filter: 'comm' }); },
+      pickMaint: function () { self.setState({ filter: 'maint' }); }
+    };
+
+    // AI confirmation queue (candidate -> confirmed), confidence bands 0.60 / 0.85 are sample thresholds.
+    var decided = st.decided || {};
+    var Q = [
+      { id: 'q1', type: 'solar_inverter', typeZh: '太陽能逆變器', sig: 'Modbus TCP 10.0.3.27:502 · 18 個暫存器', conf: 0.91, signals: ['P_ac kW', 'E_total kWh', 'V_dc V'] },
+      { id: 'q2', type: 'electricity', typeZh: '分路電表', sig: 'MQTT site/nangang/meter/sub-07', conf: 0.74, signals: ['kW', 'V', 'A', 'PF'] },
+      { id: 'q3', type: 'hvac', typeZh: '空調設備', sig: 'Modbus TCP 10.0.3.41:502 · 9 個暫存器', conf: 0.58, signals: ['溫度 °C', '設定值 °C', '運轉 bool'] }
+    ];
+    var queue = Q.map(function (c) {
+      var d = decided[c.id];
+      var band = c.conf >= 0.85 ? '高' : (c.conf >= 0.6 ? '中' : '低，需人工判斷');
+      return {
+        type: c.type, typeZh: c.typeZh, sig: c.sig, conf: c.conf.toFixed(2), confNum: c.conf, band: band,
+        confW: Math.round(c.conf * 100) + '%', confC: c.conf >= 0.85 ? '#647956' : (c.conf >= 0.6 ? '#cca858' : '#a5762e'),
+        signalText: c.signals.join(' · '),
+        open: !d, done: !!d,
+        result: d === 'confirmed' ? '已確認 · confirmed' : '已退回',
+        resBg: d === 'confirmed' ? '#e5ebdc' : '#e9e9e3', resFg: d === 'confirmed' ? '#426d4b' : '#64645e',
+        confirm: function () { var n = Object.assign({}, decided); n[c.id] = 'confirmed'; self.setState({ decided: n }); },
+        reject: function () { var n = Object.assign({}, decided); n[c.id] = 'rejected'; self.setState({ decided: n }); }
+      };
+    });
+    var queueLeft = Q.filter(function (c) { return !decided[c.id]; }).length;
+
+    return { showSketch: showSketch, devices: devices, shown: devices.length, flt: flt, queue: queue, queueLeft: queueLeft };
+  }
+}
+</script>
+</body>
+</html>

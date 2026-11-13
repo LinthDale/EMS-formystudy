@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 42,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 42,
+  "observed_tests": 42,
+  "evidence_checks": {
+    "header": true,
+    "truncated": true,
+    "zero-length": true,
+    "empty-sqlite": true,
+    "broker-restart": true,
+    "certificate-rotation-revocation": true
+  }
+}

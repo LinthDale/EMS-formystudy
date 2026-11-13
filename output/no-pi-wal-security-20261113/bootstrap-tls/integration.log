@@ -1,0 +1,30 @@
+...........................................                              [100%]
+---------------- generated xml file: /evidence/integration.xml -----------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                                                       Stmts   Miss  Cover   Missing
+----------------------------------------------------------------------------------------
+services/delta/delta_device/__init__.py                        0      0   100%
+services/delta/delta_device/__main__.py                       60     60     0%   1-75
+services/delta/delta_device/config.py                        120    108    10%   14-21, 26-38, 42-45, 49-126, 130-146
+services/delta/delta_device/delivery.py                       91     62    32%   15-24, 34, 37, 44-66, 71-76, 79-88, 92-94, 97-98, 102-103, 106-107, 111-117
+services/delta/delta_device/edge.py                           63     49    22%   22-82
+services/delta/delta_device/migrate_delivery.py               75     75     0%   2-91
+services/delta/delta_device/poller.py                        101     78    23%   28-36, 41-49, 53-57, 60-63, 66-83, 86-105, 108-127
+services/delta/delta_device/protocol.py                       54     41    24%   11-13, 17-19, 33-48, 53-91
+services/delta/delta_device/publisher.py                      62     50    19%   10-33, 36-39, 42, 46-48, 51-52, 55-71, 74-75
+services/delta/delta_device/reliable_sender.py               128      7    95%   75, 87-88, 107, 115-117
+services/delta/delta_device/reliable_store.py                262     40    85%   24, 28, 31, 35, 47, 52, 70, 73-78, 84, 87, 90, 100, 103, 106, 108, 111, 117, 121, 141-144, 157, 165, 168, 172, 207, 233, 263, 271, 288, 298, 305, 325-326, 333, 335
+services/delta/delta_device/reliable_transport.py             23      6    74%   12, 14, 21-24
+services/delta/delta_device/reliable_wire.py                 131     29    78%   28, 34, 40, 46, 51, 55-56, 60, 77, 79, 86, 88, 91, 95, 98, 100, 122, 125-126, 129, 135, 148, 151, 155, 160, 165-167, 169
+services/delta/delta_device/simulator.py                     142    142     0%   2-192
+services/edge-receiver/edge_receiver/__init__.py               0      0   100%
+services/edge-receiver/edge_receiver/backup_preflight.py      29     29     0%   2-37
+services/edge-receiver/edge_receiver/database_tls.py          16      2    88%   9, 21
+services/edge-receiver/edge_receiver/receiver.py             197     45    77%   39, 43, 48, 51, 53, 55, 60, 64, 68, 73, 76, 79, 82, 106, 126, 129-130, 145, 148, 151, 154, 161, 164, 168, 171, 173, 179, 186, 209-210, 217-230, 234
+services/edge-receiver/edge_receiver/store.py                 59      9    85%   28-30, 38, 54, 68, 79, 88-89, 92
+----------------------------------------------------------------------------------------
+TOTAL                                                       1613    832    48%
+Coverage JSON written to file /evidence/receiver-coverage.json
+43 passed in 9.29s

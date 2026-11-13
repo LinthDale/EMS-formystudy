@@ -1,0 +1,19 @@
+{
+  "window_start": {
+    "kind": "window_start",
+    "utc": "2026-11-12T06:49:53.637469+00:00",
+    "monotonic": 2544316.218,
+    "origin": 2544316.218,
+    "count": 17280,
+    "interval": 5
+  },
+  "next_attempt": {
+    "kind": "attempt",
+    "utc": "2026-11-12T09:14:53.634688+00:00",
+    "monotonic": 2553016.218,
+    "slot": 1740,
+    "start_delay": 0.0
+  },
+  "lower_inclusive_ns": 1794466193637469000,
+  "upper_exclusive_ns": 1794474893634688000
+}

@@ -267,3 +267,6 @@ ALTER VIEW api.measurements RENAME TO electricity_measurements;
 
 ### D. 對應 ADR
 ADR-006、ADR-007（v2 修訂）
+
+### 2026-09-29：Simulator 控制改由 PRD-0022 / ADR-033
+四台固定模擬器的設定與故障注入統一至 BFF OPS API/CLI、持久 SQLite audit。舊 meter :8001 POST、PLC/MCP raw Modbus 寫入停用，遙測與真機唯讀採集不變。runtime 設定重啟還原，操作紀錄保留；詳 operations/simulator-control.md。

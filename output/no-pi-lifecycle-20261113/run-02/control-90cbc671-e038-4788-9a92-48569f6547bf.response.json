@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "request_id": "90cbc671-e038-4788-9a92-48569f6547bf",
+  "op": "revoke_old_client",
+  "container_id": "b9594fd1d743e84652bccca00d302cc4e160c1d223e296a0cb62f9d51c3d8d46",
+  "started_at": "2026-11-13T04:07:25.491236079Z",
+  "before_started_at": "2026-11-13T04:06:52.814658289Z",
+  "running": true,
+  "serial_revoked": "109A18BC75F7258933A3147AA3E398D5D1B2B578",
+  "crl_verified": true,
+  "revocation_verify_error": 23,
+  "crl_sha256": "0b8bc4e06527f91f18048bbd725aaa0ab295e696739a660bd4625bdc1fd862c2"
+}

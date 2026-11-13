@@ -1,0 +1,40 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+chmod: /var/run/postgresql: Operation not permitted
+2026-11-13 05:44:42.696 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 05:44:42.697 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5433
+2026-11-13 05:44:42.707 UTC [1] LOG:  listening on IPv6 address "::", port 5433
+2026-11-13 05:44:42.728 UTC [1] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-11-13 05:44:42.731 UTC [22] LOG:  database system was interrupted; last known up at 2026-11-13 05:44:38 UTC
+2026-11-13 05:44:42.731 UTC [23] FATAL:  the database system is starting up
+2026-11-13 05:44:42.906 UTC [30] FATAL:  the database system is starting up
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 05:44:42.981 UTC [22] LOG:  starting point-in-time recovery to "ems_ack_boundary"
+2026-11-13 05:44:42.981 UTC [22] LOG:  starting backup recovery with redo LSN 0/2000028, checkpoint LSN 0/2000060, on timeline ID 1
+2026-11-13 05:44:42.989 UTC [22] LOG:  restored log file "000000010000000000000002" from archive
+2026-11-13 05:44:42.999 UTC [22] LOG:  redo starts at 0/2000028
+2026-11-13 05:44:43.006 UTC [22] LOG:  restored log file "000000010000000000000003" from archive
+2026-11-13 05:44:43.013 UTC [22] LOG:  completed backup recovery with redo LSN 0/2000028 and end LSN 0/2000100
+2026-11-13 05:44:43.013 UTC [22] LOG:  consistent recovery state reached at 0/2000100
+2026-11-13 05:44:43.013 UTC [1] LOG:  database system is ready to accept read-only connections
+2026-11-13 05:44:43.015 UTC [22] LOG:  recovery stopping at restore point "ems_ack_boundary", time 2026-11-13 05:44:39.366622+00
+2026-11-13 05:44:43.015 UTC [22] LOG:  redo done at 0/30BD118 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.01 s
+2026-11-13 05:44:43.015 UTC [22] LOG:  last completed transaction was at log time 2026-11-13 05:44:39.215826+00
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 05:44:43.018 UTC [22] LOG:  selected new timeline ID: 2
+cp: can't stat '/archive/00000001.history.partial': No such file or directory
+2026-11-13 05:44:43.040 UTC [22] LOG:  archive recovery complete
+2026-11-13 05:44:43.041 UTC [20] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-13 05:44:43.057 UTC [20] LOG:  checkpoint complete: wrote 119 buffers (2.9%); 0 WAL file(s) added, 0 removed, 1 recycled; write=0.003 s, sync=0.008 s, total=0.017 s; sync files=37, longest=0.002 s, average=0.001 s; distance=17140 kB, estimate=17140 kB
+2026-11-13 05:44:43.060 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 05:44:43.061 UTC [49] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+2026-11-13 05:44:43.413 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 05:44:43.414 UTC [1] LOG:  parameter "max_connections" cannot be changed without restarting the server
+2026-11-13 05:44:43.414 UTC [1] LOG:  parameter "shared_buffers" cannot be changed without restarting the server
+2026-11-13 05:44:43.414 UTC [1] LOG:  parameter "synchronous_standby_names" changed to "FIRST 1 (ems_archive)"
+2026-11-13 05:44:43.414 UTC [1] LOG:  configuration file "/restore/postgresql.conf" contains errors; unaffected changes were applied
+2026-11-13 05:44:43.750 UTC [61] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 05:44:43.750 UTC [61] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/3000000 TIMELINE 2
+2026-11-13 05:44:45.065 UTC [61] LOG:  unexpected EOF on standby connection
+2026-11-13 05:44:45.065 UTC [61] STATEMENT:  START_REPLICATION SLOT "ems_archive_slot" 0/3000000 TIMELINE 2

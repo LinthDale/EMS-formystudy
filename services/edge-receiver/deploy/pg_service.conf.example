@@ -1,0 +1,12 @@
+# No passwords in this file. Restrict filesystem access and use a dedicated
+# REPLICATION LOGIN role with only the required pg_hba source/cert mapping.
+[ems_archive]
+host=primary-db.example.invalid
+port=5432
+user=ems_wal_archive
+application_name=ems_archive
+sslmode=verify-full
+sslrootcert=/etc/ems-wal/ca.crt
+sslcert=/etc/ems-wal/archive.crt
+sslkey=/run/secrets/ems-wal.key
+connect_timeout=5

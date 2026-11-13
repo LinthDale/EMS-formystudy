@@ -1,0 +1,9 @@
+{
+  "captured_utc": "2026-11-13T08:09:12.799607+00:00",
+  "scope": "all static evidence, including original RED, intermediate failures and weak PASS, definitive three-scenario and baseline reports, source snapshots and audits",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "no_active_soak": true,
+  "private_keys_included": false
+}

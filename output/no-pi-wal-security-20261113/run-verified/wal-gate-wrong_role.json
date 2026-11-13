@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "kind": "wrong_role",
+  "gate": {
+    "passed": true,
+    "request_id": "a87108aa-1960-476d-bc85-b3565f75c538",
+    "op": "wal_gate_wrong_role",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": true,
+      "client_dn": "/CN=postgres",
+      "username": "postgres",
+      "guard": false
+    }
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

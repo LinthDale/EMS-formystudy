@@ -1,0 +1,88 @@
+{
+  "expected": [
+    {
+      "sampled_ns": 1794474681564124000,
+      "voltage": 230.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.0
+    },
+    {
+      "sampled_ns": 1794474681564125000,
+      "voltage": 230.1,
+      "current": 5.01,
+      "power_kw": 1.01,
+      "energy_kwh": 1000.01
+    },
+    {
+      "sampled_ns": 1794474681564126000,
+      "voltage": 230.2,
+      "current": 5.02,
+      "power_kw": 1.02,
+      "energy_kwh": 1000.02
+    },
+    {
+      "sampled_ns": 1794474681564127000,
+      "voltage": 230.3,
+      "current": 5.03,
+      "power_kw": 1.03,
+      "energy_kwh": 1000.03
+    },
+    {
+      "sampled_ns": 1794474681564128000,
+      "voltage": 230.4,
+      "current": 5.04,
+      "power_kw": 1.04,
+      "energy_kwh": 1000.04
+    },
+    {
+      "sampled_ns": 1794474681564129000,
+      "voltage": 230.5,
+      "current": 5.05,
+      "power_kw": 1.05,
+      "energy_kwh": 1000.05
+    },
+    {
+      "sampled_ns": 1794474681564130000,
+      "voltage": 230.6,
+      "current": 5.06,
+      "power_kw": 1.06,
+      "energy_kwh": 1000.06
+    },
+    {
+      "sampled_ns": 1794474681564131000,
+      "voltage": 230.7,
+      "current": 5.07,
+      "power_kw": 1.07,
+      "energy_kwh": 1000.07
+    },
+    {
+      "sampled_ns": 1794474681564132000,
+      "voltage": 230.8,
+      "current": 5.08,
+      "power_kw": 1.08,
+      "energy_kwh": 1000.08
+    },
+    {
+      "sampled_ns": 1794474681564133000,
+      "voltage": 230.9,
+      "current": 5.09,
+      "power_kw": 1.09,
+      "energy_kwh": 1000.09
+    }
+  ],
+  "payloads": [
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474681564124000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.1,current=5.01,power_kw=1.01,energy_kwh=1000.01 1794474681564125000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.2,current=5.02,power_kw=1.02,energy_kwh=1000.02 1794474681564126000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.3,current=5.03,power_kw=1.03,energy_kwh=1000.03 1794474681564127000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.4,current=5.04,power_kw=1.04,energy_kwh=1000.04 1794474681564128000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.5,current=5.05,power_kw=1.05,energy_kwh=1000.05 1794474681564129000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.6,current=5.06,power_kw=1.06,energy_kwh=1000.06 1794474681564130000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.7,current=5.07,power_kw=1.07,energy_kwh=1000.07 1794474681564131000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.8,current=5.08,power_kw=1.08,energy_kwh=1000.08 1794474681564132000",
+    "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.9,current=5.09,power_kw=1.09,energy_kwh=1000.09 1794474681564133000"
+  ],
+  "broker_ack": true,
+  "pending_end": 0
+}

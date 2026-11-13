@@ -1,0 +1,7 @@
+................                                                         [100%]
+-------------- generated xml file: /evidence/controller-final.xml --------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Coverage JSON written to file /evidence/controller-final-coverage.json
+16 passed in 0.05s

@@ -1,0 +1,9 @@
+F                                                                        [100%]
+=================================== FAILURES ===================================
+___ test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound ____
+tests/test_rtu_uncertainty.py:96: in test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound
+    with pytest.raises(ReadError):
+E   Failed: DID NOT RAISE <class 'delta_device.poller.ReadError'>
+=========================== short test summary info ============================
+FAILED tests/test_rtu_uncertainty.py::test_timeout_then_new_sample_cannot_accept_prior_ac_frame_without_bound
+1 failed in 0.05s

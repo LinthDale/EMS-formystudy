@@ -1,0 +1,54 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+chmod: /var/run/postgresql: Operation not permitted
+2026-11-13 08:06:11.739 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 08:06:11.739 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5433
+2026-11-13 08:06:11.750 UTC [1] LOG:  listening on IPv6 address "::", port 5433
+2026-11-13 08:06:11.760 UTC [1] LOG:  listening on Unix socket "/tmp/.s.PGSQL.5433"
+2026-11-13 08:06:11.765 UTC [17] LOG:  database system was interrupted; last known up at 2026-11-13 08:06:05 UTC
+2026-11-13 08:06:11.798 UTC [23] FATAL:  the database system is starting up
+2026-11-13 08:06:11.967 UTC [30] FATAL:  the database system is starting up
+2026-11-13 08:06:11.994 UTC [17] LOG:  starting point-in-time recovery to "ems_branch_origin"
+2026-11-13 08:06:11.994 UTC [17] LOG:  starting backup recovery with redo LSN 0/3000028, checkpoint LSN 0/3000060, on timeline ID 1
+2026-11-13 08:06:12.001 UTC [17] LOG:  restored log file "000000010000000000000003" from archive
+2026-11-13 08:06:12.010 UTC [17] LOG:  redo starts at 0/3000028
+2026-11-13 08:06:12.017 UTC [17] LOG:  restored log file "000000010000000000000004" from archive
+2026-11-13 08:06:12.030 UTC [17] LOG:  restored log file "000000010000000000000005" from archive
+2026-11-13 08:06:12.044 UTC [17] LOG:  restored log file "000000010000000000000006" from archive
+2026-11-13 08:06:12.060 UTC [17] LOG:  restored log file "000000010000000000000007" from archive
+2026-11-13 08:06:12.067 UTC [17] LOG:  completed backup recovery with redo LSN 0/3000028 and end LSN 0/3000100
+2026-11-13 08:06:12.067 UTC [17] LOG:  consistent recovery state reached at 0/3000100
+2026-11-13 08:06:12.067 UTC [1] LOG:  database system is ready to accept read-only connections
+2026-11-13 08:06:12.067 UTC [17] LOG:  recovery stopping at restore point "ems_branch_origin", time 2026-11-13 08:06:10.3477+00
+2026-11-13 08:06:12.095 UTC [17] LOG:  redo done at 0/703CA08 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.08 s
+2026-11-13 08:06:12.095 UTC [17] LOG:  last completed transaction was at log time 2026-11-13 08:06:10.042259+00
+cp: can't stat '/archive/00000002.history.partial': No such file or directory
+2026-11-13 08:06:12.098 UTC [17] LOG:  selected new timeline ID: 2
+cp: can't stat '/archive/00000001.history.partial': No such file or directory
+2026-11-13 08:06:12.121 UTC [17] LOG:  archive recovery complete
+2026-11-13 08:06:12.122 UTC [15] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-13 08:06:12.143 UTC [15] LOG:  checkpoint complete: wrote 66 buffers (3.2%); 0 WAL file(s) added, 1 removed, 3 recycled; write=0.003 s, sync=0.008 s, total=0.023 s; sync files=27, longest=0.002 s, average=0.001 s; distance=65778 kB, estimate=65778 kB
+2026-11-13 08:06:12.147 UTC [1] LOG:  database system is ready to accept connections
+2026-11-13 08:06:12.148 UTC [54] LOG:  TimescaleDB background worker launcher connected to shared catalogs
+2026-11-13 08:06:12.780 UTC [1] LOG:  received SIGHUP, reloading configuration files
+2026-11-13 08:06:12.780 UTC [1] LOG:  parameter "shared_buffers" cannot be changed without restarting the server
+2026-11-13 08:06:12.780 UTC [1] LOG:  parameter "synchronous_standby_names" changed to "FIRST 1 (ems_archive)"
+2026-11-13 08:06:12.780 UTC [1] LOG:  configuration file "/restore/postgresql.auto.conf" contains errors; unaffected changes were applied
+2026-11-13 08:06:12.911 UTC [85] LOG:  standby "ems_archive" is now a synchronous standby with priority 1
+2026-11-13 08:06:12.911 UTC [85] STATEMENT:  START_REPLICATION SLOT "qa_branch" 0/7000000 TIMELINE 2
+2026-11-13 08:06:12.966 UTC [120] LOG:  restore point "ems_branch_target" created at 0/703CCB8
+2026-11-13 08:06:12.966 UTC [120] STATEMENT:  SELECT pg_create_restore_point('ems_branch_target')::text
+2026-11-13 08:06:13.151 UTC [1] LOG:  received fast shutdown request
+2026-11-13 08:06:13.153 UTC [1] LOG:  aborting any active transactions
+2026-11-13 08:06:13.153 UTC [57] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 08:06:13.153 UTC [56] FATAL:  terminating background worker "TimescaleDB Background Worker Scheduler" due to administrator command
+2026-11-13 08:06:13.153 UTC [54] FATAL:  terminating background worker "TimescaleDB Background Worker Launcher" due to administrator command
+2026-11-13 08:06:13.155 UTC [1] LOG:  background worker "TimescaleDB Background Worker Launcher" (PID 54) exited with exit code 1
+2026-11-13 08:06:13.155 UTC [1] LOG:  background worker "logical replication launcher" (PID 55) exited with exit code 1
+2026-11-13 08:06:13.155 UTC [1] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 56) exited with exit code 1
+2026-11-13 08:06:13.155 UTC [1] LOG:  background worker "TimescaleDB Background Worker Scheduler" (PID 57) exited with exit code 1
+2026-11-13 08:06:13.155 UTC [15] LOG:  shutting down
+2026-11-13 08:06:13.156 UTC [15] LOG:  checkpoint starting: shutdown immediate
+2026-11-13 08:06:13.167 UTC [15] LOG:  checkpoint complete: wrote 5 buffers (0.2%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.002 s, sync=0.003 s, total=0.013 s; sync files=5, longest=0.002 s, average=0.001 s; distance=0 kB, estimate=59200 kB
+2026-11-13 08:06:13.170 UTC [1] LOG:  database system is shut down

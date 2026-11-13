@@ -1,0 +1,26 @@
+[
+  {
+    "observed_monotonic": 2360458.052478416,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.05,power_kw=9.006,energy_kwh=1234.56 1794473381634599000"
+  },
+  {
+    "observed_monotonic": 2360459.059904612,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.09,power_kw=9.036,energy_kwh=1234.56 1794473382634729000"
+  },
+  {
+    "observed_monotonic": 2360459.06335621,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.14,power_kw=9.066,energy_kwh=1234.56 1794473383634709000"
+  },
+  {
+    "observed_monotonic": 2360470.358727488,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.55,power_kw=9.351,energy_kwh=1234.59 1794473396907471000"
+  },
+  {
+    "observed_monotonic": 2360471.367833047,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.58,power_kw=9.375,energy_kwh=1234.59 1794473397907575000"
+  },
+  {
+    "observed_monotonic": 2360471.376414279,
+    "payload": "electricity_measurements,device_id=delta-systemd-qa voltage=230.0,current=13.620000000000001,power_kw=9.398,energy_kwh=1234.59 1794473398907584000"
+  }
+]

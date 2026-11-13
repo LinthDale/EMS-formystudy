@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "old_samples": 1000,
+  "new_samples": 3,
+  "sender_wait_seconds": 1,
+  "enqueue_to_commit_seconds": [
+    1.0372072589998425,
+    2.0927034939995792,
+    2.0777493770001456
+  ],
+  "completion_ranks_after_enqueue": [
+    1,
+    2,
+    2
+  ],
+  "oldest_backlog_advanced": true,
+  "confirmed_samples": 6,
+  "pending_history_retained": 997,
+  "retained_total": 1003,
+  "scope": "three short samples on private local stack, not a percentile or field SLA"
+}

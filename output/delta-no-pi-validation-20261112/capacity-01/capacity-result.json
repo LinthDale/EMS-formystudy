@@ -1,0 +1,10 @@
+{
+  "queue_full_rejected": true,
+  "sqlite_full_rejected": true,
+  "pending_preserved": true,
+  "recovery_inserted": true,
+  "integrity_check": "ok",
+  "corrupt_rejected": true,
+  "corrupt_bytes_preserved": true,
+  "passed": true
+}

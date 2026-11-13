@@ -1,0 +1,86 @@
+[
+  {
+    "passed": true,
+    "request_id": "3421cf3c-a611-424f-b3d0-c2d19aabeccc",
+    "op": "wal_stop",
+    "running": false,
+    "container_id": "b021d313fab9e1cd64593c888874e22db3c1fdb401f19c23d8a0261cb5b6c137"
+  },
+  {
+    "passed": true,
+    "request_id": "c8bf3403-d5c5-4d5e-8bd3-6eb8f8af8916",
+    "op": "wal_start",
+    "running": true,
+    "container_id": "b021d313fab9e1cd64593c888874e22db3c1fdb401f19c23d8a0261cb5b6c137"
+  },
+  {
+    "passed": true,
+    "request_id": "b08e4284-95ab-43a1-8338-e2a2706b2def",
+    "op": "wal_basebackup",
+    "files": {
+      "backup_manifest": {
+        "bytes": 312283,
+        "sha256": "1f09fd72d9718f66efb1d54f2171c0a4e88f58e699bd74b528196dee3ea5a9d5"
+      },
+      "base.tar": {
+        "bytes": 36430848,
+        "sha256": "91375751e373b297c7b5519875e5ece4e539bc7702934022e145072f870ca009"
+      },
+      "pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "447fa40c424f263ecbc61adfbc6ed145f206cf7b9df8b119328c41406d085702"
+      }
+    },
+    "format": "physical-basebackup-tar"
+  },
+  {
+    "passed": true,
+    "request_id": "c3c10cb3-ebcd-4d1e-846f-dc6fbebce690",
+    "op": "wal_restorepoint",
+    "restore_point": "ems_ack_boundary",
+    "target_lsn": "0/3002A08",
+    "independent_flush_verified": true
+  },
+  {
+    "passed": true,
+    "request_id": "998a708f-552d-4a87-95f6-e04c0728862d",
+    "op": "wal_primary_loss",
+    "original_primary_stopped": true,
+    "container_id": "d27cbd708b4c3105e449b2103d12f976ac6e39541b73c3a13e66b55c357cb46e",
+    "artifacts": {
+      "base-backup_manifest": {
+        "bytes": 312283,
+        "sha256": "1f09fd72d9718f66efb1d54f2171c0a4e88f58e699bd74b528196dee3ea5a9d5"
+      },
+      "base-base.tar": {
+        "bytes": 36430848,
+        "sha256": "91375751e373b297c7b5519875e5ece4e539bc7702934022e145072f870ca009"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "447fa40c424f263ecbc61adfbc6ed145f206cf7b9df8b119328c41406d085702"
+      },
+      "wal-000000010000000000000003.partial": {
+        "bytes": 16777216,
+        "sha256": "3c1c2e13320e45a47b4595fe18cc619e8f2753edd3d5688aa642efcfc8d75786"
+      },
+      "wal-000000010000000000000001": {
+        "bytes": 16777216,
+        "sha256": "a6ad81bf918373fef6df99770300957daf3f079e5434b6ec0ceb2b29cc21baff"
+      },
+      "wal-000000010000000000000002": {
+        "bytes": 16777216,
+        "sha256": "481cdaad563afd0517e92294702b72547b9ac6600fc2d884433cc432e9153dfe"
+      }
+    },
+    "original_pgdata_used_for_recovery": false
+  },
+  {
+    "passed": true,
+    "request_id": "cfb619ff-abd8-49d4-990b-727d9b7c6b71",
+    "op": "wal_missing",
+    "container_id": "f28f646056c82757c907d86946bf55d039c71506f67d62bda0e2f1d2f9d51ce4",
+    "target_not_reached": true,
+    "promoted": false
+  }
+]

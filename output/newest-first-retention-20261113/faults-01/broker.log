@@ -1,0 +1,238 @@
+1794535721: mosquitto version 2.1.2 starting
+1794535721: Config loaded from /qa.conf.
+1794535721: Bridge support available.
+1794535721: Persistence support available.
+1794535721: TLS support available.
+1794535721: TLS-PSK support available.
+1794535721: Websockets support available.
+1794535721: Opening ipv4 listen socket on port 1883.
+1794535721: mosquitto version 2.1.2 running
+1794535725: New connection from 127.0.0.1:48891 on port 1883.
+1794535725: New client connected from 127.0.0.1:48891 as receiver-g-8bf091429d39 (p4, c1, k30).
+1794535725: No will message specified.
+1794535725: Sending CONNACK to receiver-g-8bf091429d39 (0, 0)
+1794535725: Received SUBSCRIBE from receiver-g-8bf091429d39
+1794535725: 	ems/v2/gateways/+/samples (QoS 1)
+1794535725: receiver-g-8bf091429d39 1 ems/v2/gateways/+/samples
+1794535725: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535725: receiver-g-8bf091429d39 1 ems/v2/gateways/+/session/request
+1794535725: Sending SUBACK to receiver-g-8bf091429d39
+1794535725: New connection from 127.0.0.1:34219 on port 1883.
+1794535725: New client connected from 127.0.0.1:34219 as sender-g-8bf091429d39 (p4, c1, k30).
+1794535725: No will message specified.
+1794535725: Sending CONNACK to sender-g-8bf091429d39 (0, 0)
+1794535725: Received SUBSCRIBE from sender-g-8bf091429d39
+1794535725: 	ems/v2/gateways/g-8bf091429d39/acks (QoS 1)
+1794535725: sender-g-8bf091429d39 1 ems/v2/gateways/g-8bf091429d39/acks
+1794535725: 	ems/v2/gateways/g-8bf091429d39/session/response (QoS 1)
+1794535725: sender-g-8bf091429d39 1 ems/v2/gateways/g-8bf091429d39/session/response
+1794535725: Sending SUBACK to sender-g-8bf091429d39
+1794535725: Received PUBLISH from sender-g-8bf091429d39 (d0, q1, r0, m2, 'ems/v2/gateways/g-8bf091429d39/session/request', ... (109 bytes))
+1794535725: Sending PUBLISH to receiver-g-8bf091429d39 (d0, q1, r0, m1, 'ems/v2/gateways/g-8bf091429d39/session/request', ... (109 bytes))
+1794535725: Sending PUBACK to sender-g-8bf091429d39 (m2, rc0)
+1794535725: Received PUBACK from receiver-g-8bf091429d39 (Mid: 1, RC:0)
+1794535725: Received PUBLISH from receiver-g-8bf091429d39 (d0, q1, r0, m2, 'ems/v2/gateways/g-8bf091429d39/session/response', ... (170 bytes))
+1794535725: Sending PUBLISH to sender-g-8bf091429d39 (d0, q1, r0, m1, 'ems/v2/gateways/g-8bf091429d39/session/response', ... (170 bytes))
+1794535725: Sending PUBACK to receiver-g-8bf091429d39 (m2, rc0)
+1794535725: Received PUBACK from sender-g-8bf091429d39 (Mid: 1, RC:0)
+1794535725: Received PUBLISH from sender-g-8bf091429d39 (d0, q1, r0, m3, 'ems/v2/gateways/g-8bf091429d39/samples', ... (725 bytes))
+1794535725: Sending PUBLISH to receiver-g-8bf091429d39 (d0, q1, r0, m2, 'ems/v2/gateways/g-8bf091429d39/samples', ... (725 bytes))
+1794535725: Sending PUBACK to sender-g-8bf091429d39 (m3, rc0)
+1794535725: Received PUBACK from receiver-g-8bf091429d39 (Mid: 2, RC:0)
+1794535726: Received PUBLISH from receiver-g-8bf091429d39 (d0, q1, r0, m3, 'ems/v2/gateways/g-8bf091429d39/acks', ... (412 bytes))
+1794535726: Sending PUBLISH to sender-g-8bf091429d39 (d0, q1, r0, m2, 'ems/v2/gateways/g-8bf091429d39/acks', ... (412 bytes))
+1794535726: Sending PUBACK to receiver-g-8bf091429d39 (m3, rc0)
+1794535726: Received PUBACK from sender-g-8bf091429d39 (Mid: 2, RC:0)
+1794535728: Received PUBLISH from sender-g-8bf091429d39 (d0, q1, r0, m4, 'ems/v2/gateways/g-8bf091429d39/session/request', ... (109 bytes))
+1794535728: Sending PUBLISH to receiver-g-8bf091429d39 (d0, q1, r0, m3, 'ems/v2/gateways/g-8bf091429d39/session/request', ... (109 bytes))
+1794535728: Sending PUBACK to sender-g-8bf091429d39 (m4, rc0)
+1794535728: Received PUBACK from receiver-g-8bf091429d39 (Mid: 3, RC:0)
+1794535728: Received PUBLISH from receiver-g-8bf091429d39 (d0, q1, r0, m4, 'ems/v2/gateways/g-8bf091429d39/session/response', ... (170 bytes))
+1794535728: Sending PUBLISH to sender-g-8bf091429d39 (d0, q1, r0, m3, 'ems/v2/gateways/g-8bf091429d39/session/response', ... (170 bytes))
+1794535728: Sending PUBACK to receiver-g-8bf091429d39 (m4, rc0)
+1794535728: Received PUBACK from sender-g-8bf091429d39 (Mid: 3, RC:0)
+1794535728: Received PUBLISH from sender-g-8bf091429d39 (d0, q1, r0, m5, 'ems/v2/gateways/g-8bf091429d39/samples', ... (725 bytes))
+1794535728: Sending PUBLISH to receiver-g-8bf091429d39 (d0, q1, r0, m4, 'ems/v2/gateways/g-8bf091429d39/samples', ... (725 bytes))
+1794535728: Sending PUBACK to sender-g-8bf091429d39 (m5, rc0)
+1794535728: Received PUBACK from receiver-g-8bf091429d39 (Mid: 4, RC:0)
+1794535728: Received PUBLISH from receiver-g-8bf091429d39 (d0, q1, r0, m5, 'ems/v2/gateways/g-8bf091429d39/acks', ... (438 bytes))
+1794535728: Sending PUBLISH to sender-g-8bf091429d39 (d0, q1, r0, m4, 'ems/v2/gateways/g-8bf091429d39/acks', ... (438 bytes))
+1794535728: Sending PUBACK to receiver-g-8bf091429d39 (m5, rc0)
+1794535728: Received PUBACK from sender-g-8bf091429d39 (Mid: 4, RC:0)
+1794535728: Received DISCONNECT from sender-g-8bf091429d39
+1794535728: Client sender-g-8bf091429d39 [127.0.0.1:34219] disconnected.
+1794535728: Received DISCONNECT from receiver-g-8bf091429d39
+1794535728: Client receiver-g-8bf091429d39 [127.0.0.1:48891] disconnected.
+1794535728: New connection from 127.0.0.1:50739 on port 1883.
+1794535728: New client connected from 127.0.0.1:50739 as receiver-g-639533da67dc (p4, c1, k30).
+1794535728: No will message specified.
+1794535728: Sending CONNACK to receiver-g-639533da67dc (0, 0)
+1794535728: Received SUBSCRIBE from receiver-g-639533da67dc
+1794535728: 	ems/v2/gateways/+/samples (QoS 1)
+1794535728: receiver-g-639533da67dc 1 ems/v2/gateways/+/samples
+1794535728: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535728: receiver-g-639533da67dc 1 ems/v2/gateways/+/session/request
+1794535728: Sending SUBACK to receiver-g-639533da67dc
+1794535728: New connection from 127.0.0.1:44213 on port 1883.
+1794535728: New client connected from 127.0.0.1:44213 as sender-g-639533da67dc (p4, c1, k30).
+1794535728: No will message specified.
+1794535728: Sending CONNACK to sender-g-639533da67dc (0, 0)
+1794535728: Received SUBSCRIBE from sender-g-639533da67dc
+1794535728: 	ems/v2/gateways/g-639533da67dc/acks (QoS 1)
+1794535728: sender-g-639533da67dc 1 ems/v2/gateways/g-639533da67dc/acks
+1794535728: 	ems/v2/gateways/g-639533da67dc/session/response (QoS 1)
+1794535728: sender-g-639533da67dc 1 ems/v2/gateways/g-639533da67dc/session/response
+1794535728: Sending SUBACK to sender-g-639533da67dc
+1794535728: Received PUBLISH from sender-g-639533da67dc (d0, q1, r0, m2, 'ems/v2/gateways/g-639533da67dc/session/request', ... (109 bytes))
+1794535728: Sending PUBLISH to receiver-g-639533da67dc (d0, q1, r0, m1, 'ems/v2/gateways/g-639533da67dc/session/request', ... (109 bytes))
+1794535728: Sending PUBACK to sender-g-639533da67dc (m2, rc0)
+1794535728: Received PUBACK from receiver-g-639533da67dc (Mid: 1, RC:0)
+1794535728: Received PUBLISH from receiver-g-639533da67dc (d0, q1, r0, m2, 'ems/v2/gateways/g-639533da67dc/session/response', ... (170 bytes))
+1794535728: Sending PUBLISH to sender-g-639533da67dc (d0, q1, r0, m1, 'ems/v2/gateways/g-639533da67dc/session/response', ... (170 bytes))
+1794535728: Sending PUBACK to receiver-g-639533da67dc (m2, rc0)
+1794535728: Received PUBACK from sender-g-639533da67dc (Mid: 1, RC:0)
+1794535728: Received PUBLISH from sender-g-639533da67dc (d0, q1, r0, m3, 'ems/v2/gateways/g-639533da67dc/samples', ... (725 bytes))
+1794535728: Sending PUBLISH to receiver-g-639533da67dc (d0, q1, r0, m2, 'ems/v2/gateways/g-639533da67dc/samples', ... (725 bytes))
+1794535728: Sending PUBACK to sender-g-639533da67dc (m3, rc0)
+1794535728: Received PUBACK from receiver-g-639533da67dc (Mid: 2, RC:0)
+1794535728: Received PUBLISH from receiver-g-639533da67dc (d0, q1, r0, m3, 'ems/v2/gateways/g-639533da67dc/acks', ... (411 bytes))
+1794535728: Sending PUBLISH to sender-g-639533da67dc (d0, q1, r0, m2, 'ems/v2/gateways/g-639533da67dc/acks', ... (411 bytes))
+1794535728: Sending PUBACK to receiver-g-639533da67dc (m3, rc0)
+1794535728: Received PUBACK from sender-g-639533da67dc (Mid: 2, RC:0)
+1794535728: Received DISCONNECT from sender-g-639533da67dc
+1794535728: Client sender-g-639533da67dc [127.0.0.1:44213] disconnected.
+1794535729: Received DISCONNECT from receiver-g-639533da67dc
+1794535729: Client receiver-g-639533da67dc [127.0.0.1:50739] disconnected.
+1794535729: New connection from 127.0.0.1:37427 on port 1883.
+1794535729: New client connected from 127.0.0.1:37427 as receiver-g-8aa42574de23 (p4, c1, k30).
+1794535729: No will message specified.
+1794535729: Sending CONNACK to receiver-g-8aa42574de23 (0, 0)
+1794535729: Received SUBSCRIBE from receiver-g-8aa42574de23
+1794535729: 	ems/v2/gateways/+/samples (QoS 1)
+1794535729: receiver-g-8aa42574de23 1 ems/v2/gateways/+/samples
+1794535729: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535729: receiver-g-8aa42574de23 1 ems/v2/gateways/+/session/request
+1794535729: Sending SUBACK to receiver-g-8aa42574de23
+1794535729: New connection from 127.0.0.1:33811 on port 1883.
+1794535729: New client connected from 127.0.0.1:33811 as receiver-g-8aa42574de23-b (p4, c1, k30).
+1794535729: No will message specified.
+1794535729: Sending CONNACK to receiver-g-8aa42574de23-b (0, 0)
+1794535729: Received SUBSCRIBE from receiver-g-8aa42574de23-b
+1794535729: 	ems/v2/gateways/+/samples (QoS 1)
+1794535729: receiver-g-8aa42574de23-b 1 ems/v2/gateways/+/samples
+1794535729: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535729: receiver-g-8aa42574de23-b 1 ems/v2/gateways/+/session/request
+1794535729: Sending SUBACK to receiver-g-8aa42574de23-b
+1794535729: New connection from 127.0.0.1:38375 on port 1883.
+1794535729: New client connected from 127.0.0.1:38375 as sender-g-8aa42574de23 (p4, c1, k30).
+1794535729: No will message specified.
+1794535729: Sending CONNACK to sender-g-8aa42574de23 (0, 0)
+1794535729: Received SUBSCRIBE from sender-g-8aa42574de23
+1794535729: 	ems/v2/gateways/g-8aa42574de23/acks (QoS 1)
+1794535729: sender-g-8aa42574de23 1 ems/v2/gateways/g-8aa42574de23/acks
+1794535729: 	ems/v2/gateways/g-8aa42574de23/session/response (QoS 1)
+1794535729: sender-g-8aa42574de23 1 ems/v2/gateways/g-8aa42574de23/session/response
+1794535729: Sending SUBACK to sender-g-8aa42574de23
+1794535729: Received PUBLISH from sender-g-8aa42574de23 (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/session/request', ... (109 bytes))
+1794535729: Sending PUBLISH to receiver-g-8aa42574de23 (d0, q1, r0, m1, 'ems/v2/gateways/g-8aa42574de23/session/request', ... (109 bytes))
+1794535729: Sending PUBLISH to receiver-g-8aa42574de23-b (d0, q1, r0, m1, 'ems/v2/gateways/g-8aa42574de23/session/request', ... (109 bytes))
+1794535729: Sending PUBACK to sender-g-8aa42574de23 (m2, rc0)
+1794535729: Received PUBACK from receiver-g-8aa42574de23 (Mid: 1, RC:0)
+1794535729: Received PUBACK from receiver-g-8aa42574de23-b (Mid: 1, RC:0)
+1794535729: Received PUBLISH from receiver-g-8aa42574de23 (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/session/response', ... (170 bytes))
+1794535729: Sending PUBLISH to sender-g-8aa42574de23 (d0, q1, r0, m1, 'ems/v2/gateways/g-8aa42574de23/session/response', ... (170 bytes))
+1794535729: Sending PUBACK to receiver-g-8aa42574de23 (m2, rc0)
+1794535729: Received PUBACK from sender-g-8aa42574de23 (Mid: 1, RC:0)
+1794535729: Received PUBLISH from receiver-g-8aa42574de23-b (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/session/response', ... (170 bytes))
+1794535729: Sending PUBLISH to sender-g-8aa42574de23 (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/session/response', ... (170 bytes))
+1794535729: Sending PUBACK to receiver-g-8aa42574de23-b (m2, rc0)
+1794535729: Received PUBACK from sender-g-8aa42574de23 (Mid: 2, RC:0)
+1794535729: Received PUBLISH from sender-g-8aa42574de23 (d0, q1, r0, m3, 'ems/v2/gateways/g-8aa42574de23/samples', ... (725 bytes))
+1794535729: Sending PUBLISH to receiver-g-8aa42574de23 (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/samples', ... (725 bytes))
+1794535729: Sending PUBLISH to receiver-g-8aa42574de23-b (d0, q1, r0, m2, 'ems/v2/gateways/g-8aa42574de23/samples', ... (725 bytes))
+1794535729: Sending PUBACK to sender-g-8aa42574de23 (m3, rc0)
+1794535729: Received PUBACK from receiver-g-8aa42574de23 (Mid: 2, RC:0)
+1794535729: Received PUBACK from receiver-g-8aa42574de23-b (Mid: 2, RC:0)
+1794535729: Received PUBLISH from receiver-g-8aa42574de23 (d0, q1, r0, m3, 'ems/v2/gateways/g-8aa42574de23/acks', ... (438 bytes))
+1794535729: Sending PUBLISH to sender-g-8aa42574de23 (d0, q1, r0, m3, 'ems/v2/gateways/g-8aa42574de23/acks', ... (438 bytes))
+1794535729: Sending PUBACK to receiver-g-8aa42574de23 (m3, rc0)
+1794535729: Received PUBACK from sender-g-8aa42574de23 (Mid: 3, RC:0)
+1794535729: Received PUBLISH from receiver-g-8aa42574de23-b (d0, q1, r0, m3, 'ems/v2/gateways/g-8aa42574de23/acks', ... (438 bytes))
+1794535729: Sending PUBLISH to sender-g-8aa42574de23 (d0, q1, r0, m4, 'ems/v2/gateways/g-8aa42574de23/acks', ... (438 bytes))
+1794535729: Sending PUBACK to receiver-g-8aa42574de23-b (m3, rc0)
+1794535729: Received PUBACK from sender-g-8aa42574de23 (Mid: 4, RC:0)
+1794535729: Received DISCONNECT from sender-g-8aa42574de23
+1794535729: Client sender-g-8aa42574de23 [127.0.0.1:38375] disconnected.
+1794535729: Received DISCONNECT from receiver-g-8aa42574de23-b
+1794535729: Client receiver-g-8aa42574de23-b [127.0.0.1:33811] disconnected.
+1794535729: Received DISCONNECT from receiver-g-8aa42574de23
+1794535729: Client receiver-g-8aa42574de23 [127.0.0.1:37427] disconnected.
+1794535729: New connection from 127.0.0.1:38325 on port 1883.
+1794535729: New client connected from 127.0.0.1:38325 as sender-g-770d7e8f9eb0 (p4, c1, k30).
+1794535729: No will message specified.
+1794535729: Sending CONNACK to sender-g-770d7e8f9eb0 (0, 0)
+1794535729: Received SUBSCRIBE from sender-g-770d7e8f9eb0
+1794535729: 	ems/v2/gateways/g-770d7e8f9eb0/acks (QoS 1)
+1794535729: sender-g-770d7e8f9eb0 1 ems/v2/gateways/g-770d7e8f9eb0/acks
+1794535729: 	ems/v2/gateways/g-770d7e8f9eb0/session/response (QoS 1)
+1794535729: sender-g-770d7e8f9eb0 1 ems/v2/gateways/g-770d7e8f9eb0/session/response
+1794535729: Sending SUBACK to sender-g-770d7e8f9eb0
+1794535729: New connection from 127.0.0.1:52037 on port 1883.
+1794535729: New client connected from 127.0.0.1:52037 as receiver-g-770d7e8f9eb0 (p4, c1, k30).
+1794535729: No will message specified.
+1794535729: Sending CONNACK to receiver-g-770d7e8f9eb0 (0, 0)
+1794535729: Received SUBSCRIBE from receiver-g-770d7e8f9eb0
+1794535729: 	ems/v2/gateways/+/samples (QoS 1)
+1794535729: receiver-g-770d7e8f9eb0 1 ems/v2/gateways/+/samples
+1794535729: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535729: receiver-g-770d7e8f9eb0 1 ems/v2/gateways/+/session/request
+1794535729: Sending SUBACK to receiver-g-770d7e8f9eb0
+1794535729: Received PUBLISH from sender-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/session/request', ... (109 bytes))
+1794535729: Sending PUBLISH to receiver-g-770d7e8f9eb0 (d0, q1, r0, m1, 'ems/v2/gateways/g-770d7e8f9eb0/session/request', ... (109 bytes))
+1794535729: Sending PUBACK to sender-g-770d7e8f9eb0 (m2, rc0)
+1794535729: Received PUBACK from receiver-g-770d7e8f9eb0 (Mid: 1, RC:0)
+1794535729: Received PUBLISH from receiver-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/session/response', ... (170 bytes))
+1794535729: Sending PUBLISH to sender-g-770d7e8f9eb0 (d0, q1, r0, m1, 'ems/v2/gateways/g-770d7e8f9eb0/session/response', ... (170 bytes))
+1794535729: Sending PUBACK to receiver-g-770d7e8f9eb0 (m2, rc0)
+1794535729: Received PUBACK from sender-g-770d7e8f9eb0 (Mid: 1, RC:0)
+1794535729: Received PUBLISH from sender-g-770d7e8f9eb0 (d0, q1, r0, m3, 'ems/v2/gateways/g-770d7e8f9eb0/samples', ... (725 bytes))
+1794535729: Sending PUBLISH to receiver-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/samples', ... (725 bytes))
+1794535729: Sending PUBACK to sender-g-770d7e8f9eb0 (m3, rc0)
+1794535729: Received PUBACK from receiver-g-770d7e8f9eb0 (Mid: 2, RC:0)
+1794535730: Received DISCONNECT from receiver-g-770d7e8f9eb0
+1794535730: Client receiver-g-770d7e8f9eb0 [127.0.0.1:52037] disconnected.
+1794535730: New connection from 127.0.0.1:57907 on port 1883.
+1794535730: New client connected from 127.0.0.1:57907 as receiver-g-770d7e8f9eb0 (p4, c1, k30).
+1794535730: No will message specified.
+1794535730: Sending CONNACK to receiver-g-770d7e8f9eb0 (0, 0)
+1794535730: Received SUBSCRIBE from receiver-g-770d7e8f9eb0
+1794535730: 	ems/v2/gateways/+/samples (QoS 1)
+1794535730: receiver-g-770d7e8f9eb0 1 ems/v2/gateways/+/samples
+1794535730: 	ems/v2/gateways/+/session/request (QoS 1)
+1794535730: receiver-g-770d7e8f9eb0 1 ems/v2/gateways/+/session/request
+1794535730: Sending SUBACK to receiver-g-770d7e8f9eb0
+1794535732: Received PUBLISH from sender-g-770d7e8f9eb0 (d0, q1, r0, m4, 'ems/v2/gateways/g-770d7e8f9eb0/session/request', ... (109 bytes))
+1794535732: Sending PUBLISH to receiver-g-770d7e8f9eb0 (d0, q1, r0, m1, 'ems/v2/gateways/g-770d7e8f9eb0/session/request', ... (109 bytes))
+1794535732: Sending PUBACK to sender-g-770d7e8f9eb0 (m4, rc0)
+1794535732: Received PUBACK from receiver-g-770d7e8f9eb0 (Mid: 1, RC:0)
+1794535732: Received PUBLISH from receiver-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/session/response', ... (170 bytes))
+1794535732: Sending PUBLISH to sender-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/session/response', ... (170 bytes))
+1794535732: Sending PUBACK to receiver-g-770d7e8f9eb0 (m2, rc0)
+1794535732: Received PUBACK from sender-g-770d7e8f9eb0 (Mid: 2, RC:0)
+1794535732: Received PUBLISH from receiver-g-770d7e8f9eb0 (d0, q1, r0, m3, 'ems/v2/gateways/g-770d7e8f9eb0/acks', ... (438 bytes))
+1794535732: Sending PUBLISH to sender-g-770d7e8f9eb0 (d0, q1, r0, m3, 'ems/v2/gateways/g-770d7e8f9eb0/acks', ... (438 bytes))
+1794535732: Sending PUBACK to receiver-g-770d7e8f9eb0 (m3, rc0)
+1794535732: Received PUBACK from sender-g-770d7e8f9eb0 (Mid: 3, RC:0)
+1794535732: Received PUBLISH from sender-g-770d7e8f9eb0 (d0, q1, r0, m5, 'ems/v2/gateways/g-770d7e8f9eb0/samples', ... (725 bytes))
+1794535732: Sending PUBLISH to receiver-g-770d7e8f9eb0 (d0, q1, r0, m2, 'ems/v2/gateways/g-770d7e8f9eb0/samples', ... (725 bytes))
+1794535732: Sending PUBACK to sender-g-770d7e8f9eb0 (m5, rc0)
+1794535732: Received PUBACK from receiver-g-770d7e8f9eb0 (Mid: 2, RC:0)
+1794535732: Received PUBLISH from receiver-g-770d7e8f9eb0 (d0, q1, r0, m4, 'ems/v2/gateways/g-770d7e8f9eb0/acks', ... (438 bytes))
+1794535732: Sending PUBLISH to sender-g-770d7e8f9eb0 (d0, q1, r0, m4, 'ems/v2/gateways/g-770d7e8f9eb0/acks', ... (438 bytes))
+1794535732: Sending PUBACK to receiver-g-770d7e8f9eb0 (m4, rc0)
+1794535732: Received PUBACK from sender-g-770d7e8f9eb0 (Mid: 4, RC:0)
+1794535732: Received DISCONNECT from receiver-g-770d7e8f9eb0
+1794535732: Client receiver-g-770d7e8f9eb0 [127.0.0.1:57907] disconnected.
+1794535732: Received DISCONNECT from sender-g-770d7e8f9eb0
+1794535732: Client sender-g-770d7e8f9eb0 [127.0.0.1:38325] disconnected.
+1794535721: Info: running mosquitto as user id: 1000.

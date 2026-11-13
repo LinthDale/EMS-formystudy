@@ -1,0 +1,29 @@
+1794548613: mosquitto version 2.1.2 starting
+1794548613: Config loaded from /qa/tls.conf.
+1794548613: Bridge support available.
+1794548613: Persistence support available.
+1794548613: TLS support available.
+1794548613: TLS-PSK support available.
+1794548613: Websockets support available.
+1794548613: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794548613: Plugin builtin-security has registered to receive 'acl-check' events.
+1794548613: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794548613: Plugin builtin-security has registered to receive 'acl-check' events.
+1794548613: Warning: File /qa/acl has world readable permissions. Future versions will refuse to load this file.
+To fix this, use `chmod 0700 /qa/acl`.
+
+1794548613: Plugin builtin-security has registered to receive 'acl-check' events.
+1794548613: Opening ipv4 listen socket on port 8886.
+1794548613: Opening ipv4 listen socket on port 8887.
+1794548613: Opening ipv4 listen socket on port 8888.
+1794548613: mosquitto version 2.1.2 running
+1794548613: The 'per_listener_settings' option is now deprecated and will be removed in version 3.0. Please see the documentation for how to achieve the same effect.
+1794548613: Note: It is recommended to replace `message_size_limit` with `max_packet_size`.
+1794548613: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794548613: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794548613: You are using the 'allow_anonymous' option with 'per_listener_settings true'. Please replace this with 'listener_allow_anonymous'.
+1794548613: Info: running mosquitto as user id: 1000.

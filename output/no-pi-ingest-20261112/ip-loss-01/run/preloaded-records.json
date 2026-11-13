@@ -1,0 +1,2202 @@
+[
+  {
+    "sampled_ns": 1794470115973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794470115973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.0
+    }
+  },
+  {
+    "sampled_ns": 1794470120973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.01,current=5.01,power_kw=1.01,energy_kwh=1000.01 1794470120973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.01,
+      "current": 5.01,
+      "power_kw": 1.01,
+      "energy_kwh": 1000.01
+    }
+  },
+  {
+    "sampled_ns": 1794470125973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.02,current=5.02,power_kw=1.02,energy_kwh=1000.02 1794470125973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.02,
+      "current": 5.02,
+      "power_kw": 1.02,
+      "energy_kwh": 1000.02
+    }
+  },
+  {
+    "sampled_ns": 1794470130973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.03,current=5.03,power_kw=1.03,energy_kwh=1000.03 1794470130973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.03,
+      "current": 5.03,
+      "power_kw": 1.03,
+      "energy_kwh": 1000.03
+    }
+  },
+  {
+    "sampled_ns": 1794470135973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.04,current=5.04,power_kw=1.04,energy_kwh=1000.04 1794470135973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.04,
+      "current": 5.04,
+      "power_kw": 1.04,
+      "energy_kwh": 1000.04
+    }
+  },
+  {
+    "sampled_ns": 1794470140973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.05,current=5.05,power_kw=1.05,energy_kwh=1000.05 1794470140973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.05,
+      "current": 5.05,
+      "power_kw": 1.05,
+      "energy_kwh": 1000.05
+    }
+  },
+  {
+    "sampled_ns": 1794470145973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.06,current=5.06,power_kw=1.06,energy_kwh=1000.06 1794470145973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.06,
+      "current": 5.06,
+      "power_kw": 1.06,
+      "energy_kwh": 1000.06
+    }
+  },
+  {
+    "sampled_ns": 1794470150973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.07,current=5.07,power_kw=1.07,energy_kwh=1000.07 1794470150973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.07,
+      "current": 5.07,
+      "power_kw": 1.07,
+      "energy_kwh": 1000.07
+    }
+  },
+  {
+    "sampled_ns": 1794470155973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.08,current=5.08,power_kw=1.08,energy_kwh=1000.08 1794470155973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.08,
+      "current": 5.08,
+      "power_kw": 1.08,
+      "energy_kwh": 1000.08
+    }
+  },
+  {
+    "sampled_ns": 1794470160973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.09,current=5.09,power_kw=1.09,energy_kwh=1000.09 1794470160973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.09,
+      "current": 5.09,
+      "power_kw": 1.09,
+      "energy_kwh": 1000.09
+    }
+  },
+  {
+    "sampled_ns": 1794470165973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.1,current=5.1,power_kw=1.1,energy_kwh=1000.1 1794470165973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.1,
+      "current": 5.1,
+      "power_kw": 1.1,
+      "energy_kwh": 1000.1
+    }
+  },
+  {
+    "sampled_ns": 1794470170973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.11,current=5.11,power_kw=1.11,energy_kwh=1000.11 1794470170973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.11,
+      "current": 5.11,
+      "power_kw": 1.11,
+      "energy_kwh": 1000.11
+    }
+  },
+  {
+    "sampled_ns": 1794470175973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.12,current=5.12,power_kw=1.12,energy_kwh=1000.12 1794470175973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.12,
+      "current": 5.12,
+      "power_kw": 1.12,
+      "energy_kwh": 1000.12
+    }
+  },
+  {
+    "sampled_ns": 1794470180973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.13,current=5.13,power_kw=1.13,energy_kwh=1000.13 1794470180973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.13,
+      "current": 5.13,
+      "power_kw": 1.13,
+      "energy_kwh": 1000.13
+    }
+  },
+  {
+    "sampled_ns": 1794470185973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.14,current=5.14,power_kw=1.1400000000000001,energy_kwh=1000.14 1794470185973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.14,
+      "current": 5.14,
+      "power_kw": 1.1400000000000001,
+      "energy_kwh": 1000.14
+    }
+  },
+  {
+    "sampled_ns": 1794470190973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.15,current=5.15,power_kw=1.15,energy_kwh=1000.15 1794470190973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.15,
+      "current": 5.15,
+      "power_kw": 1.15,
+      "energy_kwh": 1000.15
+    }
+  },
+  {
+    "sampled_ns": 1794470195973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.16,current=5.16,power_kw=1.16,energy_kwh=1000.16 1794470195973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.16,
+      "current": 5.16,
+      "power_kw": 1.16,
+      "energy_kwh": 1000.16
+    }
+  },
+  {
+    "sampled_ns": 1794470200973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.17,current=5.17,power_kw=1.17,energy_kwh=1000.17 1794470200973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.17,
+      "current": 5.17,
+      "power_kw": 1.17,
+      "energy_kwh": 1000.17
+    }
+  },
+  {
+    "sampled_ns": 1794470205973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.18,current=5.18,power_kw=1.18,energy_kwh=1000.18 1794470205973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.18,
+      "current": 5.18,
+      "power_kw": 1.18,
+      "energy_kwh": 1000.18
+    }
+  },
+  {
+    "sampled_ns": 1794470210973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.19,current=5.19,power_kw=1.19,energy_kwh=1000.19 1794470210973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.19,
+      "current": 5.19,
+      "power_kw": 1.19,
+      "energy_kwh": 1000.19
+    }
+  },
+  {
+    "sampled_ns": 1794470215973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.2,current=5.2,power_kw=1.2,energy_kwh=1000.2 1794470215973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.2,
+      "current": 5.2,
+      "power_kw": 1.2,
+      "energy_kwh": 1000.2
+    }
+  },
+  {
+    "sampled_ns": 1794470220973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.21,current=5.21,power_kw=1.21,energy_kwh=1000.21 1794470220973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.21,
+      "current": 5.21,
+      "power_kw": 1.21,
+      "energy_kwh": 1000.21
+    }
+  },
+  {
+    "sampled_ns": 1794470225973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.22,current=5.22,power_kw=1.22,energy_kwh=1000.22 1794470225973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.22,
+      "current": 5.22,
+      "power_kw": 1.22,
+      "energy_kwh": 1000.22
+    }
+  },
+  {
+    "sampled_ns": 1794470230973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.23,current=5.23,power_kw=1.23,energy_kwh=1000.23 1794470230973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.23,
+      "current": 5.23,
+      "power_kw": 1.23,
+      "energy_kwh": 1000.23
+    }
+  },
+  {
+    "sampled_ns": 1794470235973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.24,current=5.24,power_kw=1.24,energy_kwh=1000.24 1794470235973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.24,
+      "current": 5.24,
+      "power_kw": 1.24,
+      "energy_kwh": 1000.24
+    }
+  },
+  {
+    "sampled_ns": 1794470240973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.25,current=5.25,power_kw=1.25,energy_kwh=1000.25 1794470240973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.25,
+      "current": 5.25,
+      "power_kw": 1.25,
+      "energy_kwh": 1000.25
+    }
+  },
+  {
+    "sampled_ns": 1794470245973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.26,current=5.26,power_kw=1.26,energy_kwh=1000.26 1794470245973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.26,
+      "current": 5.26,
+      "power_kw": 1.26,
+      "energy_kwh": 1000.26
+    }
+  },
+  {
+    "sampled_ns": 1794470250973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.27,current=5.27,power_kw=1.27,energy_kwh=1000.27 1794470250973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.27,
+      "current": 5.27,
+      "power_kw": 1.27,
+      "energy_kwh": 1000.27
+    }
+  },
+  {
+    "sampled_ns": 1794470255973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.28,current=5.28,power_kw=1.28,energy_kwh=1000.28 1794470255973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.28,
+      "current": 5.28,
+      "power_kw": 1.28,
+      "energy_kwh": 1000.28
+    }
+  },
+  {
+    "sampled_ns": 1794470260973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.29,current=5.29,power_kw=1.29,energy_kwh=1000.29 1794470260973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.29,
+      "current": 5.29,
+      "power_kw": 1.29,
+      "energy_kwh": 1000.29
+    }
+  },
+  {
+    "sampled_ns": 1794470265973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.3,current=5.3,power_kw=1.3,energy_kwh=1000.3 1794470265973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.3,
+      "current": 5.3,
+      "power_kw": 1.3,
+      "energy_kwh": 1000.3
+    }
+  },
+  {
+    "sampled_ns": 1794470270973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.31,current=5.31,power_kw=1.31,energy_kwh=1000.31 1794470270973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.31,
+      "current": 5.31,
+      "power_kw": 1.31,
+      "energy_kwh": 1000.31
+    }
+  },
+  {
+    "sampled_ns": 1794470275973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.32,current=5.32,power_kw=1.32,energy_kwh=1000.32 1794470275973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.32,
+      "current": 5.32,
+      "power_kw": 1.32,
+      "energy_kwh": 1000.32
+    }
+  },
+  {
+    "sampled_ns": 1794470280973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.33,current=5.33,power_kw=1.33,energy_kwh=1000.33 1794470280973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.33,
+      "current": 5.33,
+      "power_kw": 1.33,
+      "energy_kwh": 1000.33
+    }
+  },
+  {
+    "sampled_ns": 1794470285973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.34,current=5.34,power_kw=1.34,energy_kwh=1000.34 1794470285973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.34,
+      "current": 5.34,
+      "power_kw": 1.34,
+      "energy_kwh": 1000.34
+    }
+  },
+  {
+    "sampled_ns": 1794470290973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.35,current=5.35,power_kw=1.35,energy_kwh=1000.35 1794470290973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.35,
+      "current": 5.35,
+      "power_kw": 1.35,
+      "energy_kwh": 1000.35
+    }
+  },
+  {
+    "sampled_ns": 1794470295973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.36,current=5.36,power_kw=1.3599999999999999,energy_kwh=1000.36 1794470295973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.36,
+      "current": 5.36,
+      "power_kw": 1.3599999999999999,
+      "energy_kwh": 1000.36
+    }
+  },
+  {
+    "sampled_ns": 1794470300973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.37,current=5.37,power_kw=1.37,energy_kwh=1000.37 1794470300973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.37,
+      "current": 5.37,
+      "power_kw": 1.37,
+      "energy_kwh": 1000.37
+    }
+  },
+  {
+    "sampled_ns": 1794470305973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.38,current=5.38,power_kw=1.38,energy_kwh=1000.38 1794470305973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.38,
+      "current": 5.38,
+      "power_kw": 1.38,
+      "energy_kwh": 1000.38
+    }
+  },
+  {
+    "sampled_ns": 1794470310973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.39,current=5.39,power_kw=1.3900000000000001,energy_kwh=1000.39 1794470310973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.39,
+      "current": 5.39,
+      "power_kw": 1.3900000000000001,
+      "energy_kwh": 1000.39
+    }
+  },
+  {
+    "sampled_ns": 1794470315973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.4,current=5.4,power_kw=1.4,energy_kwh=1000.4 1794470315973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.4,
+      "current": 5.4,
+      "power_kw": 1.4,
+      "energy_kwh": 1000.4
+    }
+  },
+  {
+    "sampled_ns": 1794470320973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.41,current=5.41,power_kw=1.41,energy_kwh=1000.41 1794470320973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.41,
+      "current": 5.41,
+      "power_kw": 1.41,
+      "energy_kwh": 1000.41
+    }
+  },
+  {
+    "sampled_ns": 1794470325973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.42,current=5.42,power_kw=1.42,energy_kwh=1000.42 1794470325973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.42,
+      "current": 5.42,
+      "power_kw": 1.42,
+      "energy_kwh": 1000.42
+    }
+  },
+  {
+    "sampled_ns": 1794470330973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.43,current=5.43,power_kw=1.43,energy_kwh=1000.43 1794470330973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.43,
+      "current": 5.43,
+      "power_kw": 1.43,
+      "energy_kwh": 1000.43
+    }
+  },
+  {
+    "sampled_ns": 1794470335973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.44,current=5.44,power_kw=1.44,energy_kwh=1000.44 1794470335973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.44,
+      "current": 5.44,
+      "power_kw": 1.44,
+      "energy_kwh": 1000.44
+    }
+  },
+  {
+    "sampled_ns": 1794470340973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.45,current=5.45,power_kw=1.45,energy_kwh=1000.45 1794470340973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.45,
+      "current": 5.45,
+      "power_kw": 1.45,
+      "energy_kwh": 1000.45
+    }
+  },
+  {
+    "sampled_ns": 1794470345973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.46,current=5.46,power_kw=1.46,energy_kwh=1000.46 1794470345973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.46,
+      "current": 5.46,
+      "power_kw": 1.46,
+      "energy_kwh": 1000.46
+    }
+  },
+  {
+    "sampled_ns": 1794470350973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.47,current=5.47,power_kw=1.47,energy_kwh=1000.47 1794470350973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.47,
+      "current": 5.47,
+      "power_kw": 1.47,
+      "energy_kwh": 1000.47
+    }
+  },
+  {
+    "sampled_ns": 1794470355973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.48,current=5.48,power_kw=1.48,energy_kwh=1000.48 1794470355973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.48,
+      "current": 5.48,
+      "power_kw": 1.48,
+      "energy_kwh": 1000.48
+    }
+  },
+  {
+    "sampled_ns": 1794470360973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.49,current=5.49,power_kw=1.49,energy_kwh=1000.49 1794470360973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.49,
+      "current": 5.49,
+      "power_kw": 1.49,
+      "energy_kwh": 1000.49
+    }
+  },
+  {
+    "sampled_ns": 1794470365973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.5,current=5.5,power_kw=1.0,energy_kwh=1000.5 1794470365973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.5,
+      "current": 5.5,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.5
+    }
+  },
+  {
+    "sampled_ns": 1794470370973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.51,current=5.51,power_kw=1.01,energy_kwh=1000.51 1794470370973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.51,
+      "current": 5.51,
+      "power_kw": 1.01,
+      "energy_kwh": 1000.51
+    }
+  },
+  {
+    "sampled_ns": 1794470375973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.52,current=5.52,power_kw=1.02,energy_kwh=1000.52 1794470375973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.52,
+      "current": 5.52,
+      "power_kw": 1.02,
+      "energy_kwh": 1000.52
+    }
+  },
+  {
+    "sampled_ns": 1794470380973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.53,current=5.53,power_kw=1.03,energy_kwh=1000.53 1794470380973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.53,
+      "current": 5.53,
+      "power_kw": 1.03,
+      "energy_kwh": 1000.53
+    }
+  },
+  {
+    "sampled_ns": 1794470385973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.54,current=5.54,power_kw=1.04,energy_kwh=1000.54 1794470385973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.54,
+      "current": 5.54,
+      "power_kw": 1.04,
+      "energy_kwh": 1000.54
+    }
+  },
+  {
+    "sampled_ns": 1794470390973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.55,current=5.55,power_kw=1.05,energy_kwh=1000.55 1794470390973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.55,
+      "current": 5.55,
+      "power_kw": 1.05,
+      "energy_kwh": 1000.55
+    }
+  },
+  {
+    "sampled_ns": 1794470395973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.56,current=5.5600000000000005,power_kw=1.06,energy_kwh=1000.56 1794470395973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.56,
+      "current": 5.5600000000000005,
+      "power_kw": 1.06,
+      "energy_kwh": 1000.56
+    }
+  },
+  {
+    "sampled_ns": 1794470400973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.57,current=5.57,power_kw=1.07,energy_kwh=1000.57 1794470400973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.57,
+      "current": 5.57,
+      "power_kw": 1.07,
+      "energy_kwh": 1000.57
+    }
+  },
+  {
+    "sampled_ns": 1794470405973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.58,current=5.58,power_kw=1.08,energy_kwh=1000.58 1794470405973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.58,
+      "current": 5.58,
+      "power_kw": 1.08,
+      "energy_kwh": 1000.58
+    }
+  },
+  {
+    "sampled_ns": 1794470410973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.59,current=5.59,power_kw=1.09,energy_kwh=1000.59 1794470410973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.59,
+      "current": 5.59,
+      "power_kw": 1.09,
+      "energy_kwh": 1000.59
+    }
+  },
+  {
+    "sampled_ns": 1794470415973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.6,current=5.6,power_kw=1.1,energy_kwh=1000.6 1794470415973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.6,
+      "current": 5.6,
+      "power_kw": 1.1,
+      "energy_kwh": 1000.6
+    }
+  },
+  {
+    "sampled_ns": 1794470420973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.61,current=5.61,power_kw=1.11,energy_kwh=1000.61 1794470420973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.61,
+      "current": 5.61,
+      "power_kw": 1.11,
+      "energy_kwh": 1000.61
+    }
+  },
+  {
+    "sampled_ns": 1794470425973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.62,current=5.62,power_kw=1.12,energy_kwh=1000.62 1794470425973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.62,
+      "current": 5.62,
+      "power_kw": 1.12,
+      "energy_kwh": 1000.62
+    }
+  },
+  {
+    "sampled_ns": 1794470430973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.63,current=5.63,power_kw=1.13,energy_kwh=1000.63 1794470430973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.63,
+      "current": 5.63,
+      "power_kw": 1.13,
+      "energy_kwh": 1000.63
+    }
+  },
+  {
+    "sampled_ns": 1794470435973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.64,current=5.64,power_kw=1.1400000000000001,energy_kwh=1000.64 1794470435973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.64,
+      "current": 5.64,
+      "power_kw": 1.1400000000000001,
+      "energy_kwh": 1000.64
+    }
+  },
+  {
+    "sampled_ns": 1794470440973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.65,current=5.65,power_kw=1.15,energy_kwh=1000.65 1794470440973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.65,
+      "current": 5.65,
+      "power_kw": 1.15,
+      "energy_kwh": 1000.65
+    }
+  },
+  {
+    "sampled_ns": 1794470445973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.66,current=5.66,power_kw=1.16,energy_kwh=1000.66 1794470445973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.66,
+      "current": 5.66,
+      "power_kw": 1.16,
+      "energy_kwh": 1000.66
+    }
+  },
+  {
+    "sampled_ns": 1794470450973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.67,current=5.67,power_kw=1.17,energy_kwh=1000.67 1794470450973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.67,
+      "current": 5.67,
+      "power_kw": 1.17,
+      "energy_kwh": 1000.67
+    }
+  },
+  {
+    "sampled_ns": 1794470455973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.68,current=5.68,power_kw=1.18,energy_kwh=1000.68 1794470455973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.68,
+      "current": 5.68,
+      "power_kw": 1.18,
+      "energy_kwh": 1000.68
+    }
+  },
+  {
+    "sampled_ns": 1794470460973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.69,current=5.6899999999999995,power_kw=1.19,energy_kwh=1000.69 1794470460973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.69,
+      "current": 5.6899999999999995,
+      "power_kw": 1.19,
+      "energy_kwh": 1000.69
+    }
+  },
+  {
+    "sampled_ns": 1794470465973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.7,current=5.7,power_kw=1.2,energy_kwh=1000.7 1794470465973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.7,
+      "current": 5.7,
+      "power_kw": 1.2,
+      "energy_kwh": 1000.7
+    }
+  },
+  {
+    "sampled_ns": 1794470470973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.71,current=5.71,power_kw=1.21,energy_kwh=1000.71 1794470470973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.71,
+      "current": 5.71,
+      "power_kw": 1.21,
+      "energy_kwh": 1000.71
+    }
+  },
+  {
+    "sampled_ns": 1794470475973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.72,current=5.72,power_kw=1.22,energy_kwh=1000.72 1794470475973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.72,
+      "current": 5.72,
+      "power_kw": 1.22,
+      "energy_kwh": 1000.72
+    }
+  },
+  {
+    "sampled_ns": 1794470480973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.73,current=5.73,power_kw=1.23,energy_kwh=1000.73 1794470480973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.73,
+      "current": 5.73,
+      "power_kw": 1.23,
+      "energy_kwh": 1000.73
+    }
+  },
+  {
+    "sampled_ns": 1794470485973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.74,current=5.74,power_kw=1.24,energy_kwh=1000.74 1794470485973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.74,
+      "current": 5.74,
+      "power_kw": 1.24,
+      "energy_kwh": 1000.74
+    }
+  },
+  {
+    "sampled_ns": 1794470490973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.75,current=5.75,power_kw=1.25,energy_kwh=1000.75 1794470490973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.75,
+      "current": 5.75,
+      "power_kw": 1.25,
+      "energy_kwh": 1000.75
+    }
+  },
+  {
+    "sampled_ns": 1794470495973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.76,current=5.76,power_kw=1.26,energy_kwh=1000.76 1794470495973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.76,
+      "current": 5.76,
+      "power_kw": 1.26,
+      "energy_kwh": 1000.76
+    }
+  },
+  {
+    "sampled_ns": 1794470500973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.77,current=5.77,power_kw=1.27,energy_kwh=1000.77 1794470500973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.77,
+      "current": 5.77,
+      "power_kw": 1.27,
+      "energy_kwh": 1000.77
+    }
+  },
+  {
+    "sampled_ns": 1794470505973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.78,current=5.78,power_kw=1.28,energy_kwh=1000.78 1794470505973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.78,
+      "current": 5.78,
+      "power_kw": 1.28,
+      "energy_kwh": 1000.78
+    }
+  },
+  {
+    "sampled_ns": 1794470510973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.79,current=5.79,power_kw=1.29,energy_kwh=1000.79 1794470510973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.79,
+      "current": 5.79,
+      "power_kw": 1.29,
+      "energy_kwh": 1000.79
+    }
+  },
+  {
+    "sampled_ns": 1794470515973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.8,current=5.8,power_kw=1.3,energy_kwh=1000.8 1794470515973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.8,
+      "current": 5.8,
+      "power_kw": 1.3,
+      "energy_kwh": 1000.8
+    }
+  },
+  {
+    "sampled_ns": 1794470520973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.81,current=5.8100000000000005,power_kw=1.31,energy_kwh=1000.81 1794470520973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.81,
+      "current": 5.8100000000000005,
+      "power_kw": 1.31,
+      "energy_kwh": 1000.81
+    }
+  },
+  {
+    "sampled_ns": 1794470525973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.82,current=5.82,power_kw=1.32,energy_kwh=1000.82 1794470525973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.82,
+      "current": 5.82,
+      "power_kw": 1.32,
+      "energy_kwh": 1000.82
+    }
+  },
+  {
+    "sampled_ns": 1794470530973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.83,current=5.83,power_kw=1.33,energy_kwh=1000.83 1794470530973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.83,
+      "current": 5.83,
+      "power_kw": 1.33,
+      "energy_kwh": 1000.83
+    }
+  },
+  {
+    "sampled_ns": 1794470535973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.84,current=5.84,power_kw=1.34,energy_kwh=1000.84 1794470535973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.84,
+      "current": 5.84,
+      "power_kw": 1.34,
+      "energy_kwh": 1000.84
+    }
+  },
+  {
+    "sampled_ns": 1794470540973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.85,current=5.85,power_kw=1.35,energy_kwh=1000.85 1794470540973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.85,
+      "current": 5.85,
+      "power_kw": 1.35,
+      "energy_kwh": 1000.85
+    }
+  },
+  {
+    "sampled_ns": 1794470545973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.86,current=5.86,power_kw=1.3599999999999999,energy_kwh=1000.86 1794470545973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.86,
+      "current": 5.86,
+      "power_kw": 1.3599999999999999,
+      "energy_kwh": 1000.86
+    }
+  },
+  {
+    "sampled_ns": 1794470550973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.87,current=5.87,power_kw=1.37,energy_kwh=1000.87 1794470550973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.87,
+      "current": 5.87,
+      "power_kw": 1.37,
+      "energy_kwh": 1000.87
+    }
+  },
+  {
+    "sampled_ns": 1794470555973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.88,current=5.88,power_kw=1.38,energy_kwh=1000.88 1794470555973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.88,
+      "current": 5.88,
+      "power_kw": 1.38,
+      "energy_kwh": 1000.88
+    }
+  },
+  {
+    "sampled_ns": 1794470560973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.89,current=5.89,power_kw=1.3900000000000001,energy_kwh=1000.89 1794470560973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.89,
+      "current": 5.89,
+      "power_kw": 1.3900000000000001,
+      "energy_kwh": 1000.89
+    }
+  },
+  {
+    "sampled_ns": 1794470565973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.9,current=5.9,power_kw=1.4,energy_kwh=1000.9 1794470565973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.9,
+      "current": 5.9,
+      "power_kw": 1.4,
+      "energy_kwh": 1000.9
+    }
+  },
+  {
+    "sampled_ns": 1794470570973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.91,current=5.91,power_kw=1.41,energy_kwh=1000.91 1794470570973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.91,
+      "current": 5.91,
+      "power_kw": 1.41,
+      "energy_kwh": 1000.91
+    }
+  },
+  {
+    "sampled_ns": 1794470575973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.92,current=5.92,power_kw=1.42,energy_kwh=1000.92 1794470575973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.92,
+      "current": 5.92,
+      "power_kw": 1.42,
+      "energy_kwh": 1000.92
+    }
+  },
+  {
+    "sampled_ns": 1794470580973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.93,current=5.93,power_kw=1.43,energy_kwh=1000.93 1794470580973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.93,
+      "current": 5.93,
+      "power_kw": 1.43,
+      "energy_kwh": 1000.93
+    }
+  },
+  {
+    "sampled_ns": 1794470585973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.94,current=5.9399999999999995,power_kw=1.44,energy_kwh=1000.94 1794470585973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.94,
+      "current": 5.9399999999999995,
+      "power_kw": 1.44,
+      "energy_kwh": 1000.94
+    }
+  },
+  {
+    "sampled_ns": 1794470590973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.95,current=5.95,power_kw=1.45,energy_kwh=1000.95 1794470590973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.95,
+      "current": 5.95,
+      "power_kw": 1.45,
+      "energy_kwh": 1000.95
+    }
+  },
+  {
+    "sampled_ns": 1794470595973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.96,current=5.96,power_kw=1.46,energy_kwh=1000.96 1794470595973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.96,
+      "current": 5.96,
+      "power_kw": 1.46,
+      "energy_kwh": 1000.96
+    }
+  },
+  {
+    "sampled_ns": 1794470600973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.97,current=5.97,power_kw=1.47,energy_kwh=1000.97 1794470600973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.97,
+      "current": 5.97,
+      "power_kw": 1.47,
+      "energy_kwh": 1000.97
+    }
+  },
+  {
+    "sampled_ns": 1794470605973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.98,current=5.98,power_kw=1.48,energy_kwh=1000.98 1794470605973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.98,
+      "current": 5.98,
+      "power_kw": 1.48,
+      "energy_kwh": 1000.98
+    }
+  },
+  {
+    "sampled_ns": 1794470610973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=220.99,current=5.99,power_kw=1.49,energy_kwh=1000.99 1794470610973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 220.99,
+      "current": 5.99,
+      "power_kw": 1.49,
+      "energy_kwh": 1000.99
+    }
+  },
+  {
+    "sampled_ns": 1794470615973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.0,current=5.0,power_kw=1.0,energy_kwh=1001.0 1794470615973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1001.0
+    }
+  },
+  {
+    "sampled_ns": 1794470620973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.01,current=5.01,power_kw=1.01,energy_kwh=1001.01 1794470620973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.01,
+      "current": 5.01,
+      "power_kw": 1.01,
+      "energy_kwh": 1001.01
+    }
+  },
+  {
+    "sampled_ns": 1794470625973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.02,current=5.02,power_kw=1.02,energy_kwh=1001.02 1794470625973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.02,
+      "current": 5.02,
+      "power_kw": 1.02,
+      "energy_kwh": 1001.02
+    }
+  },
+  {
+    "sampled_ns": 1794470630973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.03,current=5.03,power_kw=1.03,energy_kwh=1001.03 1794470630973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.03,
+      "current": 5.03,
+      "power_kw": 1.03,
+      "energy_kwh": 1001.03
+    }
+  },
+  {
+    "sampled_ns": 1794470635973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.04,current=5.04,power_kw=1.04,energy_kwh=1001.04 1794470635973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.04,
+      "current": 5.04,
+      "power_kw": 1.04,
+      "energy_kwh": 1001.04
+    }
+  },
+  {
+    "sampled_ns": 1794470640973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.05,current=5.05,power_kw=1.05,energy_kwh=1001.05 1794470640973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.05,
+      "current": 5.05,
+      "power_kw": 1.05,
+      "energy_kwh": 1001.05
+    }
+  },
+  {
+    "sampled_ns": 1794470645973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.06,current=5.06,power_kw=1.06,energy_kwh=1001.06 1794470645973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.06,
+      "current": 5.06,
+      "power_kw": 1.06,
+      "energy_kwh": 1001.06
+    }
+  },
+  {
+    "sampled_ns": 1794470650973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.07,current=5.07,power_kw=1.07,energy_kwh=1001.07 1794470650973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.07,
+      "current": 5.07,
+      "power_kw": 1.07,
+      "energy_kwh": 1001.07
+    }
+  },
+  {
+    "sampled_ns": 1794470655973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.08,current=5.08,power_kw=1.08,energy_kwh=1001.08 1794470655973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.08,
+      "current": 5.08,
+      "power_kw": 1.08,
+      "energy_kwh": 1001.08
+    }
+  },
+  {
+    "sampled_ns": 1794470660973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.09,current=5.09,power_kw=1.09,energy_kwh=1001.09 1794470660973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.09,
+      "current": 5.09,
+      "power_kw": 1.09,
+      "energy_kwh": 1001.09
+    }
+  },
+  {
+    "sampled_ns": 1794470665973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.1,current=5.1,power_kw=1.1,energy_kwh=1001.1 1794470665973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.1,
+      "current": 5.1,
+      "power_kw": 1.1,
+      "energy_kwh": 1001.1
+    }
+  },
+  {
+    "sampled_ns": 1794470670973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.11,current=5.11,power_kw=1.11,energy_kwh=1001.11 1794470670973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.11,
+      "current": 5.11,
+      "power_kw": 1.11,
+      "energy_kwh": 1001.11
+    }
+  },
+  {
+    "sampled_ns": 1794470675973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.12,current=5.12,power_kw=1.12,energy_kwh=1001.12 1794470675973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.12,
+      "current": 5.12,
+      "power_kw": 1.12,
+      "energy_kwh": 1001.12
+    }
+  },
+  {
+    "sampled_ns": 1794470680973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.13,current=5.13,power_kw=1.13,energy_kwh=1001.13 1794470680973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.13,
+      "current": 5.13,
+      "power_kw": 1.13,
+      "energy_kwh": 1001.13
+    }
+  },
+  {
+    "sampled_ns": 1794470685973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.14,current=5.14,power_kw=1.1400000000000001,energy_kwh=1001.14 1794470685973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.14,
+      "current": 5.14,
+      "power_kw": 1.1400000000000001,
+      "energy_kwh": 1001.14
+    }
+  },
+  {
+    "sampled_ns": 1794470690973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.15,current=5.15,power_kw=1.15,energy_kwh=1001.15 1794470690973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.15,
+      "current": 5.15,
+      "power_kw": 1.15,
+      "energy_kwh": 1001.15
+    }
+  },
+  {
+    "sampled_ns": 1794470695973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.16,current=5.16,power_kw=1.16,energy_kwh=1001.16 1794470695973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.16,
+      "current": 5.16,
+      "power_kw": 1.16,
+      "energy_kwh": 1001.16
+    }
+  },
+  {
+    "sampled_ns": 1794470700973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.17,current=5.17,power_kw=1.17,energy_kwh=1001.17 1794470700973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.17,
+      "current": 5.17,
+      "power_kw": 1.17,
+      "energy_kwh": 1001.17
+    }
+  },
+  {
+    "sampled_ns": 1794470705973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.18,current=5.18,power_kw=1.18,energy_kwh=1001.18 1794470705973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.18,
+      "current": 5.18,
+      "power_kw": 1.18,
+      "energy_kwh": 1001.18
+    }
+  },
+  {
+    "sampled_ns": 1794470710973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.19,current=5.19,power_kw=1.19,energy_kwh=1001.19 1794470710973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.19,
+      "current": 5.19,
+      "power_kw": 1.19,
+      "energy_kwh": 1001.19
+    }
+  },
+  {
+    "sampled_ns": 1794470715973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.2,current=5.2,power_kw=1.2,energy_kwh=1001.2 1794470715973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.2,
+      "current": 5.2,
+      "power_kw": 1.2,
+      "energy_kwh": 1001.2
+    }
+  },
+  {
+    "sampled_ns": 1794470720973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.21,current=5.21,power_kw=1.21,energy_kwh=1001.21 1794470720973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.21,
+      "current": 5.21,
+      "power_kw": 1.21,
+      "energy_kwh": 1001.21
+    }
+  },
+  {
+    "sampled_ns": 1794470725973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.22,current=5.22,power_kw=1.22,energy_kwh=1001.22 1794470725973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.22,
+      "current": 5.22,
+      "power_kw": 1.22,
+      "energy_kwh": 1001.22
+    }
+  },
+  {
+    "sampled_ns": 1794470730973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.23,current=5.23,power_kw=1.23,energy_kwh=1001.23 1794470730973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.23,
+      "current": 5.23,
+      "power_kw": 1.23,
+      "energy_kwh": 1001.23
+    }
+  },
+  {
+    "sampled_ns": 1794470735973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.24,current=5.24,power_kw=1.24,energy_kwh=1001.24 1794470735973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.24,
+      "current": 5.24,
+      "power_kw": 1.24,
+      "energy_kwh": 1001.24
+    }
+  },
+  {
+    "sampled_ns": 1794470740973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.25,current=5.25,power_kw=1.25,energy_kwh=1001.25 1794470740973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.25,
+      "current": 5.25,
+      "power_kw": 1.25,
+      "energy_kwh": 1001.25
+    }
+  },
+  {
+    "sampled_ns": 1794470745973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.26,current=5.26,power_kw=1.26,energy_kwh=1001.26 1794470745973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.26,
+      "current": 5.26,
+      "power_kw": 1.26,
+      "energy_kwh": 1001.26
+    }
+  },
+  {
+    "sampled_ns": 1794470750973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.27,current=5.27,power_kw=1.27,energy_kwh=1001.27 1794470750973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.27,
+      "current": 5.27,
+      "power_kw": 1.27,
+      "energy_kwh": 1001.27
+    }
+  },
+  {
+    "sampled_ns": 1794470755973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.28,current=5.28,power_kw=1.28,energy_kwh=1001.28 1794470755973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.28,
+      "current": 5.28,
+      "power_kw": 1.28,
+      "energy_kwh": 1001.28
+    }
+  },
+  {
+    "sampled_ns": 1794470760973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.29,current=5.29,power_kw=1.29,energy_kwh=1001.29 1794470760973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.29,
+      "current": 5.29,
+      "power_kw": 1.29,
+      "energy_kwh": 1001.29
+    }
+  },
+  {
+    "sampled_ns": 1794470765973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.3,current=5.3,power_kw=1.3,energy_kwh=1001.3 1794470765973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.3,
+      "current": 5.3,
+      "power_kw": 1.3,
+      "energy_kwh": 1001.3
+    }
+  },
+  {
+    "sampled_ns": 1794470770973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.31,current=5.31,power_kw=1.31,energy_kwh=1001.31 1794470770973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.31,
+      "current": 5.31,
+      "power_kw": 1.31,
+      "energy_kwh": 1001.31
+    }
+  },
+  {
+    "sampled_ns": 1794470775973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.32,current=5.32,power_kw=1.32,energy_kwh=1001.32 1794470775973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.32,
+      "current": 5.32,
+      "power_kw": 1.32,
+      "energy_kwh": 1001.32
+    }
+  },
+  {
+    "sampled_ns": 1794470780973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.33,current=5.33,power_kw=1.33,energy_kwh=1001.33 1794470780973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.33,
+      "current": 5.33,
+      "power_kw": 1.33,
+      "energy_kwh": 1001.33
+    }
+  },
+  {
+    "sampled_ns": 1794470785973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.34,current=5.34,power_kw=1.34,energy_kwh=1001.34 1794470785973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.34,
+      "current": 5.34,
+      "power_kw": 1.34,
+      "energy_kwh": 1001.34
+    }
+  },
+  {
+    "sampled_ns": 1794470790973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.35,current=5.35,power_kw=1.35,energy_kwh=1001.35 1794470790973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.35,
+      "current": 5.35,
+      "power_kw": 1.35,
+      "energy_kwh": 1001.35
+    }
+  },
+  {
+    "sampled_ns": 1794470795973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.36,current=5.36,power_kw=1.3599999999999999,energy_kwh=1001.36 1794470795973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.36,
+      "current": 5.36,
+      "power_kw": 1.3599999999999999,
+      "energy_kwh": 1001.36
+    }
+  },
+  {
+    "sampled_ns": 1794470800973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.37,current=5.37,power_kw=1.37,energy_kwh=1001.37 1794470800973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.37,
+      "current": 5.37,
+      "power_kw": 1.37,
+      "energy_kwh": 1001.37
+    }
+  },
+  {
+    "sampled_ns": 1794470805973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.38,current=5.38,power_kw=1.38,energy_kwh=1001.38 1794470805973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.38,
+      "current": 5.38,
+      "power_kw": 1.38,
+      "energy_kwh": 1001.38
+    }
+  },
+  {
+    "sampled_ns": 1794470810973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.39,current=5.39,power_kw=1.3900000000000001,energy_kwh=1001.39 1794470810973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.39,
+      "current": 5.39,
+      "power_kw": 1.3900000000000001,
+      "energy_kwh": 1001.39
+    }
+  },
+  {
+    "sampled_ns": 1794470815973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.4,current=5.4,power_kw=1.4,energy_kwh=1001.4 1794470815973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.4,
+      "current": 5.4,
+      "power_kw": 1.4,
+      "energy_kwh": 1001.4
+    }
+  },
+  {
+    "sampled_ns": 1794470820973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.41,current=5.41,power_kw=1.41,energy_kwh=1001.41 1794470820973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.41,
+      "current": 5.41,
+      "power_kw": 1.41,
+      "energy_kwh": 1001.41
+    }
+  },
+  {
+    "sampled_ns": 1794470825973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.42,current=5.42,power_kw=1.42,energy_kwh=1001.42 1794470825973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.42,
+      "current": 5.42,
+      "power_kw": 1.42,
+      "energy_kwh": 1001.42
+    }
+  },
+  {
+    "sampled_ns": 1794470830973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.43,current=5.43,power_kw=1.43,energy_kwh=1001.43 1794470830973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.43,
+      "current": 5.43,
+      "power_kw": 1.43,
+      "energy_kwh": 1001.43
+    }
+  },
+  {
+    "sampled_ns": 1794470835973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.44,current=5.44,power_kw=1.44,energy_kwh=1001.44 1794470835973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.44,
+      "current": 5.44,
+      "power_kw": 1.44,
+      "energy_kwh": 1001.44
+    }
+  },
+  {
+    "sampled_ns": 1794470840973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.45,current=5.45,power_kw=1.45,energy_kwh=1001.45 1794470840973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.45,
+      "current": 5.45,
+      "power_kw": 1.45,
+      "energy_kwh": 1001.45
+    }
+  },
+  {
+    "sampled_ns": 1794470845973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.46,current=5.46,power_kw=1.46,energy_kwh=1001.46 1794470845973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.46,
+      "current": 5.46,
+      "power_kw": 1.46,
+      "energy_kwh": 1001.46
+    }
+  },
+  {
+    "sampled_ns": 1794470850973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.47,current=5.47,power_kw=1.47,energy_kwh=1001.47 1794470850973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.47,
+      "current": 5.47,
+      "power_kw": 1.47,
+      "energy_kwh": 1001.47
+    }
+  },
+  {
+    "sampled_ns": 1794470855973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.48,current=5.48,power_kw=1.48,energy_kwh=1001.48 1794470855973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.48,
+      "current": 5.48,
+      "power_kw": 1.48,
+      "energy_kwh": 1001.48
+    }
+  },
+  {
+    "sampled_ns": 1794470860973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.49,current=5.49,power_kw=1.49,energy_kwh=1001.49 1794470860973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.49,
+      "current": 5.49,
+      "power_kw": 1.49,
+      "energy_kwh": 1001.49
+    }
+  },
+  {
+    "sampled_ns": 1794470865973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.5,current=5.5,power_kw=1.0,energy_kwh=1001.5 1794470865973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.5,
+      "current": 5.5,
+      "power_kw": 1.0,
+      "energy_kwh": 1001.5
+    }
+  },
+  {
+    "sampled_ns": 1794470870973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.51,current=5.51,power_kw=1.01,energy_kwh=1001.51 1794470870973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.51,
+      "current": 5.51,
+      "power_kw": 1.01,
+      "energy_kwh": 1001.51
+    }
+  },
+  {
+    "sampled_ns": 1794470875973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.52,current=5.52,power_kw=1.02,energy_kwh=1001.52 1794470875973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.52,
+      "current": 5.52,
+      "power_kw": 1.02,
+      "energy_kwh": 1001.52
+    }
+  },
+  {
+    "sampled_ns": 1794470880973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.53,current=5.53,power_kw=1.03,energy_kwh=1001.53 1794470880973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.53,
+      "current": 5.53,
+      "power_kw": 1.03,
+      "energy_kwh": 1001.53
+    }
+  },
+  {
+    "sampled_ns": 1794470885973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.54,current=5.54,power_kw=1.04,energy_kwh=1001.54 1794470885973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.54,
+      "current": 5.54,
+      "power_kw": 1.04,
+      "energy_kwh": 1001.54
+    }
+  },
+  {
+    "sampled_ns": 1794470890973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.55,current=5.55,power_kw=1.05,energy_kwh=1001.55 1794470890973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.55,
+      "current": 5.55,
+      "power_kw": 1.05,
+      "energy_kwh": 1001.55
+    }
+  },
+  {
+    "sampled_ns": 1794470895973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.56,current=5.5600000000000005,power_kw=1.06,energy_kwh=1001.56 1794470895973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.56,
+      "current": 5.5600000000000005,
+      "power_kw": 1.06,
+      "energy_kwh": 1001.56
+    }
+  },
+  {
+    "sampled_ns": 1794470900973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.57,current=5.57,power_kw=1.07,energy_kwh=1001.57 1794470900973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.57,
+      "current": 5.57,
+      "power_kw": 1.07,
+      "energy_kwh": 1001.57
+    }
+  },
+  {
+    "sampled_ns": 1794470905973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.58,current=5.58,power_kw=1.08,energy_kwh=1001.58 1794470905973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.58,
+      "current": 5.58,
+      "power_kw": 1.08,
+      "energy_kwh": 1001.58
+    }
+  },
+  {
+    "sampled_ns": 1794470910973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.59,current=5.59,power_kw=1.09,energy_kwh=1001.59 1794470910973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.59,
+      "current": 5.59,
+      "power_kw": 1.09,
+      "energy_kwh": 1001.59
+    }
+  },
+  {
+    "sampled_ns": 1794470915973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.6,current=5.6,power_kw=1.1,energy_kwh=1001.6 1794470915973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.6,
+      "current": 5.6,
+      "power_kw": 1.1,
+      "energy_kwh": 1001.6
+    }
+  },
+  {
+    "sampled_ns": 1794470920973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.61,current=5.61,power_kw=1.11,energy_kwh=1001.61 1794470920973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.61,
+      "current": 5.61,
+      "power_kw": 1.11,
+      "energy_kwh": 1001.61
+    }
+  },
+  {
+    "sampled_ns": 1794470925973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.62,current=5.62,power_kw=1.12,energy_kwh=1001.62 1794470925973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.62,
+      "current": 5.62,
+      "power_kw": 1.12,
+      "energy_kwh": 1001.62
+    }
+  },
+  {
+    "sampled_ns": 1794470930973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.63,current=5.63,power_kw=1.13,energy_kwh=1001.63 1794470930973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.63,
+      "current": 5.63,
+      "power_kw": 1.13,
+      "energy_kwh": 1001.63
+    }
+  },
+  {
+    "sampled_ns": 1794470935973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.64,current=5.64,power_kw=1.1400000000000001,energy_kwh=1001.64 1794470935973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.64,
+      "current": 5.64,
+      "power_kw": 1.1400000000000001,
+      "energy_kwh": 1001.64
+    }
+  },
+  {
+    "sampled_ns": 1794470940973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.65,current=5.65,power_kw=1.15,energy_kwh=1001.65 1794470940973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.65,
+      "current": 5.65,
+      "power_kw": 1.15,
+      "energy_kwh": 1001.65
+    }
+  },
+  {
+    "sampled_ns": 1794470945973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.66,current=5.66,power_kw=1.16,energy_kwh=1001.66 1794470945973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.66,
+      "current": 5.66,
+      "power_kw": 1.16,
+      "energy_kwh": 1001.66
+    }
+  },
+  {
+    "sampled_ns": 1794470950973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.67,current=5.67,power_kw=1.17,energy_kwh=1001.67 1794470950973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.67,
+      "current": 5.67,
+      "power_kw": 1.17,
+      "energy_kwh": 1001.67
+    }
+  },
+  {
+    "sampled_ns": 1794470955973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.68,current=5.68,power_kw=1.18,energy_kwh=1001.68 1794470955973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.68,
+      "current": 5.68,
+      "power_kw": 1.18,
+      "energy_kwh": 1001.68
+    }
+  },
+  {
+    "sampled_ns": 1794470960973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.69,current=5.6899999999999995,power_kw=1.19,energy_kwh=1001.69 1794470960973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.69,
+      "current": 5.6899999999999995,
+      "power_kw": 1.19,
+      "energy_kwh": 1001.69
+    }
+  },
+  {
+    "sampled_ns": 1794470965973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.7,current=5.7,power_kw=1.2,energy_kwh=1001.7 1794470965973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.7,
+      "current": 5.7,
+      "power_kw": 1.2,
+      "energy_kwh": 1001.7
+    }
+  },
+  {
+    "sampled_ns": 1794470970973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.71,current=5.71,power_kw=1.21,energy_kwh=1001.71 1794470970973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.71,
+      "current": 5.71,
+      "power_kw": 1.21,
+      "energy_kwh": 1001.71
+    }
+  },
+  {
+    "sampled_ns": 1794470975973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.72,current=5.72,power_kw=1.22,energy_kwh=1001.72 1794470975973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.72,
+      "current": 5.72,
+      "power_kw": 1.22,
+      "energy_kwh": 1001.72
+    }
+  },
+  {
+    "sampled_ns": 1794470980973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.73,current=5.73,power_kw=1.23,energy_kwh=1001.73 1794470980973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.73,
+      "current": 5.73,
+      "power_kw": 1.23,
+      "energy_kwh": 1001.73
+    }
+  },
+  {
+    "sampled_ns": 1794470985973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.74,current=5.74,power_kw=1.24,energy_kwh=1001.74 1794470985973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.74,
+      "current": 5.74,
+      "power_kw": 1.24,
+      "energy_kwh": 1001.74
+    }
+  },
+  {
+    "sampled_ns": 1794470990973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.75,current=5.75,power_kw=1.25,energy_kwh=1001.75 1794470990973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.75,
+      "current": 5.75,
+      "power_kw": 1.25,
+      "energy_kwh": 1001.75
+    }
+  },
+  {
+    "sampled_ns": 1794470995973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.76,current=5.76,power_kw=1.26,energy_kwh=1001.76 1794470995973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.76,
+      "current": 5.76,
+      "power_kw": 1.26,
+      "energy_kwh": 1001.76
+    }
+  },
+  {
+    "sampled_ns": 1794471000973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.77,current=5.77,power_kw=1.27,energy_kwh=1001.77 1794471000973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.77,
+      "current": 5.77,
+      "power_kw": 1.27,
+      "energy_kwh": 1001.77
+    }
+  },
+  {
+    "sampled_ns": 1794471005973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.78,current=5.78,power_kw=1.28,energy_kwh=1001.78 1794471005973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.78,
+      "current": 5.78,
+      "power_kw": 1.28,
+      "energy_kwh": 1001.78
+    }
+  },
+  {
+    "sampled_ns": 1794471010973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.79,current=5.79,power_kw=1.29,energy_kwh=1001.79 1794471010973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.79,
+      "current": 5.79,
+      "power_kw": 1.29,
+      "energy_kwh": 1001.79
+    }
+  },
+  {
+    "sampled_ns": 1794471015973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.8,current=5.8,power_kw=1.3,energy_kwh=1001.8 1794471015973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.8,
+      "current": 5.8,
+      "power_kw": 1.3,
+      "energy_kwh": 1001.8
+    }
+  },
+  {
+    "sampled_ns": 1794471020973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.81,current=5.8100000000000005,power_kw=1.31,energy_kwh=1001.81 1794471020973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.81,
+      "current": 5.8100000000000005,
+      "power_kw": 1.31,
+      "energy_kwh": 1001.81
+    }
+  },
+  {
+    "sampled_ns": 1794471025973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.82,current=5.82,power_kw=1.32,energy_kwh=1001.82 1794471025973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.82,
+      "current": 5.82,
+      "power_kw": 1.32,
+      "energy_kwh": 1001.82
+    }
+  },
+  {
+    "sampled_ns": 1794471030973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.83,current=5.83,power_kw=1.33,energy_kwh=1001.83 1794471030973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.83,
+      "current": 5.83,
+      "power_kw": 1.33,
+      "energy_kwh": 1001.83
+    }
+  },
+  {
+    "sampled_ns": 1794471035973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.84,current=5.84,power_kw=1.34,energy_kwh=1001.84 1794471035973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.84,
+      "current": 5.84,
+      "power_kw": 1.34,
+      "energy_kwh": 1001.84
+    }
+  },
+  {
+    "sampled_ns": 1794471040973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.85,current=5.85,power_kw=1.35,energy_kwh=1001.85 1794471040973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.85,
+      "current": 5.85,
+      "power_kw": 1.35,
+      "energy_kwh": 1001.85
+    }
+  },
+  {
+    "sampled_ns": 1794471045973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.86,current=5.86,power_kw=1.3599999999999999,energy_kwh=1001.86 1794471045973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.86,
+      "current": 5.86,
+      "power_kw": 1.3599999999999999,
+      "energy_kwh": 1001.86
+    }
+  },
+  {
+    "sampled_ns": 1794471050973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.87,current=5.87,power_kw=1.37,energy_kwh=1001.87 1794471050973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.87,
+      "current": 5.87,
+      "power_kw": 1.37,
+      "energy_kwh": 1001.87
+    }
+  },
+  {
+    "sampled_ns": 1794471055973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.88,current=5.88,power_kw=1.38,energy_kwh=1001.88 1794471055973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.88,
+      "current": 5.88,
+      "power_kw": 1.38,
+      "energy_kwh": 1001.88
+    }
+  },
+  {
+    "sampled_ns": 1794471060973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.89,current=5.89,power_kw=1.3900000000000001,energy_kwh=1001.89 1794471060973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.89,
+      "current": 5.89,
+      "power_kw": 1.3900000000000001,
+      "energy_kwh": 1001.89
+    }
+  },
+  {
+    "sampled_ns": 1794471065973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.9,current=5.9,power_kw=1.4,energy_kwh=1001.9 1794471065973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.9,
+      "current": 5.9,
+      "power_kw": 1.4,
+      "energy_kwh": 1001.9
+    }
+  },
+  {
+    "sampled_ns": 1794471070973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.91,current=5.91,power_kw=1.41,energy_kwh=1001.91 1794471070973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.91,
+      "current": 5.91,
+      "power_kw": 1.41,
+      "energy_kwh": 1001.91
+    }
+  },
+  {
+    "sampled_ns": 1794471075973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.92,current=5.92,power_kw=1.42,energy_kwh=1001.92 1794471075973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.92,
+      "current": 5.92,
+      "power_kw": 1.42,
+      "energy_kwh": 1001.92
+    }
+  },
+  {
+    "sampled_ns": 1794471080973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.93,current=5.93,power_kw=1.43,energy_kwh=1001.93 1794471080973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.93,
+      "current": 5.93,
+      "power_kw": 1.43,
+      "energy_kwh": 1001.93
+    }
+  },
+  {
+    "sampled_ns": 1794471085973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.94,current=5.9399999999999995,power_kw=1.44,energy_kwh=1001.94 1794471085973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.94,
+      "current": 5.9399999999999995,
+      "power_kw": 1.44,
+      "energy_kwh": 1001.94
+    }
+  },
+  {
+    "sampled_ns": 1794471090973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.95,current=5.95,power_kw=1.45,energy_kwh=1001.95 1794471090973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.95,
+      "current": 5.95,
+      "power_kw": 1.45,
+      "energy_kwh": 1001.95
+    }
+  },
+  {
+    "sampled_ns": 1794471095973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.96,current=5.96,power_kw=1.46,energy_kwh=1001.96 1794471095973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.96,
+      "current": 5.96,
+      "power_kw": 1.46,
+      "energy_kwh": 1001.96
+    }
+  },
+  {
+    "sampled_ns": 1794471100973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.97,current=5.97,power_kw=1.47,energy_kwh=1001.97 1794471100973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.97,
+      "current": 5.97,
+      "power_kw": 1.47,
+      "energy_kwh": 1001.97
+    }
+  },
+  {
+    "sampled_ns": 1794471105973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.98,current=5.98,power_kw=1.48,energy_kwh=1001.98 1794471105973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.98,
+      "current": 5.98,
+      "power_kw": 1.48,
+      "energy_kwh": 1001.98
+    }
+  },
+  {
+    "sampled_ns": 1794471110973349000,
+    "payload": "electricity_measurements,device_id=delta-private-ip-loss voltage=221.99,current=5.99,power_kw=1.49,energy_kwh=1001.99 1794471110973349000",
+    "snapshot": {
+      "profile": "synthetic-backlog-qa",
+      "voltage": 221.99,
+      "current": 5.99,
+      "power_kw": 1.49,
+      "energy_kwh": 1001.99
+    }
+  }
+]

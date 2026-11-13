@@ -1,0 +1,23 @@
+{
+  "passed": false,
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "RuntimeError",
+  "cleanup": [
+    {
+      "name": "database",
+      "container": "5e181b687e092db23e5ec3e6cbd9810c4c0e0a679dfcd4e92f668af7bf88a5b5",
+      "passed": true
+    },
+    {
+      "name": "broker",
+      "container": "b3cd00f66233b62c5a68aa4757070330eb711219ee9d0d336b79af7aa366cb20",
+      "passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "a1c97b8654ac6c0d6148053842af53f0bc803896b3b90b1378cdff63df55b3fb",
+      "passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

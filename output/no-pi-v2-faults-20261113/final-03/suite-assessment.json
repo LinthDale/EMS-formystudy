@@ -1,0 +1,13 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 43,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false
+  },
+  "expected_tests": 43,
+  "observed_tests": 43,
+  "database_timeout_evidence_valid": true
+}

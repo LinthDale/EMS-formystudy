@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "kind": "untrusted_client",
+  "actual_error": {
+    "kind": "ConnectionDoesNotExistError",
+    "verify_code": null
+  },
+  "source_preserved": true,
+  "no_partial_write": true,
+  "rows": 1,
+  "pending_end": 0
+}

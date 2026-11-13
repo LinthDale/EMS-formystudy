@@ -1,0 +1,23 @@
+{
+  "passed": true,
+  "captured_utc": "2026-11-13T05:51:11.185192+00:00",
+  "shared_containers_unchanged": true,
+  "shared_container_count": 17,
+  "core_sources_match_final_pitr": true,
+  "owned_cleanup_count": 12,
+  "prior_sealed_artifacts_verified": {
+    "delta-no-pi-validation-20261112": 770,
+    "committed-delivery-fix-20261112": 752,
+    "no-pi-backlog-20261112": 384,
+    "no-pi-ingest-20261112": 321,
+    "slot-boundary-fix-20261113": 20,
+    "no-pi-v2-faults-20261113": 526,
+    "newest-first-retention-20261113": 670,
+    "no-pi-resilience-20261113": 305,
+    "no-pi-lifecycle-20261113": 595,
+    "no-pi-restore-load-20261113": 581
+  },
+  "relative_links_checked": 548,
+  "new_wal_broken_links": [],
+  "preexisting_other_broken_links": []
+}

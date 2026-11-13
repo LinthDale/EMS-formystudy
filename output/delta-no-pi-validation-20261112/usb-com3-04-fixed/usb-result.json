@@ -1,0 +1,15 @@
+{
+  "automatic_recovery": true,
+  "absent_seconds": 33.32800000021234,
+  "recovery_seconds_upper": 9.67200000025332,
+  "spanning_reads": 0,
+  "same_port": true,
+  "false_values": 0,
+  "read_errors": 3,
+  "wrong_usb_events": 0,
+  "target": "COM3",
+  "monitor_errors": [],
+  "unexpected_errors": [],
+  "unclassified_slots": [],
+  "passed": true
+}

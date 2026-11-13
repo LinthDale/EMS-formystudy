@@ -1,0 +1,20 @@
+{
+  "passed": true,
+  "actual_disconnect": true,
+  "inflight_at_collision": true,
+  "observed_disconnect": {
+    "ready": true,
+    "challenge": "fcaeb265-fdde-4100-8fc9-7de1cb2675ae",
+    "batch_id": "14bb5256-5361-45d0-b841-00e7fd388304"
+  },
+  "old_challenge": "fcaeb265-fdde-4100-8fc9-7de1cb2675ae",
+  "new_challenge": "c0027c97-8707-4ec9-b6cf-5764982cadf4",
+  "old_ack_observed": true,
+  "old_ack_accepted": false,
+  "source_preserved": true,
+  "central_rows": [
+    1,
+    1
+  ],
+  "pending_end": 0
+}

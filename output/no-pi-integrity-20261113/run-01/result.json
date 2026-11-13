@@ -1,0 +1,76 @@
+{
+  "passed": true,
+  "suite": "integrity",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "exit_code": 0,
+  "namespace": "net:[4026532320]",
+  "suite_assessment": {
+    "passed": true,
+    "boundary": {
+      "passed": true,
+      "observed_tests": 66,
+      "boundary_cases": 35,
+      "missing_groups": {},
+      "boundary_failed_or_skipped": false,
+      "missing_case_ids": [],
+      "unexpected_case_ids": [],
+      "duplicate_case_ids": []
+    },
+    "expected_tests": 66,
+    "observed_tests": 66,
+    "evidence_checks": {
+      "logical-sequence-rollback": true,
+      "logical-clock-rollback": true,
+      "logical-missing-audit": true,
+      "logical-audit-hash": true,
+      "logical-audit-state": true,
+      "logical-orphan-audit": true,
+      "logical-audit-sequence": true,
+      "malformed-bad-hash": true,
+      "malformed-duplicate-id": true,
+      "malformed-duplicate-key": true,
+      "malformed-invalid-utf8": true,
+      "malformed-excess-depth": true,
+      "sigterm-db-wait": true
+    }
+  },
+  "cleanup": [
+    {
+      "name": "worker",
+      "container": "34e472535c5520a354b5bb1f25916bd33714ce88d0c23f9e04a946c09a483eba",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "a9500b590ccce985afcb5c418cae1157230429d01e3b4dde07370cf40b4370cf",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "262063ca4c30b2afe4e5360a5529289e4e09fb49d42dbfdde16ec41935bc91fd",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "54358dcc45544a8b76a420c2eeaf39393add045a57ad841e0fcdf7a70ae1b919",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "6e819d84ba6eaa39c985d384e76e8c7f4b1354889c9b75066a815efaa6ef7421",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "8a5a91fde304c01e3f90acf9b8cb7321ce72412bfee6986e998640fa4be6c883",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

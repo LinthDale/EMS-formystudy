@@ -1,0 +1,15 @@
+{
+  "passed": true,
+  "actual_disconnect": true,
+  "inflight_at_collision": true,
+  "old_challenge": "f0f72629-b144-44dc-984e-f668019981ac",
+  "new_challenge": "d1b86abc-702e-4200-a60c-5648dde91c48",
+  "old_ack_observed": true,
+  "old_ack_accepted": false,
+  "source_preserved": true,
+  "central_rows": [
+    1,
+    1
+  ],
+  "pending_end": 0
+}

@@ -1,0 +1,6 @@
+{"kind": "fragment", "passed": 20, "count": 20}
+{"kind": "truncated", "passed": 20, "count": 20}
+{"kind": "crc", "passed": 20, "count": 20}
+{"kind": "wrong_unit", "passed": 20, "count": 20}
+{"kind": "silent", "passed": 20, "count": 20}
+{"kind": "late", "passed": 0, "count": 20}

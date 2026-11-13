@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "child_exit": -9,
+  "observed": {
+    "pid": 70,
+    "stage": "before_commit",
+    "journal_bytes": 44544,
+    "baseline_stage": "after_constructor",
+    "baseline_sha256": "d4f7584bd1966fc05d2d962e4f1e63391732f0d9150b22caef6f886df28b40c8",
+    "observed_sha256": "11705cdfc8f2ea6b9888727c1282a80b2686f375119467517dd61de28f1ad2d3",
+    "constructor_changed_file": true,
+    "main_file_changed": true,
+    "committed_sample": null
+  },
+  "recovered_ids": [
+    "26fdb000-609c-4fa7-8b0c-2bb4b071e925"
+  ],
+  "recovered_sequence": 1,
+  "retirement": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 0,
+    "unconfirmed_evicted_total": 0,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": null
+  },
+  "next_sequence": 2,
+  "integrity": "ok",
+  "committed_identity_preserved": null
+}

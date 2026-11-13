@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "damage": "zero-length",
+  "original_sample_id": "7d94f192-ffc7-499e-9da7-d49d25f4ab1a",
+  "damaged_bytes": 0,
+  "before_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "after_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "error_kind": "ValueError",
+  "empty_database_recreated": false
+}

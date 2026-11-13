@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "request_id": "db159c8e-5b47-403e-82a7-1be828487d88",
+  "op": "broker_start",
+  "container_id": "7ae5d5e31a01f5aa43ef6166e2c63d0de86ed33d08be6a8674cb37e972e39d18",
+  "started_at": "2026-11-13T04:07:05.51242977Z",
+  "before_started_at": "2026-11-13T04:06:52.675716183Z",
+  "running": true
+}

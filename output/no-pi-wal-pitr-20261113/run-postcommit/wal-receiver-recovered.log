@@ -1,0 +1,3 @@
+pg_receivewal: starting log streaming at 0/3000000 (timeline 1)
+pg_receivewal: not renaming "000000010000000000000003.partial", segment is not complete
+pg_receivewal: switched to timeline 2 at 0/3039460

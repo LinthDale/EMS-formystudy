@@ -1,0 +1,20 @@
+[
+  {
+    "ProcessId": 4564,
+    "ParentProcessId": 35084,
+    "CreationDate": "2026-11-12T13:49:42.289455+08:00",
+    "CommandLine": "\"C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe\" \"\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\services\\delta\\tools\\bench_soak.py\" --config \"\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\rtu-recovery-policy\\lab-bench.json\" --local-root C:/Users/User/AppData/Local/Temp/ems-no-pi-20261112/soak-sequence-01 --archive-root \"\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\soak-sequence-01\" --mode full"
+  },
+  {
+    "ProcessId": 18924,
+    "ParentProcessId": 4564,
+    "CreationDate": "2026-11-12T14:49:51.335981+08:00",
+    "CommandLine": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe -c \"import pathlib,runpy,sys,time\ngate=pathlib.Path(sys.argv[1]); deadline=time.monotonic()+60\nwhile not gate.exists():\n    if time.monotonic()>deadline: raise SystemExit(2)\n    time.sleep(.02)\nsys.argv=sys.argv[2:]\nsys.path.insert(0,str(pathlib.Path(sys.argv[0]).resolve().parent))\nrunpy.run_path(sys.argv[0],run_name='__main__')\n\" C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\.launch-five-second-twenty-four-hours C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\runtime\\services\\delta\\tools\\bench_run.py --config C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\config.json --output C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\five-second-twenty-four-hours --count 17280 --interval 5"
+  },
+  {
+    "ProcessId": 5524,
+    "ParentProcessId": 18924,
+    "CreationDate": "2026-11-12T14:49:51.623627+08:00",
+    "CommandLine": "C:\\Users\\User\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\python\\python.exe -m delta_device simulator --transport rtu --serial-port COM3 --baudrate 19200 --unit-id 1 --scenario day"
+  }
+]

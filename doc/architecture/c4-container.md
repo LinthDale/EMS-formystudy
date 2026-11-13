@@ -1,6 +1,10 @@
 # C4 Level 2 — Container Diagram
 
+2026-11-13 [ADR-045](../adr/ADR-045-newest-first-edge-retention.md)：既有edge SQLite本地schema3／最舊淘汰，無新服務、port或依賴；wire仍2。[子集圖](edge-committed-telemetry.md)包含容量策略，未切共享部署。
+
 > 範圍：EMS 內部所有容器（services + infra）、技術選型、部署位置、Owner。
+
+2026-11-12 [v2 reliable receiver Container](edge-committed-telemetry.md)：新增 opt-in Python3.11/paho/asyncpg receiver、獨立 SQLite v2、普通 receipts＋nullable投影身份欄、DB外generation；無新對外port。私有驗證通過，未變更以下共享 v1 部署。
 
 ```mermaid
 flowchart LR
@@ -94,6 +98,10 @@ flowchart LR
 | ems-kc-modbus-sim | external/kc_modbus_mcp | external | 5021 | KC | dev only |
 | ems-kc-mqtt-sim | external/kc_iot_gateway | external | — | KC | dev only |
 | ems-kc-mcp-server | external/kc_modbus_mcp | external | 8765 | KC | AI 控制功能停 |
+| ems-device-service | local build | ✅ Python | 8002 | EMS team | 裝置 CRUD/分類 REST 停（PRD-0003）|
+| ems-device-service-mcp | 同 device-service image | ✅ Python | 127.0.0.1:8766 | EMS team | AI 通道 MCP 停（PRD-0003）|
+| ems-bff | local build | ✅ Python | 127.0.0.1:8003 | EMS team | 前端操作面停（PRD-0005；Grafana/管線不受影響）|
+| ems-frontend | node(dev)/nginx(prod) | ✅ React/TS | 5173(dev) | EMS team | 產品 UI 停（PRD-0005）|
 
 ## 技術選型摘要（連結 ADR）
 
@@ -117,3 +125,53 @@ flowchart LR
 | grafana | 🟢 視覺化停，資料仍寫入 | 無 |
 | query (postgrest) | 🟢 歷史查詢停 | 可重啟 |
 | simulator | 🟢 測試流斷 | 無（dev only） |
+| device-service | 🟢 裝置分類/CRUD 停，量測管線不受影響 | 可重啟（無狀態，雙 DB pool）|
+| bff | 🟢 前端操作面停；Grafana/管線/PostgREST 不受影響 | 可重啟（in-memory session 清空，需重登）|
+| frontend | 🟢 產品 UI 停 | 靜態檔，可重啟 |
+
+## 2026-09-23 歷史查詢擴充（ADR-027）
+既有資料流不变：Browser → BFF（OPS session）→ device-service（gateway解析）→ PostgREST（唯讀RPC）→ TimescaleDB。新增有界history/records，無OT控制、無新容器、無既有table修改；詳PRD-0018。
+### Telegram 示範警報容器路徑（ADR-028）
+Browser → DGX nginx → Windows Node proxy → WSL BFF → HTTPS api.telegram.org。既有 BFF 增加 OPS-only /api/alarms/demo；無新增容器/資料庫。Bot Token/Chat ID 透過 Compose 注入 BFF，瀏覽器不取得。
+### 展位 QR 綁定（ADR-036）
+同一 ems-bff 容器內新增 getUpdates 長輪詢背景任務（出站 api.telegram.org:443）與具名 volume `demo_alarm_state:/data/demo-alarm`（SQLite：唯一綁定、當日 keyed 計數、offset）。無新增容器、host port、入站路徑或資料庫權限；公開代理白名單不變。同一 Bot Token 只允許一個 getUpdates 消費者。
+
+## Delta 增量（PRD-0020 / ADR-029）
+新增opt-in delta-simulator + delta-edge容器；edge内部pure parser / TCP或RTU poller / SQLite outbox / MQTT sender分離。沿既有ingest與electricity四欄schema、BFF domain routing使用ems-gateway；此gateway_id為邏輯路由，不等於Pi實體識別。Pi用原生Python3.9+及systemd，不要求Docker。
+
+### RTU 模擬增補（ADR-031）
+同一Python simulator可選RTU本機serial server，與TCP共用唯讀context；一次僅選一種transport。PC原生執行、Pi原生poller，既有Compose TCP demo不變，無新增服務、公開port或DB schema。
+
+### Simulator 控制容器更新（ADR-033）
+四個 EMS wrapper 共用內部 agent API :9000（token、無 host mapping），分 image 保留 pymodbus 3.6.9/3.12.1 與 aiomqtt。
+meter host8001移除；meter5020/PLC5021改loopback唯讀。MCP模擬器寫入被target拒絕。
+BFF新增 simulator_audit volume、單process檔案鎖；無Docker socket、無獨立控制服務；詳PRD-0022 §6三圖。
+
+## PRD-0023：帳號儲存與權限
+
+```mermaid
+flowchart LR
+  BFF -->|bff_auth_reader SELECT| DB[(ems / bff_auth)]
+  Admin[臨時 account-admin container] -->|bff_auth_admin EXECUTE| DB
+  Owner[DB migration owner] -->|migration 018| DB
+```
+BFF image 加入 asyncpg；CLI 沒有 host port。management DSN 不注入 BFF。PostgREST 仍只曝露 api schema，無帳號 view。
+
+
+## 2026-11-10 演進設計：站端核心與模擬 runner（尚未實作）
+
+
+
+
+
+
+
+### ADR-041內部狀態更新（2026-11-12）
+
+Delta RTU edge內部增加不確定交易鎖定與有界隔離恢復；容器／volume／port及跨服務關係不變，無共用runtime重建。field範本未核定時限前拒絕啟動。詳[ADR-041](../adr/ADR-041-rtu-uncertainty-and-bounded-recovery.md)。
+
+### 2026-11-13 DB／WAL TLS與還原準入
+
+沿原receiver→PostgreSQL與PostgreSQL→WAL archive連線，field雙向驗證TLS；WAL ACK須唯一同步ems_wal_archive、TLS＋client DN且flush覆蓋固定LSN。021新函式缺失拒絕，不回舊版。維運backup_preflight先tar layout／資源界限，再外置可信cluster ID＋checksum，最後PG真recovery至核定timeline／target；滿載保留原slot修復，不降級。依[ADR-050](../adr/ADR-050-database-tls-and-recovery-identity.md)，[55案／相鄰回歸證據](../../output/no-pi-wal-security-20261113/README.md)；元件及wire2/schema3不變，正式異失效域／Pi另驗。
+
+2026-11-13：[ADR-051](../adr/ADR-051-pinned-recovery-and-slot-reseed.md) 僅補維運還原準入：外置核定timeline／target、slot先reserve→basebackup→新archive接手→真新鏈PITR驗證→generation換代／重新開ACK；沿原元件／資料流，無新增自動reseed/failover服務。中央資料滿與同ID分支短測已驗，[證據](../../output/no-pi-critical-closure-20261113/README.md)。

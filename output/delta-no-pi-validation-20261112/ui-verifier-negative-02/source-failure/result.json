@@ -1,0 +1,166 @@
+{
+  "scope": "Local 4178 Monitor with intercepted synthetic API, not live ingest or public site",
+  "scenarios": [
+    {
+      "state": "live",
+      "label": "持續接收中",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 14:04:09\n電壓\n230V\n區間末筆 14:04:09\n電流\n13A\n區間末筆 14:04:09\n累計電量\n655.38kWh\n區間末筆 14:04:09",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [
+          9
+        ],
+        "voltage": [
+          230
+        ],
+        "current": [
+          13
+        ],
+        "energy_kwh": [
+          655.38
+        ]
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 14:04:12 · 量測 14:04:09",
+      "scenario": "fresh",
+      "expected_state": "live",
+      "fixture_measurement_time": "2026-11-12T06:04:09.523Z",
+      "fixture_registry_last_seen_at": "2026-11-12T06:04:11.523Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 14:02:12\n電壓\n230V\n區間末筆 14:02:12\n電流\n13A\n區間末筆 14:02:12\n累計電量\n655.38kWh\n區間末筆 14:02:12",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [
+          9
+        ],
+        "voltage": [
+          230
+        ],
+        "current": [
+          13
+        ],
+        "energy_kwh": [
+          655.38
+        ]
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 14:04:14 · 量測 14:02:12",
+      "scenario": "historical-backlog-with-fresh-registry",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T06:02:12.873Z",
+      "fixture_registry_last_seen_at": "2026-11-12T06:04:12.873Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "stale",
+      "label": "量測未更新",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "有效功率\n9kW\n區間末筆 14:06:14\n電壓\n230V\n區間末筆 14:06:14\n電流\n13A\n區間末筆 14:06:14\n累計電量\n655.38kWh\n區間末筆 14:06:14",
+      "rawRows": 1,
+      "chartCount": 4,
+      "chartValues": {
+        "power_kw": [],
+        "voltage": [],
+        "current": [],
+        "energy_kwh": []
+      },
+      "rawCells": [
+        "9",
+        "230",
+        "13",
+        "655.38"
+      ],
+      "values": {
+        "power_kw": "9",
+        "voltage": "230",
+        "current": "13",
+        "energy_kwh": "655.38"
+      },
+      "updated": "讀取 14:04:15 · 量測 14:06:14",
+      "scenario": "future-measurement",
+      "expected_state": "stale",
+      "fixture_measurement_time": "2026-11-12T06:06:14.190Z",
+      "fixture_registry_last_seen_at": "2026-11-12T06:04:14.190Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "empty",
+      "label": "沒有資料",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "chartValues": {},
+      "rawCells": [],
+      "values": {},
+      "updated": "讀取 14:04:16",
+      "scenario": "empty",
+      "expected_state": "empty",
+      "fixture_measurement_time": "2026-11-12T06:04:13.562Z",
+      "fixture_registry_last_seen_at": "2026-11-12T06:04:15.562Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    },
+    {
+      "state": "error",
+      "label": "查詢未完成",
+      "device": "太陽能逆變器(delta-sim-001)",
+      "cards": "",
+      "rawRows": 0,
+      "chartCount": 0,
+      "chartValues": {},
+      "rawCells": [],
+      "values": {},
+      "updated": "尚未取得量測",
+      "scenario": "backend-error",
+      "expected_state": "error",
+      "fixture_measurement_time": "2026-11-12T06:04:14.914Z",
+      "fixture_registry_last_seen_at": "2026-11-12T06:04:16.914Z",
+      "errors": [],
+      "writes": [],
+      "passed": true
+    }
+  ],
+  "completed": false,
+  "source_verified": false,
+  "cleanup": true,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(response.ok())\n\n    at main (\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\ui-verifier-negative-02\\source-failure.cjs:88:16)",
+  "passed": false
+}

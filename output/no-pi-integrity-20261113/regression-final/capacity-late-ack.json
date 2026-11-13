@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "old_sample_id": "bef9461d-bd09-4415-bb9b-5dbaa52a409c",
+  "new_sample_id": "47fdf274-c4f5-46d8-9160-0d9853fb1242",
+  "old_central_rows": 1,
+  "new_central_rows": 1,
+  "pending_end": 0,
+  "retention": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 1,
+    "unconfirmed_evicted_total": 1,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 1,
+      "first_seq": 1,
+      "last_seq": 1,
+      "sample_id": "bef9461d-bd09-4415-bb9b-5dbaa52a409c",
+      "payload_hash": "7f27c1d0cb24913a5bad449b909945840c67b97cadbbae465b0e30b0628bd66b",
+      "state": "pending",
+      "sampled_at_us": 1794550914171955
+    }
+  }
+}

@@ -1,0 +1,23 @@
+[
+  "docker",
+  "exec",
+  "966616d59a1fcd4d71fe71cb46fd4c9190f6b3161e401e7ead0f79959e7c7100",
+  "python",
+  "-m",
+  "pytest",
+  "-c",
+  "/app/services/delta/pytest.ini",
+  "/app/tests/integration/test_edge_receipts.py",
+  "/app/tests/integration/test_edge_receipts_mqtt.py",
+  "/app/services/edge-receiver/tests",
+  "/app/services/delta/tests",
+  "-q",
+  "-p",
+  "no:cacheprovider",
+  "--cov=edge_receiver",
+  "--cov=delta_device",
+  "--cov-report=term-missing",
+  "--cov-report=json:/evidence/receiver-coverage.json",
+  "--junitxml=/evidence/integration.xml",
+  "--cov-fail-under=80"
+]

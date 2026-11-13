@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "real_db_lock_observed": true,
+  "wait_still_active_at_exit": true,
+  "first_exit": 0,
+  "restart_exit": 0,
+  "graceful_exit_seconds": 0.11357561900149449,
+  "saved_before_restart": [
+    {
+      "sample_id": "4d0ae75b-d276-4874-becd-fb5fe472219b",
+      "payload_hash": "0ed9d613c02bedcc636fb7f72e650567848020f68817b4bf64af132a05e32aec"
+    },
+    {
+      "sample_id": "0685d087-a0da-49d4-83d3-24fff6829f8f",
+      "payload_hash": "3356845031b42e821e011bd1f3f338a9fbf8c59b4ddbf3837bc45f6fc8301886"
+    },
+    {
+      "sample_id": "08c8f29b-02ee-4fbe-ac59-1a9650eabce6",
+      "payload_hash": "3959c08b225d01620c5ead3c51d85ea91dd050bf2bf6101a4202a3c935c8f810"
+    }
+  ],
+  "total_acquired": 11,
+  "receipts": 11,
+  "projections": 11,
+  "all_projection_counts_one": true,
+  "original_canonical_unchanged": true,
+  "ledger_hashes_match": true,
+  "pending_end": 0
+}

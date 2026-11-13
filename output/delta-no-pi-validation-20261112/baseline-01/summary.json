@@ -1,0 +1,24 @@
+{
+  "scheduled": 120,
+  "attempted": 120,
+  "valid": 120,
+  "committed": 120,
+  "missing_slots": [],
+  "failed_slots": [],
+  "duplicate_attempt_slots": [],
+  "duplicate_read_slots": [],
+  "duplicate_commit_slots": [],
+  "outside_slots": [],
+  "poll_seconds": {
+    "p50": 0.29699999978765845,
+    "p95": 0.3440000000409782,
+    "p99": 0.3440000000409782,
+    "max": 0.35900000017136335
+  },
+  "pass": true,
+  "ledger_error": null,
+  "outages_completed": 0,
+  "control_errors": [],
+  "pending_end": 0,
+  "sqlite_bytes": 16384
+}

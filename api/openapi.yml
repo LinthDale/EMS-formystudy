@@ -4,8 +4,10 @@ info:
   description: |
     Energy Management System API 規範
 
+    Local 帳號改存 PostgreSQL；所有受保護 local session 請求均驗 DB，失效401、DB不可用503（PRD-0023/ADR-035）。
     本系統包含以下 API 端點：
-    - **Simulator API** (port 8001): 模擬電表控制
+    - **Simulator Control** (BFF port 8003): OPS 統一控制四台 simulator 與持久稽核
+      維運CLI預設使用 http://127.0.0.1:8003；僅相同數字loopback origin支援本機Secure-cookie例外，BFF認證契約不變。
     - **Query API** (port 3001): 歷史資料查詢 (PostgREST)
     - **Grafana API** (port 3000): 告警與儀表板管理
     - **Device Service API** (port 8002): Device Registry 與 AI 自動分類 (PRD-0003)
@@ -13,15 +15,15 @@ info:
 
     注意：device-service 另有 MCP 端點 (127.0.0.1:8766)，走 MCP Streamable-HTTP 協定
     而非 REST，因此不在本 OpenAPI 規範內；詳見 doc/operations/容器速查表 §2-14。
-  version: 1.3.0
+  version: 2.2.1
   contact:
     name: EMS Development Team
   license:
     name: Proprietary
 
 servers:
-  - url: http://localhost:8001
-    description: Simulator API (模擬電表控制)
+  - url: http://localhost:8003
+    description: Authenticated BFF simulator control
   - url: http://localhost:3001
     description: Query API - PostgREST (歷史資料查詢)
   - url: http://localhost:3000
@@ -40,169 +42,360 @@ tags:
     description: Device Registry 與 AI 自動分類 API (PRD-0003, port 8002)
 
 paths:
-  # ============================================================
-  # Simulator API (port 8001)
-  # ============================================================
-  /health:
+  /api/auth/login: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffPasswordLogin","description":"PRD-0023: local credentials come only from PostgreSQL bff_auth. Account records are not read from env. Unknown, disabled and wrong password return identical 401. HttpOnly Secure SameSite=Strict session cookie; immutable account UUID/version/role checked on every authenticated request.","parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["username","password"],"properties":{"username":{"type":"string","minLength":1,"maxLength":64},"password":{"type":"string","minLength":1,"maxLength":256,"writeOnly":true}}}}}},"responses":{"200":{"description":"Login successful; session cookie issued","content":{"application/json":{"schema":{"type":"object","required":["username","role","expires_in"],"properties":{"username":{"type":"string"},"role":{"type":"string","enum":["ops","ingest","readonly"]},"expires_in":{"type":"integer"}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"422":{"description":"Invalid request body"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/session: {"servers":[{"url":"http://localhost:8003"}],"get":{"tags":["BFF Authentication"],"operationId":"bffSessionInfo","security":[{"bffSession":[]}],"responses":{"200":{"description":"Authenticated result","content":{"application/json":{"schema":{"type":"object","required":["username","role"],"properties":{"username":{"type":"string"},"role":{"type":"string","enum":["ops","ingest","readonly"]}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/logout: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffLogout","security":[{"bffSession":[]}],"parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"responses":{"204":{"description":"Session revoked; cookie cleared"},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /api/auth/role: {"servers":[{"url":"http://localhost:8003"}],"post":{"tags":["BFF Authentication"],"operationId":"bffSessionRoleChange","description":"Any different role revokes the session. This endpoint does not change the DB account role; use the host account-admin CLI.","security":[{"bffSession":[]}],"parameters":[{"name":"Origin","in":"header","required":true,"schema":{"type":"string"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"type":"object","required":["role"],"properties":{"role":{"type":"string","enum":["ops","ingest","readonly"]}}}}}},"responses":{"200":{"description":"Whether session was terminated","content":{"application/json":{"schema":{"type":"object","required":["role","session_terminated"],"properties":{"role":{"type":"string","enum":["ops","ingest","readonly"]},"session_terminated":{"type":"boolean"}}}}}},"401":{"description":"Invalid credentials or revoked/expired session"},"403":{"description":"Origin check failed"},"422":{"description":"Invalid role"},"503":{"description":"Account database unavailable (fail closed); password login unavailable in OIDC mode"}}}}
+  /health: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"get":{"tags":["Internal Simulator Control"],"operationId":"internalSimulatorHealth","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"type":"object","required":["status","control_configured","control_faulted"],"properties":{"status":{"const":"ok"},"control_configured":{"type":"boolean"},"control_faulted":{"type":"boolean"}}}}}}}}}
+  /state: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"get":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorState","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorSnapshot"}}}},"401":{"description":"Bad credential"},"503":{"description":"Control not configured"}}}}
+  /receipts/{request_id}: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"parameters":[{"name":"request_id","in":"path","required":true,"schema":{"type":"string","format":"uuid"}}],"get":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorReceipt","responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorReceipt"}}}},"401":{"description":"Bad credential"},"404":{"description":"No receipt; not evidence of non-execution"},"503":{"description":"Control not configured"}}}}
+  /apply: {"servers":[{"url":"http://simulator:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-modbus-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://kc-mqtt-sim:9000","description":"Docker-internal only; no host mapping"},{"url":"http://delta-simulator:9000","description":"Docker-internal only; no host mapping"}],"post":{"tags":["Internal Simulator Control"],"security":[{"simControlToken":[]}],"operationId":"internalSimulatorApply","description":"Internal only. Body <=4096 bytes. CAS, apply, revision and receipt run atomically on a single event-loop thread. Deadline is epoch seconds between now and now+15s. BFF sends now+10s; no automatic retries. Queries forbidden.","requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorApply"}}}},"responses":{"200":{"description":"Internal typed control result","content":{"application/json":{"schema":{"$ref":"#/components/schemas/SimulatorReceipt"}}}},"401":{"description":"Bad credential"},"409":{"description":"UUID, instance or revision conflict"},"410":{"description":"Expired or invalid deadline"},"413":{"description":"Body too large"},"422":{"description":"Invalid body/changes/query"},"429":{"description":"Receipt capacity exhausted; no application"},"503":{"description":"Not configured, faulted or application outcome unknown"}}}}
+  /api/alarms/demo:
+    servers: [{url: 'http://localhost:8003'}]
     get:
-      tags:
-        - Simulator
-      summary: 健康檢查
-      description: 檢查模擬器服務是否運作中
-      operationId: getSimulatorHealth
-      servers:
-        - url: http://localhost:8001
-      responses:
-        '200':
-          description: 服務正常運作
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HealthResponse'
-              example:
-                status: ok
-
-  /config:
-    get:
-      tags:
-        - Simulator
-      summary: 取得模擬參數
-      description: 取得目前的模擬電表參數設定
-      operationId: getSimulatorConfig
-      servers:
-        - url: http://localhost:8001
-      responses:
-        '200':
-          description: 目前的模擬參數
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/SimulatorConfig'
-              example:
-                noise_voltage_v: 3.0
-                current_base_a: 100.0
-                current_swing_a: 40.0
-                noise_current_a: 2.0
-                power_factor: 0.85
-                period_seconds: 3600.0
-                fault_mode: none
-
-    post:
-      tags:
-        - Simulator
-      summary: 修改模擬參數
+      tags: [BFF Demo Alarms]
+      summary: Telegram 示範通知設定狀態、最近十筆成功紀錄與展位 QR 綁定狀態
+      operationId: getDemoAlarmStatus
       description: |
-        修改模擬電表的參數設定。所有參數都是可選的，只會更新有提供的參數。
-
-        **功率計算公式：**
-        ```
-        P (kW) = √3 × 380V × current_base_a × power_factor / 1000
-        ```
-
-        **快速參考：**
-        - current_base_a=100, power_factor=0.85 → ~56 kW
-        - current_base_a=180, power_factor=0.85 → ~101 kW (會觸發告警)
-      operationId: setSimulatorConfig
-      servers:
-        - url: http://localhost:8001
-      parameters:
-        - name: noise_voltage_v
-          in: query
-          description: 電壓雜訊標準差 (V)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 3.0
-        - name: current_base_a
-          in: query
-          description: 基礎電流 (A)，直接影響功率大小
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 100.0
-        - name: current_swing_a
-          in: query
-          description: 電流波動幅度 (A)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 40.0
-        - name: noise_current_a
-          in: query
-          description: 電流雜訊標準差 (A)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            default: 2.0
-        - name: power_factor
-          in: query
-          description: 功率因數 (0-1)
-          schema:
-            type: number
-            format: float
-            minimum: 0
-            maximum: 1
-            default: 0.85
-        - name: period_seconds
-          in: query
-          description: 負載週期秒數
-          schema:
-            type: number
-            format: float
-            minimum: 1
-            default: 3600.0
+        OPS session required. No query parameters. No external send. In-memory recent records
+        clear on BFF restart. `binding` (PRD-0024) is null when booth binding is disabled; the
+        deep link carries a rotating start code (new every 60 s, each valid 300 s) and is only
+        present while the Telegram poller is ready. The UI polls this endpoint (~4 s).
+      security: [{bffSession: []}]
       responses:
         '200':
-          description: 更新後的參數
+          description: Notification readiness, recent acknowledgements and booth binding state
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SimulatorConfig'
-
-  /inject-fault:
+                type: object
+                required: [configured, cooldown_seconds, recent, binding]
+                properties:
+                  configured: {type: boolean}
+                  cooldown_seconds: {type: integer, minimum: 0}
+                  recent:
+                    type: array
+                    maxItems: 10
+                    items: {$ref: '#/components/schemas/DemoAlarmDelivery'}
+                  binding:
+                    oneOf:
+                      - {$ref: '#/components/schemas/DemoAlarmBinding'}
+                      - {type: 'null'}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '422': {description: Query parameters are not supported}
     post:
-      tags:
-        - Simulator
-      summary: 注入故障模式
+      tags: [BFF Demo Alarms]
+      summary: 發送 Telegram 示範警報（有效展位綁定訪客優先，否則固定對象）
+      operationId: triggerDemoAlarm
       description: |
-        設定故障模式以測試告警機制：
-        - `none`: 正常運作
-        - `zero`: 所有數值歸零
-        - `freeze`: 數值凍結不更新
-      operationId: injectFault
-      servers:
-        - url: http://localhost:8001
+        OPS session and allowlisted Origin required. No query parameters.
+        Recipient is chosen server-side (PRD-0024): a valid booth binding receives only the fixed
+        3-line visitor text with today's visitor number (Asia/Taipei); otherwise the fixed chat
+        receives the original DEMO message (not counted). The request cannot name a recipient or text.
+        Numbers are kept for acknowledged or uncertain (timeout) sends, released on definite failure.
+        Server-side fixed bot and message templates; no device control.
+        Global 30-second default cooldown. Same UUID is deduplicated for 10 minutes
+        including failures (64-entry cap); no automatic retry. Single-process,
+        in-memory state resets on restart. Success means Telegram accepted, not read.
+      security: [{bffSession: []}]
       parameters:
-        - name: mode
-          in: query
+        - name: Origin
+          in: header
           required: true
-          description: 故障模式
-          schema:
-            type: string
-            enum:
-              - none
-              - zero
-              - freeze
-            default: none
+          schema: {type: string, format: uri}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [request_id]
+              properties:
+                request_id:
+                  type: string
+                  format: uuid
+                  description: UUID version 4; reuse only for the same logical send attempt
       responses:
         '200':
-          description: 故障模式已設定
+          description: Confirmed Telegram acknowledgement or replay of the same successful UUID
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/FaultResponse'
-              example:
-                fault_mode: freeze
-        '400':
-          description: 無效的故障模式
+                allOf:
+                  - {$ref: '#/components/schemas/DemoAlarmDelivery'}
+                  - type: object
+                    required: [cooldown_seconds]
+                    properties:
+                      cooldown_seconds: {type: integer, minimum: 0}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role or Origin check failed}
+        '409': {description: Same UUID is still in progress (demo_alarm_in_progress)}
+        '422': {description: Invalid UUID4 or unsupported fields/query}
+        '429':
+          description: Global cooldown or bounded dedupe cache is full (demo_alarm_cooldown)
+          headers:
+            Retry-After:
+              schema: {type: integer, minimum: 1}
+              description: Seconds before a new attempt is permitted
+        '502':
+          description: telegram_delivery_failed or telegram_delivery_unknown; no automatic resend
+        '503': {description: Telegram credentials missing (telegram_not_configured)}
+  /api/devices/{device_id}/history:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [BFF History]
+      summary: 完整指定區間的設備趨勢彙整
+      operationId: getDeviceHistory
+      description: |
+        OPS session required. Read-only and idempotent; retries safe.
+        Half-open [since, until), timezone required, maximum 7 days.
+        Unknown/repeated query parameters return 422. No new rate limiter.
+        Server resolves domain through gateway_id and calls internal read-only
+        api.measurement_history RPC (migration 017); never accepts browser SQL.
+        Numeric value is mean; last is bucket-end sample. Boolean signals encode
+        0/1; min != max means transitions within the bucket, not an exact timeline.
+        Empty buckets/signals are omitted; missing data must not be filled with zero.
+      security: [{bffSession: []}]
+      parameters:
+        - {$ref: '#/components/parameters/HistoryDeviceId'}
+        - {$ref: '#/components/parameters/HistorySince'}
+        - {$ref: '#/components/parameters/HistoryUntil'}
+        - name: points
+          in: query
+          schema: {type: integer, minimum: 60, maximum: 1200, default: 600}
+      responses:
+        '200':
+          description: Bounded bucket series for the entire requested interval
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DeviceHistory'}
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '404': {description: Device or measurement domain missing}
+        '422': {description: Invalid range or parameters}
+        '502': {description: Upstream unavailable}
+        '503': {description: OPS channel not configured}
+  /api/devices/{device_id}/records:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [BFF History]
+      summary: 查詢指定區間的原始量測紀錄
+      operationId: getDeviceRecords
+      description: |
+        OPS-only, read-only, idempotent; same 7-day timezone-aware half-open range.
+        Ordered by time descending and full row JSON as deterministic tie-break.
+        Returns a fixed-time-window page, not a transaction snapshot; late arrivals
+        may shift offsets. limit+1 lookahead determines has_more. Existing samples
+        are unmodified; fields may be null for sparse factory rows.
+        Internal RPC api.measurement_records, via BFF only for browser clients.
+      security: [{bffSession: []}]
+      parameters:
+        - {$ref: '#/components/parameters/HistoryDeviceId'}
+        - {$ref: '#/components/parameters/HistorySince'}
+        - {$ref: '#/components/parameters/HistoryUntil'}
+        - name: limit
+          in: query
+          schema: {type: integer, minimum: 1, maximum: 1000, default: 100}
+        - name: offset
+          in: query
+          schema: {type: integer, minimum: 0, maximum: 1000000, default: 0}
+      responses:
+        '200':
+          description: Raw page; no total count
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorResponse'
+                type: object
+                required: [rows, has_more]
+                properties:
+                  has_more: {type: boolean}
+                  rows:
+                    type: array
+                    maxItems: 1000
+                    items:
+                      type: object
+                      required: [time, device_id]
+                      properties:
+                        time: {type: string, format: date-time}
+                        device_id: {type: string}
+                      additionalProperties: true
+        '401': {description: Session absent or expired}
+        '403': {description: OPS role required}
+        '404': {description: Device or measurement domain missing}
+        '422': {description: Invalid range or pagination}
+        '502': {description: Upstream unavailable}
+        '503': {description: OPS channel not configured}
+
+  /api/simulators:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [Simulator Control]
+      operationId: listSimulators
+      summary: OPS 查詢四個固定 simulator 的狀態與可設定欄位
+      description: No query parameters. Settings are control state, not telemetry. Unreachable targets return available=false.
+      security: [{bffSession: []}]
+      responses:
+        '200':
+          description: Fixed simulator registry
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items]
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/SimulatorDescription'}}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Query parameters forbidden}
+        '503': {description: Control or audit unavailable}
+  /api/simulators/{simulator_id}:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {$ref: '#/components/parameters/SimulatorId'}
+    get:
+      tags: [Simulator Control]
+      operationId: getSimulatorState
+      summary: OPS 查詢控制設定、instance 與 revision
+      security: [{bffSession: []}]
+      responses:
+        '200':
+          description: Control configuration and capabilities
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorDescription'}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Invalid ID or query}
+        '503': {description: Control or audit unavailable}
+  /api/simulators/{simulator_id}/commands:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {$ref: '#/components/parameters/SimulatorId'}
+    post:
+      tags: [Simulator Control]
+      operationId: configureSimulator
+      summary: 統一設定 simulator 並先持久化操作紀錄
+      description: |
+        OPS session plus allowlisted Origin required. No query parameters; body <=4096 bytes.
+        Changes schema must match path ID. No host/register/topic/process operations.
+        Actor comes from session. UUID dedup persists across restarts; changed actor/body conflicts.
+        Succeeded means settings applied, not telemetry delivered. Timeout/crash remains
+        outcome_unknown, blocks this target and is never automatically resent.
+        Before/after are configuration snapshots. Targets reset settings on restart.
+      security: [{bffSession: []}]
+      parameters:
+        - {name: Origin, in: header, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SimulatorCommand'}
+      responses:
+        '200':
+          description: Durable succeeded, failed, or outcome_unknown operation
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '202':
+          description: Same UUID is still pending; it was not dispatched twice
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS or exact Origin required}
+        '409': {description: UUID conflict, target busy, or unresolved earlier command}
+        '413': {description: Body exceeds 4096 bytes}
+        '422': {description: Invalid ID, schema, changes, or query}
+        '503': {description: Disabled, audit unavailable, or audit capacity reached; success not confirmed}
+  /api/simulators/operations:
+    servers: [{url: 'http://localhost:8003'}]
+    get:
+      tags: [Simulator Control]
+      operationId: listSimulatorOperations
+      summary: OPS 查詢持久操作紀錄，依 sequence 倒序
+      security: [{bffSession: []}]
+      parameters:
+        - {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 100, default: 50}}
+        - {name: before, in: query, schema: {type: integer, minimum: 1}}
+        - {name: simulator_id, in: query, schema: {$ref: '#/components/schemas/SimulatorIdValue'}}
+      responses:
+        '200':
+          description: Bounded page; next_before is the last sequence or null
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, next_before]
+                properties:
+                  items: {type: array, maxItems: 100, items: {$ref: '#/components/schemas/SimulatorOperation'}}
+                  next_before: {type: [integer, 'null']}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '422': {description: Invalid or unknown query}
+        '503': {description: Audit unavailable}
+  /api/simulators/operations/{request_id}:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {name: request_id, in: path, required: true, schema: {type: string, format: uuid}}
+    get:
+      tags: [Simulator Control]
+      operationId: getSimulatorOperation
+      summary: OPS 依 UUID 查操作與歷次結果事件
+      security: [{bffSession: []}]
+      responses:
+        '200':
+          description: Durable operation
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS required}
+        '404': {description: Operation not found}
+        '422': {description: Invalid UUID or query}
+        '503': {description: Audit unavailable}
+  /api/simulators/operations/{request_id}/reconcile:
+    servers: [{url: 'http://localhost:8003'}]
+    parameters:
+      - {name: request_id, in: path, required: true, schema: {type: string, format: uuid}}
+    post:
+      tags: [Simulator Control]
+      operationId: reconcileSimulatorOperation
+      summary: 查原始 receipt 對帳，或確認 target 已換 instance 後解封
+      description: |
+        OPS plus Origin. No query; body <=4096 bytes. Never resends a command.
+        Receipt must match UUID, command hash, target, old instance, revision and snapshots.
+        Missing receipt/current matching settings do not prove success.
+        A new authoritative instance retires the old instance in this single-container topology;
+        status stays outcome_unknown, resolved=true permits further commands.
+        Unchanged/unavailable evidence returns the original unresolved record.
+      security: [{bffSession: []}]
+      parameters:
+        - {name: Origin, in: header, required: true, schema: {type: string}}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [reason]
+              properties:
+                reason: {type: string, minLength: 1, maxLength: 200, pattern: '\S'}
+      responses:
+        '200':
+          description: Current operation including any appended reconciliation event
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SimulatorOperation'}
+        '401': {description: Login required}
+        '403': {description: OPS or Origin required}
+        '404': {description: Operation not found}
+        '409': {description: Target command still running}
+        '413': {description: Body too large}
+        '422': {description: Invalid body, UUID, or query}
+        '503': {description: Audit unavailable}
 
   # ============================================================
   # Query API - PostgREST (port 3001)
@@ -747,7 +940,40 @@ paths:
         '409': { description: 凍結紀錄，請用 /override }
 
 components:
+  parameters:
+    SimulatorId:
+      name: simulator_id
+      in: path
+      required: true
+      schema: {$ref: '#/components/schemas/SimulatorIdValue'}
+    HistoryDeviceId:
+      name: device_id
+      in: path
+      required: true
+      schema: {type: string, pattern: '^[A-Za-z0-9_-]{1,64}$'}
+    HistorySince:
+      name: since
+      in: query
+      required: true
+      schema: {type: string, format: date-time}
+      description: Inclusive start with timezone; total interval at most 7 days
+    HistoryUntil:
+      name: until
+      in: query
+      required: true
+      schema: {type: string, format: date-time}
+      description: Exclusive end with timezone
+
   securitySchemes:
+    simControlToken:
+      type: http
+      scheme: bearer
+      description: Env-only service credential; never provided to browser/CLI.
+    bffSession:
+      type: apiKey
+      in: cookie
+      name: ems_bff_session
+      description: HttpOnly Secure SameSite Strict opaque session; OPS role required
     basicAuth:
       type: http
       scheme: basic
@@ -763,6 +989,181 @@ components:
         AI 金鑰輪替後需 `docker compose up -d device-service-mcp` 重啟（L-3）。
 
   schemas:
+    SimulatorApply: {"type":"object","additionalProperties":false,"required":["request_id","expected_instance_id","expected_revision","changes","reason","deadline"],"properties":{"request_id":{"$ref":"#/components/schemas/SimulatorCommand/properties/request_id"},"expected_instance_id":{"$ref":"#/components/schemas/SimulatorCommand/properties/expected_instance_id"},"expected_revision":{"$ref":"#/components/schemas/SimulatorCommand/properties/expected_revision"},"changes":{"$ref":"#/components/schemas/SimulatorCommand/properties/changes"},"reason":{"$ref":"#/components/schemas/SimulatorCommand/properties/reason"},"deadline":{"type":"number","exclusiveMinimum":0}}}
+    SimulatorReceipt: {"type":"object","additionalProperties":false,"required":["request_id","command_hash","changes","before","after"],"properties":{"request_id":{"type":"string","format":"uuid4"},"command_hash":{"type":"string","pattern":"^[a-f0-9]{64}$"},"changes":{"type":"object"},"before":{"$ref":"#/components/schemas/SimulatorSnapshot"},"after":{"$ref":"#/components/schemas/SimulatorSnapshot"}}}
+    SimulatorIdValue:
+      type: string
+      enum: [sim-001, plc-001, sensor-001, delta-sim-001]
+    SimulatorCommand:
+      type: object
+      additionalProperties: false
+      required: [request_id, expected_instance_id, expected_revision, changes, reason]
+      properties:
+        request_id: {type: string, format: uuid4}
+        expected_instance_id: {type: string, format: uuid4}
+        expected_revision: {type: integer, minimum: 0, maximum: 4096}
+        changes:
+          description: Non-empty partial settings, matching simulator_id; nulls and unknown keys forbidden.
+          oneOf:
+            - {$ref: '#/components/schemas/MeterChanges'}
+            - {$ref: '#/components/schemas/PLCChanges'}
+            - {$ref: '#/components/schemas/SensorChanges'}
+            - {$ref: '#/components/schemas/DeltaChanges'}
+        reason: {type: string, minLength: 1, maxLength: 200, pattern: '\S'}
+    MeterChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        noise_voltage_v: {type: number, minimum: 0, maximum: 20}
+        current_base_a: {type: number, minimum: 0, maximum: 1000}
+        current_swing_a: {type: number, minimum: 0, maximum: 1000}
+        noise_current_a: {type: number, minimum: 0, maximum: 20}
+        power_factor: {type: number, minimum: 0, maximum: 1}
+        period_seconds: {type: number, minimum: 1, maximum: 86400}
+        fault_mode: {type: string, enum: [none, zero, freeze]}
+    PLCChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        motor_speed: {type: integer, minimum: 0, maximum: 65535}
+        pump_on: {type: boolean}
+        valve_open: {type: boolean}
+    SensorChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        enabled: {type: boolean}
+        interval_seconds: {type: integer, enum: [1, 2, 5, 10, 15, 30], description: '2 preserves legacy default; independent of edge poll interval'}
+    DeltaChanges:
+      type: object
+      minProperties: 1
+      additionalProperties: false
+      properties:
+        scenario: {type: string, enum: [day, night, alarm]}
+    SimulatorSnapshot:
+      type: object
+      required: [simulator_id, instance_id, revision, settings]
+      properties:
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        instance_id: {type: string, format: uuid4}
+        revision: {type: integer, minimum: 0, maximum: 4096}
+        settings: {type: object, description: Complete typed configuration for this ID}
+    SimulatorDescription:
+      type: object
+      required: [simulator_id, available, blocked, capabilities]
+      properties:
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        available: {type: boolean}
+        blocked: {type: boolean}
+        capabilities: {type: object, description: configure contains JSON Schema for allowed settings}
+        instance_id: {type: string, format: uuid4}
+        revision: {type: integer, minimum: 0}
+        settings: {type: object}
+        error: {type: string, enum: [target_unavailable]}
+    SimulatorOperation:
+      type: object
+      required: [sequence, request_id, simulator_id, actor, created_at, status, resolved, reason, changes, expected_instance_id, expected_revision, before, after, error, events]
+      properties:
+        sequence: {type: integer, minimum: 1}
+        request_id: {type: string, format: uuid4}
+        simulator_id: {$ref: '#/components/schemas/SimulatorIdValue'}
+        actor: {type: string, description: Server-validated login username}
+        created_at: {type: string, format: date-time}
+        updated_at: {type: string, format: date-time}
+        status: {type: string, enum: [pending, succeeded, failed, outcome_unknown]}
+        resolved: {type: boolean, description: 'unknown + true means old instance retired, not proven success'}
+        reason: {type: string, minLength: 1, maxLength: 200}
+        changes: {type: object}
+        expected_instance_id: {type: string, format: uuid4}
+        expected_revision: {type: integer, minimum: 0}
+        before: {anyOf: [{$ref: '#/components/schemas/SimulatorSnapshot'}, {type: 'null'}]}
+        after: {anyOf: [{$ref: '#/components/schemas/SimulatorSnapshot'}, {type: 'null'}]}
+        error: {type: [string, 'null']}
+        reconciled_by: {type: string}
+        reconcile_reason: {type: string}
+        observed_instance_id: {type: string, format: uuid4}
+        events:
+          type: array
+          items:
+            type: object
+            required: [event_id, status, created_at]
+            properties:
+              event_id: {type: integer}
+              status: {type: string, enum: [succeeded, failed, outcome_unknown]}
+              created_at: {type: string, format: date-time}
+            additionalProperties: true
+    DemoAlarmDelivery:
+      type: object
+      required: [status, event_id, sent_at, channel, target, visitor_number]
+      properties:
+        status: {type: string, enum: [sent]}
+        event_id: {type: string, format: uuid}
+        sent_at: {type: string, format: date-time}
+        channel: {type: string, enum: [telegram]}
+        target:
+          type: string
+          enum: [visitor, default]
+          description: visitor = current booth binding (PRD-0024); default = fixed chat (PRD-0019)
+        visitor_number:
+          type: [integer, 'null']
+          minimum: 1
+          description: Today's distinct-visitor number (Asia/Taipei day); null for default sends
+    DemoAlarmBinding:
+      type: object
+      description: PRD-0024 booth binding block. Contains no chat id, username or token.
+      required: [state, deep_link, current, today]
+      properties:
+        state:
+          type: string
+          enum: [ready, starting, webhook_active, conflict, unauthorized, unavailable]
+          description: Telegram getUpdates poller / state-store health
+        deep_link:
+          type: [string, 'null']
+          format: uri
+          description: https://t.me/<bot>?start=<code>; only when state=ready
+        current:
+          oneOf:
+            - type: object
+              required: [display, expires_in_seconds]
+              properties:
+                display: {type: string, description: 'Masked, e.g. @da***; first-name initial + *** or "Telegram 訪客" without username'}
+                expires_in_seconds: {type: integer, minimum: 1, maximum: 3600}
+            - {type: 'null'}
+        today:
+          type: object
+          required: [date, visitor_count]
+          properties:
+            date: {type: string, format: date, description: Asia/Taipei calendar day}
+            visitor_count: {type: integer, minimum: 0}
+    DeviceHistory:
+      type: object
+      required: [device_id, since, until, bucket_seconds, series]
+      properties:
+        device_id: {type: string}
+        since: {type: string, format: date-time}
+        until: {type: string, format: date-time}
+        bucket_seconds: {type: integer, minimum: 1, maximum: 10080}
+        series:
+          type: array
+          maxItems: 7200
+          items:
+            type: object
+            required: [time, signal, value, min, max, last, samples, last_time]
+            properties:
+              time: {type: string, format: date-time, description: Bucket start anchored to since}
+              signal:
+                type: string
+                enum: [voltage, current, power_kw, energy_kwh, temperature, humidity, motor_speed, pressure, pump_on, valve_open]
+              value: {type: number, description: Mean of finite samples}
+              min: {type: number}
+              max: {type: number}
+              last: {type: number, description: Latest finite sample in the bucket}
+              samples: {type: integer, minimum: 1}
+              last_time: {type: string, format: date-time}
+
     # ===== Device Service (PRD-0003) — 對齊 services/device-service/device_service/models.py =====
     DeviceCreate:
       type: object
@@ -1190,3 +1591,271 @@ components:
                         message:
                           type: string
                           description: 測試訊息內容
+
+# 2026-09-23: Local EMS design preview reuses existing auth, devices and measurements routes.
+# No API contract change. See output/ems-design-preview-20260923/README.md.
+
+# PRD-0020: non-HTTP contract extension; existing REST schemas are unchanged.
+x-delta-telemetry:
+  profile: delta-three-phase-v1.35
+  simulator:
+    transports: [tcp, rtu]
+    default_transport: tcp
+    rtu:
+      role: slave-server
+      port: Operator-specified local COMn or /dev/ device; serial URLs rejected
+      baudrates: [9600, 19200, 38400]
+      framing: 8N1
+      unit_id: Single station, 1-247
+      function_codes: [4]
+      unknown_unit_and_broadcast: ignore
+      startup_failure: nonzero-exit
+      tcp_listener: false
+      validation: Linux PTY and Windows dual-adapter RS485 bench verified (2026-11-12, 110 samples); Pi, real Delta and 4G pending
+  topic: ems/devices/{device_id}/measurements
+  format: influx-line-protocol
+  measurement: electricity_measurements
+  qos: 1
+  retain: false
+  timestamp: source-utc-nanoseconds-microsecond-aligned
+  fields:
+    voltage: L1 phase voltage in V
+    current: L1 current in A
+    power_kw: Three-phase total active output in kW
+    energy_kwh: Lifetime generation in kWh, low-word-first source
+  delivery: Broker PUBACK only; DB loss and replay duplicates remain possible
+
+# Complete target remains partly planned; ADR-043 implements the opt-in delivery subset.
+x-planned-delta-edge-v2:
+  status: delivery-subset-implemented-private-verified-not-shared-deployed
+  prd: doc/prd/PRD-0021-multi-device-edge-reliability.md
+  adr: doc/adr/ADR-030-edge-durable-receipts.md
+  transport: MQTT-over-TLS
+  topics:
+    samples: ems/v2/gateways/{gateway_id}/samples
+    acks: ems/v2/gateways/{gateway_id}/acks
+    session_request: ems/v2/gateways/{gateway_id}/session/request
+    session_response: ems/v2/gateways/{gateway_id}/session/response
+    reconcile_request: ems/v2/gateways/{gateway_id}/reconcile/request
+    reconcile_response: ems/v2/gateways/{gateway_id}/reconcile/response
+    health: ems/v2/gateways/{gateway_id}/health
+  qos: 1
+  retain: false
+  identity: Per-gateway mTLS and topic/device ownership validation
+  delivery: Delete local row only after validated central DB committed ACK
+  idempotency: Unique gateway_id/sample_id with immutable canonical payload hash
+  limits:
+    sample_bytes: 1024
+    batch_samples: 32
+    batch_bytes: 65536
+    inflight_batches: 8
+    receiver_samples_per_second: 40
+  payload_schema: PRD-0021 section 8; strict four-field delivery subset in x-delta-edge-v2-reliable-subset
+  reconciliation:
+    status: draft-not-implemented
+    contract: PRD-0021 sections 8.1 and 15.1
+    audit_interval_seconds: 300
+    audit_history_days: 7
+    max_page_entries: 256
+    max_message_bytes: 65536
+    heartbeat_interval_seconds: 30
+    gateway_unavailable_after_seconds: 90
+    reconciliation_reply_deletes_queue: false
+  sampling:
+    status: draft-not-implemented
+    contract: PRD-0021 FR-2117/2118 and section 15.2
+    scope: per-device
+    presets_seconds: [1, 5, 10, 15, 30]
+    default_seconds: 10
+    mixed_intervals: true
+    desired_state: requested_interval_s
+    applied_state: effective_interval_s
+    activation: Gateway validated durable config_revision and applied boundary
+    admission: Model and bus schedulability plus pending/audit disk and uplink capacity
+    ui_refresh_equals_sampling: false
+    baseline: Eight devices at 10 seconds with seven days offline
+    remote_config_transport: Not implemented; no new configuration route declared
+  existing_v1_unchanged: true
+
+x-delta-edge-v2-reliable-subset:
+  status: implemented-private-verified
+  deployment: Explicit opt-in only; existing shared v1 and active 24h run not switched
+  adr: doc/adr/ADR-043-opt-in-committed-telemetry.md
+  evidence: output/committed-delivery-fix-20261112/README.md
+  source: services/delta/delta_device/reliable_wire.py
+  receiver: services/edge-receiver/edge_receiver/receiver.py
+  schema_migration: infra/timescaledb/migrations/019_edge_committed_receipts.sql
+  sender_batch_samples: 1
+  sender_inflight_batches: 1
+  sender_max_batches_per_second: 2
+  sender_selection: Alternate newest and oldest pending capture_seq after each authenticated committed ACK that resolves an existing local sample; start with newest; failed/retryable/retired ACK does not consume the turn
+  sender_selection_adr: doc/adr/ADR-048-v2-live-backlog-fairness.md
+  sender_selection_limit: In-memory turn resets on process restart; newest candidate is not a fixed latency SLA for every sample; wire2/local schema3 unchanged
+  receiver_max_batch_samples: 32
+  receiver_max_wire_bytes: 65536
+  receiver_samples_per_second: 40
+  receiver_sample_burst: 64
+  session_max_bytes: 1024
+  recovery_generation: Required external UUID file; rotate before PITR and force new gateway sessions
+  canonicalization: Sorted-key ASCII-escaped UTF-8 JSON, no whitespace; measurements normalized to float and negative zero to 0.0; SHA256 excludes payload_hash
+  sample_required: [sample_id, gateway_id, device_id, stream_id, capture_seq, window_id, config_revision, sampled_at_us, profile_version, time_quality, measurements, payload_hash]
+  sample_unknown_fields: reject
+  sample_max_bytes: 1024
+  sample_uuid_fields: [sample_id, stream_id, window_id]
+  sample_identities: ASCII alnum/underscore/hyphen, 1-64 chars; authoritative gateway/device/stream/revision/profile and effective half-open time range
+  capture_seq: Positive int64; boolean rejected; persisted with sample and local sequence
+  sampled_at_us: Positive int64 source UTC microseconds; DB accepts now minus 90 days through now plus 120 seconds
+  time_quality: trusted
+  measurements:
+    required: [voltage, current, power_kw, energy_kwh]
+    unknown_fields: reject
+    numbers: Finite 0..1e15; booleans and oversized integers rejected before float conversion
+    projection: L1 voltage/current, total three-phase kW, lifetime kWh
+  sample_envelope_required: [schema_version, gateway_id, session_challenge, recovery_generation, batch_id, samples]
+  session_request_required: [schema_version, gateway_id, session_challenge]
+  session_response_required: [schema_version, gateway_id, session_challenge, recovery_generation]
+  ack_envelope_required: [schema_version, gateway_id, session_challenge, recovery_generation, batch_id, results]
+  ack_result:
+    required: [sample_id, payload_hash, status]
+    status: [committed, retryable, rejected]
+    committed_requires: committed_at with UTC offset; DB transaction COMMIT returned; field additionally requires fixed post-COMMIT LSN covered by named synchronous durable WAL peer (ADR-049)
+    non_committed_requires: error_code
+    error_code: [conflict, invalid, unauthorized, outside_window, database, rate]
+  ack_acceptance: Current authenticated topic/gateway/session/generation/batch and exact pending ID/hash; entire result validated under same lock as reconnect and deletion; retained/unknown/duplicate ignored
+  persistence: SQLite DELETE/EXTRA; PostgreSQL fsync=on and synchronous_commit=on; receipt and projection in same READ COMMITTED transaction
+  idempotency: Receipt unique gateway/sample and gateway/device/stream/sequence; row-lock recheck of indexed measurement identity, 0 repair, 1 exact match, more than 1 conflict
+  field_authentication: Mandatory verified mTLS, certificate CN bound to gateway_id, server-only ACK/session responses; no anonymous listener sharing v2 topic plane
+  demo: Explicit matching network-none namespace with lo only; shared anonymous broker refused
+  local_schema_version: 3
+  wire_schema_version: 2
+  retention_adr: doc/adr/ADR-045-newest-first-edge-retention.md
+  retention: Local queue/quarantine/audit/byte pressure retires oldest capture-sequence prefix to admit newest sample; retirement and new sample commit atomically or all roll back. Retirement is not central committed ACK. Central receipts are not automatically purged.
+  retirement_observability: Bounded local cumulative counters and latest sequence span with last ID/hash, plus capacity_eviction warning; no central gap UI or complete per-sample retirement ledger
+  local_sampled_ns: Microsecond-aligned non-negative int64, validated before retirement; wire microsecond contract unchanged
+  not_implemented: [multi-device-scheduler, sealed-manifest-reconciliation, daily-reconciliation, heartbeat-ui, central-receipt-retention, remote-sampling-config, Pi-field-validation]
+
+x-delta-demo-sampling:
+  adr: ADR-034
+  device_id: delta-sim-001
+  demo_interval_seconds: 1
+  field_default_interval_seconds: 10
+  schedule: monotonic deadlines; skip missed slots without synthetic samples
+  noise_enable_env: DELTA_SIM_NOISE=1
+  phase_voltage_noise: {sigma_v: 1.5, maximum_absolute_v: 4.5}
+  phase_current_noise: {sigma_a: 0.15, maximum_absolute_a: 0.45}
+  power: sum of phase voltage times phase current; unity power factor
+  energy: integral of baseline generation; no random counter noise
+  contract_change: none; existing REST, MQTT and measurement fields preserved
+
+# 2026-11-12: no-Pi bench acceptance plan (proposed gates; no API/runtime change).
+# See doc/operations/delta-no-pi-validation-plan.md; committed ACK remains planned v2.
+
+# 2026-11-12: bounded no-Pi bench ledger/run/DB-API verification tools added.
+# Run status: output/delta-no-pi-validation-20261112/README.md; no API contract change.
+
+# 2026-11-12 ADR-040: RTU simulator same-port listener recovery only.
+# No REST/MQTT/schema changes; physical USB recovery acceptance remains pending.
+
+# 2026-11-12 12:16 ADR-040 COM3 USB recovery passed: <=9.672s; 52/52 DB/API.
+# COM4 remains untested; no API change. See no-Pi validation report.
+
+# 2026-11-12 physical frame tests: five classes 20/20; late reply 0/20.
+# Poller.read correlation issue remains open; no fault samples published, no API change.
+# ADR-041 (2026-11-12): local RTU uncertain-transaction lock; field RTU
+# requires qualified response_lifetime_seconds/source and startup quarantine.
+# Unknown lifetime stops new acquisition; trusted outbox sender continues.
+# No REST/MQTT/DB schema change; not a DB committed ACK or field qualification.
+
+# 2026-11-12: isolated v1 delivery counterexamples reproduced; receipt/dedup pending.
+# Monitor mocked-API freshness 5/5; 1s/1h then conditional 5s/24h sequence running.
+# No API/schema change. See output/delta-no-pi-validation-20261112/README.md.
+
+# 2026-11-12 clock/TLS isolated checks: 12/12 passed; no API/schema/production change.
+# 191 regression passed; 12 private integration tests skipped in ordinary environment
+# and separately executed successfully. Central receipt/dedup not implemented.
+
+# 2026-11-12 handoff only: doc/operations/edge-temperature-handoff-20261112.md.
+# Target: U701-A-10 / CS1-TP1-8-A -> Pi -> EMS; irradiance deferred.
+# ADTEK profile and end-to-end temperature integration remain unimplemented.
+# No API/schema/runtime change; central committed receipt/dedup remain pending.
+
+# 2026-11-12 backlog/weak-stream validation only: output/no-pi-backlog-20261112/README.md
+# 203 regression tests; no API/schema/production change. v1 central receipt/dedup remains unimplemented.
+
+# 2026-11-12 actual-ingest/IP-loss validation: output/no-pi-ingest-20261112/README.md
+# Private Telegraf/Timescale clone reproduces duplicate rows and loss while ingest is down.
+# 211 regression tests; no API/schema/runtime change. Central receipt/dedup still unimplemented.
+
+# 2026-11-13 runtime audit only: output/soak-interruption-audit-20261113/README.md
+# Legacy 24h bench interrupted by Windows update reboot; 5512 rows match DB/API.
+# Stale RUNNING is preserved as evidence; no new API/schema or deployment change.
+
+# 2026-11-13 bench slot-boundary instrumentation fix only:
+# output/slot-boundary-fix-20261113/README.md; 66 targeted tests, no long soak rerun.
+# No production/API/schema change; original frozen verifier and ledger preserved.
+
+# 2026-11-13 additional no-Pi short fault tests: output/no-pi-v2-faults-20261113/README.md
+# 8 real private faults + 35 mandatory boundary regressions; 16 verdict counterexamples.
+# No API/schema/production or shared deployment change; no long soak rerun.
+
+# 2026-11-13 tests only: output/no-pi-resilience-20261113/README.md
+# --suite resilience: 9 new process/storage/v2-TLS cases + 35 mandatory slot cases;
+# 44 passed, 32 controller checks. Post-constructor hash/journal proof required.
+# No REST/topic/schema/production change or shared deployment/long-soak restart.
+
+# 2026-11-13 lifecycle checks: output/no-pi-lifecycle-20261113/README.md
+# 42 targeted passed; adjacent 393 passed/12 dedicated skipped; coverage 91.02%.
+# ReliableOutbox refuses existing empty/corrupt files; only SQLite's explicit
+# READONLY_ROLLBACK permits native mode=rw recovery, never schema reinitialization.
+# Private broker/client-CRL rotation only; REST/topics/wire2/local schema3 unchanged.
+
+x-edge-synchronous-wal-durability:
+  adr: doc/adr/ADR-049-synchronous-wal-ack-and-pitr.md
+  migration: infra/timescaledb/migrations/021_edge_tls_wal.sql
+  field_ack_durability: sync_wal
+  demo_default: local-isolated-only
+  field_local_downgrade: forbidden
+  wal_standby_name_default: ems_archive
+  required_postgresql: fsync=on; synchronous_commit=on; synchronous_standby_names=FIRST 1 (ems_archive)
+  committed_ack_requires: DB transaction COMMIT returned and exactly one named synchronous streaming peer reports durable flush at or beyond a fixed post-COMMIT WAL flush LSN
+  failure: retryable database; original sample ID remains pending until authenticated committed ACK or explicit capacity retirement
+  deployment_prerequisites: Independent durable WAL failure domain; pg_receivewal --synchronous; physical slot; verified basebackup and continuous WAL chain before first ACK; dedicated replication principal and TLS verify-full
+  restore: Fence old primary; physical basebackup plus complete WAL to required target; missing WAL fails; external generation rotation and fresh session; reestablish synchronous WAL before ACK service
+  scope: Private validation only; shared v1 not migrated; wire2 and local schema3 unchanged; no new REST or MQTT topic
+
+# 2026-11-13 no-Pi cutover validation only (PRD-0021 section 15.10):
+# output/no-pi-cutover-20261113/README.md; 5 new scenarios + 35 fixed boundary
+# cases passed; 131 adjacent tool/conversion unit checks passed.
+# Limited field DB role + mTLS + synchronous WAL, permission recovery/repair,
+# three real conversion SIGKILL boundaries, and inflight duplicate client-ID
+# disconnect/reconnect with stale ACK rejection. No REST/topic/schema/runtime
+# change, shared deployment, COM access, or long-soak rerun.
+
+# 2026-11-13 PRD-0021 section 15.11 existing local integrity contract bugfix:
+# output/no-pi-integrity-20261113/README.md; local schema3/wire2 remain unchanged.
+# Startup queue/audit/high-water consistency, enqueue pre-retirement watermark,
+# immutable selected payload validation and in-transaction ACK revalidation,
+# consistent pending read snapshot, retirement-counter overflow rollback.
+# Optional audit_time index may defer on SQLITE_FULL with correct scan fallback.
+# 66 targeted passed; adjacent 500 passed/12 dedicated skipped, coverage91.36%.
+# Latest tool/storage checks210 passed. No REST/MQTT topic/role/table change,
+# shared deployment, COM access, or long-soak rerun.
+
+x-edge-database-tls-and-restore-identity:
+  adr: doc/adr/ADR-050-database-tls-and-recovery-identity.md
+  validation: output/no-pi-wal-security-20261113/README.md
+  field_db_tls_required: [ca_file, cert_file, key_file]
+  database_tls: Verify CA and hostname; require client certificate; forbid socket and host override or explicit downgrade
+  wal_predicate: edge_ingest.sync_tls_wal_flushed; no legacy fallback if migration021 is missing
+  wal_identity: Exactly one named synchronous TLS peer with client DN and role ems_wal_archive
+  restore_gate: Bounded standard tar layout; external trusted expected system ID; pg_verifybackup before startup; explicit approved timeline and target
+  scope: Private short tests passed; no new REST paths or MQTT topics; formal deployment pending
+
+x-edge-critical-recovery-closure:
+  adr: doc/adr/ADR-051-pinned-recovery-and-slot-reseed.md
+  validation: output/no-pi-critical-closure-20261113/README.md
+  directory_preflight_required: [expected-system-id, expected-timeline, target-name]
+  target_policy: Externally approved positive uint32 decimal timeline and bounded safe named target; latest and current forbidden
+  preflight_output: Verified backup plus recovery_settings JSON; operator must apply settings; no automatic startup
+  slot_reseed: Fence ACK; reserve new physical slot before basebackup; preserve all WAL until pickup; verify new backup and actual chain PITR; rotate generation before reopening ACK
+  scope: Three bounded private failure drills passed; no new REST or MQTT contracts; no automatic failover or shared deployment

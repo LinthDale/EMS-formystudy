@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../responsive.css">
+<link rel="stylesheet" href="../brand-header.css">
+<title>需量管理 · tAIstro EMS</title>
+<script src="./support.js"></script>
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-a-32.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="../favicon-a.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon-a.png">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500&amp;family=Newsreader:opsz,wght@6..72,300;6..72,400&amp;family=Noto+Sans+TC:wght@400;500&amp;family=Noto+Serif+TC:wght@300;400&amp;display=swap">
+<style>
+body{margin:0;font-family:Manrope,"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:#282825}
+a{color:#576a4a}a:hover{color:#345e40}
+</style>
+</helmet>
+<div style="width: 1440px; height: 1080px; box-sizing: border-box; display: grid; grid-template-columns: 208px minmax(0, 1fr); grid-template-rows: 74px minmax(0, 1fr); background: #f4f4f2; color: #282825;" class="ems-board ems-page-demand">
+
+<header style="grid-column: 1 / 3; grid-row: 1; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 0 24px 0 28px; background: #292a2e;" class="ems-header">
+<div style="display: flex; align-items: center; gap: 20px;" class="ems-brand">
+<svg viewBox="235.88 409.41 370.13 72.54" role="img" aria-label="tAIstro" style="height: 26px; width: auto; display: block;">
+<path fill="#cca858" d="M587.83,430.46h-23.75c-10.03,0-18.18,8.16-18.18,18.18v14.45c0,10.03,8.16,18.18,18.18,18.18h23.75c10.03,0,18.18-8.16,18.18-18.18v-14.45c0-10.03-8.16-18.18-18.18-18.18ZM595.46,463.1c0,4.21-3.42,7.63-7.63,7.63h-23.75c-4.21,0-7.63-3.42-7.63-7.63v-14.45c0-4.21,3.42-7.63,7.63-7.63h23.75c4.21,0,7.63,3.42,7.63,7.63v14.45Z"></path>
+<path fill="#cca858" d="M253.59,419.13h-10.55v10.94h-7.16v10.55h7.16v22.47c0,4.86,1.89,9.42,5.33,12.86,3.43,3.43,8,5.33,12.86,5.33h10.97v-10.55h-10.97c-2.04,0-3.95-.79-5.39-2.23-1.44-1.44-2.23-3.36-2.23-5.4v-22.47h18.81v-10.55h-18.81v-10.94Z"></path>
+<path fill="#cca858" d="M447.16,454.25c-1.41-1.42-3.06-2.53-4.9-3.3-1.9-.81-3.93-1.21-6.01-1.21h-25c-.66,0-1.3-.13-1.9-.38-.58-.24-1.1-.6-1.55-1.04-.45-.45-.8-.97-1.05-1.55-.25-.6-.38-1.23-.38-1.9s.13-1.3.38-1.9c.25-.58.6-1.1,1.05-1.55s.97-.8,1.55-1.04c.6-.25,1.24-.38,1.9-.38h37.14v-10.55h-37.14c-2.08,0-4.1.41-6.01,1.21-1.84.78-3.49,1.89-4.9,3.3-1.42,1.41-2.53,3.06-3.3,4.9-.81,1.9-1.21,3.93-1.21,6.01s.41,4.1,1.21,6.01c.78,1.84,1.89,3.49,3.3,4.9,1.42,1.42,3.07,2.53,4.9,3.3,1.91.81,3.93,1.22,6.01,1.22h25c.66,0,1.3.13,1.9.38.58.25,1.1.6,1.55,1.05s.8.97,1.05,1.55c.25.6.38,1.24.38,1.9s-.13,1.3-.38,1.9c-.25.58-.6,1.1-1.05,1.55s-.97.8-1.55,1.05c-.6.25-1.23.38-1.9.38h-41.36v10.55h41.36c2.08,0,4.1-.41,6.01-1.21,1.84-.78,3.49-1.89,4.9-3.3,1.42-1.41,2.53-3.06,3.31-4.9.81-1.91,1.21-3.93,1.21-6.01s-.41-4.1-1.21-6.01c-.78-1.84-1.89-3.49-3.3-4.9Z"></path>
+<path fill="#cca858" d="M476.09,468.49c-1.44-1.44-2.23-3.36-2.23-5.4v-22.6h19.12v-10.55h-19.12v-10.81h-10.55v43.97c0,4.86,1.89,9.42,5.33,12.86,3.44,3.43,8,5.32,12.86,5.32h11.87v-10.55h-11.87c-2.04,0-3.95-.79-5.39-2.23Z"></path>
+<path fill="#cca858" d="M505.24,448.65v33.3h10.55v-33.3c0-4.21,3.42-7.63,7.63-7.63h17.12v-10.55h-17.12c-10.03,0-18.18,8.16-18.18,18.18Z"></path>
+<rect fill="#cca858" x="371.02" y="431.67" width="10.55" height="49.49"></rect>
+<circle fill="#cca858" cx="376.3" cy="420.6" r="6.88"></circle>
+<g>
+<polygon fill="#cca858" points="317.83 456.72 320.97 409.41 281.74 481.94 317.83 456.72"></polygon>
+<polygon fill="#cca858" points="325.48 456.72 322.35 409.41 361.58 481.94 325.48 456.72"></polygon>
+</g>
+</svg>
+<span aria-hidden="true" style="display: block; width: 1px; height: 30px; background: #5a503b;"></span>
+<span style="font-family: Newsreader, Noto Serif TC, Songti TC, serif; font-weight: 400; font-size: 24px; letter-spacing: 0.12em; color: #cca858; white-space: nowrap;" class="ems-product-heading"><img class="ems-product-logo" src="../assets/ems-wordmark-03.svg" alt="EMS"><span>能源管理系統</span></span>
+</div>
+<div style="display: flex; align-items: center; gap: 12px;" class="ems-header-actions">
+<button type="button" aria-haspopup="listbox" style="display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 320px; height: 44px; box-sizing: border-box; padding: 0 14px; background: transparent; border: 1px solid #45474c; border-radius: 10px; color: #f4f4f2; font-family: inherit; font-size: 14px; cursor: pointer;">
+<span style="display: flex; align-items: center; gap: 10px;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.4 20.5 4 5.8Q4 4.2 5.6 4.1L13 3.5Q14.2 3.5 14.3 5L14.7 20.4 M14.5 10.1 19.3 10Q20 10 20 11L20.2 20.5 M2.8 20.6 21.4 20.3 M7.5 8.1l3.3-.2 M7.6 12.2l3.3-.1 M7.7 16.2h3.2"></path></svg>
+<span>台北南港展覽館專案</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</button>
+<button type="button" aria-label="通知，2 則未讀" style="position: relative; display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: transparent; border: 0; border-radius: 10px; color: #c4c4be; cursor: pointer;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="21" height="21" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.5 16.8Q7 14.5 6.9 10.4Q6.8 5.5 11.8 5.1Q16.8 5 17.1 10.1Q17.1 14.4 18.6 16.8Q12.2 17.7 5.5 16.8 M10.1 20Q12.1 22 14.1 19.9 M11.9 2.7v2.4"></path></svg>
+<span aria-hidden="true" style="position: absolute; top: 10px; right: 11px; width: 8px; height: 8px; border-radius: 999px; background: #cca858; box-shadow: 0 0 0 2px #292a2e;"></span>
+</button>
+<button type="button" aria-haspopup="menu" style="display: flex; align-items: center; gap: 10px; height: 44px; padding: 0 6px 0 4px; background: transparent; border: 0; border-radius: 10px; color: #f4f4f2; font-family: inherit; cursor: pointer;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 999px; background: #34383a; color: #c4c4be;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="18" height="18" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M15.7 7.4Q15.8 11.4 12 11.6Q8.1 11.4 8.2 7.5Q8.1 3.6 12 3.5Q15.6 3.6 15.7 7.4 M4.5 20.5Q4.7 15.1 11.8 14.9Q19 14.7 19.6 20.3"></path></svg>
+</span>
+<span style="display: flex; flex-direction: column; align-items: flex-start; line-height: 1.25;">
+<span style="font-size: 14px;">使用者</span>
+<span style="font-size: 12px; color: #c4c4be;">維運</span>
+</span>
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="fill: none; stroke: #c4c4be; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M5.8 9.1Q8.7 11.3 11.9 14.5Q15 11.5 18.1 9.4"></path></svg>
+</button>
+</div>
+</header>
+
+<nav aria-label="主選單" style="grid-column: 1; grid-row: 2; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; box-sizing: border-box; padding: 20px 0 22px; background: #1d1e20; overflow: hidden;" class="ems-sidebar">
+<div style="display: flex; flex-direction: column; gap: 4px;" class="ems-nav-items">
+<a href="Main.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 10.8 11.6 3.6Q12 3.2 12.5 3.6L21 10.5 M5.1 10.1 5.3 20.3 10.1 20.4 10 14.5 14.1 14.4 14.2 20.3 19 20.1 18.9 10"></path></svg>
+<span>能源總覽</span>
+</a>
+<a href="Monitor.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3 16.6 3.1 5.6Q3.1 4 4.7 4L19.3 4.2Q20.8 4.2 20.7 5.8L20.6 16.2Q20.6 17.8 19.1 17.8L4.6 17.9Q3 17.9 3 16.6 M6 11.9l2.9-.1 1.6-3.9 2.8 7.1 1.6-3.6 3.3-.1 M9 21h6 M12 18v3"></path></svg>
+<span>即時監控</span>
+</a>
+<a href="Demand.dc.html" aria-current="page" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; background: #2d3229; box-shadow: inset 2px 0 0 #cca858; color: #f4f4f2; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: #cca858; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M3.4 17.7Q1.9 6 11.8 5Q21.7 4.7 20.6 17.5L3.4 17.7 M12 15.8l4.4-6.2 M6.2 13.4l1.2-.1 M7.7 8.7l.8.9 M12.2 7v1.4 M17.4 13.2h1.1"></path></svg>
+<span>需量管理</span>
+</a>
+<a href="Storage.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.1 7.4 17.8 7.2Q19.1 7.2 19.2 8.8L19.3 15.2Q19.3 16.8 17.7 16.8L4 17Q2.6 17 2.7 15.4L2.6 9Q2.6 7.5 4.1 7.4 M21.3 10.2l.1 3.7 M6.4 10.3v3.4 M10.4 10.2v3.4 M14.4 10.1v3.4"></path></svg>
+<span>儲能管理</span>
+</a>
+<a href="Alarms.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M6.3 17.5l.2-5.8Q6.4 6.6 11.9 6.4Q17.3 6.3 17.5 11.4L17.8 17.4 M4.3 20.4l15.4-.2 M4.8 17.6l14.3-.2 M12 2.4v1.8 M4 5.6l1.6 1.3 M19.9 5.4l-1.4 1.5"></path></svg>
+<span>警報中心</span>
+</a>
+<a href="Devices.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M7.5 6.4l8.8-.1Q17.5 6.4 17.5 7.7L17.7 16Q17.7 17.5 16.1 17.5L7.8 17.7Q6.3 17.7 6.3 16.1L6.2 8Q6.2 6.5 7.5 6.4 M9.3 2.7v3.5 M14.7 2.5v3.7 M9.6 17.7v3.5 M15 17.6v3.5 M2.7 9.5h3.4 M2.6 14.7h3.6 M17.7 9.2h3.5 M17.7 14.5h3.6 M10 10h4v4h-4z"></path></svg>
+<span>設備分析</span>
+</a>
+<a href="Reports.dc.html" style="display: flex; align-items: center; gap: 14px; height: 48px; padding: 0 22px; color: #c4c4be; text-decoration: none; font-size: 15px; letter-spacing: 0.04em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M13.9 3.2l-7.4.1Q5 3.3 5 5L5.2 19Q5.2 20.8 6.8 20.7L17.1 20.5Q18.7 20.5 18.7 18.9L18.5 8.1 13.9 3.2 M13.9 3.2 13.8 8.2 18.5 8.1 M8.5 12.2l6.3-.2 M8.6 15.8l6.4-.1"></path></svg>
+<span>報表中心</span>
+</a>
+</div>
+
+<div style="display: flex; flex-direction: column; gap: 2px; padding: 0 22px; font-size: 12px; line-height: 1.5; color: #c4c4be;" class="ems-sidebar-footer">
+<span>星洋智能科技股份有限公司</span>
+<span style="font-family: Newsreader, serif; letter-spacing: 0.06em;">tAistro co., ltd.</span>
+</div>
+</nav>
+
+<main style="grid-column: 2; grid-row: 2; min-width: 0; box-sizing: border-box; padding: 24px; display: flex; flex-direction: column; gap: 16px;" class="ems-main">
+
+<div style="display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; height: 60px;" class="ems-page-heading">
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-family: Newsreader, serif; font-size: 13px; letter-spacing: 0.08em; color: #64645e;">DEMAND &amp; TIME-OF-USE</span>
+<h1 style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 300; font-size: 33px; line-height: 1.1; letter-spacing: -0.02em; color: #282825;">需量管理</h1>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; padding-bottom: 4px;">
+<span style="font-size: 14px; color: #64645e;">契約容量、15 分鐘需量與時間電價</span>
+<span style="display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 12px; border: 1px solid #b4b4ac; border-radius: 999px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M2.9 12.2Q6.4 5.5 11.8 5.4Q17.2 5.3 21.1 11.8Q17.4 18.5 12 18.6Q6.8 18.6 2.9 12.2 M15.3 12Q15.3 15.2 12.1 15.3Q8.8 15.2 8.8 12.1Q8.7 8.9 11.9 8.8Q15.2 8.9 15.3 12"></path></svg>
+<span>第一版僅供檢視</span>
+</span>
+<span style="display: inline-flex; align-items: center; padding: 3px 10px 2px; background: #f2f0e8; border: 1px solid #afafa0; border-bottom-width: 3px; font-size: 12px; letter-spacing: 0.06em; color: #64645e; transform: rotate(-1.2deg); box-shadow: 3px 5px 0 #dedfd477;">示意資料 · SAMPLE</span>
+</div>
+</div>
+
+<section aria-label="需量指標" style="height: 116px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:116px;" class="ems-summary ems-panel">
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 24px;">
+<span style="font-size: 14px; color: #64645e;">契約容量</span>
+<span style="display: flex; align-items: baseline; gap: 5px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{k.contract}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">kW</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">超約部分依台電規定加倍計收</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 24px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 14px; color: #64645e;">本月最高需量</span>
+<span style="display: flex; align-items: baseline; gap: 5px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{k.peak}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">kW</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">09/12 16:45 · 達約 {{k.pct}} %</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 4px; padding: 0 24px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 14px; color: #64645e;">目前 15 分鐘需量</span>
+<span style="display: flex; align-items: baseline; gap: 5px;">
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 40px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{k.now}}</span>
+<span style="font-family: Newsreader, serif; font-size: 15px;">kW</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">區間 14:30–14:45 · 進行中，剩 12 分 55 秒</span>
+</div>
+<div style="display: flex; flex-direction: column; justify-content: center; gap: 6px; padding: 0 24px; border-left: 1px solid #d5d5ce;">
+<span style="font-size: 14px; color: #64645e;">本月超約風險</span>
+<span style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 999px; background: #e5ebdc; color: #426d4b;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="20" height="20" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M12 3.1Q15.4 5.5 19.3 6L18.9 12Q18.5 17.4 12.2 21Q5.8 17.8 5.3 12.3L4.8 6.2Q8.8 5.3 12 3.1 M8.7 11.8l2.3 2.5 4.5-5"></path></svg>
+</span>
+<span style="font-family: Newsreader, Noto Serif TC, serif; font-size: 25px; line-height: 1; color: #426d4b;">低</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">本月最高距契約容量 {{k.headroom}} kW</span>
+</div>
+</section>
+
+<div style="display: flex; gap: 16px; height: 400px;" class="ems-panel-row">
+<section aria-labelledby="barsTitle" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 400px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:400px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="barsTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">今日 15 分鐘需量</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">15-MIN DEMAND</span>
+</div>
+<div style="display: flex; align-items: center; gap: 16px; font-size: 12px; color: #64645e;">
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 2px; background: #647956;"></span><span>市電需量（台電受電點）</span></span>
+<span style="display: flex; align-items: center; gap: 6px;"><svg viewBox="0 0 18 6" width="18" height="6" aria-hidden="true" style="display: block;"><path d="M1 3H17" style="stroke: #9b7b31; stroke-width: 1.5px; stroke-dasharray: 4 3;"></path></svg><span>契約容量</span></span>
+<span style="display: flex; align-items: center; gap: 6px;"><svg viewBox="0 0 18 6" width="18" height="6" aria-hidden="true" style="display: block;"><path d="M1 3H17" style="stroke: #64645e; stroke-width: 1px; stroke-dasharray: 2 2;"></path></svg><span>本月最高</span></span>
+</div>
+</div>
+<div class="ems-chart" data-chart-height="308" style="position: relative; flex: 1 0 308px; min-height: 308px;">
+<span style="position: absolute; left: 0; top: -8px; font-size: 12px; color: #64645e;">kW</span>
+<sc-for list="{{bars.yTicks}}" as="t" hint-placeholder-count="4">
+<span style="position: absolute; left: 0; width: 38px; top: {{t.top}}; transform: translateY(-50%); text-align: right; font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{t.label}}</span>
+</sc-for>
+<svg viewBox="0 0 {{bars.width}} 250" width="{{bars.width}}" height="250" role="img" aria-label="今日 15 分鐘需量長條圖，目前最高 312 kW，契約容量 500 kW，本月最高 428 kW" style="position: absolute; left: 50px; top: 14px; display: block; overflow: visible;">
+<path d="{{bars.grid}}" style="fill: none; stroke: #e9e9e3; stroke-width: 1px;"></path>
+<path d="{{bars.done}}" style="fill: #647956; stroke: none;"></path>
+<path d="{{bars.live}}" style="fill: #647956; fill-opacity: 0.35; stroke: #647956; stroke-width: 1px; stroke-dasharray: 2 2;"></path>
+<path d="{{bars.hot}}" style="fill: #345e40; stroke: none;"></path>
+<path d="M0 250H{{bars.width}}" style="fill: none; stroke: #b4b4ac; stroke-width: 1px;"></path>
+<path d="{{bars.contractPath}}" style="fill: none; stroke: #9b7b31; stroke-width: 1.5px; stroke-dasharray: 6 4;"></path>
+<path d="{{bars.peakPath}}" style="fill: none; stroke: #64645e; stroke-width: 1px; stroke-dasharray: 2 2;"></path>
+</svg>
+<div style="position: absolute; right: 0; top: {{bars.contractTop}}; display: flex; align-items: baseline; gap: 6px; padding: 3px 9px; border-radius: 6px; background: #cca858; color: #282825; white-space: nowrap;">
+<span style="font-size: 12px;">契約容量</span>
+<span style="font-family: Newsreader, serif; font-size: 14px;">500 kW</span>
+</div>
+<div style="position: absolute; right: 0; top: {{bars.peakTop}}; padding: 2px 8px; border-radius: 6px; background: #f8f8f7; border: 1px solid #d5d5ce; font-size: 12px; color: #282825; white-space: nowrap;">本月最高 428 kW · 09/12</div>
+<div class="ems-demand-peak" style="position: absolute; left: {{bars.maxLeft}}; top: {{bars.maxTop}}; transform: translateX(-50%); padding: 2px 8px; border-radius: 6px; background: #f8f8f7; border: 1px solid #d5d5ce; font-size: 12px; color: #282825; white-space: nowrap;">今日最高 {{bars.maxKw}} kW · {{bars.maxTime}}</div>
+<div style="position: absolute; left: {{bars.liveLeft}}; top: {{bars.liveTop}}; transform: translateX(-50%); font-size: 12px; color: #576a4a; white-space: nowrap;">進行中</div>
+
+<div aria-hidden="true" style="position: absolute; left: 50px; top: 270px; width: {{bars.width}}px; height: 8px; display: flex; border-radius: 2px; overflow: hidden;">
+<span style="display: block; width: 37.5%; background: #f7f3eb;"></span>
+<span style="display: block; width: 29.1667%; background: #f1e5cc;"></span>
+<span style="display: block; width: 25%; background: #e5d0a6;"></span>
+<span style="display: block; width: 8.3333%; background: #f1e5cc;"></span>
+</div>
+<sc-for list="{{bars.xTicks}}" as="t" hint-placeholder-count="9">
+<span style="position: absolute; top: 284px; left: {{t.left}}; transform: translateX(-50%); font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">{{t.label}}</span>
+</sc-for>
+
+<div onMouseMove="{{barMove}}" onMouseLeave="{{barLeave}}" style="position: absolute; left: 50px; top: 14px; width: {{bars.width}}px; height: 250px; cursor: crosshair;"></div>
+<sc-if value="{{hoverOn}}" hint-placeholder-val="{{false}}">
+<div role="status" style="position: absolute; left: {{hover.tipLeft}}; top: 24px; width: 176px; box-sizing: border-box; padding: 8px 10px; display: flex; flex-direction: column; gap: 3px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 8px; box-shadow: 0 16px 30px #0002; pointer-events: none;">
+<span style="font-size: 12px; color: #64645e;">{{hover.slot}}</span>
+<span style="display: flex; align-items: baseline; gap: 4px;"><span style="font-family: Newsreader, serif; font-size: 22px; line-height: 1; font-variant-numeric: lining-nums;">{{hover.kw}}</span><span style="font-size: 12px;">kW</span></span>
+<span style="font-size: 12px; color: #64645e;">達約 {{hover.pct}} % · {{hover.tou}}</span>
+</div>
+</sc-if>
+</div>
+</section>
+
+<section aria-labelledby="riskTitle" style="flex: 0 0 380px; box-sizing: border-box; height: 400px; padding: 20px; display: flex; flex-direction: column; gap: 14px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:400px;" class="ems-panel">
+<div style="display: flex; align-items: center; gap: 10px; height: 28px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="riskTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">超約風險</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">RISK</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; padding: 16px; background: #e5ebdc; border-radius: 9px;">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+<span style="display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 10px; border-radius: 999px; background: #f8f8f7; color: #426d4b; font-size: 12px; font-weight: 500; letter-spacing: 0.06em;">
+<svg data-icon-set="pencil-v2" viewBox="0 0 24 24" width="13" height="13" aria-hidden="true" style="fill: none; stroke: currentColor; stroke-width: 1.65px; stroke-linecap: round; stroke-linejoin: round;"><path d="M4.6 12.1Q6.9 14.3 9.1 16.4Q14 10.6 19.5 5.9"></path></svg>
+<span>風險低</span>
+</span>
+<span style="font-size: 12px; color: #64645e;">以本月最高需量評估</span>
+</div>
+<span style="font-size: 14px; color: #282825; line-height: 1.6;">本月最高 428 kW，距契約容量 500 kW 尚有 72 kW。</span>
+<div role="meter" aria-label="本月最高需量占契約容量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{k.pctNum}}" style="position: relative; height: 10px; border-radius: 999px; background: #f8f8f7;">
+<div style="width: {{k.pctCss}}; height: 10px; border-radius: 999px; background: #647956;"></div>
+</div>
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #64645e;"><span>0</span><span>達約 {{k.pct}} %</span><span>500 kW</span></div>
+</div>
+<div role="table" aria-label="需量計算規則" style="display: flex; flex-direction: column;" class="ems-data-table">
+<div role="row" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid #d5d5ce;"><span role="rowheader" style="font-size: 12px; color: #64645e;">需量計算</span><span role="cell" style="font-size: 13px;">15 分鐘平均，對齊 :00／:15／:30／:45</span></div>
+<div role="row" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 0; border-bottom: 1px solid #d5d5ce;"><span role="rowheader" style="font-size: 12px; color: #64645e;">計費需量</span><span role="cell" style="font-size: 13px;">當月最高 15 分鐘需量（本月 428 kW）</span></div>
+<div role="row" style="display: flex; flex-direction: column; gap: 2px; padding: 10px 0;"><span role="rowheader" style="font-size: 12px; color: #64645e;">量測點</span><span role="cell" style="font-size: 13px;">台電受電點 PCC · M-01（市電購電）</span></div>
+</div>
+</section>
+</div>
+
+<div style="display: flex; gap: 16px; height: 334px;" class="ems-panel-row">
+<section aria-labelledby="touTitle" style="flex: 1 1 0; min-width: 0; box-sizing: border-box; height: 334px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:334px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="touTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">台電三段式時間電價</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">TIME-OF-USE</span>
+</div>
+<span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border: 1px dashed #a5762e; border-radius: 6px; background: #f6ecd7; font-size: 12px; color: #8a5f21;">[PLACEHOLDER] 時段待依台電最新公告確認</span>
+</div>
+<div class="ems-tou-schedule" style="flex: 1 1 auto; display: grid; grid-template-columns: 132px minmax(0, 1fr); column-gap: 14px; row-gap: 10px; align-items: center; align-content: start;">
+<span></span>
+<div style="position: relative; height: 14px; font-size: 12px; color: #64645e; font-variant-numeric: tabular-nums;">
+<span style="position: absolute; left: 0;">00:00</span>
+<span style="position: absolute; left: 25%; transform: translateX(-50%);">06:00</span>
+<span style="position: absolute; left: 50%; transform: translateX(-50%);">12:00</span>
+<span style="position: absolute; left: 75%; transform: translateX(-50%);">18:00</span>
+<span style="position: absolute; right: 0;">24:00</span>
+</div>
+
+<span style="display: flex; flex-direction: column; gap: 1px;"><span style="font-size: 13px; color: #282825;">夏月 · 平日</span><span style="font-size: 12px; color: #576a4a;">今日適用</span></span>
+<div style="position: relative; height: 36px; border-radius: 6px; overflow: hidden; box-shadow: inset 0 0 0 1px #cca858;">
+<sc-for list="{{tou.summerWeekday}}" as="s" hint-placeholder-count="4">
+<span style="position: absolute; top: 0; bottom: 0; left: {{s.left}}; width: {{s.width}}; display: flex; align-items: center; padding-left: 8px; box-sizing: border-box; background: {{s.bg}}; border-right: 2px solid #f8f8f7; font-size: 12px; color: #282825; white-space: nowrap; overflow: hidden;">{{s.label}}</span>
+</sc-for>
+<span aria-hidden="true" style="position: absolute; top: 0; bottom: 0; left: {{tou.nowLeft}}; width: 2px; background: #282825;"></span>
+</div>
+
+<span style="font-size: 13px; color: #282825;">夏月 · 週六</span>
+<div style="position: relative; height: 36px; border-radius: 6px; overflow: hidden;">
+<sc-for list="{{tou.summerSat}}" as="s" hint-placeholder-count="2">
+<span style="position: absolute; top: 0; bottom: 0; left: {{s.left}}; width: {{s.width}}; display: flex; align-items: center; padding-left: 8px; box-sizing: border-box; background: {{s.bg}}; border-right: 2px solid #f8f8f7; font-size: 12px; color: #282825; white-space: nowrap; overflow: hidden;">{{s.label}}</span>
+</sc-for>
+</div>
+
+<span style="font-size: 13px; color: #282825;">非夏月 · 平日</span>
+<div style="position: relative; height: 36px; border-radius: 6px; overflow: hidden;">
+<sc-for list="{{tou.winterWeekday}}" as="s" hint-placeholder-count="4">
+<span style="position: absolute; top: 0; bottom: 0; left: {{s.left}}; width: {{s.width}}; display: flex; align-items: center; padding-left: 8px; box-sizing: border-box; background: {{s.bg}}; border-right: 2px solid #f8f8f7; font-size: 12px; color: #282825; white-space: nowrap; overflow: hidden;">{{s.label}}</span>
+</sc-for>
+</div>
+
+<span style="font-size: 13px; color: #282825;">週日及離峰日</span>
+<div style="position: relative; height: 36px; border-radius: 6px; overflow: hidden;">
+<sc-for list="{{tou.sunday}}" as="s" hint-placeholder-count="1">
+<span style="position: absolute; top: 0; bottom: 0; left: {{s.left}}; width: {{s.width}}; display: flex; align-items: center; padding-left: 8px; box-sizing: border-box; background: {{s.bg}}; font-size: 12px; color: #282825; white-space: nowrap; overflow: hidden;">{{s.label}}</span>
+</sc-for>
+</div>
+</div>
+<div style="display: flex; align-items: center; gap: 18px; font-size: 12px; color: #64645e;">
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 14px; height: 10px; border-radius: 2px; background: #f7f3eb; box-shadow: inset 0 0 0 1px #d5d5ce;"></span><span>離峰</span></span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 14px; height: 10px; border-radius: 2px; background: #f1e5cc;"></span><span>半尖峰</span></span>
+<span style="display: flex; align-items: center; gap: 6px;"><span aria-hidden="true" style="display: block; width: 14px; height: 10px; border-radius: 2px; background: #e5d0a6;"></span><span>尖峰</span></span>
+<span>夏月 5/16–10/15 · 不顯示任何費率</span>
+</div>
+</section>
+
+<section aria-labelledby="billTitle" style="flex: 0 0 440px; box-sizing: border-box; height: 334px; padding: 20px; display: flex; flex-direction: column; gap: 12px; background: #f8f8f7; border: 1px solid #d5d5ce; border-radius: 14px;;--ems-panel-min:334px;" class="ems-panel">
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 28px;">
+<div style="display: flex; align-items: center; gap: 10px;">
+<span aria-hidden="true" style="display: block; width: 3px; height: 18px; border-radius: 2px; background: #cca858;"></span>
+<h2 id="billTitle" style="margin: 0; font-family: Newsreader, Noto Serif TC, serif; font-weight: 400; font-size: 19px; letter-spacing: 0.02em; color: #282825;">本月電費估算</h2>
+<span style="font-family: Newsreader, serif; font-size: 12px; letter-spacing: 0.06em; color: #64645e;">BILL ESTIMATE</span>
+</div>
+<span style="display: inline-flex; align-items: center; height: 24px; padding: 0 10px; border: 1px solid #b4b4ac; border-radius: 999px; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; color: #64645e;">估算</span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px;">
+<span style="font-size: 12px; color: #64645e;">09/01–09/23 累計 · 估算 · 示意資料</span>
+<span style="display: flex; align-items: baseline; gap: 6px; color: #282825;">
+<span style="font-family: Newsreader, serif; font-size: 17px;">NT$</span>
+<span style="font-family: Newsreader, serif; font-weight: 300; font-size: 44px; line-height: 1; letter-spacing: -0.055em; font-variant-numeric: lining-nums;">{{bill.total}}</span>
+</span>
+</div>
+<div aria-hidden="true" style="display: flex; gap: 2px; height: 8px; border-radius: 999px; overflow: hidden;">
+<span style="display: block; width: {{bill.basicPct}}; background: #34383a;"></span>
+<span style="display: block; flex: 1 1 auto; background: #647956;"></span>
+</div>
+<div role="table" aria-label="電費估算明細" style="display: flex; flex-direction: column;" class="ems-data-table">
+<div role="row" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 38px; border-bottom: 1px solid #d5d5ce; font-size: 13px;"><span role="rowheader" style="display: flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #34383a;"></span>基本電費（需量）</span><span role="cell" style="font-variant-numeric: tabular-nums;">NT$ {{bill.basic}}</span></div>
+<div role="row" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 38px; border-bottom: 1px solid #d5d5ce; font-size: 13px;"><span role="rowheader" style="display: flex; align-items: center; gap: 8px;"><span aria-hidden="true" style="display: block; width: 10px; height: 10px; border-radius: 3px; background: #647956;"></span>流動電費（時間電價）</span><span role="cell" style="font-variant-numeric: tabular-nums;">NT$ {{bill.energy}}</span></div>
+<div role="row" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 38px; border-bottom: 1px solid #d5d5ce; font-size: 13px;"><span role="rowheader" style="color: #64645e;">功率因數調整（PF 0.92）</span><span role="cell" style="color: #64645e;">無附加費</span></div>
+<div role="row" style="display: flex; align-items: center; justify-content: space-between; gap: 10px; height: 38px; font-size: 13px;"><span role="rowheader" style="color: #64645e;">超約附加費</span><span role="cell" style="font-variant-numeric: tabular-nums; color: #64645e;">NT$ 0</span></div>
+</div>
+<span style="font-size: 12px; color: #64645e;">不顯示任何費率；實際金額以台電帳單為準。</span>
+</section>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"showSketch":{"editor":"boolean","default":true,"section":"質感"},"$preview":{"width":1440,"height":1080}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var props = this.props || {};
+    var st = this.state || {};
+    var self = this;
+    var showSketch = props.showSketch == null ? true : props.showSketch;
+    var r1 = function (v) { return Math.round(v * 10) / 10; };
+    var fmt = function (v, d) { return Number(v).toLocaleString('en-US', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); };
+    var pad2 = function (n) { return String(n).padStart(2, '0'); };
+
+    // Sample snapshot shared with 能源總覽 / 即時監控 (示意資料).
+    var snap = { contract: 500, monthPeak: 428, now: 186 };
+    // Today's 15-min grid-import demand, 00:00 .. 14:30 (last interval still running) - same series as 即時監控.
+    var TODAY = [234,233,231,230,229,228,227,227,226,225,225,224,224,223,223,223,224,224,225,226,227,229,231,234,207,212,221,233,246,259,271,283,294,302,309,312,306,302,298,296,293,290,288,287,286,284,283,283,282,281,279,287,292,297,300,294,246,212,186];
+    var PW = props.plotWidth || 694, PH = 250, YMAX = 600, SLOTS = 96, OX = 50, OY = 14;
+    var slot = PW / SLOTS, bw = Math.min(5, slot * 0.7), rad = Math.min(2, bw / 2);
+    var Y = function (v) { return PH - v / YMAX * PH; };
+    var barPath = function (i, v) {
+      var x = i * slot + (slot - bw) / 2, y = Y(v);
+      return 'M' + r1(x) + ' ' + PH + 'V' + r1(y + rad) + 'Q' + r1(x) + ' ' + r1(y) + ' ' + r1(x + rad) + ' ' + r1(y) +
+        'H' + r1(x + bw - rad) + 'Q' + r1(x + bw) + ' ' + r1(y) + ' ' + r1(x + bw) + ' ' + r1(y + rad) + 'V' + PH + 'Z';
+    };
+    var liveIdx = TODAY.length - 1;
+    var done = TODAY.slice(0, liveIdx);
+    var maxKw = Math.max.apply(null, done);
+    var maxIdx = done.indexOf(maxKw);
+    var slotLabel = function (i) { var m = i * 15; return pad2(Math.floor(m / 60)) + ':' + pad2(m % 60); };
+    var touOf = function (i) { var h = i / 4; return h < 9 ? '離峰' : (h < 16 ? '半尖峰' : (h < 22 ? '尖峰' : '半尖峰')); };
+
+    var hi = (st.hi === undefined || st.hi === null) ? null : st.hi;
+    var bars = {
+      width: PW,
+      done: done.map(function (v, i) { return barPath(i, v); }).join(' '),
+      live: barPath(liveIdx, TODAY[liveIdx]),
+      hot: hi === null ? '' : barPath(hi, TODAY[hi]),
+      grid: [200, 400, 600].map(function (v) { return 'M0 ' + r1(Y(v)) + 'H' + PW; }).join(' '),
+      yTicks: [0, 200, 400, 600].map(function (v) { return { label: String(v), top: r1(OY + Y(v)) + 'px' }; }),
+      xTicks: (PW < 450 ? [0, 24, 48, 72, 96] : [0, 12, 24, 36, 48, 60, 72, 84, 96]).map(function (i) { return { label: i === 96 ? '24:00' : slotLabel(i), left: r1(OX + i * slot) + 'px' }; }),
+      contractPath: 'M0 ' + r1(Y(snap.contract)) + 'H' + PW,
+      peakPath: 'M0 ' + r1(Y(snap.monthPeak)) + 'H' + PW,
+      contractTop: r1(OY + Y(snap.contract) - 28) + 'px',
+      peakTop: r1(OY + Y(snap.monthPeak) + 6) + 'px',
+      maxKw: fmt(maxKw), maxTime: slotLabel(maxIdx),
+      maxLeft: r1(OX + (maxIdx + 0.5) * slot) + 'px', maxTop: r1(OY + Y(maxKw) - 30) + 'px',
+      liveLeft: r1(OX + (liveIdx + 0.5) * slot) + 'px', liveTop: r1(OY + Y(TODAY[liveIdx]) - 20) + 'px'
+    };
+
+    var barMove = function (e) {
+      var box = e.currentTarget.getBoundingClientRect();
+      var i = Math.floor((e.clientX - box.left) / box.width * SLOTS);
+      var j = (i < 0 || i > liveIdx) ? null : i;
+      if (!self.state || self.state.hi !== j) { self.setState({ hi: j }); }
+    };
+    var barLeave = function () { self.setState({ hi: null }); };
+    var hover = { tipLeft: '0px', slot: '', kw: '', pct: '', tou: '' };
+    if (hi !== null) {
+      var cx = (hi + 0.5) * slot;
+      hover = {
+        tipLeft: r1(cx > PW - 200 ? OX + cx - 188 : OX + cx + 12) + 'px',
+        slot: slotLabel(hi) + '–' + slotLabel(hi + 1) + (hi === liveIdx ? '（進行中）' : ''),
+        kw: fmt(TODAY[hi]), pct: fmt(TODAY[hi] / snap.contract * 100, 1), tou: touOf(hi)
+      };
+    }
+
+    // Time-of-use ribbons (sample windows, flagged [PLACEHOLDER] on screen until confirmed with Taipower).
+    var TINT = { '離峰': '#f7f3eb', '半尖峰': '#f1e5cc', '尖峰': '#e5d0a6' };
+    var ribbon = function (spans) {
+      return spans.map(function (s) {
+        return { label: s[2] + ' ' + pad2(s[0]) + '–' + pad2(s[1]), left: r1(s[0] / 24 * 100) + '%', width: r1((s[1] - s[0]) / 24 * 100) + '%', bg: TINT[s[2]] };
+      });
+    };
+    var tou = {
+      summerWeekday: ribbon([[0, 9, '離峰'], [9, 16, '半尖峰'], [16, 22, '尖峰'], [22, 24, '半尖峰']]),
+      summerSat: ribbon([[0, 9, '離峰'], [9, 24, '半尖峰']]),
+      winterWeekday: ribbon([[0, 6, '離峰'], [6, 11, '半尖峰'], [11, 14, '離峰'], [14, 24, '半尖峰']]),
+      sunday: ribbon([[0, 24, '離峰']]),
+      nowLeft: r1((14 + 32 / 60) / 24 * 100) + '%'
+    };
+
+    var pct = snap.monthPeak / snap.contract * 100;
+    var k = {
+      contract: fmt(snap.contract), peak: fmt(snap.monthPeak), now: fmt(snap.now),
+      pct: fmt(pct, 1), pctNum: r1(pct), pctCss: r1(pct) + '%', headroom: fmt(snap.contract - snap.monthPeak)
+    };
+    // Bill estimate (估算): amounts only, never a rate.
+    var basic = 118000, energy = 554000;
+    var bill = { basic: fmt(basic), energy: fmt(energy), total: fmt(basic + energy), basicPct: r1(basic / (basic + energy) * 100) + '%' };
+
+    return {
+      showSketch: showSketch, k: k, bars: bars, tou: tou, bill: bill,
+      hoverOn: hi !== null, hover: hover, barMove: barMove, barLeave: barLeave
+    };
+  }
+}
+</script>
+</body>
+</html>
+

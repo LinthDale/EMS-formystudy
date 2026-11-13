@@ -1,0 +1,40 @@
+{
+  "cases": [
+    {
+      "kind": "ack-before-commit",
+      "ack": true,
+      "observed": 1,
+      "committed": 0,
+      "pending": 0,
+      "counterexample_reproduced": true,
+      "desired_delivery_invariant_met": false
+    },
+    {
+      "kind": "sender-confirmation-suppressed",
+      "actual_first_puback": true,
+      "first_drain_sent": 0,
+      "pending_before_retry": 1,
+      "first_committed": 1,
+      "ack": true,
+      "observed": 2,
+      "committed": 2,
+      "pending": 0,
+      "counterexample_reproduced": true,
+      "desired_delivery_invariant_met": false
+    },
+    {
+      "kind": "duplicate-delivery",
+      "ack": true,
+      "observed": 2,
+      "committed": 2,
+      "pending": 0,
+      "counterexample_reproduced": true,
+      "desired_delivery_invariant_met": false
+    }
+  ],
+  "receiver_errors": [],
+  "reproduction_passed": true,
+  "system_acceptance_passed": false,
+  "scope": "Real isolated MQTT broker + production Publisher/Outbox/drain + controlled SQLite sink; not production receiver",
+  "fault_injection": "DB unavailability is controlled no-commit; local confirmation is suppressed after actual PUBACK; no v2 ACK exists"
+}

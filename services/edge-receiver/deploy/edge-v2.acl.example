@@ -1,0 +1,12 @@
+# Certificate CN must equal the gateway_id. Replace qa-edge with commissioned ID.
+user qa-edge
+topic write ems/v2/gateways/qa-edge/samples
+topic write ems/v2/gateways/qa-edge/session/request
+topic read ems/v2/gateways/qa-edge/acks
+topic read ems/v2/gateways/qa-edge/session/response
+
+user edge-receiver
+topic read ems/v2/gateways/+/samples
+topic read ems/v2/gateways/+/session/request
+topic write ems/v2/gateways/+/acks
+topic write ems/v2/gateways/+/session/response

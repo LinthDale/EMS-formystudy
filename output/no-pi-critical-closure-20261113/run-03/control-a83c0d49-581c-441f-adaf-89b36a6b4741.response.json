@@ -1,0 +1,8 @@
+{
+  "passed": true,
+  "request_id": "a83c0d49-581c-441f-adaf-89b36a6b4741",
+  "op": "db_data_full",
+  "actual_enospc": true,
+  "limit_bytes": 16777216,
+  "receipt_relation": "pg_tblspc/18562/PG_15_202209061/16384/18563"
+}

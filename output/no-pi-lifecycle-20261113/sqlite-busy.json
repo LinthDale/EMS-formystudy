@@ -1,0 +1,24 @@
+{
+  "passed": true,
+  "sqlite_error": "SQLITE_BUSY",
+  "elapsed_seconds": 5.005668112000421,
+  "old_preserved": true,
+  "next_sequence": 2,
+  "retirement_after_recovery": {
+    "policy": "drop_oldest",
+    "audit_evicted_total": 1,
+    "unconfirmed_evicted_total": 1,
+    "committed_audit_evicted_total": 0,
+    "quarantine_evicted_total": 0,
+    "last": {
+      "count": 1,
+      "unconfirmed_count": 1,
+      "first_seq": 1,
+      "last_seq": 1,
+      "sample_id": "70bb277c-0b95-4d76-a0e9-5f06432547c0",
+      "payload_hash": "eecd164acda3ab6080e9f5e805551fe2d376e6298ec6e312b9f68845d072d374",
+      "state": "pending",
+      "sampled_at_us": 1794474000000000
+    }
+  }
+}

@@ -1,0 +1,216 @@
+[
+  {
+    "strict": true,
+    "read": 1,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 2,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 3,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 4,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 5,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 6,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 7,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 8,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 9,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 10,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 11,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 12,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 13,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 14,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 15,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 16,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 17,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": true,
+    "read": 18,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 19,
+    "ok": true
+  },
+  {
+    "strict": true,
+    "read": 20,
+    "ok": false,
+    "error": "Modbus read failed"
+  },
+  {
+    "strict": false,
+    "read": 1,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 2,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 3,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 4,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 5,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 6,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 7,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 8,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 9,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 10,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 11,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 12,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 13,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 14,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 15,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 16,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 17,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 18,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 19,
+    "ok": true
+  },
+  {
+    "strict": false,
+    "read": 20,
+    "ok": true
+  }
+]

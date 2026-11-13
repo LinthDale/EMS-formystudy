@@ -1,0 +1,10 @@
+1794557156: mosquitto version 2.1.2 starting
+1794557156: Config loaded from /qa.conf.
+1794557156: Bridge support available.
+1794557156: Persistence support available.
+1794557156: TLS support available.
+1794557156: TLS-PSK support available.
+1794557156: Websockets support available.
+1794557156: Opening ipv4 listen socket on port 1883.
+1794557156: mosquitto version 2.1.2 running
+1794557156: Info: running mosquitto as user id: 1000.

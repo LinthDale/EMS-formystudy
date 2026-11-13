@@ -1,0 +1,22 @@
+{
+  "mode": "demo",
+  "device_id": "delta-systemd-qa",
+  "poll_interval": 1,
+  "queue_limit": 10000,
+  "batch_size": 100,
+  "outbox_path": "/home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/state/outbox.db",
+  "modbus": {
+    "transport": "tcp",
+    "host": "127.0.0.1",
+    "port": 48231,
+    "unit_id": 1,
+    "address_base": 1,
+    "timeout": 1
+  },
+  "mqtt": {
+    "host": "127.0.0.1",
+    "port": 44620,
+    "client_id": "systemd-qa-sender",
+    "tls": false
+  }
+}

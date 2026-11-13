@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 44,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 44,
+  "observed_tests": 44,
+  "evidence_checks": {
+    "crash-after_retire": true,
+    "crash-before_commit": true,
+    "crash-after_commit": true,
+    "sqlite-busy": true,
+    "sqlite-readonly": true,
+    "online-backup": true,
+    "tls-server-untrusted-ca": true,
+    "tls-server-wrong-host": true,
+    "tls-server-expired": true
+  }
+}

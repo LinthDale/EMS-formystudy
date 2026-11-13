@@ -1,0 +1,25 @@
+{
+  "raw_duplicate_slot": 5108,
+  "raw_missing_slot": 5109,
+  "events": [
+    {
+      "kind": "attempt",
+      "utc": "2026-11-12T13:55:33.646420+00:00",
+      "monotonic": 2569856.218,
+      "slot": 5108,
+      "start_delay": 0.0
+    },
+    {
+      "kind": "attempt",
+      "utc": "2026-11-12T13:55:38.631664+00:00",
+      "monotonic": 2569861.203,
+      "slot": 5108,
+      "start_delay": 4.985000000335276
+    }
+  ],
+  "second_elapsed": 25544.985000000335,
+  "nominal_next_slot_elapsed": 25545,
+  "early_seconds": 0.014999999664723873,
+  "cause": "ObservedClock floors elapsed // interval; start 15ms before next boundary is labelled previous slot; source timestamps and DB identity remain distinct",
+  "original_not_modified": true
+}

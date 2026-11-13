@@ -1,0 +1,147 @@
+{
+  "passed": false,
+  "suite": "wal-security",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "FileExistsError",
+  "cleanup": [
+    {
+      "name": "prepare-foreign-bundle",
+      "container": "b4e3e8896e37055f3c590c6e9313ea559154d6895677aea6785df3d5302cb530",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "foreign-primary",
+      "container": "e118d100ac4dc8d462738ec171adb2ad5ac81b39a25bfc75fc108d83fbda1297",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "bad-wal-database",
+      "container": "7e77592288a974c71f067072628963c9672a12c346d2c66608396e9f1cf87d0b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-wal",
+      "container": "87e27a41d201e2955690d515ac9c239625221d1b0ee0d4cffaa7f65ce9121d33",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-bad-backup",
+      "container": "447f13b049ac83efbe718482854b60870fb00fcfdfaaa83865559601d07e970b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "good-restore-database",
+      "container": "6d3a8f0dcc1c0b05f45da24c9be598e3b948d87022686f99112e9506759d250b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "prepare-good-restore",
+      "container": "3a2778f0b9db54bcfebb44f9d05fcf341ee9a42f23084e336bb3f98aeea6202f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "basebackup-client",
+      "container": "9b5f66e775a623d96db498531086ffc78de2b8b6f31a3b9bef59c97312f7a3fb",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-wrong_role",
+      "container": "eceb9f716c3fe5c155963f5266e282181a5135a7a275cdb7c91bd34274350fe1",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "unsafe-peer-plaintext",
+      "container": "c3cbe20829dd166cb70c417b59bc1c9203a5d0c321985f0e3aeca310b5e2fa79",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-plaintext",
+      "container": "ac0e00c25d29c12b5c27d37c99893f343b107fac2a24b1441f9dce23284e72bf",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_user",
+      "container": "8c10f8dabcba7efbf2ce5c5a2de6fab33a90d6937f91424b709398c6baa32baf",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-untrusted_client",
+      "container": "9690ff579ab9276257d77be0e63db0aa69f0fd3bb279fb07b64f2784d3225bea",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-missing_client",
+      "container": "1585a9944f172a7cae3d37ea75be21ae719bba5f67b63c3ff852bb6977e38f23",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-expired",
+      "container": "03dc8187d9b277754067e2f598f4be6ad2ec4b96f758312769c9492b45907569",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_host",
+      "container": "c53f12b82e9d498757fe403b2224e0c894f6add3338ca5385198137ea29dc58f",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-probe-wrong_ca",
+      "container": "ef716870d89e12c192a6ca7960106400df247a75d9492ab5db8d2723f9cbabab",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "worker",
+      "container": "bcb3fe323aab8cada2c2fc1c2fcc9f13fd28e4037f1ee475827850c8c423255a",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "32c0dcd3ffd7d3d69c597359e6ce8cccbba949da197fb7350f1c87598d02d435",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "5948878c9c07a054bf10def0d95e40a1d7e953f06854179902272fb59045193c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "647ab253ff1cf8b722a1fa90e000fb452e4a5a4b5ddd0e983bc68794fc05b1dd",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "b5b6f71440fb24e72056b7ad4aab0a1c09249f31917b38435b1dc9136747e76c",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "5c5d051aaedcb5d4b4869250f9c2ee5958dcfa70c2b2ab54b8358da9ce76eff2",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

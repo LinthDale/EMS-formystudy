@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "request_id": "0b6f697d-2ce0-45ee-9574-9956c43e6e71",
+  "op": "wal_recover",
+  "container_id": "73ca1edfe868d8c03f01823e672b8c54d15c3d359178075e8a57e710d52bfe84",
+  "target_reached": true,
+  "promoted": true,
+  "port": 5433,
+  "backup_verified": true
+}

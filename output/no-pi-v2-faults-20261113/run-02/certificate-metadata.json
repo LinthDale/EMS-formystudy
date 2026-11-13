@@ -1,0 +1,11 @@
+{
+  "ca.crt": "sha256 Fingerprint=48:E1:CE:A8:A1:E6:79:45:4E:01:0B:93:6E:CE:0A:A0:81:A9:C8:92:D4:39:34:7D:A3:0F:79:88:24:66:1B:95\nsubject=CN = EMS-QA-ca\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "wrong-host.crt": "sha256 Fingerprint=D7:EC:2F:92:8B:6C:BA:0A:B5:0C:AB:63:77:1F:15:12:C1:D6:01:AD:3C:69:F2:62:D3:20:9A:96:04:7B:AE:E0\nsubject=CN = wrong-host.invalid\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "expired.crt": "sha256 Fingerprint=A7:FB:A3:9D:81:87:3F:CA:40:BC:3A:E7:17:F7:3E:B3:AE:B2:C7:21:FC:7D:6E:FD:B6:71:E3:7C:ED:34:80:B7\nsubject=CN = localhost\nissuer=CN = EMS-QA-ca\nnotBefore=Jan  1 00:00:00 2020 GMT\nnotAfter=Jan  2 00:00:00 2020 GMT",
+  "client.crt": "sha256 Fingerprint=6B:A0:E8:20:5F:78:51:17:CC:85:94:3A:24:AC:29:3F:31:C5:20:FA:D0:37:31:23:63:D8:7C:38:D1:F5:5C:16\nsubject=CN = qa-edge\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "rogue-client.crt": "sha256 Fingerprint=C1:BD:AB:55:7A:BA:EB:E4:3B:CB:F7:CB:74:40:FE:82:AA:E7:B1:94:40:28:86:BF:9F:23:E1:C4:48:72:E1:A3\nsubject=CN = qa-edge\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "qa-observer.crt": "sha256 Fingerprint=E0:B1:3F:88:88:39:FF:99:70:DA:80:68:34:30:65:B2:2A:8D:D7:CE:12:F3:2D:5B:79:9B:C8:02:EE:B0:B6:5F\nsubject=CN = qa-observer\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "rogue-ca.crt": "sha256 Fingerprint=0B:D4:E2:1A:50:58:1F:4B:A1:C6:1C:4C:47:0E:4E:6E:11:07:CB:75:63:23:F1:33:8D:98:99:2E:3D:C6:F3:45\nsubject=CN = EMS-QA-rogue-ca\nissuer=CN = EMS-QA-rogue-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "edge-receiver.crt": "sha256 Fingerprint=FB:0F:36:4C:F0:22:20:DF:67:41:84:BE:69:9D:C6:97:62:78:BC:CF:9C:2E:3C:A9:D8:53:77:84:8A:3C:98:42\nsubject=CN = edge-receiver\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT",
+  "server.crt": "sha256 Fingerprint=EF:B3:77:AE:C5:3C:E9:50:8C:0D:5C:3C:F3:97:F9:9B:58:94:2E:F5:9D:46:8B:A9:31:47:74:D2:9F:08:7D:94\nsubject=CN = localhost\nissuer=CN = EMS-QA-ca\nnotBefore=Nov 13 01:25:45 2026 GMT\nnotAfter=Nov 15 01:25:45 2026 GMT"
+}

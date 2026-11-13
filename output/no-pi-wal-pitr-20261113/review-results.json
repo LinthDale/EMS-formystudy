@@ -1,0 +1,29 @@
+{
+  "architect": {
+    "verdict": "approve",
+    "adr": "ADR-049",
+    "conditions": [
+      "fixed postcommit LSN",
+      "restorepoint independently flushed before primary loss",
+      "missing WAL fails target",
+      "dedicated TLS replication principal and failure-domain commissioning"
+    ]
+  },
+  "python": {
+    "verdict": "approve",
+    "last_reviewed_run": "run-final",
+    "production_unchanged_after_review": true
+  },
+  "security": {
+    "verdict": "approve",
+    "high_fixed": "postworker command recorder symlink overwrite",
+    "last_reviewed_run": "run-final"
+  },
+  "code": {
+    "verdict": "approve",
+    "last_reviewed_run": "run-postcommit",
+    "critical": 0,
+    "high": 0
+  },
+  "scope": "private source and same-host owned-resource tests; field deployment not performed"
+}

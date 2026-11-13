@@ -1,0 +1,74 @@
+[
+  {
+    "TimeCreated": "2026-11-12T22:29:14.3453652+08:00",
+    "Id": 1074,
+    "ProviderName": "User32",
+    "Message": "處理程序 C:\\WINDOWS\\uus\\AMD64\\MoUsoCoreWorker.exe (DESKTOP-G19V1B5)已代表使用者 NT AUTHORITY\\SYSTEM，啟動電腦 DESKTOP-G19V1B5 的 重新啟動，原因如下: 作業系統: Service Pack (計劃之中)\r\n 理由代碼: 0x80020010\r\n 關機類型: 重新啟動\r\n 註解: "
+  },
+  {
+    "TimeCreated": "2026-11-12T22:30:35.389557+08:00",
+    "Id": 6006,
+    "ProviderName": "EventLog",
+    "Message": "事件記錄檔服務已中止。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:30:38.7070957+08:00",
+    "Id": 13,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "作業系統已經在系統時間 ‎2026‎-‎11‎-‎12T14:30:38.707094800Z 關閉。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:30:53.1753005+08:00",
+    "Id": 12,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "作業系統已經在系統時間 ‎2026‎-‎11‎-‎12T14:30:52.500000000Z 啟動。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:03.5496674+08:00",
+    "Id": 12,
+    "ProviderName": "Microsoft-Windows-Wininit",
+    "Message": "LSASS.exe 已以受保護的處理程序方式啟動，層級為: 4。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:10.838635+08:00",
+    "Id": 6005,
+    "ProviderName": "EventLog",
+    "Message": "事件記錄檔服務已啟動。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:26.3930913+08:00",
+    "Id": 1074,
+    "ProviderName": "User32",
+    "Message": "處理程序 C:\\WINDOWS\\servicing\\TrustedInstaller.exe (DESKTOP-G19V1B5)已代表使用者 NT AUTHORITY\\SYSTEM，啟動電腦 DESKTOP-G19V1B5 的 重新啟動，原因如下: 作業系統: 升級 (計劃之中)\r\n 理由代碼: 0x80020003\r\n 關機類型: 重新啟動\r\n 註解: "
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:27.202596+08:00",
+    "Id": 6006,
+    "ProviderName": "EventLog",
+    "Message": "事件記錄檔服務已中止。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:33.5085187+08:00",
+    "Id": 13,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "作業系統已經在系統時間 ‎2026‎-‎11‎-‎12T14:31:33.508517800Z 關閉。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:31:51.0646145+08:00",
+    "Id": 12,
+    "ProviderName": "Microsoft-Windows-Kernel-General",
+    "Message": "作業系統已經在系統時間 ‎2026‎-‎11‎-‎12T14:31:50.500000000Z 啟動。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:32:01.5492307+08:00",
+    "Id": 12,
+    "ProviderName": "Microsoft-Windows-Wininit",
+    "Message": "LSASS.exe 已以受保護的處理程序方式啟動，層級為: 4。"
+  },
+  {
+    "TimeCreated": "2026-11-12T22:32:02.265957+08:00",
+    "Id": 6005,
+    "ProviderName": "EventLog",
+    "Message": "事件記錄檔服務已啟動。"
+  }
+]

@@ -1,0 +1,17 @@
+52a3815f3536 ems-bff
+285ea656c9c2 ems-delta-simulator
+d36bf7e3b0f0 ems-simulator
+3923ff011a08 ems-kc-modbus-sim
+57570d740f61 ems-kc-mqtt-sim
+c83ca771f3ea ems-delta-edge
+4545eced008c ems-device-service
+b816d1aaef60 ems-device-service-mcp
+60f107e6b2f8 ems-kc-mcp-server
+201e02763932 ems-kc-gateway
+985cf9a88504 ems-kc-ingest
+3d44ba72abea ems-gateway
+09ff6c584b49 ems-grafana
+05d1d8783417 ems-ingest
+26397ce0c78e ems-query
+b4d14d7ada3c ems-timescaledb
+bc96fbd67fbc ems-mosquitto

@@ -1,0 +1,366 @@
+[
+  {
+    "sampled_ns": 1794456705258947000,
+    "voltage": 230.0,
+    "current": 13.11,
+    "power_kw": 9.05,
+    "energy_kwh": 1234.56
+  },
+  {
+    "sampled_ns": 1794456710276258000,
+    "voltage": 230.0,
+    "current": 13.33,
+    "power_kw": 9.198,
+    "energy_kwh": 1234.57
+  },
+  {
+    "sampled_ns": 1794456715268611000,
+    "voltage": 230.0,
+    "current": 13.52,
+    "power_kw": 9.331,
+    "energy_kwh": 1234.58
+  },
+  {
+    "sampled_ns": 1794456720278900000,
+    "voltage": 230.0,
+    "current": 13.68,
+    "power_kw": 9.444,
+    "energy_kwh": 1234.6
+  },
+  {
+    "sampled_ns": 1794456725265978000,
+    "voltage": 230.0,
+    "current": 13.81,
+    "power_kw": 9.53,
+    "energy_kwh": 1234.61
+  },
+  {
+    "sampled_ns": 1794456730268548000,
+    "voltage": 230.0,
+    "current": 13.88,
+    "power_kw": 9.583,
+    "energy_kwh": 1234.62
+  },
+  {
+    "sampled_ns": 1794456735266560000,
+    "voltage": 230.0,
+    "current": 13.91,
+    "power_kw": 9.599,
+    "energy_kwh": 1234.64
+  },
+  {
+    "sampled_ns": 1794456740263623000,
+    "voltage": 230.0,
+    "current": 13.88,
+    "power_kw": 9.579,
+    "energy_kwh": 1234.65
+  },
+  {
+    "sampled_ns": 1794456745280844000,
+    "voltage": 230.0,
+    "current": 13.8,
+    "power_kw": 9.522,
+    "energy_kwh": 1234.66
+  },
+  {
+    "sampled_ns": 1794456750281251000,
+    "voltage": 230.0,
+    "current": 13.67,
+    "power_kw": 9.432,
+    "energy_kwh": 1234.68
+  },
+  {
+    "sampled_ns": 1794456755273194000,
+    "voltage": 230.0,
+    "current": 13.5,
+    "power_kw": 9.316,
+    "energy_kwh": 1234.69
+  },
+  {
+    "sampled_ns": 1794456760264363000,
+    "voltage": 230.0,
+    "current": 13.3,
+    "power_kw": 9.181,
+    "energy_kwh": 1234.7
+  },
+  {
+    "sampled_ns": 1794456765272184000,
+    "voltage": 230.0,
+    "current": 13.09,
+    "power_kw": 9.034,
+    "energy_kwh": 1234.72
+  },
+  {
+    "sampled_ns": 1794456770266682000,
+    "voltage": 230.0,
+    "current": 12.870000000000001,
+    "power_kw": 8.885,
+    "energy_kwh": 1234.73
+  },
+  {
+    "sampled_ns": 1794456775274432000,
+    "voltage": 230.0,
+    "current": 12.66,
+    "power_kw": 8.741,
+    "energy_kwh": 1234.74
+  },
+  {
+    "sampled_ns": 1794456780269399000,
+    "voltage": 230.0,
+    "current": 12.48,
+    "power_kw": 8.616,
+    "energy_kwh": 1234.75
+  },
+  {
+    "sampled_ns": 1794456785261676000,
+    "voltage": 230.0,
+    "current": 12.33,
+    "power_kw": 8.514,
+    "energy_kwh": 1234.76
+  },
+  {
+    "sampled_ns": 1794456790272235000,
+    "voltage": 230.0,
+    "current": 12.23,
+    "power_kw": 8.442,
+    "energy_kwh": 1234.78
+  },
+  {
+    "sampled_ns": 1794456795262305000,
+    "voltage": 230.0,
+    "current": 12.18,
+    "power_kw": 8.404,
+    "energy_kwh": 1234.79
+  },
+  {
+    "sampled_ns": 1794456800270697000,
+    "voltage": 230.0,
+    "current": 12.18,
+    "power_kw": 8.404,
+    "energy_kwh": 1234.8
+  },
+  {
+    "sampled_ns": 1794456805265623000,
+    "voltage": 230.0,
+    "current": 12.23,
+    "power_kw": 8.441,
+    "energy_kwh": 1234.81
+  },
+  {
+    "sampled_ns": 1794456810268713000,
+    "voltage": 230.0,
+    "current": 12.33,
+    "power_kw": 8.512,
+    "energy_kwh": 1234.82
+  },
+  {
+    "sampled_ns": 1794456815281244000,
+    "voltage": 230.0,
+    "current": 12.48,
+    "power_kw": 8.614,
+    "energy_kwh": 1234.84
+  },
+  {
+    "sampled_ns": 1794456820269665000,
+    "voltage": 230.0,
+    "current": 12.66,
+    "power_kw": 8.739,
+    "energy_kwh": 1234.85
+  },
+  {
+    "sampled_ns": 1794456825275743000,
+    "voltage": 230.0,
+    "current": 12.870000000000001,
+    "power_kw": 8.881,
+    "energy_kwh": 1234.86
+  },
+  {
+    "sampled_ns": 1794456830271391000,
+    "voltage": 230.0,
+    "current": 13.08,
+    "power_kw": 9.03,
+    "energy_kwh": 1234.87
+  },
+  {
+    "sampled_ns": 1794456835259765000,
+    "voltage": 230.0,
+    "current": 13.3,
+    "power_kw": 9.178,
+    "energy_kwh": 1234.88
+  },
+  {
+    "sampled_ns": 1794456840266068000,
+    "voltage": 230.0,
+    "current": 13.49,
+    "power_kw": 9.314,
+    "energy_kwh": 1234.9
+  },
+  {
+    "sampled_ns": 1794456845283067000,
+    "voltage": 230.0,
+    "current": 13.66,
+    "power_kw": 9.431,
+    "energy_kwh": 1234.91
+  },
+  {
+    "sampled_ns": 1794456850279013000,
+    "voltage": 230.0,
+    "current": 13.790000000000001,
+    "power_kw": 9.521,
+    "energy_kwh": 1234.92
+  },
+  {
+    "sampled_ns": 1794456855270937000,
+    "voltage": 230.0,
+    "current": 13.88,
+    "power_kw": 9.578,
+    "energy_kwh": 1234.94
+  },
+  {
+    "sampled_ns": 1794456860261583000,
+    "voltage": 230.0,
+    "current": 13.91,
+    "power_kw": 9.599,
+    "energy_kwh": 1234.95
+  },
+  {
+    "sampled_ns": 1794456865266454000,
+    "voltage": 230.0,
+    "current": 13.89,
+    "power_kw": 9.584,
+    "energy_kwh": 1234.96
+  },
+  {
+    "sampled_ns": 1794456870272183000,
+    "voltage": 230.0,
+    "current": 13.81,
+    "power_kw": 9.532,
+    "energy_kwh": 1234.98
+  },
+  {
+    "sampled_ns": 1794456875257376000,
+    "voltage": 230.0,
+    "current": 13.69,
+    "power_kw": 9.446,
+    "energy_kwh": 1234.99
+  },
+  {
+    "sampled_ns": 1794456880260525000,
+    "voltage": 230.0,
+    "current": 13.52,
+    "power_kw": 9.333,
+    "energy_kwh": 1235.0
+  },
+  {
+    "sampled_ns": 1794456885266925000,
+    "voltage": 230.0,
+    "current": 13.33,
+    "power_kw": 9.199,
+    "energy_kwh": 1235.02
+  },
+  {
+    "sampled_ns": 1794456890276499000,
+    "voltage": 230.0,
+    "current": 13.11,
+    "power_kw": 9.052,
+    "energy_kwh": 1235.03
+  },
+  {
+    "sampled_ns": 1794456895269818000,
+    "voltage": 230.0,
+    "current": 12.9,
+    "power_kw": 8.904,
+    "energy_kwh": 1235.04
+  },
+  {
+    "sampled_ns": 1794456900285126000,
+    "voltage": 230.0,
+    "current": 12.69,
+    "power_kw": 8.76,
+    "energy_kwh": 1235.05
+  },
+  {
+    "sampled_ns": 1794456905269862000,
+    "voltage": 230.0,
+    "current": 12.51,
+    "power_kw": 8.632,
+    "energy_kwh": 1235.07
+  },
+  {
+    "sampled_ns": 1794456910268551000,
+    "voltage": 230.0,
+    "current": 12.35,
+    "power_kw": 8.526,
+    "energy_kwh": 1235.08
+  },
+  {
+    "sampled_ns": 1794456915263383000,
+    "voltage": 230.0,
+    "current": 12.24,
+    "power_kw": 8.449,
+    "energy_kwh": 1235.09
+  },
+  {
+    "sampled_ns": 1794456920280870000,
+    "voltage": 230.0,
+    "current": 12.18,
+    "power_kw": 8.407,
+    "energy_kwh": 1235.1
+  },
+  {
+    "sampled_ns": 1794456925269018000,
+    "voltage": 230.0,
+    "current": 12.17,
+    "power_kw": 8.402,
+    "energy_kwh": 1235.11
+  },
+  {
+    "sampled_ns": 1794456930273439000,
+    "voltage": 230.0,
+    "current": 12.22,
+    "power_kw": 8.434,
+    "energy_kwh": 1235.12
+  },
+  {
+    "sampled_ns": 1794456975277405000,
+    "voltage": 230.0,
+    "current": 13.780000000000001,
+    "power_kw": 9.51,
+    "energy_kwh": 1235.24
+  },
+  {
+    "sampled_ns": 1794456980270045000,
+    "voltage": 230.0,
+    "current": 13.870000000000001,
+    "power_kw": 9.572,
+    "energy_kwh": 1235.25
+  },
+  {
+    "sampled_ns": 1794456985270488000,
+    "voltage": 230.0,
+    "current": 13.91,
+    "power_kw": 9.599,
+    "energy_kwh": 1235.26
+  },
+  {
+    "sampled_ns": 1794456990263844000,
+    "voltage": 230.0,
+    "current": 13.89,
+    "power_kw": 9.588,
+    "energy_kwh": 1235.28
+  },
+  {
+    "sampled_ns": 1794456995278162000,
+    "voltage": 230.0,
+    "current": 13.82,
+    "power_kw": 9.54,
+    "energy_kwh": 1235.29
+  },
+  {
+    "sampled_ns": 1794457000272133000,
+    "voltage": 230.0,
+    "current": 13.71,
+    "power_kw": 9.459,
+    "energy_kwh": 1235.3
+  }
+]

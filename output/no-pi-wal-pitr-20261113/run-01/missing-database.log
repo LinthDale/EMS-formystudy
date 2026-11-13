@@ -1,0 +1,26 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+2026-11-13 05:43:46.910 UTC [1] LOG:  starting PostgreSQL 15.17 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+2026-11-13 05:43:46.910 UTC [1] LOG:  listening on IPv4 address "0.0.0.0", port 5434
+2026-11-13 05:43:46.920 UTC [1] LOG:  listening on IPv6 address "::", port 5434
+2026-11-13 05:43:46.931 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5434"
+2026-11-13 05:43:46.935 UTC [30] LOG:  database system was interrupted; last known up at 2026-11-13 05:43:43 UTC
+2026-11-13 05:43:46.979 UTC [36] FATAL:  the database system is starting up
+2026-11-13 05:43:47.134 UTC [43] FATAL:  the database system is starting up
+cp: can't stat '/archive/00000002.history.partial': Permission denied
+2026-11-13 05:43:47.193 UTC [30] LOG:  starting point-in-time recovery to "ems_ack_boundary"
+2026-11-13 05:43:47.193 UTC [30] LOG:  starting backup recovery with redo LSN 0/2000028, checkpoint LSN 0/2000060, on timeline ID 1
+cp: can't stat '/archive/000000010000000000000002.partial': Permission denied
+2026-11-13 05:43:47.199 UTC [30] LOG:  redo starts at 0/2000028
+cp: can't stat '/archive/000000010000000000000003.partial': Permission denied
+2026-11-13 05:43:47.201 UTC [30] LOG:  completed backup recovery with redo LSN 0/2000028 and end LSN 0/2000100
+2026-11-13 05:43:47.201 UTC [30] LOG:  consistent recovery state reached at 0/2000100
+2026-11-13 05:43:47.201 UTC [1] LOG:  database system is ready to accept read-only connections
+cp: can't stat '/archive/000000010000000000000003.partial': Permission denied
+2026-11-13 05:43:47.202 UTC [30] LOG:  redo done at 0/2000100 system usage: CPU: user: 0.00 s, system: 0.00 s, elapsed: 0.00 s
+2026-11-13 05:43:47.202 UTC [30] FATAL:  recovery ended before configured recovery target was reached
+2026-11-13 05:43:47.204 UTC [1] LOG:  startup process (PID 30) exited with exit code 1
+2026-11-13 05:43:47.204 UTC [1] LOG:  terminating any other active server processes
+2026-11-13 05:43:47.204 UTC [1] LOG:  shutting down due to startup process failure
+2026-11-13 05:43:47.204 UTC [1] LOG:  database system is shut down

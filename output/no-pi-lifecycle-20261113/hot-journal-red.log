@@ -1,0 +1,149 @@
+FF.                                                                      [100%]
+=================================== FAILURES ===================================
+_ test_sigkill_during_rotation_recovers_exact_transaction_boundary[after_retire] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_sigkill_during_rotation_r0')
+stage = 'after_retire'
+
+    @pytest.mark.parametrize('stage',['after_retire','before_commit','after_commit'])
+    def test_sigkill_during_rotation_recovers_exact_transaction_boundary(tmp_path,stage):
+        box=box_at(tmp_path)
+        old=box.enqueue(NOW,VALUES)
+        before=hashlib.sha256(box.path.read_bytes()).hexdigest()
+        marker=tmp_path/'ready.json'
+        process=subprocess.Popen([sys.executable,str(Path(__file__).resolve()),'--child',str(box.path),stage,str(marker),before],
+                                 stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        try:
+            deadline=time.monotonic()+8
+            while not marker.exists() and process.poll() is None and time.monotonic()<deadline:
+                time.sleep(.01)
+            assert marker.exists(), 'owned child did not reach the required transaction boundary'
+            observed=json.loads(marker.read_text())
+            assert observed['pid']==process.pid and observed['stage']==stage, 'wrong process or transaction marker'
+            if stage!='after_commit':
+                assert observed['journal_bytes']>0 and observed['main_file_changed'], 'no actual dirty-page/journal crash window'
+            process.kill()
+            stdout,stderr=process.communicate(timeout=5)
+            assert process.returncode==-signal.SIGKILL, 'child did not actually terminate by SIGKILL'
+        finally:
+            if process.poll() is None:
+                process.kill();process.communicate(timeout=5)
+>       reopened=ReliableOutbox(box.path,1,**box.identity,byte_limit=1048576,audit_limit=10)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_resilience.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7534ef9aaed0>
+path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_sigkill_during_rotation_r0/queue/q.db')
+limit = 1, gateway_id = 'g1', device_id = 'd1'
+stream_id = 'c2a08078-17d6-4a4b-abc3-a4724cf37ce3', config_revision = 'r1'
+profile_version = 'v135', byte_limit = 1048576, audit_limit = 10
+
+    def __init__(self, path, limit, gateway_id, device_id, stream_id, config_revision,
+                 profile_version, byte_limit=4 * 1024**3, audit_limit=600000):
+        self.path = Path(path)
+        self.limit, self.byte_limit, self.audit_limit = limit, byte_limit, audit_limit
+        if (type(limit) is not int or not 1 <= limit <= 1000000
+                or type(byte_limit) is not int or not 65536 <= byte_limit <= 64 * 1024**3
+                or type(audit_limit) is not int or not 1 <= audit_limit <= 6000000):
+            raise ValueError('queue capacity')
+        self.identity = dict(gateway_id=identifier(gateway_id), device_id=identifier(device_id),
+                             stream_id=uuid_text(stream_id), config_revision=identifier(config_revision),
+                             profile_version=identifier(profile_version))
+        if self.path.is_symlink() or self.path.parent.is_symlink():
+            raise ValueError('queue symlink')
+        self.path.parent.mkdir(parents=True, mode=0o700, exist_ok=True)
+        self.path.parent.chmod(0o700)
+        try:
+            fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0), 0o600)
+            created = True
+        except FileExistsError:
+            fd = os.open(self.path, os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0))
+            created = False
+        os.close(fd)
+        if not created:
+            # Existing empty/truncated storage is evidence, not a fresh stream.
+            # Inspect read-only before any mutating PRAGMA or schema creation.
+            with closing(sqlite3.connect(self.path.resolve().as_uri()+'?mode=ro',uri=True)) as existing:
+>               version = existing.execute('PRAGMA user_version').fetchone()[0]
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               sqlite3.OperationalError: attempt to write a readonly database
+
+services/delta/delta_device/reliable_store.py:66: OperationalError
+_ test_sigkill_during_rotation_recovers_exact_transaction_boundary[before_commit] _
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_sigkill_during_rotation_r1')
+stage = 'before_commit'
+
+    @pytest.mark.parametrize('stage',['after_retire','before_commit','after_commit'])
+    def test_sigkill_during_rotation_recovers_exact_transaction_boundary(tmp_path,stage):
+        box=box_at(tmp_path)
+        old=box.enqueue(NOW,VALUES)
+        before=hashlib.sha256(box.path.read_bytes()).hexdigest()
+        marker=tmp_path/'ready.json'
+        process=subprocess.Popen([sys.executable,str(Path(__file__).resolve()),'--child',str(box.path),stage,str(marker),before],
+                                 stdout=subprocess.PIPE,stderr=subprocess.PIPE,text=True)
+        try:
+            deadline=time.monotonic()+8
+            while not marker.exists() and process.poll() is None and time.monotonic()<deadline:
+                time.sleep(.01)
+            assert marker.exists(), 'owned child did not reach the required transaction boundary'
+            observed=json.loads(marker.read_text())
+            assert observed['pid']==process.pid and observed['stage']==stage, 'wrong process or transaction marker'
+            if stage!='after_commit':
+                assert observed['journal_bytes']>0 and observed['main_file_changed'], 'no actual dirty-page/journal crash window'
+            process.kill()
+            stdout,stderr=process.communicate(timeout=5)
+            assert process.returncode==-signal.SIGKILL, 'child did not actually terminate by SIGKILL'
+        finally:
+            if process.poll() is None:
+                process.kill();process.communicate(timeout=5)
+>       reopened=ReliableOutbox(box.path,1,**box.identity,byte_limit=1048576,audit_limit=10)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_resilience.py:102: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = <delta_device.reliable_store.ReliableOutbox object at 0x7534edef1fd0>
+path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_sigkill_during_rotation_r1/queue/q.db')
+limit = 1, gateway_id = 'g1', device_id = 'd1'
+stream_id = '5344c078-70ef-4d3b-bc97-c2cb5e41c018', config_revision = 'r1'
+profile_version = 'v135', byte_limit = 1048576, audit_limit = 10
+
+    def __init__(self, path, limit, gateway_id, device_id, stream_id, config_revision,
+                 profile_version, byte_limit=4 * 1024**3, audit_limit=600000):
+        self.path = Path(path)
+        self.limit, self.byte_limit, self.audit_limit = limit, byte_limit, audit_limit
+        if (type(limit) is not int or not 1 <= limit <= 1000000
+                or type(byte_limit) is not int or not 65536 <= byte_limit <= 64 * 1024**3
+                or type(audit_limit) is not int or not 1 <= audit_limit <= 6000000):
+            raise ValueError('queue capacity')
+        self.identity = dict(gateway_id=identifier(gateway_id), device_id=identifier(device_id),
+                             stream_id=uuid_text(stream_id), config_revision=identifier(config_revision),
+                             profile_version=identifier(profile_version))
+        if self.path.is_symlink() or self.path.parent.is_symlink():
+            raise ValueError('queue symlink')
+        self.path.parent.mkdir(parents=True, mode=0o700, exist_ok=True)
+        self.path.parent.chmod(0o700)
+        try:
+            fd = os.open(self.path, os.O_CREAT | os.O_EXCL | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0), 0o600)
+            created = True
+        except FileExistsError:
+            fd = os.open(self.path, os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0))
+            created = False
+        os.close(fd)
+        if not created:
+            # Existing empty/truncated storage is evidence, not a fresh stream.
+            # Inspect read-only before any mutating PRAGMA or schema creation.
+            with closing(sqlite3.connect(self.path.resolve().as_uri()+'?mode=ro',uri=True)) as existing:
+>               version = existing.execute('PRAGMA user_version').fetchone()[0]
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E               sqlite3.OperationalError: attempt to write a readonly database
+
+services/delta/delta_device/reliable_store.py:66: OperationalError
+-------------- generated xml file: /evidence/hot-journal-red.xml ---------------
+=========================== short test summary info ============================
+FAILED services/delta/tests/test_reliable_resilience.py::test_sigkill_during_rotation_recovers_exact_transaction_boundary[after_retire]
+FAILED services/delta/tests/test_reliable_resilience.py::test_sigkill_during_rotation_recovers_exact_transaction_boundary[before_commit]
+2 failed, 1 passed, 3 deselected in 0.30s

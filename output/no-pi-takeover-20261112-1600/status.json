@@ -1,0 +1,123 @@
+{
+  "observed_utc": "2026-11-12T08:06:23.098614+00:00",
+  "scope": "no-Pi takeover; no product source or shared service changes",
+  "regression": {
+    "passed": true,
+    "passed_tests": 191,
+    "skipped_private_tests": 12,
+    "production_line_coverage_percent": 96.06060606060606
+  },
+  "private_clock_tls": {
+    "passed": true,
+    "cases": 12,
+    "cleanup_passed": true
+  },
+  "settled_24h_prefix": {
+    "passed": true,
+    "slots": 863,
+    "full_24h_passed": false
+  },
+  "live_ui": {
+    "passed": true,
+    "widths": [
+      1440,
+      390
+    ],
+    "raw_records": 100,
+    "history_series": 720
+  },
+  "shared_containers": {
+    "before_count": 17,
+    "after_count": 17,
+    "same_ids": true
+  },
+  "integrity": {
+    "checked_utc": "2026-11-12T08:04:32.677335+00:00",
+    "old_static_artifacts": {
+      "files": 770,
+      "mismatches": [],
+      "passed": true
+    },
+    "frozen_archive": {
+      "files": 17,
+      "mismatches": [],
+      "passed": true
+    },
+    "active_windows_frozen": {
+      "files": 17,
+      "mismatches": [],
+      "passed": true
+    },
+    "verifier_dependencies": {
+      "files": 3,
+      "mismatches": [],
+      "passed": true
+    }
+  },
+  "soak": {
+    "status": "RUNNING",
+    "plan": [
+      {
+        "name": "one-second-one-hour",
+        "interval": 1,
+        "count": 3600,
+        "formal": true
+      },
+      {
+        "name": "five-second-twenty-four-hours",
+        "interval": 5,
+        "count": 17280,
+        "formal": true
+      }
+    ],
+    "results": [
+      {
+        "passed": true,
+        "valid_rate": 1.0,
+        "raw_strict_pass": true,
+        "classified_failed_slots": [],
+        "measured_seconds": 3600.0,
+        "minimum_measurement_seconds": 3600,
+        "name": "one-second-one-hour",
+        "formal": true,
+        "verifier_exit_code": 0
+      }
+    ],
+    "controller_pid": 4564,
+    "local_root": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01",
+    "archive_root": "\\\\wsl.localhost\\Ubuntu\\home\\dalelin\\synaiq\\EMS\\output\\delta-no-pi-validation-20261112\\soak-sequence-01",
+    "stop_file": "C:\\Users\\User\\AppData\\Local\\Temp\\ems-no-pi-20261112\\soak-sequence-01\\STOP.txt",
+    "scope": "v1 Windows bench, not Pi/4G/field/central DB ACK",
+    "started_utc": "2026-11-12T05:49:42.632275+00:00",
+    "updated_utc": "2026-11-12T08:06:05.256537+00:00",
+    "stage": "five-second-twenty-four-hours",
+    "expected_slots": 17280,
+    "interval": 5,
+    "expected_measurement_seconds": 86400,
+    "bench_pid": 18924,
+    "last_resource_observation": {
+      "utc": "2026-11-12T08:06:05.255527+00:00",
+      "monotonic": 2548887.828,
+      "processes": [
+        {
+          "Id": 5524,
+          "CPU": 25.265625,
+          "WorkingSet64": 38326272,
+          "PrivateMemorySize64": 24391680
+        },
+        {
+          "Id": 18924,
+          "CPU": 9.375,
+          "WorkingSet64": 43364352,
+          "PrivateMemorySize64": 27590656
+        }
+      ],
+      "cpu_unit": "cumulative process seconds",
+      "free_bytes": 257433014272,
+      "sqlite_bytes": 16384
+    }
+  },
+  "central_receipt": "v1 FAIL preserved; v2 not implemented",
+  "pi_available": false,
+  "hardware_acceptance": false
+}

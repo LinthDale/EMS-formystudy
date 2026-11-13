@@ -1,0 +1,485 @@
+{
+  "rows": [
+    {
+      "time": "2026-11-12T07:44:05.534095+00:00",
+      "current": 5.59,
+      "voltage": 220.59,
+      "power_kw": 1.09,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.59
+    },
+    {
+      "time": "2026-11-12T07:44:00.534095+00:00",
+      "current": 5.58,
+      "voltage": 220.58,
+      "power_kw": 1.08,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.58
+    },
+    {
+      "time": "2026-11-12T07:43:55.534095+00:00",
+      "current": 5.57,
+      "voltage": 220.57,
+      "power_kw": 1.07,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.57
+    },
+    {
+      "time": "2026-11-12T07:43:50.534095+00:00",
+      "current": 5.5600000000000005,
+      "voltage": 220.56,
+      "power_kw": 1.06,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.56
+    },
+    {
+      "time": "2026-11-12T07:43:45.534095+00:00",
+      "current": 5.55,
+      "voltage": 220.55,
+      "power_kw": 1.05,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.55
+    },
+    {
+      "time": "2026-11-12T07:43:40.534095+00:00",
+      "current": 5.54,
+      "voltage": 220.54,
+      "power_kw": 1.04,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.54
+    },
+    {
+      "time": "2026-11-12T07:43:35.534095+00:00",
+      "current": 5.53,
+      "voltage": 220.53,
+      "power_kw": 1.03,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.53
+    },
+    {
+      "time": "2026-11-12T07:43:30.534095+00:00",
+      "current": 5.52,
+      "voltage": 220.52,
+      "power_kw": 1.02,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.52
+    },
+    {
+      "time": "2026-11-12T07:43:25.534095+00:00",
+      "current": 5.51,
+      "voltage": 220.51,
+      "power_kw": 1.01,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.51
+    },
+    {
+      "time": "2026-11-12T07:43:20.534095+00:00",
+      "current": 5.5,
+      "voltage": 220.5,
+      "power_kw": 1,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.5
+    },
+    {
+      "time": "2026-11-12T07:43:15.534095+00:00",
+      "current": 5.49,
+      "voltage": 220.49,
+      "power_kw": 1.49,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.49
+    },
+    {
+      "time": "2026-11-12T07:43:10.534095+00:00",
+      "current": 5.48,
+      "voltage": 220.48,
+      "power_kw": 1.48,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.48
+    },
+    {
+      "time": "2026-11-12T07:43:05.534095+00:00",
+      "current": 5.47,
+      "voltage": 220.47,
+      "power_kw": 1.47,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.47
+    },
+    {
+      "time": "2026-11-12T07:43:00.534095+00:00",
+      "current": 5.46,
+      "voltage": 220.46,
+      "power_kw": 1.46,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.46
+    },
+    {
+      "time": "2026-11-12T07:42:55.534095+00:00",
+      "current": 5.45,
+      "voltage": 220.45,
+      "power_kw": 1.45,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.45
+    },
+    {
+      "time": "2026-11-12T07:42:50.534095+00:00",
+      "current": 5.44,
+      "voltage": 220.44,
+      "power_kw": 1.44,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.44
+    },
+    {
+      "time": "2026-11-12T07:42:45.534095+00:00",
+      "current": 5.43,
+      "voltage": 220.43,
+      "power_kw": 1.43,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.43
+    },
+    {
+      "time": "2026-11-12T07:42:40.534095+00:00",
+      "current": 5.42,
+      "voltage": 220.42,
+      "power_kw": 1.42,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.42
+    },
+    {
+      "time": "2026-11-12T07:42:35.534095+00:00",
+      "current": 5.41,
+      "voltage": 220.41,
+      "power_kw": 1.41,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.41
+    },
+    {
+      "time": "2026-11-12T07:42:30.534095+00:00",
+      "current": 5.4,
+      "voltage": 220.4,
+      "power_kw": 1.4,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.4
+    },
+    {
+      "time": "2026-11-12T07:42:25.534095+00:00",
+      "current": 5.39,
+      "voltage": 220.39,
+      "power_kw": 1.3900000000000001,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.39
+    },
+    {
+      "time": "2026-11-12T07:42:20.534095+00:00",
+      "current": 5.38,
+      "voltage": 220.38,
+      "power_kw": 1.38,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.38
+    },
+    {
+      "time": "2026-11-12T07:42:15.534095+00:00",
+      "current": 5.37,
+      "voltage": 220.37,
+      "power_kw": 1.37,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.37
+    },
+    {
+      "time": "2026-11-12T07:42:10.534095+00:00",
+      "current": 5.36,
+      "voltage": 220.36,
+      "power_kw": 1.3599999999999999,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.36
+    },
+    {
+      "time": "2026-11-12T07:42:05.534095+00:00",
+      "current": 5.35,
+      "voltage": 220.35,
+      "power_kw": 1.35,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.35
+    },
+    {
+      "time": "2026-11-12T07:42:00.534095+00:00",
+      "current": 5.34,
+      "voltage": 220.34,
+      "power_kw": 1.34,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.34
+    },
+    {
+      "time": "2026-11-12T07:41:55.534095+00:00",
+      "current": 5.33,
+      "voltage": 220.33,
+      "power_kw": 1.33,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.33
+    },
+    {
+      "time": "2026-11-12T07:41:50.534095+00:00",
+      "current": 5.32,
+      "voltage": 220.32,
+      "power_kw": 1.32,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.32
+    },
+    {
+      "time": "2026-11-12T07:41:45.534095+00:00",
+      "current": 5.31,
+      "voltage": 220.31,
+      "power_kw": 1.31,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.31
+    },
+    {
+      "time": "2026-11-12T07:41:40.534095+00:00",
+      "current": 5.3,
+      "voltage": 220.3,
+      "power_kw": 1.3,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.3
+    },
+    {
+      "time": "2026-11-12T07:41:35.534095+00:00",
+      "current": 5.29,
+      "voltage": 220.29,
+      "power_kw": 1.29,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.29
+    },
+    {
+      "time": "2026-11-12T07:41:30.534095+00:00",
+      "current": 5.28,
+      "voltage": 220.28,
+      "power_kw": 1.28,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.28
+    },
+    {
+      "time": "2026-11-12T07:41:25.534095+00:00",
+      "current": 5.27,
+      "voltage": 220.27,
+      "power_kw": 1.27,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.27
+    },
+    {
+      "time": "2026-11-12T07:41:20.534095+00:00",
+      "current": 5.26,
+      "voltage": 220.26,
+      "power_kw": 1.26,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.26
+    },
+    {
+      "time": "2026-11-12T07:41:15.534095+00:00",
+      "current": 5.25,
+      "voltage": 220.25,
+      "power_kw": 1.25,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.25
+    },
+    {
+      "time": "2026-11-12T07:41:10.534095+00:00",
+      "current": 5.24,
+      "voltage": 220.24,
+      "power_kw": 1.24,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.24
+    },
+    {
+      "time": "2026-11-12T07:41:05.534095+00:00",
+      "current": 5.23,
+      "voltage": 220.23,
+      "power_kw": 1.23,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.23
+    },
+    {
+      "time": "2026-11-12T07:41:00.534095+00:00",
+      "current": 5.22,
+      "voltage": 220.22,
+      "power_kw": 1.22,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.22
+    },
+    {
+      "time": "2026-11-12T07:40:55.534095+00:00",
+      "current": 5.21,
+      "voltage": 220.21,
+      "power_kw": 1.21,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.21
+    },
+    {
+      "time": "2026-11-12T07:40:50.534095+00:00",
+      "current": 5.2,
+      "voltage": 220.2,
+      "power_kw": 1.2,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.2
+    },
+    {
+      "time": "2026-11-12T07:40:45.534095+00:00",
+      "current": 5.19,
+      "voltage": 220.19,
+      "power_kw": 1.19,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.19
+    },
+    {
+      "time": "2026-11-12T07:40:40.534095+00:00",
+      "current": 5.18,
+      "voltage": 220.18,
+      "power_kw": 1.18,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.18
+    },
+    {
+      "time": "2026-11-12T07:40:35.534095+00:00",
+      "current": 5.17,
+      "voltage": 220.17,
+      "power_kw": 1.17,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.17
+    },
+    {
+      "time": "2026-11-12T07:40:30.534095+00:00",
+      "current": 5.16,
+      "voltage": 220.16,
+      "power_kw": 1.16,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.16
+    },
+    {
+      "time": "2026-11-12T07:40:25.534095+00:00",
+      "current": 5.15,
+      "voltage": 220.15,
+      "power_kw": 1.15,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.15
+    },
+    {
+      "time": "2026-11-12T07:40:20.534095+00:00",
+      "current": 5.14,
+      "voltage": 220.14,
+      "power_kw": 1.1400000000000001,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.14
+    },
+    {
+      "time": "2026-11-12T07:40:15.534095+00:00",
+      "current": 5.13,
+      "voltage": 220.13,
+      "power_kw": 1.13,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.13
+    },
+    {
+      "time": "2026-11-12T07:40:10.534095+00:00",
+      "current": 5.12,
+      "voltage": 220.12,
+      "power_kw": 1.12,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.12
+    },
+    {
+      "time": "2026-11-12T07:40:05.534095+00:00",
+      "current": 5.11,
+      "voltage": 220.11,
+      "power_kw": 1.11,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.11
+    },
+    {
+      "time": "2026-11-12T07:40:00.534095+00:00",
+      "current": 5.1,
+      "voltage": 220.1,
+      "power_kw": 1.1,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.1
+    },
+    {
+      "time": "2026-11-12T07:39:55.534095+00:00",
+      "current": 5.09,
+      "voltage": 220.09,
+      "power_kw": 1.09,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.09
+    },
+    {
+      "time": "2026-11-12T07:39:50.534095+00:00",
+      "current": 5.08,
+      "voltage": 220.08,
+      "power_kw": 1.08,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.08
+    },
+    {
+      "time": "2026-11-12T07:39:45.534095+00:00",
+      "current": 5.07,
+      "voltage": 220.07,
+      "power_kw": 1.07,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.07
+    },
+    {
+      "time": "2026-11-12T07:39:40.534095+00:00",
+      "current": 5.06,
+      "voltage": 220.06,
+      "power_kw": 1.06,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.06
+    },
+    {
+      "time": "2026-11-12T07:39:35.534095+00:00",
+      "current": 5.05,
+      "voltage": 220.05,
+      "power_kw": 1.05,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.05
+    },
+    {
+      "time": "2026-11-12T07:39:30.534095+00:00",
+      "current": 5.04,
+      "voltage": 220.04,
+      "power_kw": 1.04,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.04
+    },
+    {
+      "time": "2026-11-12T07:39:25.534095+00:00",
+      "current": 5.03,
+      "voltage": 220.03,
+      "power_kw": 1.03,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.03
+    },
+    {
+      "time": "2026-11-12T07:39:20.534095+00:00",
+      "current": 5.02,
+      "voltage": 220.02,
+      "power_kw": 1.02,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.02
+    },
+    {
+      "time": "2026-11-12T07:39:15.534095+00:00",
+      "current": 5.01,
+      "voltage": 220.01,
+      "power_kw": 1.01,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000.01
+    },
+    {
+      "time": "2026-11-12T07:39:10.534095+00:00",
+      "current": 5,
+      "voltage": 220,
+      "power_kw": 1,
+      "device_id": "delta-backlog-qa-20261112",
+      "energy_kwh": 1000
+    }
+  ],
+  "has_more": false
+}

@@ -1,0 +1,130 @@
+1794548805: mosquitto version 2.1.2 starting
+1794548805: Config loaded from /qa.conf.
+1794548805: Bridge support available.
+1794548805: Persistence support available.
+1794548805: TLS support available.
+1794548805: TLS-PSK support available.
+1794548805: Websockets support available.
+1794548805: Opening ipv4 listen socket on port 1883.
+1794548805: mosquitto version 2.1.2 running
+1794548809: New connection from 127.0.0.1:60989 on port 1883.
+1794548809: New client connected from 127.0.0.1:60989 as receiver-g-455d98804cf0 (p4, c1, k30).
+1794548809: No will message specified.
+1794548809: Sending CONNACK to receiver-g-455d98804cf0 (0, 0)
+1794548809: Received SUBSCRIBE from receiver-g-455d98804cf0
+1794548809: 	ems/v2/gateways/+/samples (QoS 1)
+1794548809: receiver-g-455d98804cf0 1 ems/v2/gateways/+/samples
+1794548809: 	ems/v2/gateways/+/session/request (QoS 1)
+1794548809: receiver-g-455d98804cf0 1 ems/v2/gateways/+/session/request
+1794548809: Sending SUBACK to receiver-g-455d98804cf0
+1794548809: New connection from 127.0.0.1:36001 on port 1883.
+1794548809: New client connected from 127.0.0.1:36001 as sender-g-455d98804cf0 (p4, c1, k30).
+1794548809: No will message specified.
+1794548809: Sending CONNACK to sender-g-455d98804cf0 (0, 0)
+1794548809: Received SUBSCRIBE from sender-g-455d98804cf0
+1794548809: 	ems/v2/gateways/g-455d98804cf0/acks (QoS 1)
+1794548809: sender-g-455d98804cf0 1 ems/v2/gateways/g-455d98804cf0/acks
+1794548809: 	ems/v2/gateways/g-455d98804cf0/session/response (QoS 1)
+1794548809: sender-g-455d98804cf0 1 ems/v2/gateways/g-455d98804cf0/session/response
+1794548809: Sending SUBACK to sender-g-455d98804cf0
+1794548810: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548810: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m1, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548810: Sending PUBACK to sender-g-455d98804cf0 (m2, rc0)
+1794548810: Received PUBACK from receiver-g-455d98804cf0 (Mid: 1, RC:0)
+1794548810: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548810: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m1, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548810: Sending PUBACK to receiver-g-455d98804cf0 (m2, rc0)
+1794548810: Received PUBACK from sender-g-455d98804cf0 (Mid: 1, RC:0)
+1794548810: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548810: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548810: Sending PUBACK to sender-g-455d98804cf0 (m3, rc0)
+1794548810: Received PUBACK from receiver-g-455d98804cf0 (Mid: 2, RC:0)
+1794548810: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/acks', ... (412 bytes))
+1794548810: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/acks', ... (412 bytes))
+1794548810: Sending PUBACK to receiver-g-455d98804cf0 (m3, rc0)
+1794548810: Received PUBACK from sender-g-455d98804cf0 (Mid: 2, RC:0)
+1794548811: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548811: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548811: Sending PUBACK to sender-g-455d98804cf0 (m4, rc0)
+1794548811: Received PUBACK from receiver-g-455d98804cf0 (Mid: 3, RC:0)
+1794548811: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548811: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548811: Sending PUBACK to receiver-g-455d98804cf0 (m4, rc0)
+1794548811: Received PUBACK from sender-g-455d98804cf0 (Mid: 3, RC:0)
+1794548811: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m5, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548811: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548811: Sending PUBACK to sender-g-455d98804cf0 (m5, rc0)
+1794548811: Received PUBACK from receiver-g-455d98804cf0 (Mid: 4, RC:0)
+1794548811: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m5, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548811: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548811: Sending PUBACK to receiver-g-455d98804cf0 (m5, rc0)
+1794548811: Received PUBACK from sender-g-455d98804cf0 (Mid: 4, RC:0)
+1794548812: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m6, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548812: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m5, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548812: Sending PUBACK to sender-g-455d98804cf0 (m6, rc0)
+1794548812: Received PUBACK from receiver-g-455d98804cf0 (Mid: 5, RC:0)
+1794548812: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m6, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548812: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m5, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548812: Sending PUBACK to receiver-g-455d98804cf0 (m6, rc0)
+1794548812: Received PUBACK from sender-g-455d98804cf0 (Mid: 5, RC:0)
+1794548812: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m7, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548812: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m6, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548812: Sending PUBACK to sender-g-455d98804cf0 (m7, rc0)
+1794548812: Received PUBACK from receiver-g-455d98804cf0 (Mid: 6, RC:0)
+1794548814: Received DISCONNECT from sender-g-455d98804cf0
+1794548814: Client sender-g-455d98804cf0 [127.0.0.1:36001] disconnected.
+1794548814: Received DISCONNECT from receiver-g-455d98804cf0
+1794548814: Client receiver-g-455d98804cf0 [127.0.0.1:60989] disconnected.
+1794548816: New connection from 127.0.0.1:47733 on port 1883.
+1794548816: New client connected from 127.0.0.1:47733 as receiver-g-455d98804cf0 (p4, c1, k30).
+1794548816: No will message specified.
+1794548816: Sending CONNACK to receiver-g-455d98804cf0 (0, 0)
+1794548816: Received SUBSCRIBE from receiver-g-455d98804cf0
+1794548816: 	ems/v2/gateways/+/samples (QoS 1)
+1794548816: receiver-g-455d98804cf0 1 ems/v2/gateways/+/samples
+1794548816: 	ems/v2/gateways/+/session/request (QoS 1)
+1794548816: receiver-g-455d98804cf0 1 ems/v2/gateways/+/session/request
+1794548816: Sending SUBACK to receiver-g-455d98804cf0
+1794548816: New connection from 127.0.0.1:46311 on port 1883.
+1794548816: New client connected from 127.0.0.1:46311 as sender-g-455d98804cf0 (p4, c1, k30).
+1794548816: No will message specified.
+1794548816: Sending CONNACK to sender-g-455d98804cf0 (0, 0)
+1794548816: Received SUBSCRIBE from sender-g-455d98804cf0
+1794548816: 	ems/v2/gateways/g-455d98804cf0/acks (QoS 1)
+1794548816: sender-g-455d98804cf0 1 ems/v2/gateways/g-455d98804cf0/acks
+1794548816: 	ems/v2/gateways/g-455d98804cf0/session/response (QoS 1)
+1794548816: sender-g-455d98804cf0 1 ems/v2/gateways/g-455d98804cf0/session/response
+1794548816: Sending SUBACK to sender-g-455d98804cf0
+1794548816: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548816: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m1, 'ems/v2/gateways/g-455d98804cf0/session/request', ... (109 bytes))
+1794548816: Sending PUBACK to sender-g-455d98804cf0 (m2, rc0)
+1794548816: Received PUBACK from receiver-g-455d98804cf0 (Mid: 1, RC:0)
+1794548816: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548816: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m1, 'ems/v2/gateways/g-455d98804cf0/session/response', ... (170 bytes))
+1794548816: Sending PUBACK to receiver-g-455d98804cf0 (m2, rc0)
+1794548816: Received PUBACK from sender-g-455d98804cf0 (Mid: 1, RC:0)
+1794548816: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548816: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548816: Sending PUBACK to sender-g-455d98804cf0 (m3, rc0)
+1794548816: Received PUBACK from sender-g-455d98804cf0 (Mid: 2, RC:0)
+1794548816: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548816: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m2, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548816: Sending PUBACK to sender-g-455d98804cf0 (m4, rc0)
+1794548816: Received PUBACK from receiver-g-455d98804cf0 (Mid: 2, RC:0)
+1794548816: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548816: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548816: Sending PUBACK to receiver-g-455d98804cf0 (m3, rc0)
+1794548816: Received PUBACK from sender-g-455d98804cf0 (Mid: 3, RC:0)
+1794548817: Received PUBLISH from sender-g-455d98804cf0 (d0, q1, r0, m5, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548817: Sending PUBLISH to receiver-g-455d98804cf0 (d0, q1, r0, m3, 'ems/v2/gateways/g-455d98804cf0/samples', ... (725 bytes))
+1794548817: Sending PUBACK to sender-g-455d98804cf0 (m5, rc0)
+1794548817: Received PUBACK from receiver-g-455d98804cf0 (Mid: 3, RC:0)
+1794548817: Received PUBLISH from receiver-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548817: Sending PUBLISH to sender-g-455d98804cf0 (d0, q1, r0, m4, 'ems/v2/gateways/g-455d98804cf0/acks', ... (438 bytes))
+1794548817: Sending PUBACK to receiver-g-455d98804cf0 (m4, rc0)
+1794548817: Received PUBACK from sender-g-455d98804cf0 (Mid: 4, RC:0)
+1794548817: Received DISCONNECT from sender-g-455d98804cf0
+1794548817: Client sender-g-455d98804cf0 [127.0.0.1:46311] disconnected.
+1794548817: Received DISCONNECT from receiver-g-455d98804cf0
+1794548817: Client receiver-g-455d98804cf0 [127.0.0.1:47733] disconnected.
+1794548805: Info: running mosquitto as user id: 1000.

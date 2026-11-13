@@ -1,0 +1,95 @@
+{
+  "scheduled": 44,
+  "attempted": 32,
+  "valid": 20,
+  "committed": 20,
+  "missing_slots": [
+    5,
+    7,
+    9,
+    11,
+    17,
+    19,
+    21,
+    23,
+    29,
+    31,
+    33,
+    35
+  ],
+  "failed_slots": [
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35
+  ],
+  "duplicate_attempt_slots": [],
+  "duplicate_read_slots": [],
+  "duplicate_commit_slots": [],
+  "outside_slots": [],
+  "poll_seconds": {
+    "p50": 0.29600000008940697,
+    "p95": 0.3440000000409782,
+    "p99": 0.3440000000409782,
+    "max": 0.3440000000409782
+  },
+  "pass": true,
+  "ledger_error": null,
+  "outages_restarted": 3,
+  "control_errors": [],
+  "golden_errors": [],
+  "normal_sampling_pass": false,
+  "recovery": {
+    "outcomes": [
+      {
+        "index": 0,
+        "errors": 3,
+        "recovery_seconds": 10.280999999959022,
+        "spanning_reads": 0,
+        "false_values": 0,
+        "passed": true
+      },
+      {
+        "index": 1,
+        "errors": 3,
+        "recovery_seconds": 10.280999999959022,
+        "spanning_reads": 0,
+        "false_values": 0,
+        "passed": true
+      },
+      {
+        "index": 2,
+        "errors": 3,
+        "recovery_seconds": 10.280999999959022,
+        "spanning_reads": 0,
+        "false_values": 0,
+        "passed": true
+      }
+    ],
+    "pass": true
+  },
+  "unexpected_errors": [],
+  "unclassified_slots": [],
+  "pending_end": 0,
+  "sqlite_bytes": 16384
+}

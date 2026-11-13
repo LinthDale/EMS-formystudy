@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "captured_utc": "2026-11-13T06:08:28.200297+00:00",
+  "integration_passed": 40,
+  "tools_passed": 131,
+  "skipped": 0,
+  "final_code_matches_frozen_source": true,
+  "production_files_unchanged_from_prior_wal_run": 17,
+  "shared_containers_unchanged": true,
+  "shared_container_count": 17,
+  "owned_resources_cleaned": 6,
+  "prior_sealed_artifacts_verified": {
+    "delta-no-pi-validation-20261112": 770,
+    "committed-delivery-fix-20261112": 752,
+    "no-pi-backlog-20261112": 384,
+    "no-pi-ingest-20261112": 321,
+    "slot-boundary-fix-20261113": 20,
+    "no-pi-v2-faults-20261113": 526,
+    "newest-first-retention-20261113": 670,
+    "no-pi-resilience-20261113": 305,
+    "no-pi-lifecycle-20261113": 595,
+    "no-pi-restore-load-20261113": 581,
+    "no-pi-wal-pitr-20261113": 814
+  },
+  "relative_links_checked": 482,
+  "broken_links": 0,
+  "openapi_yaml_parse": true,
+  "this_task_diff_check": true
+}

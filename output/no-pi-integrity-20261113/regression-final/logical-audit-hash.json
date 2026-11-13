@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "audit-hash",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "3a4c4678-08f6-4d1f-a737-93253151b02e",
+  "before_sha256": "96b7dec91b76885b3d74f3cf5ceff30263ed520173c9403995d07319ca5a11e9",
+  "after_sha256": "96b7dec91b76885b3d74f3cf5ceff30263ed520173c9403995d07319ca5a11e9"
+}

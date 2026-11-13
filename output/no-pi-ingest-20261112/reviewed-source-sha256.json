@@ -1,0 +1,4 @@
+{
+  "services/delta/tools/bench_ingest.py": "089c3c91dcad05ce9b8483c650ca4513a0bd33b548176b5220fb0bb0d9d7ca21",
+  "services/delta/tests/test_bench_ingest.py": "b9938bd4002bfc0688b0e24732af0be01ad0640d2a929610a989270b2deae0df"
+}

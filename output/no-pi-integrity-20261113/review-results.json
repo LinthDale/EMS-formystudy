@@ -1,0 +1,27 @@
+{
+  "code": {
+    "verdict": "approve",
+    "critical": 0,
+    "high": 0,
+    "medium": 0
+  },
+  "python": {
+    "verdict": "approve",
+    "critical": 0,
+    "high": 0
+  },
+  "security": {
+    "verdict": "approve",
+    "critical": 0,
+    "high": 0
+  },
+  "resolved_findings": [
+    "live sequence rollback could retire source and reuse sequence",
+    "missing audit could allow ACK deletion",
+    "pending read snapshot race",
+    "retirement counter overflow",
+    "projection validation needed ID/time/device/values as well as counts"
+  ],
+  "last_targeted_run": "run-final",
+  "scope": "private code/test validation only; field/shared deployment and Pi/600k startup performance not performed"
+}

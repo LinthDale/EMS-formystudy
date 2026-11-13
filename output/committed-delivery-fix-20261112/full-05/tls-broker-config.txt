@@ -1,0 +1,12 @@
+listener 8886 127.0.0.1
+allow_anonymous false
+require_certificate true
+use_identity_as_username true
+cafile /qa/ca.crt
+certfile /qa/server.crt
+keyfile /qa/server.key
+acl_file /qa/acl
+message_size_limit 65536
+persistence false
+log_dest stdout
+log_type all

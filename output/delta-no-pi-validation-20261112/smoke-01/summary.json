@@ -1,0 +1,19 @@
+{
+  "scheduled": 3,
+  "attempted": 3,
+  "valid": 3,
+  "committed": 3,
+  "missing_slots": [],
+  "failed_slots": [],
+  "duplicate_attempt_slots": [],
+  "outside_slots": [],
+  "poll_seconds": {
+    "p50": 0.2809999999590218,
+    "p95": 0.3130000000819564,
+    "p99": 0.3130000000819564,
+    "max": 0.3130000000819564
+  },
+  "pass": false,
+  "pending_end": 1,
+  "sqlite_bytes": 16384
+}

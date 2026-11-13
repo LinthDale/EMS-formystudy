@@ -1,0 +1,170 @@
+{
+  "automatic_recovery": false,
+  "absent_seconds": 33.78099999995902,
+  "recovery_seconds_upper": null,
+  "spanning_reads": 0,
+  "same_port": true,
+  "false_values": 0,
+  "read_errors": 3,
+  "wrong_usb_events": 0,
+  "target": "COM3",
+  "monitor_errors": [],
+  "unexpected_errors": [
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:00:15.186170+00:00",
+      "monotonic": 2534137.765,
+      "slot": 26,
+      "error": "ReadError",
+      "duration": 6.125
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:00:25.202535+00:00",
+      "monotonic": 2534147.781,
+      "slot": 28,
+      "error": "ReadError",
+      "duration": 6.155999999959022
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:00:35.197553+00:00",
+      "monotonic": 2534157.781,
+      "slot": 30,
+      "error": "ReadError",
+      "duration": 6.155999999959022
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:00:45.205579+00:00",
+      "monotonic": 2534167.781,
+      "slot": 32,
+      "error": "ReadError",
+      "duration": 6.140999999828637
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:00:55.180002+00:00",
+      "monotonic": 2534177.765,
+      "slot": 34,
+      "error": "ReadError",
+      "duration": 6.125
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:05.195676+00:00",
+      "monotonic": 2534187.781,
+      "slot": 36,
+      "error": "ReadError",
+      "duration": 6.155999999959022
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:15.166486+00:00",
+      "monotonic": 2534197.75,
+      "slot": 38,
+      "error": "ReadError",
+      "duration": 6.125
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:25.173583+00:00",
+      "monotonic": 2534207.75,
+      "slot": 40,
+      "error": "ReadError",
+      "duration": 6.109999999869615
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:35.209730+00:00",
+      "monotonic": 2534217.781,
+      "slot": 42,
+      "error": "ReadError",
+      "duration": 6.140999999828637
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:45.197784+00:00",
+      "monotonic": 2534227.781,
+      "slot": 44,
+      "error": "ReadError",
+      "duration": 6.125
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:01:55.197524+00:00",
+      "monotonic": 2534237.781,
+      "slot": 46,
+      "error": "ReadError",
+      "duration": 6.155999999959022
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:05.206917+00:00",
+      "monotonic": 2534247.781,
+      "slot": 48,
+      "error": "ReadError",
+      "duration": 6.140999999828637
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:15.191360+00:00",
+      "monotonic": 2534257.765,
+      "slot": 50,
+      "error": "ReadError",
+      "duration": 6.125
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:25.200363+00:00",
+      "monotonic": 2534267.781,
+      "slot": 52,
+      "error": "ReadError",
+      "duration": 6.140999999828637
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:35.207229+00:00",
+      "monotonic": 2534277.781,
+      "slot": 54,
+      "error": "ReadError",
+      "duration": 6.140999999828637
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:45.215068+00:00",
+      "monotonic": 2534287.796,
+      "slot": 56,
+      "error": "ReadError",
+      "duration": 6.155999999959022
+    },
+    {
+      "kind": "read_error",
+      "utc": "2026-11-12T04:02:55.193912+00:00",
+      "monotonic": 2534297.765,
+      "slot": 58,
+      "error": "ReadError",
+      "duration": 6.140000000130385
+    }
+  ],
+  "unclassified_slots": [
+    27,
+    29,
+    31,
+    33,
+    35,
+    37,
+    39,
+    41,
+    43,
+    45,
+    47,
+    49,
+    51,
+    53,
+    55,
+    57,
+    59
+  ],
+  "passed": false
+}

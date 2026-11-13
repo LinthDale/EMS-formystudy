@@ -21,7 +21,7 @@ from contextlib import asynccontextmanager
 from dataclasses import dataclass
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pymodbus.datastore import (
     ModbusSequentialDataBlock,
     ModbusServerContext,
@@ -34,7 +34,13 @@ from pymodbus.server import StartAsyncTcpServer
 # Using pymodbus 3.6.x classic API (pinned in requirements.txt).
 # pymodbus 3.13 rewrote this with SimData/SimDevice — avoided for MVP.
 
-_store = ModbusSlaveContext(hr=ModbusSequentialDataBlock(0, [0] * 100))
+class ReadOnlyMeterContext(ModbusSlaveContext):
+    """Only FC03 is accepted from the wire; the local loop still calls setValues."""
+    def validate(self, fc_as_int, address, count=1):
+        return fc_as_int == 3 and super().validate(fc_as_int, address, count)
+
+
+_store = ReadOnlyMeterContext(hr=ModbusSequentialDataBlock(0, [0] * 100))
 _context = ModbusServerContext(slaves={1: _store}, single=False)
 
 
@@ -160,35 +166,10 @@ def get_config() -> dict:
 
 
 @app.post("/config")
-def set_config(
-    noise_voltage_v: float | None = None,
-    current_base_a: float | None = None,
-    current_swing_a: float | None = None,
-    noise_current_a: float | None = None,
-    power_factor: float | None = None,
-    period_seconds: float | None = None,
-) -> dict:
-    for key, value in {
-        "noise_voltage_v": noise_voltage_v,
-        "current_base_a": current_base_a,
-        "current_swing_a": current_swing_a,
-        "noise_current_a": noise_current_a,
-        "power_factor": power_factor,
-        "period_seconds": period_seconds,
-    }.items():
-        if value is not None:
-            setattr(config, key, value)
-    return get_config()
-
-
 @app.post("/inject-fault")
-def inject_fault(mode: str = "none") -> dict:
-    """Set fault_mode to one of: none | zero | freeze."""
-    valid = {"none", "zero", "freeze"}
-    if mode not in valid:
-        return {"error": f"mode must be one of: {sorted(valid)}"}
-    config.fault_mode = mode
-    return {"fault_mode": mode}
+def retired_control():
+    """ADR-033: writes must be authenticated and audited by the BFF."""
+    raise HTTPException(410, "use the authenticated BFF simulator control API")
 
 
 if __name__ == "__main__":

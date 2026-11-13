@@ -1,0 +1,14 @@
+{
+  "checked_utc": "2026-11-12T07:25:49.826508+00:00",
+  "local_links_checked": 327,
+  "broken_local_links": [],
+  "prior_index_files": 704,
+  "prior_changed_expected_summaries": [
+    "latest-status.json",
+    "README.md"
+  ],
+  "frozen_field_sources_unchanged": true,
+  "active_soak_frozen_sources_unchanged": true,
+  "active_soak_verifier_unchanged": true,
+  "private_key_files_in_new_evidence": []
+}

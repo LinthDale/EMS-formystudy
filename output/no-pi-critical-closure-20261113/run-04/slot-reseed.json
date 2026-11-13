@@ -1,0 +1,73 @@
+{
+  "passed": true,
+  "lost": {
+    "passed": true,
+    "request_id": "7c588f49-7e8f-45a3-9b1b-e2c0cc15c17a",
+    "op": "slot_lose",
+    "before": {
+      "slot": "ems_archive_slot",
+      "active": true,
+      "restart_lsn": "0/1FB2538",
+      "wal_status": "reserved",
+      "peer_tls": true,
+      "flush_lsn": "0/1FB2538"
+    },
+    "lost": {
+      "slot": "ems_archive_slot",
+      "active": false,
+      "restart_lsn": null,
+      "wal_status": "lost",
+      "peer_tls": null,
+      "flush_lsn": null
+    },
+    "child_exit": 1,
+    "gate_rejected": true
+  },
+  "rebuilt": {
+    "passed": true,
+    "request_id": "2c3cc3f4-0694-4907-8c26-1b908e91ee40",
+    "op": "slot_reseed",
+    "base_verified": true,
+    "expected_system_id": "7707563597702295594",
+    "old_slot_preserved": "ems_archive_slot",
+    "replacement_slot": {
+      "slot": "ems_archive_reseed",
+      "active": true,
+      "restart_lsn": "0/7039010",
+      "wal_status": "reserved",
+      "peer_tls": true,
+      "flush_lsn": "0/7039010"
+    },
+    "fixed_lsn": "0/70000D8",
+    "flush_fence_satisfied": true,
+    "reserved_before_backup": "0/2000028",
+    "forced_gap_segments": 3,
+    "reseed_chain_pitr_verified": true,
+    "recovered_gap_marker": "reseed-gap",
+    "base_artifacts": {
+      "base-backup_manifest": {
+        "bytes": 313085,
+        "sha256": "8b16ee86f9e10cba0ea8ed385b4e1c58e2c2418a53a8dc81276a1f456e7eabb0"
+      },
+      "base-base.tar": {
+        "bytes": 36515328,
+        "sha256": "4df12cc7c9b27bef91f197f75ce8e88c3ecf6a4f770dc6983699aff377d1ee07"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "71d21150266109fe507d448b5c38e7ab930d1488e57cee75842d51bfbe358ba6"
+      }
+    }
+  },
+  "ack_fenced_until_reseed": true,
+  "generation_rotated": true,
+  "statuses_during_failure": [
+    "retryable"
+  ],
+  "source_preserved": true,
+  "rows": [
+    1,
+    1
+  ],
+  "pending_end": 0
+}

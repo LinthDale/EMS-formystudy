@@ -2,9 +2,9 @@
 
 | 欄位 | 內容 |
 |------|------|
-| 狀態 | **Draft v3**（2026-06-10；決策齊備——GATE-1/GATE-2 關閉、P2 路由與技術棧/Design System 已定案；**待 Approved**）|
+| 狀態 | **Approved**（2026-06-11 驗收通過；GATE-1/GATE-2 關閉、§9.3 路由=全部經 BFF、技術棧/Design System 定案、§8.2 P2 路由殘留已清；鎖定後變更走 ADR）|
 | 起案日期 | 2026-06-09 |
-| 最後修訂 | 2026-06-10 **v3**（owner 拍板）：§9.3 量測路由=**全部經 BFF**（零瀏覽器 CORS 面）；GATE-1 關閉=**FastAPI BFF** + session/CSRF 定案；§6.4 新增=**EMS Design System**（Tailwind v4+Radix+shadcn 種子、Precise/Industrial/Alive、domain components、Motion 範圍；視覺執行交 Claude Design）；§14 Q1/Q2/Q7/Q9 全解。v2（06-09）：資料路由改 REST、BFF 強制、§9 威脅模型、§1.5 後端相依 |
+| 最後修訂 | 2026-06-11：驗收通過 → flip **Approved**；§8.2 P2 路由殘留清除。2026-06-10 **v3**（owner 拍板）：§9.3 量測路由=**全部經 BFF**（零瀏覽器 CORS 面）；GATE-1 關閉=**FastAPI BFF** + session/CSRF 定案；§6.4 新增=**EMS Design System**（Tailwind v4+Radix+shadcn 種子、Precise/Industrial/Alive、domain components、Motion 範圍；視覺執行交 Claude Design）；§14 Q1/Q2/Q7/Q9 全解。v2（06-09）：資料路由改 REST、BFF 強制、§9 威脅模型、§1.5 後端相依 |
 | 對應決策紀錄 | 還原原始計畫 `doc/archive/plan/EMS實作計畫.md` 之自寫前端（Stage 2~6 React SPA），當時因 ADR-001 開源優先暫以 Grafana 取代、降為「待決策」 |
 | 取代 / 補充 | **補充**全線 PRD；消費 PRD-0001/0002/0003 既有後端契約；與 [PRD-0004](PRD-0004-device-service-observability-alerting.md)（Grafana 內部 ops 觀測）**分工並存，非替代** |
 | 邊界釐清 | Grafana = 運維內部可觀測性 / 告警；本 PRD = 客戶 / 操作人員的產品 UI |
@@ -245,7 +245,7 @@ charts/theme.ts      ECharts theme
 
 ### 8.2 契約原則
 
-- **本 PRD 不新增後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 契約已存在——剩餘為 **P2 路由策略決策**（非後端工項），前端不擅改契約。
+- **本 PRD 不新增 device-service 後端 API**；D1/D3 已由 GATE-2 後端增量關閉（openapi 1.3.0），D2 量測契約已存在且路由已決策為 BFF-mediated（§9.3）。前端不擅改 device-service 契約；BFF 對外 facade 屬本 PRD 實作面。
 - 前端→後端呼叫**一律經 BFF**統一注入 X-API-Key（不在前端明碼）。
 - 由 `api/openapi.yml` 生成 TS client，做契約測試 + runtime drift test 防漂移（§13.2 / R2）；open-ended enum 須有 unknown/default handling（§13.2）。
 
@@ -413,3 +413,13 @@ charts/theme.ts      ECharts theme
 ---
 
 > **Draft v2（2026-06-09，已過 architect + security 審視）**：原 v1 骨架經兩位 reviewer 評為 NEEDS-REWORK，本版已修正——資料存取改走 device-service REST（非 `api.*` 白名單，architect HIGH）、BFF 由「選項」改為**強制**並補完整威脅模型（§9 三項 CRITICAL：BFF/session/PostgREST 公開性）、§11 補瀏覽器威脅（XSS/clickjacking/IDOR/session）、§1.5 誠實列後端相依 D1~D4。**Draft v3（2026-06-10）：Approved 前 blocker 全數清空**——GATE-2 已實作關閉（openapi 1.3.0）；**P2 路由已決策**（全部經 BFF，§9.3）；**技術棧/Design System 已定案**（FastAPI BFF + Tailwind/Radix/shadcn 種子 + 自建 EMS Design System，§6.4；視覺執行交 Claude Design）。控制下發仍為 Non-Goal（待 control-service PRD）。**本 PRD 已達可 Approve / P1 可開工狀態。**
+
+### 2026-09-23 附錄變更紀錄
+FR-520/521 的完整歷史範圍與分頁由 [PRD-0018](PRD-0018-monitor-history.md)、[ADR-027](../adr/ADR-027-monitor-history.md) 實作。既有 API 保留。視覺先落地於 output/ems-design-preview-20260923 本機預覽。
+
+### 2026-09-29：Simulator 控制改由 PRD-0022 / ADR-033
+四台固定模擬器的設定與故障注入統一至 BFF OPS API/CLI、持久 SQLite audit。舊 meter :8001 POST、PLC/MCP raw Modbus 寫入停用，遙測與真機唯讀採集不變。runtime 設定重啟還原，操作紀錄保留；詳 operations/simulator-control.md。
+
+## 2026-09-30 變更紀錄：DB local accounts
+
+使用者要求帳號資料進 DB。PRD-0023／ADR-035 取代本文件內歷史 BFF_AUTH_USERS provisioning 描述；local account 唯一來源 PostgreSQL bff_auth，帳號異動令舊 session version 失效。HTTP 登入、cookie、CSRF 與 OIDC JSON／流程相容。帳號管理是主機 CLI，未新增網頁。

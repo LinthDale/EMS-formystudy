@@ -232,7 +232,7 @@ Proposed | Accepted | Deprecated | Superseded by ADR-XXX
 正面 / 負面影響？
 ```
 
-ADR 放於 `docs/adr/`，與 PRD 雙向連結。
+ADR 放於 `doc/adr/`，與 PRD 雙向連結。
 
 ---
 
@@ -265,10 +265,11 @@ ADR 放於 `docs/adr/`，與 PRD 雙向連結。
 
 ### 11.2 EMS 同步義務
 
-每次重大 PRD 完成後，**必須同步更新**：
+每次重大 PRD 完成後，**必須同步更新**（對齊 `project_rules.md §3`）：
 1. `api/openapi.yml`（專案實際路徑；舊文件寫的 `doc/API.yaml` 已不使用）
-2. Container Cheat Sheet
-3. Operations Manual
+2. `doc/operations/容器速查表.md`（Container Cheat Sheet）
+3. `doc/operations/操作手冊.md`（Operations Manual）
+4. `README.md`
 
 此為硬性流程要求，PR 缺一不予合併。
 
@@ -327,4 +328,4 @@ ADR 放於 `docs/adr/`，與 PRD 雙向連結。
 
 ---
 
-*本 Guideline 為活文件，每季 review 一次。修訂建議請開 PR 至 `docs/guidelines/`。*
+*本 Guideline 為活文件，每季 review 一次。修訂建議請開 PR 修改本檔 `doc/PRD-架構設計-Guideline.md`。*

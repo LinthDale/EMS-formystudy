@@ -1,0 +1,15 @@
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000001.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/1000000 (timeline 1)
+pg_receivewal: finished segment at 0/2000000 (timeline 1)
+pg_receivewal: finished segment at 0/3000000 (timeline 1)
+pg_receivewal: error: could not receive data from WAL stream: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+pg_receivewal: error: disconnected

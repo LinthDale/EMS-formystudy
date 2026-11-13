@@ -1,0 +1,429 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="17" skipped="0" tests="17" time="0.052" timestamp="2026-11-13T06:02:32.934874+00:00" hostname="3522c364c19e"><testcase classname="" name="test_cutover_suite_selects_new_cases_plus_original_boundary_only" time="0.000"><failure message="ValueError: unknown private suite">def test_cutover_suite_selects_new_cases_plus_original_boundary_only():
+&gt;       assert verifier.suite_targets('cutover')==('/app/tests/integration/test_edge_cutover.py',
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            '/app/services/delta/tests/test_bench_slot_boundary.py'), 'cutover suite is missing or broadens into soak'
+
+services/edge-receiver/tests/test_cutover_suite.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suite = 'cutover'
+
+    def suite_targets(suite):
+        suites = {
+            'baseline': ('/app/tests/integration/test_edge_receipts.py',
+                         '/app/tests/integration/test_edge_receipts_mqtt.py',
+                         '/app/services/edge-receiver/tests', '/app/services/delta/tests'),
+            'faults': ('/app/tests/integration/test_edge_receipts_faults.py',
+                       '/app/services/delta/tests/test_bench_slot_boundary.py'),
+            'resilience': ('/app/tests/integration/test_edge_resilience.py',
+                           '/app/services/delta/tests/test_reliable_resilience.py',
+                           '/app/services/delta/tests/test_bench_slot_boundary.py'),
+            'lifecycle': ('/app/tests/integration/test_edge_lifecycle.py',
+                          '/app/services/delta/tests/test_reliable_corruption.py',
+                          '/app/services/delta/tests/test_bench_slot_boundary.py'),
+            'restore-load': ('/app/tests/integration/test_edge_restore_load.py',
+                             '/app/services/delta/tests/test_bench_slot_boundary.py'),
+            'wal-pitr': ('/app/tests/integration/test_edge_wal_pitr.py',
+                         '/app/services/delta/tests/test_bench_slot_boundary.py'),
+        }
+        if suite not in suites:
+&gt;           raise ValueError('unknown private suite')
+E           ValueError: unknown private suite
+
+services/edge-receiver/tools/verify_private.py:61: ValueError</failure></testcase><testcase classname="" name="test_complete_cutover_proof_passes" time="0.001"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">def test_complete_cutover_proof_passes():
+        root,proof=fixture()
+&gt;       assert verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], 'complete evidence rejected'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:40: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[missing-case]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'missing-case'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[replaced-case]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'replaced-case'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[skipped]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'skipped'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[root-role]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'root-role'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[local-only]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'local-only'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[no-permission-error]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'no-permission-error'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[source-deleted]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'source-deleted'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[fake-crash]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'fake-crash'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[partial-published]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'partial-published'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[migration-duplicates]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'migration-duplicates'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[source-modified]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'source-modified'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[no-disconnect]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'no-disconnect'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[no-new-challenge]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'no-new-challenge'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[old-ack-accepted]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'old-ack-accepted'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase><testcase classname="" name="test_cutover_gate_rejects_incomplete_or_false_result[absent-evidence]" time="0.000"><failure message="AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'">mutation = 'absent-evidence'
+
+    @pytest.mark.parametrize('mutation',['missing-case','replaced-case','skipped','root-role','local-only',
+        'no-permission-error','source-deleted','fake-crash','partial-published','migration-duplicates','source-modified',
+        'no-disconnect','no-new-challenge','old-ack-accepted','absent-evidence'])
+    def test_cutover_gate_rejects_incomplete_or_false_result(mutation):
+        root,proof=fixture();proof=deepcopy(proof)
+        if mutation=='missing-case':root.remove(root[-1])
+        elif mutation=='replaced-case':root[-1].set('name','old_passing_case')
+        elif mutation=='skipped':ET.SubElement(root[-1],'skipped')
+        elif mutation=='root-role':proof['field-limited-role']['administrative_flags']['rolsuper']=True
+        elif mutation=='local-only':proof['field-limited-role']['ack_durability']='local'
+        elif mutation=='no-permission-error':proof['field-limited-role']['actual_exception']='TimeoutError'
+        elif mutation=='source-deleted':proof['field-limited-role']['source_preserved_during_denial']=False
+        elif mutation=='fake-crash':proof['conversion-before_publish']['child_exit']=0
+        elif mutation=='partial-published':proof['conversion-after_first_row']['published_at_crash']=True
+        elif mutation=='migration-duplicates':proof['conversion-after_publish']['central_rows']=[2,1]
+        elif mutation=='source-modified':proof['conversion-before_publish']['source_unchanged']=False
+        elif mutation=='no-disconnect':proof['duplicate-client-id']['actual_disconnect']=False
+        elif mutation=='no-new-challenge':proof['duplicate-client-id']['new_challenge']=None
+        elif mutation=='old-ack-accepted':proof['duplicate-client-id']['old_ack_accepted']=True
+        else:proof.pop('conversion-after_publish')
+&gt;       assert not verifier.assess_cutover_report(ET.tostring(root,encoding='unicode'),0,proof)['passed'], f'{mutation} falsely passed'
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       AttributeError: module 'verify_private' has no attribute 'assess_cutover_report'
+
+services/edge-receiver/tests/test_cutover_suite.py:63: AttributeError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="14" skipped="0" tests="14" time="0.025" timestamp="2026-11-13T07:58:26.235973+00:00" hostname="46602e617dc1"><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[latest]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = 'latest'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[current]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = 'current'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[0]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = '0'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[-1]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = '-1'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[2;port=5432]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = '2;port=5432'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[2]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = 2
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[True]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = True
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[4294967296]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = '4294967296'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_unpinned_or_invalid_timeline[02]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">timeline = '02'
+
+    @pytest.mark.parametrize('timeline',['latest','current','0','-1','2;port=5432',2,True,'4294967296','02'])
+    def test_recovery_plan_rejects_unpinned_or_invalid_timeline(timeline):
+        with pytest.raises(ValueError,match='timeline'):
+&gt;           backup_preflight.recovery_settings(timeline,'ems_approved_target')
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:10: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_invalid_target[]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">target = ''
+
+    @pytest.mark.parametrize('target',['',"x'\nport=5432",'a'*64,None])
+    def test_recovery_plan_rejects_invalid_target(target):
+        with pytest.raises(ValueError,match='target'):
+&gt;           backup_preflight.recovery_settings('2',target)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:16: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_invalid_target[x'\nport=5432]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">target = "x'\nport=5432"
+
+    @pytest.mark.parametrize('target',['',"x'\nport=5432",'a'*64,None])
+    def test_recovery_plan_rejects_invalid_target(target):
+        with pytest.raises(ValueError,match='target'):
+&gt;           backup_preflight.recovery_settings('2',target)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:16: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_invalid_target[aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">target = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+
+    @pytest.mark.parametrize('target',['',"x'\nport=5432",'a'*64,None])
+    def test_recovery_plan_rejects_invalid_target(target):
+        with pytest.raises(ValueError,match='target'):
+&gt;           backup_preflight.recovery_settings('2',target)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:16: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_rejects_invalid_target[None]" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">target = None
+
+    @pytest.mark.parametrize('target',['',"x'\nport=5432",'a'*64,None])
+    def test_recovery_plan_rejects_invalid_target(target):
+        with pytest.raises(ValueError,match='target'):
+&gt;           backup_preflight.recovery_settings('2',target)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:16: AttributeError</failure></testcase><testcase classname="" name="test_recovery_plan_pins_approved_timeline_and_named_target" time="0.000"><failure message="AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'">def test_recovery_plan_pins_approved_timeline_and_named_target():
+&gt;       assert backup_preflight.recovery_settings('2','ems_approved_target')=={
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            'recovery_target_timeline':'2','recovery_target_name':'ems_approved_target',
+            'recovery_target_action':'promote'}, 'approved recovery branch changed'
+E       AttributeError: module 'edge_receiver.backup_preflight' has no attribute 'recovery_settings'
+
+services/edge-receiver/tests/test_recovery_target.py:20: AttributeError</failure></testcase></testsuite></testsuites>

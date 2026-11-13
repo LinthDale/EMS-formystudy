@@ -1,0 +1,9 @@
+{
+  "status": "CANCELLED_BY_USER",
+  "finished_utc": "2026-11-12T04:34:53.418750+00:00",
+  "reason": "User declined another USB timing retest; preserve 27.235s result and deviation",
+  "complete_run": false,
+  "no_acceptance_claim": true,
+  "sqlite_integrity": "ok",
+  "pending_rows_at_cancellation": 0
+}

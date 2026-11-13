@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "kind": "wrong_host",
+  "probe": {
+    "passed": true,
+    "request_id": "2fe3b31b-52b2-48e6-9660-1694dac60667",
+    "op": "wal_probe_wrong_host",
+    "kind": "wrong_host",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "aa623c3b91fe66c996e672a0dda5b79f66b1f5547d374095e2aefcc36ed2aaa4",
+    "replication_peer_absent": true,
+    "tls_verify_code": 64,
+    "client_verify_code": null
+  },
+  "recovered_slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC6688",
+    "lag_bytes": 0,
+    "slot_retained_bytes": 0,
+    "active": true,
+    "peer_tls": true,
+    "peer_role": "ems_wal_archive",
+    "peer_client_dn": "/CN=ems_wal_archive",
+    "flush_lsn": "0/1FC6688"
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

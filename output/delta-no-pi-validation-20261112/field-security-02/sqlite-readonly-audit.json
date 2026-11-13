@@ -1,0 +1,86 @@
+[
+  {
+    "database": "tls-valid/outbox.db",
+    "pending": 0,
+    "expected_pending": 0,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-untrusted-ca/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-wrong-host/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-expired/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-wrong-password/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-missing-auth/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "mtls-valid/outbox.db",
+    "pending": 0,
+    "expected_pending": 0,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "mtls-client-none/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "mtls-rogue-client-certificate/outbox.db",
+    "pending": 1,
+    "expected_pending": 1,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "tls-reconnect/outbox.db",
+    "pending": 0,
+    "expected_pending": 0,
+    "latest_timestamp": "1800000000000000000",
+    "passed": true
+  },
+  {
+    "database": "clock-phases/state/outbox.db",
+    "pending": 0,
+    "expected_pending": 0,
+    "latest_timestamp": "1800000003000000000",
+    "passed": true
+  },
+  {
+    "database": "clock-restart/state/outbox.db",
+    "pending": 0,
+    "expected_pending": 0,
+    "latest_timestamp": "1800000011000000000",
+    "passed": true
+  }
+]

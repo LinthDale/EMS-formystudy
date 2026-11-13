@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="12" time="11.679" timestamp="2026-11-12T07:18:35.903911+00:00" hostname="1c2edea9961d"><testcase classname="tests.field_checks.test_clock_runtime" name="test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains" time="2.285"><failure message="AttributeError: 'ObservedPoller' object has no attribute 'close'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ca0828d6550&gt;
+modbus_server = 36235
+receiver = [('ems/devices/clock-probe/measurements', 'electricity_measurements,device_id=clock-probe voltage=230.0,current=13.05,...measurements,device_id=clock-probe voltage=230.0,current=13.09,power_kw=9.035,energy_kwh=1234.56 1800000003000000000')]
+record = &lt;function record.&lt;locals&gt;.save at 0x7ca0825ba5c0&gt;
+
+    def test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains(monkeypatch,modbus_server,receiver,record):
+&gt;       with runtime(monkeypatch,modbus_server,'clock-phases',upload=False) as (drive,upload,commits,ledger,settings):
+
+tests/field_checks/test_clock_runtime.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/contextlib.py:144: in __exit__
+    next(self.gen)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ca0828d6550&gt;
+port = 36235, name = 'clock-phases', upload = False
+
+    @contextmanager
+    def runtime(monkeypatch, port, name, upload=True):
+        directory = EVIDENCE/name
+        directory.mkdir(exist_ok=True)
+        synced = directory/'synchronized'
+        settings = validate(dict(mode='field',device_id='clock-probe',
+            modbus=dict(transport='tcp',host='127.0.0.1',port=port,unit_id=1,address_base=1,timeout=1),
+            mqtt=config(),outbox_path=str(directory/'state/outbox.db'),clock_sync_file=str(synced)))
+        settings['poll_interval'] = .01  # Phase pacing only; not a sampling-rate acceptance test.
+        requested, permits, progress = queue.Queue(), queue.Queue(), queue.Queue()
+        shutdown, errors, polls, commits, publishers = {}, [], [], [], []
+        uploading = threading.Event()
+        if upload: uploading.set()
+        class InjectedClock(ClockGuard):
+            def timestamp(self, now=None):
+                requested.put(True)
+                value = permits.get(timeout=10)
+                if value is None: raise StopIteration('test phase complete')
+                return super().timestamp(now=value)
+        class ObservedPoller(Poller):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                polls.append(self)
+            def sample(self):
+                value = super().sample()
+                polled.append(value)
+                return value
+        polled=[]
+        class ObservedBox(Outbox):
+            def enqueue(self,*args):
+                super().enqueue(*args)
+                commits.append(args)
+        class GatedPublisher(Publisher):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                publishers.append(self)
+            def publish(self,payload):
+                return super().publish(payload) if uploading.is_set() else False
+        class Progress(logging.Handler):
+            def emit(self, record):
+                if record.msg.startswith(('sample_queued','sample_rejected')):
+                    progress.put(record.getMessage().split()[0])
+        handler = Progress()
+        previous_level = edge.LOG.level
+        edge.LOG.setLevel(logging.INFO)
+        edge.LOG.addHandler(handler)
+        def worker():
+            try: edge.run(settings)
+            except BaseException as exc: errors.append(type(exc).__name__)
+        thread = threading.Thread(target=worker,name='isolated-clock-edge')
+        ledger=[]
+        def drive(label, now, synchronized, accepted):
+            requested.get(timeout=10)
+            if synchronized: synced.touch()
+            else: synced.unlink(missing_ok=True)
+            before = len(polled), len(commits)
+            permits.put(now)
+            result = progress.get(timeout=10)
+            assert result == ('sample_queued' if accepted else 'sample_rejected'), label
+            assert (len(polled)-before[0],len(commits)-before[1]) == ((1,1) if accepted else (0,0)), label
+            ledger.append(dict(phase=label,injected_time_ns=now,synchronized=synchronized,
+                               accepted=accepted,polls=len(polled)-before[0],commits=len(commits)-before[1]))
+        with monkeypatch.context() as patch:
+            patch.setattr(edge,'ClockGuard',InjectedClock)
+            patch.setattr(edge,'Poller',ObservedPoller)
+            patch.setattr(edge,'Outbox',ObservedBox)
+            patch.setattr(edge,'Publisher',GatedPublisher)
+            patch.setattr(edge.signal,'signal',lambda sig,fn:shutdown.__setitem__(sig,fn))
+            thread.start()
+            try:
+                until(lambda:bool(publishers) and publishers[0].ready.is_set())
+                yield drive,uploading,commits,ledger,settings
+            finally:
+                if signal.SIGTERM in shutdown: shutdown[signal.SIGTERM](None,None)
+                permits.put(None)
+                thread.join(timeout=12)
+&gt;               for poller in polls: poller.close()
+                                     ^^^^^^^^^^^^
+E               AttributeError: 'ObservedPoller' object has no attribute 'close'
+
+tests/field_checks/test_clock_runtime.py:125: AttributeError</failure></testcase><testcase classname="tests.field_checks.test_clock_runtime" name="test_restart_uses_persisted_last_timestamp" time="1.190"><failure message="AttributeError: 'ObservedPoller' object has no attribute 'close'">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ca0825b0290&gt;
+modbus_server = 37545
+receiver = [('ems/devices/clock-probe/measurements', 'electricity_measurements,device_id=clock-probe voltage=230.0,current=13.040000000000001,power_kw=9.004,energy_kwh=1234.56 1800000010000000000')]
+record = &lt;function record.&lt;locals&gt;.save at 0x7ca084555f80&gt;
+
+    def test_restart_uses_persisted_last_timestamp(monkeypatch,modbus_server,receiver,record):
+        all_commits=[]
+        all_phases=[]
+        for boot in (1,2):
+&gt;           with runtime(monkeypatch,modbus_server,'clock-restart') as (drive,upload,commits,ledger,settings):
+
+tests/field_checks/test_clock_runtime.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/contextlib.py:144: in __exit__
+    next(self.gen)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7ca0825b0290&gt;
+port = 37545, name = 'clock-restart', upload = True
+
+    @contextmanager
+    def runtime(monkeypatch, port, name, upload=True):
+        directory = EVIDENCE/name
+        directory.mkdir(exist_ok=True)
+        synced = directory/'synchronized'
+        settings = validate(dict(mode='field',device_id='clock-probe',
+            modbus=dict(transport='tcp',host='127.0.0.1',port=port,unit_id=1,address_base=1,timeout=1),
+            mqtt=config(),outbox_path=str(directory/'state/outbox.db'),clock_sync_file=str(synced)))
+        settings['poll_interval'] = .01  # Phase pacing only; not a sampling-rate acceptance test.
+        requested, permits, progress = queue.Queue(), queue.Queue(), queue.Queue()
+        shutdown, errors, polls, commits, publishers = {}, [], [], [], []
+        uploading = threading.Event()
+        if upload: uploading.set()
+        class InjectedClock(ClockGuard):
+            def timestamp(self, now=None):
+                requested.put(True)
+                value = permits.get(timeout=10)
+                if value is None: raise StopIteration('test phase complete')
+                return super().timestamp(now=value)
+        class ObservedPoller(Poller):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                polls.append(self)
+            def sample(self):
+                value = super().sample()
+                polled.append(value)
+                return value
+        polled=[]
+        class ObservedBox(Outbox):
+            def enqueue(self,*args):
+                super().enqueue(*args)
+                commits.append(args)
+        class GatedPublisher(Publisher):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                publishers.append(self)
+            def publish(self,payload):
+                return super().publish(payload) if uploading.is_set() else False
+        class Progress(logging.Handler):
+            def emit(self, record):
+                if record.msg.startswith(('sample_queued','sample_rejected')):
+                    progress.put(record.getMessage().split()[0])
+        handler = Progress()
+        previous_level = edge.LOG.level
+        edge.LOG.setLevel(logging.INFO)
+        edge.LOG.addHandler(handler)
+        def worker():
+            try: edge.run(settings)
+            except BaseException as exc: errors.append(type(exc).__name__)
+        thread = threading.Thread(target=worker,name='isolated-clock-edge')
+        ledger=[]
+        def drive(label, now, synchronized, accepted):
+            requested.get(timeout=10)
+            if synchronized: synced.touch()
+            else: synced.unlink(missing_ok=True)
+            before = len(polled), len(commits)
+            permits.put(now)
+            result = progress.get(timeout=10)
+            assert result == ('sample_queued' if accepted else 'sample_rejected'), label
+            assert (len(polled)-before[0],len(commits)-before[1]) == ((1,1) if accepted else (0,0)), label
+            ledger.append(dict(phase=label,injected_time_ns=now,synchronized=synchronized,
+                               accepted=accepted,polls=len(polled)-before[0],commits=len(commits)-before[1]))
+        with monkeypatch.context() as patch:
+            patch.setattr(edge,'ClockGuard',InjectedClock)
+            patch.setattr(edge,'Poller',ObservedPoller)
+            patch.setattr(edge,'Outbox',ObservedBox)
+            patch.setattr(edge,'Publisher',GatedPublisher)
+            patch.setattr(edge.signal,'signal',lambda sig,fn:shutdown.__setitem__(sig,fn))
+            thread.start()
+            try:
+                until(lambda:bool(publishers) and publishers[0].ready.is_set())
+                yield drive,uploading,commits,ledger,settings
+            finally:
+                if signal.SIGTERM in shutdown: shutdown[signal.SIGTERM](None,None)
+                permits.put(None)
+                thread.join(timeout=12)
+&gt;               for poller in polls: poller.close()
+                                     ^^^^^^^^^^^^
+E               AttributeError: 'ObservedPoller' object has no attribute 'close'
+
+tests/field_checks/test_clock_runtime.py:125: AttributeError</failure></testcase><testcase classname="tests.field_checks.test_tls_transport" name="test_valid_password_tls_delivers_original_payload" time="0.118" /><testcase classname="tests.field_checks.test_tls_transport" name="test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-20]" time="0.049"><failure message="AssertionError: certificate was not rejected for the expected reason&#10;assert 19 == 20&#10; +  where 19 = SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)').verify_code&#10; +    where SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') = &lt;ExceptionInfo SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') tblen=4&gt;.value">case = 'untrusted-ca', port = 1883, ca = 'rogue-ca.crt', verify_code = 20
+receiver = [], record = &lt;function record.&lt;locals&gt;.save at 0x7ca082414220&gt;
+
+    @pytest.mark.parametrize('case,port,ca,verify_code',[
+        ('untrusted-ca',1883,'rogue-ca.crt',20),
+        ('wrong-host',8884,'ca.crt',64),
+        ('expired',8885,'ca.crt',10),
+    ])
+    def test_invalid_server_certificate_preserves_pending(case,port,ca,verify_code,receiver,record):
+        context = ssl.create_default_context(cafile=str(PKI/ca))
+        with socket.create_connection(('127.0.0.1',port),timeout=3) as raw:
+            with pytest.raises(ssl.SSLCertVerificationError) as error:
+                context.wrap_socket(raw,server_hostname='127.0.0.1')
+&gt;       assert error.value.verify_code==verify_code, 'certificate was not rejected for the expected reason'
+E       AssertionError: certificate was not rejected for the expected reason
+E       assert 19 == 20
+E        +  where 19 = SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)').verify_code
+E        +    where SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') = &lt;ExceptionInfo SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') tblen=4&gt;.value
+
+tests/field_checks/test_tls_transport.py:80: AssertionError</failure></testcase><testcase classname="tests.field_checks.test_tls_transport" name="test_invalid_server_certificate_preserves_pending[wrong-host-8884-ca.crt-64]" time="1.079" /><testcase classname="tests.field_checks.test_tls_transport" name="test_invalid_server_certificate_preserves_pending[expired-8885-ca.crt-10]" time="1.073" /><testcase classname="tests.field_checks.test_tls_transport" name="test_wrong_password_rejected_without_deleting_pending" time="1.078" /><testcase classname="tests.field_checks.test_tls_transport" name="test_missing_auth_rejected_without_deleting_pending" time="1.076" /><testcase classname="tests.field_checks.test_tls_transport" name="test_valid_mtls_without_password_delivers" time="0.132" /><testcase classname="tests.field_checks.test_tls_transport" name="test_missing_or_untrusted_client_certificate_preserves_pending[none-client]" time="1.071" /><testcase classname="tests.field_checks.test_tls_transport" name="test_missing_or_untrusted_client_certificate_preserves_pending[certificate-rogue-client]" time="1.072" /><testcase classname="tests.field_checks.test_tls_transport" name="test_same_tls_publisher_reconnects_and_replays_original_data" time="1.322" /></testsuite></testsuites>

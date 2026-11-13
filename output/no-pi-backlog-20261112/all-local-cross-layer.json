@@ -1,0 +1,44 @@
+{
+  "scope": "all 110 actual QA samples, with 40-row live Monitor snapshot traced to source",
+  "database": {
+    "expected": 110,
+    "received": 110,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 110,
+    "received": 110,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "ui_rendered": {
+    "expected": 40,
+    "received": 40,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "ui_display_time": [
+    {
+      "width": 1440,
+      "passed": true
+    },
+    {
+      "width": 390,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

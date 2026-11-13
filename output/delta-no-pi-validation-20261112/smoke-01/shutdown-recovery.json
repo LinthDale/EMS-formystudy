@@ -1,0 +1,6 @@
+{
+  "pending_before": 1,
+  "sent": 1,
+  "pending_after": 0,
+  "method": "reopen SQLite and publish saved payload; no re-acquisition"
+}

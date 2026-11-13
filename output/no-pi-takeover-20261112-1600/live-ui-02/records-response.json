@@ -1,0 +1,805 @@
+{
+  "rows": [
+    {
+      "time": "2026-11-12T08:04:28.643942+00:00",
+      "current": 12.42,
+      "voltage": 230,
+      "power_kw": 8.573,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.75
+    },
+    {
+      "time": "2026-11-12T08:04:23.643244+00:00",
+      "current": 12.59,
+      "voltage": 230,
+      "power_kw": 8.691,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.74
+    },
+    {
+      "time": "2026-11-12T08:04:18.650097+00:00",
+      "current": 12.790000000000001,
+      "voltage": 230,
+      "power_kw": 8.827,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.73
+    },
+    {
+      "time": "2026-11-12T08:04:13.644061+00:00",
+      "current": 13,
+      "voltage": 230,
+      "power_kw": 8.974,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.72
+    },
+    {
+      "time": "2026-11-12T08:04:08.633387+00:00",
+      "current": 13.22,
+      "voltage": 230,
+      "power_kw": 9.124,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.7
+    },
+    {
+      "time": "2026-11-12T08:04:03.645374+00:00",
+      "current": 13.42,
+      "voltage": 230,
+      "power_kw": 9.266,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.69
+    },
+    {
+      "time": "2026-11-12T08:03:58.647797+00:00",
+      "current": 13.6,
+      "voltage": 230,
+      "power_kw": 9.39,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.68
+    },
+    {
+      "time": "2026-11-12T08:03:53.639358+00:00",
+      "current": 13.75,
+      "voltage": 230,
+      "power_kw": 9.491,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.67
+    },
+    {
+      "time": "2026-11-12T08:03:48.646054+00:00",
+      "current": 13.85,
+      "voltage": 230,
+      "power_kw": 9.561,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.65
+    },
+    {
+      "time": "2026-11-12T08:03:43.647951+00:00",
+      "current": 13.9,
+      "voltage": 230,
+      "power_kw": 9.596,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.64
+    },
+    {
+      "time": "2026-11-12T08:03:38.638335+00:00",
+      "current": 13.9,
+      "voltage": 230,
+      "power_kw": 9.594,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.63
+    },
+    {
+      "time": "2026-11-12T08:03:33.647379+00:00",
+      "current": 13.84,
+      "voltage": 230,
+      "power_kw": 9.555,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.61
+    },
+    {
+      "time": "2026-11-12T08:03:28.646853+00:00",
+      "current": 13.74,
+      "voltage": 230,
+      "power_kw": 9.481,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.6
+    },
+    {
+      "time": "2026-11-12T08:03:23.638395+00:00",
+      "current": 13.59,
+      "voltage": 230,
+      "power_kw": 9.378,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.59
+    },
+    {
+      "time": "2026-11-12T08:03:18.641399+00:00",
+      "current": 13.4,
+      "voltage": 230,
+      "power_kw": 9.251,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.57
+    },
+    {
+      "time": "2026-11-12T08:03:13.643567+00:00",
+      "current": 13.200000000000001,
+      "voltage": 230,
+      "power_kw": 9.108,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.56
+    },
+    {
+      "time": "2026-11-12T08:03:08.641393+00:00",
+      "current": 12.98,
+      "voltage": 230,
+      "power_kw": 8.959,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.55
+    },
+    {
+      "time": "2026-11-12T08:03:03.650694+00:00",
+      "current": 12.77,
+      "voltage": 230,
+      "power_kw": 8.813,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.54
+    },
+    {
+      "time": "2026-11-12T08:02:58.647423+00:00",
+      "current": 12.57,
+      "voltage": 230,
+      "power_kw": 8.678,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.52
+    },
+    {
+      "time": "2026-11-12T08:02:53.650455+00:00",
+      "current": 12.4,
+      "voltage": 230,
+      "power_kw": 8.562,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.51
+    },
+    {
+      "time": "2026-11-12T08:02:48.650193+00:00",
+      "current": 12.280000000000001,
+      "voltage": 230,
+      "power_kw": 8.474,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.5
+    },
+    {
+      "time": "2026-11-12T08:02:43.640683+00:00",
+      "current": 12.200000000000001,
+      "voltage": 230,
+      "power_kw": 8.419,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.49
+    },
+    {
+      "time": "2026-11-12T08:02:38.644902+00:00",
+      "current": 12.17,
+      "voltage": 230,
+      "power_kw": 8.4,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.48
+    },
+    {
+      "time": "2026-11-12T08:02:33.639408+00:00",
+      "current": 12.200000000000001,
+      "voltage": 230,
+      "power_kw": 8.418,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.46
+    },
+    {
+      "time": "2026-11-12T08:02:28.649739+00:00",
+      "current": 12.27,
+      "voltage": 230,
+      "power_kw": 8.472,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.45
+    },
+    {
+      "time": "2026-11-12T08:02:23.653507+00:00",
+      "current": 12.4,
+      "voltage": 230,
+      "power_kw": 8.559,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.44
+    },
+    {
+      "time": "2026-11-12T08:02:18.654966+00:00",
+      "current": 12.56,
+      "voltage": 230,
+      "power_kw": 8.673,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.43
+    },
+    {
+      "time": "2026-11-12T08:02:13.65147+00:00",
+      "current": 12.76,
+      "voltage": 230,
+      "power_kw": 8.807,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.42
+    },
+    {
+      "time": "2026-11-12T08:02:08.654149+00:00",
+      "current": 12.97,
+      "voltage": 230,
+      "power_kw": 8.955,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.4
+    },
+    {
+      "time": "2026-11-12T08:02:03.639783+00:00",
+      "current": 13.19,
+      "voltage": 230,
+      "power_kw": 9.105,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.39
+    },
+    {
+      "time": "2026-11-12T08:01:58.644848+00:00",
+      "current": 13.4,
+      "voltage": 230,
+      "power_kw": 9.248,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.38
+    },
+    {
+      "time": "2026-11-12T08:01:53.650203+00:00",
+      "current": 13.58,
+      "voltage": 230,
+      "power_kw": 9.374,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.37
+    },
+    {
+      "time": "2026-11-12T08:01:48.64903+00:00",
+      "current": 13.73,
+      "voltage": 230,
+      "power_kw": 9.478,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.35
+    },
+    {
+      "time": "2026-11-12T08:01:43.63355+00:00",
+      "current": 13.84,
+      "voltage": 230,
+      "power_kw": 9.554,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.34
+    },
+    {
+      "time": "2026-11-12T08:01:38.644583+00:00",
+      "current": 13.9,
+      "voltage": 230,
+      "power_kw": 9.593,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.33
+    },
+    {
+      "time": "2026-11-12T08:01:33.639607+00:00",
+      "current": 13.9,
+      "voltage": 230,
+      "power_kw": 9.596,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.31
+    },
+    {
+      "time": "2026-11-12T08:01:28.647385+00:00",
+      "current": 13.85,
+      "voltage": 230,
+      "power_kw": 9.562,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.3
+    },
+    {
+      "time": "2026-11-12T08:01:23.637485+00:00",
+      "current": 13.75,
+      "voltage": 230,
+      "power_kw": 9.493,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.29
+    },
+    {
+      "time": "2026-11-12T08:01:18.634799+00:00",
+      "current": 13.61,
+      "voltage": 230,
+      "power_kw": 9.393,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.27
+    },
+    {
+      "time": "2026-11-12T08:01:13.646144+00:00",
+      "current": 13.43,
+      "voltage": 230,
+      "power_kw": 9.269,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.26
+    },
+    {
+      "time": "2026-11-12T08:01:08.643144+00:00",
+      "current": 13.22,
+      "voltage": 230,
+      "power_kw": 9.128,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.25
+    },
+    {
+      "time": "2026-11-12T08:01:03.653514+00:00",
+      "current": 13.01,
+      "voltage": 230,
+      "power_kw": 8.979,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.23
+    },
+    {
+      "time": "2026-11-12T08:00:58.655413+00:00",
+      "current": 12.8,
+      "voltage": 230,
+      "power_kw": 8.832,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.22
+    },
+    {
+      "time": "2026-11-12T08:00:53.634298+00:00",
+      "current": 12.6,
+      "voltage": 230,
+      "power_kw": 8.695,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.21
+    },
+    {
+      "time": "2026-11-12T08:00:48.645924+00:00",
+      "current": 12.42,
+      "voltage": 230,
+      "power_kw": 8.576,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.2
+    },
+    {
+      "time": "2026-11-12T08:00:43.65722+00:00",
+      "current": 12.290000000000001,
+      "voltage": 230,
+      "power_kw": 8.484,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.19
+    },
+    {
+      "time": "2026-11-12T08:00:38.645021+00:00",
+      "current": 12.200000000000001,
+      "voltage": 230,
+      "power_kw": 8.424,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.17
+    },
+    {
+      "time": "2026-11-12T08:00:33.64533+00:00",
+      "current": 12.17,
+      "voltage": 230,
+      "power_kw": 8.4,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.16
+    },
+    {
+      "time": "2026-11-12T08:00:28.643381+00:00",
+      "current": 12.19,
+      "voltage": 230,
+      "power_kw": 8.413,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.15
+    },
+    {
+      "time": "2026-11-12T08:00:23.647481+00:00",
+      "current": 12.26,
+      "voltage": 230,
+      "power_kw": 8.463,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.14
+    },
+    {
+      "time": "2026-11-12T08:00:18.645605+00:00",
+      "current": 12.38,
+      "voltage": 230,
+      "power_kw": 8.546,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.13
+    },
+    {
+      "time": "2026-11-12T08:00:13.651598+00:00",
+      "current": 12.540000000000001,
+      "voltage": 230,
+      "power_kw": 8.657,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.12
+    },
+    {
+      "time": "2026-11-12T08:00:08.656467+00:00",
+      "current": 12.73,
+      "voltage": 230,
+      "power_kw": 8.788,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.1
+    },
+    {
+      "time": "2026-11-12T08:00:03.653445+00:00",
+      "current": 12.94,
+      "voltage": 230,
+      "power_kw": 8.934,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.09
+    },
+    {
+      "time": "2026-11-12T07:59:58.63665+00:00",
+      "current": 13.16,
+      "voltage": 230,
+      "power_kw": 9.085,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.08
+    },
+    {
+      "time": "2026-11-12T07:59:53.651529+00:00",
+      "current": 13.370000000000001,
+      "voltage": 230,
+      "power_kw": 9.229,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.07
+    },
+    {
+      "time": "2026-11-12T07:59:48.632384+00:00",
+      "current": 13.56,
+      "voltage": 230,
+      "power_kw": 9.359,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.05
+    },
+    {
+      "time": "2026-11-12T07:59:43.644092+00:00",
+      "current": 13.72,
+      "voltage": 230,
+      "power_kw": 9.467,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.04
+    },
+    {
+      "time": "2026-11-12T07:59:38.645875+00:00",
+      "current": 13.83,
+      "voltage": 230,
+      "power_kw": 9.545,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.03
+    },
+    {
+      "time": "2026-11-12T07:59:33.652428+00:00",
+      "current": 13.89,
+      "voltage": 230,
+      "power_kw": 9.59,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245.01
+    },
+    {
+      "time": "2026-11-12T07:59:28.635151+00:00",
+      "current": 13.91,
+      "voltage": 230,
+      "power_kw": 9.598,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1245
+    },
+    {
+      "time": "2026-11-12T07:59:23.645418+00:00",
+      "current": 13.86,
+      "voltage": 230,
+      "power_kw": 9.569,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.99
+    },
+    {
+      "time": "2026-11-12T07:59:18.647985+00:00",
+      "current": 13.77,
+      "voltage": 230,
+      "power_kw": 9.504,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.97
+    },
+    {
+      "time": "2026-11-12T07:59:13.643465+00:00",
+      "current": 13.63,
+      "voltage": 230,
+      "power_kw": 9.409,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.96
+    },
+    {
+      "time": "2026-11-12T07:59:08.639556+00:00",
+      "current": 13.450000000000001,
+      "voltage": 230,
+      "power_kw": 9.287,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.95
+    },
+    {
+      "time": "2026-11-12T07:59:03.643533+00:00",
+      "current": 13.25,
+      "voltage": 230,
+      "power_kw": 9.147,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.93
+    },
+    {
+      "time": "2026-11-12T07:58:58.649218+00:00",
+      "current": 13.040000000000001,
+      "voltage": 230,
+      "power_kw": 9,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.92
+    },
+    {
+      "time": "2026-11-12T07:58:53.657307+00:00",
+      "current": 12.82,
+      "voltage": 230,
+      "power_kw": 8.851,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.91
+    },
+    {
+      "time": "2026-11-12T07:58:48.655757+00:00",
+      "current": 12.620000000000001,
+      "voltage": 230,
+      "power_kw": 8.712,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.9
+    },
+    {
+      "time": "2026-11-12T07:58:43.64724+00:00",
+      "current": 12.450000000000001,
+      "voltage": 230,
+      "power_kw": 8.59,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.89
+    },
+    {
+      "time": "2026-11-12T07:58:38.652509+00:00",
+      "current": 12.31,
+      "voltage": 230,
+      "power_kw": 8.494,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.87
+    },
+    {
+      "time": "2026-11-12T07:58:33.649474+00:00",
+      "current": 12.21,
+      "voltage": 230,
+      "power_kw": 8.43,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.86
+    },
+    {
+      "time": "2026-11-12T07:58:28.640789+00:00",
+      "current": 12.17,
+      "voltage": 230,
+      "power_kw": 8.401,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.85
+    },
+    {
+      "time": "2026-11-12T07:58:23.654031+00:00",
+      "current": 12.18,
+      "voltage": 230,
+      "power_kw": 8.409,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.84
+    },
+    {
+      "time": "2026-11-12T07:58:18.650084+00:00",
+      "current": 12.25,
+      "voltage": 230,
+      "power_kw": 8.454,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.83
+    },
+    {
+      "time": "2026-11-12T07:58:13.651468+00:00",
+      "current": 12.36,
+      "voltage": 230,
+      "power_kw": 8.533,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.82
+    },
+    {
+      "time": "2026-11-12T07:58:08.651574+00:00",
+      "current": 12.52,
+      "voltage": 230,
+      "power_kw": 8.641,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.8
+    },
+    {
+      "time": "2026-11-12T07:58:03.634701+00:00",
+      "current": 12.71,
+      "voltage": 230,
+      "power_kw": 8.771,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.79
+    },
+    {
+      "time": "2026-11-12T07:57:58.64895+00:00",
+      "current": 12.92,
+      "voltage": 230,
+      "power_kw": 8.915,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.78
+    },
+    {
+      "time": "2026-11-12T07:57:53.635458+00:00",
+      "current": 13.13,
+      "voltage": 230,
+      "power_kw": 9.064,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.77
+    },
+    {
+      "time": "2026-11-12T07:57:48.645775+00:00",
+      "current": 13.34,
+      "voltage": 230,
+      "power_kw": 9.211,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.75
+    },
+    {
+      "time": "2026-11-12T07:57:43.640801+00:00",
+      "current": 13.540000000000001,
+      "voltage": 230,
+      "power_kw": 9.343,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.74
+    },
+    {
+      "time": "2026-11-12T07:57:38.6435+00:00",
+      "current": 13.700000000000001,
+      "voltage": 230,
+      "power_kw": 9.454,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.73
+    },
+    {
+      "time": "2026-11-12T07:57:33.649105+00:00",
+      "current": 13.82,
+      "voltage": 230,
+      "power_kw": 9.536,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.71
+    },
+    {
+      "time": "2026-11-12T07:57:28.6446+00:00",
+      "current": 13.89,
+      "voltage": 230,
+      "power_kw": 9.586,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.7
+    },
+    {
+      "time": "2026-11-12T07:57:23.652919+00:00",
+      "current": 13.91,
+      "voltage": 230,
+      "power_kw": 9.599,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.69
+    },
+    {
+      "time": "2026-11-12T07:57:18.641322+00:00",
+      "current": 13.870000000000001,
+      "voltage": 230,
+      "power_kw": 9.575,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.67
+    },
+    {
+      "time": "2026-11-12T07:57:13.65046+00:00",
+      "current": 13.790000000000001,
+      "voltage": 230,
+      "power_kw": 9.515,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.66
+    },
+    {
+      "time": "2026-11-12T07:57:08.641626+00:00",
+      "current": 13.65,
+      "voltage": 230,
+      "power_kw": 9.422,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.65
+    },
+    {
+      "time": "2026-11-12T07:57:03.648607+00:00",
+      "current": 13.48,
+      "voltage": 230,
+      "power_kw": 9.304,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.64
+    },
+    {
+      "time": "2026-11-12T07:56:58.652547+00:00",
+      "current": 13.280000000000001,
+      "voltage": 230,
+      "power_kw": 9.167,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.62
+    },
+    {
+      "time": "2026-11-12T07:56:53.63662+00:00",
+      "current": 13.07,
+      "voltage": 230,
+      "power_kw": 9.019,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.61
+    },
+    {
+      "time": "2026-11-12T07:56:48.659653+00:00",
+      "current": 12.85,
+      "voltage": 230,
+      "power_kw": 8.87,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.6
+    },
+    {
+      "time": "2026-11-12T07:56:43.641034+00:00",
+      "current": 12.65,
+      "voltage": 230,
+      "power_kw": 8.729,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.59
+    },
+    {
+      "time": "2026-11-12T07:56:38.636576+00:00",
+      "current": 12.47,
+      "voltage": 230,
+      "power_kw": 8.605,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.57
+    },
+    {
+      "time": "2026-11-12T07:56:33.645935+00:00",
+      "current": 12.32,
+      "voltage": 230,
+      "power_kw": 8.505,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.56
+    },
+    {
+      "time": "2026-11-12T07:56:28.650155+00:00",
+      "current": 12.22,
+      "voltage": 230,
+      "power_kw": 8.437,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.55
+    },
+    {
+      "time": "2026-11-12T07:56:23.657234+00:00",
+      "current": 12.17,
+      "voltage": 230,
+      "power_kw": 8.403,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.54
+    },
+    {
+      "time": "2026-11-12T07:56:18.644004+00:00",
+      "current": 12.18,
+      "voltage": 230,
+      "power_kw": 8.406,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.53
+    },
+    {
+      "time": "2026-11-12T07:56:13.63429+00:00",
+      "current": 12.24,
+      "voltage": 230,
+      "power_kw": 8.446,
+      "device_id": "delta-rtu-sim-001",
+      "energy_kwh": 1244.51
+    }
+  ],
+  "has_more": true
+}

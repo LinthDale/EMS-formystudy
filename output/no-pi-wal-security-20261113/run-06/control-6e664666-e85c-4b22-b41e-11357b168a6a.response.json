@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "request_id": "6e664666-e85c-4b22-b41e-11357b168a6a",
+  "op": "wal_probe_plaintext",
+  "kind": "plaintext",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "f59afbbb3ce8f950d3637f17b2cfbc79cf930ccbc61fa480ff6b1e335e56548f",
+  "replication_peer_absent": true,
+  "tls_verify_code": null
+}

@@ -1,0 +1,184 @@
+{
+  "cycles": [
+    {
+      "index": 0,
+      "killed_pid": 45252,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 3,
+      "uncommitted_ns": 1794461562225506000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 1,
+      "killed_pid": 11664,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 6,
+      "uncommitted_ns": 1794461565994315000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 2,
+      "killed_pid": 12196,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 9,
+      "uncommitted_ns": 1794461569784646000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 3,
+      "killed_pid": 58496,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 12,
+      "uncommitted_ns": 1794461573588075000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 4,
+      "killed_pid": 5672,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 15,
+      "uncommitted_ns": 1794461577331681000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 5,
+      "killed_pid": 35484,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 18,
+      "uncommitted_ns": 1794461581101039000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 6,
+      "killed_pid": 30904,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 21,
+      "uncommitted_ns": 1794461584867648000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 7,
+      "killed_pid": 25660,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 24,
+      "uncommitted_ns": 1794461588618700000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 8,
+      "killed_pid": 7064,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 27,
+      "uncommitted_ns": 1794461592374929000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    },
+    {
+      "index": 9,
+      "killed_pid": 25528,
+      "exit_code": 1,
+      "committed": 3,
+      "pending": 30,
+      "uncommitted_ns": 1794461596122128000,
+      "integrity_check": "ok",
+      "recovered_exactly": true,
+      "passed": true
+    }
+  ],
+  "database": {
+    "expected": 30,
+    "received": 30,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 30,
+    "received": 30,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "observations": [
+    {
+      "monotonic": 2539719.843,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539720.468,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539721.109,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539721.75,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539722.375,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539723.015,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539723.671,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539724.328,
+      "received": 0,
+      "missing": 30
+    },
+    {
+      "monotonic": 2539724.968,
+      "received": 30,
+      "missing": 0
+    }
+  ],
+  "pending_end": 0,
+  "crash_type": "forced child termination with uncommitted fourth transaction; not host power loss",
+  "passed": true
+}

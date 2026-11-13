@@ -1,0 +1,16 @@
+{
+  "services/delta/delta_device/reliable_store.py": "ce37ff9fb58898add590c9dd53110ca425be502507d19c4971e9a34baeacb61a",
+  "services/delta/tests/test_reliable_consistency.py": "7a3cc6466805a3802d8d9d26d97e62797e5eea8a83ea40caa88063a719a040da",
+  "services/edge-receiver/tests/fixtures/faults-and-boundary.xml": "e90503f0f938cc330a5a2faa7c201723092dc664b3f00d436bff9a1c1b1c6143",
+  "services/edge-receiver/tests/fixtures/integrity-proof.json": "8707f492b1a4ec98b59ec06a764b9a2bfc6c76fb554db87434dc722417bacbc7",
+  "services/edge-receiver/tests/fixtures/integrity-report.xml": "d665005ca1e83bfc8ef1250c1c9bc1023def3757f817293f4f3fcf6067a3d8f8",
+  "services/edge-receiver/tests/test_cutover_suite.py": "413d3fa087683ec098ea4c583523b1b3d507711c5560781ccffc6b25a4d4f3d9",
+  "services/edge-receiver/tests/test_integrity_suite.py": "f4fb7c1e56917b9f480084fece189ad4e170794ed6ec80db26d43ac493b2baf0",
+  "services/edge-receiver/tests/test_lifecycle_suite.py": "1adf4ca43bc7e37ccdf32742e2e9437d31b9fffe22f0b0fb22659a4eddf5ef55",
+  "services/edge-receiver/tests/test_private_suite.py": "c6202c039c5c76dd351cad959177a7cc29b211691b05853a7338aa5e53441980",
+  "services/edge-receiver/tests/test_receiver.py": "7358044f0d91aa2a79511947273beaa24de45e9b2100f5f301688f07f2ba0a72",
+  "services/edge-receiver/tests/test_restore_load_suite.py": "f11bd28f4cd5dbeafb1f6d0657bf87e6491821287d2a0796c9de2e0b8fb59539",
+  "services/edge-receiver/tests/test_wal_durability.py": "a554d13e9e141a4e0d566c4c4e5f8a697307502a925f09454b2a6ace53798547",
+  "services/edge-receiver/tools/verify_private.py": "0d9e08bf79668cbd7e8765861aa579a45fa079772283059179614f8afdd1c0f5",
+  "tests/integration/test_edge_integrity.py": "dfe80b38ebb388f995f6920e4515541ed8ffbc7e2d27223ab891ac79248c097a"
+}

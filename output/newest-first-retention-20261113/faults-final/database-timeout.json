@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "sample_id": "757334ff-39a8-4d4a-abee-38bea040cbfa",
+  "true_database_retryable_observed": true,
+  "database_exception_kinds": [
+    "TimeoutError"
+  ],
+  "received_statuses": [
+    {
+      "error_code": "database",
+      "payload_hash": "a8007f9afeeb6b283155b3f9df74230dcb449a5f41ede8843673940aa26cffb5",
+      "sample_id": "757334ff-39a8-4d4a-abee-38bea040cbfa",
+      "status": "retryable"
+    },
+    {
+      "committed_at": "2026-11-13T02:15:45.309176+00:00",
+      "payload_hash": "a8007f9afeeb6b283155b3f9df74230dcb449a5f41ede8843673940aa26cffb5",
+      "sample_id": "757334ff-39a8-4d4a-abee-38bea040cbfa",
+      "status": "committed"
+    }
+  ],
+  "after_failure": [
+    0,
+    0
+  ],
+  "receipts": 1,
+  "projections": 1,
+  "pending_end": 0
+}

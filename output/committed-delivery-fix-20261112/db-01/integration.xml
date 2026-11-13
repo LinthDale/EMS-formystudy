@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="10" time="0.904" timestamp="2026-11-12T09:35:07.224283+00:00" hostname="4b201b9b5431"><testcase classname="tests.integration.test_edge_receipts" name="test_identical_retry_and_parallel_receivers_insert_once" time="0.122"><failure message="edge_receiver.store.Conflict: conflict">self = &lt;edge_receiver.store.ReceiptStore object at 0x75f10f152290&gt;
+sample = {'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g-a9ecb70376', ...}
+
+    async def commit(self, sample):
+        sample = validate_sample(sample, sample['gateway_id'])
+        gateway, sid = sample['gateway_id'], UUID(sample['sample_id'])
+        try:
+            async with self.connection() as db:
+                async with db.transaction(isolation='read_committed'):
+                    now = await db.fetchval('SELECT clock_timestamp()')
+                    now_us = int((now - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds() * 1000000)
+                    if not now_us - 90 * 86400 * 1000000 &lt;= sample['sampled_at_us'] &lt;= now_us + 120 * 1000000:
+                        raise OutsideWindow('outside_window')
+                    sampled = datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=sample['sampled_at_us'])
+                    retention = max(now, sampled) + timedelta(days=91)
+&gt;                   await db.execute('''INSERT INTO edge_ingest.receipts
+                        (gateway_id,sample_id,device_id,stream_id,capture_seq,window_id,config_revision,
+                         payload_hash,sampled_at_us,retention_until,sample)
+                        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb)
+                        ON CONFLICT (gateway_id,sample_id) DO NOTHING''',
+                        gateway, sid, sample['device_id'], UUID(sample['stream_id']), sample['capture_seq'],
+                        UUID(sample['window_id']), sample['config_revision'], sample['payload_hash'],
+                        sample['sampled_at_us'], retention, canonical(sample).decode())
+
+services/edge-receiver/edge_receiver/store.py:46: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/site-packages/asyncpg/connection.py:357: in execute
+    _, status, _ = await self._execute(
+/usr/local/lib/python3.11/site-packages/asyncpg/connection.py:1873: in _execute
+    result, _ = await self.__execute(
+/usr/local/lib/python3.11/site-packages/asyncpg/connection.py:1970: in __execute
+    result, stmt = await self._do_execute(
+/usr/local/lib/python3.11/site-packages/asyncpg/connection.py:2036: in _do_execute
+    result = await executor(stmt, timeout)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+&gt;   ???
+E   asyncpg.exceptions.UniqueViolationError: duplicate key value violates unique constraint "receipts_gateway_id_device_id_stream_id_capture_seq_key"
+E   DETAIL:  Key (gateway_id, device_id, stream_id, capture_seq)=(g-a9ecb70376, d1, a608ee0e-77e6-4ffc-a5a6-61200215bab2, 1) already exists.
+
+asyncpg/protocol/protocol.pyx:205: UniqueViolationError
+
+The above exception was the direct cause of the following exception:
+
+tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_identical_retry_and_paral0')
+
+    def test_identical_retry_and_parallel_receivers_insert_once(tmp_path):
+        store, box, item = configured(tmp_path)
+        async def check():
+            results = await asyncio.gather(*(store.commit(item) for _ in range(6)))
+            receipt, rows = await counts(store, item)
+            assert len(results) == 6 and receipt == len(rows) == 1, 'parallel resend duplicated projection'
+            assert rows[0]['voltage'] == 230 and rows[0]['device_id'] == 'd1', 'projection content differs'
+&gt;       run(check())
+
+tests/integration/test_edge_receipts.py:50: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_edge_receipts.py:21: in run
+    return asyncio.run(coro)
+           ^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/integration/test_edge_receipts.py:46: in check
+    results = await asyncio.gather(*(store.commit(item) for _ in range(6)))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;edge_receiver.store.ReceiptStore object at 0x75f10f152290&gt;
+sample = {'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g-a9ecb70376', ...}
+
+    async def commit(self, sample):
+        sample = validate_sample(sample, sample['gateway_id'])
+        gateway, sid = sample['gateway_id'], UUID(sample['sample_id'])
+        try:
+            async with self.connection() as db:
+                async with db.transaction(isolation='read_committed'):
+                    now = await db.fetchval('SELECT clock_timestamp()')
+                    now_us = int((now - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds() * 1000000)
+                    if not now_us - 90 * 86400 * 1000000 &lt;= sample['sampled_at_us'] &lt;= now_us + 120 * 1000000:
+                        raise OutsideWindow('outside_window')
+                    sampled = datetime(1970, 1, 1, tzinfo=timezone.utc) + timedelta(microseconds=sample['sampled_at_us'])
+                    retention = max(now, sampled) + timedelta(days=91)
+                    await db.execute('''INSERT INTO edge_ingest.receipts
+                        (gateway_id,sample_id,device_id,stream_id,capture_seq,window_id,config_revision,
+                         payload_hash,sampled_at_us,retention_until,sample)
+                        VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11::jsonb)
+                        ON CONFLICT (gateway_id,sample_id) DO NOTHING''',
+                        gateway, sid, sample['device_id'], UUID(sample['stream_id']), sample['capture_seq'],
+                        UUID(sample['window_id']), sample['config_revision'], sample['payload_hash'],
+                        sample['sampled_at_us'], retention, canonical(sample).decode())
+                    receipt = await db.fetchrow('''SELECT payload_hash,sample,committed_at
+                        FROM edge_ingest.receipts WHERE gateway_id=$1 AND sample_id=$2 FOR UPDATE''', gateway, sid)
+                    if receipt['payload_hash'] != sample['payload_hash'] or json.loads(receipt['sample']) != sample:
+                        raise Conflict('conflict')
+                    # Re-read projection AFTER receipt lock; all writers/repair share this lock.
+                    rows = await db.fetch('''SELECT time,device_id,voltage,current,power_kw,energy_kwh
+                        FROM public.electricity_measurements WHERE edge_gateway_id=$1 AND edge_sample_id=$2
+                        ORDER BY time LIMIT 2''', gateway, sid)
+                    if len(rows) &gt; 1:
+                        raise Conflict('conflict')
+                    if rows:
+                        row = rows[0]
+                        if (row['time'] != sampled or row['device_id'] != sample['device_id']
+                                or any(row[k] != sample['measurements'][k] for k in FIELDS)):
+                            raise Conflict('conflict')
+                    else:
+                        await db.execute('''INSERT INTO public.electricity_measurements
+                            (time,device_id,voltage,current,power_kw,energy_kwh,edge_gateway_id,edge_sample_id)
+                            VALUES ($1,$2,$3,$4,$5,$6,$7,$8)''', sampled, sample['device_id'],
+                            *(sample['measurements'][k] for k in FIELDS), gateway, sid)
+                    committed_at = receipt['committed_at'].isoformat()
+                # This line is reachable only after asyncpg's transaction COMMIT returned.
+                return committed_at
+        except asyncpg.UniqueViolationError as exc:
+&gt;           raise Conflict('conflict') from exc
+E           edge_receiver.store.Conflict: conflict
+
+services/edge-receiver/edge_receiver/store.py:78: Conflict</failure></testcase><testcase classname="tests.integration.test_edge_receipts" name="test_same_id_changed_content_and_same_sequence_changed_id_are_conflicts" time="0.032"><failure message="ValueError: sample hash or size">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_same_id_changed_content_a0')
+
+    def test_same_id_changed_content_and_same_sequence_changed_id_are_conflicts(tmp_path):
+        store, _, item = configured(tmp_path)
+        async def check():
+            await store.commit(item)
+            bad = json.loads(json.dumps(item))
+            bad['measurements']['voltage'] = 240
+            bad['payload_hash'] = sample_hash(bad)
+            with pytest.raises(Conflict):
+                await store.commit(bad)
+            bad = dict(item, sample_id=str(uuid4()))
+            bad['payload_hash'] = sample_hash(bad)
+            with pytest.raises(Conflict):
+                await store.commit(bad)
+            receipt, rows = await counts(store, item)
+            assert receipt == len(rows) == 1 and rows[0]['voltage'] == 230, 'conflict altered original'
+&gt;       run(check())
+
+tests/integration/test_edge_receipts.py:69: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/integration/test_edge_receipts.py:21: in run
+    return asyncio.run(coro)
+           ^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+tests/integration/test_edge_receipts.py:62: in check
+    await store.commit(bad)
+services/edge-receiver/edge_receiver/store.py:35: in commit
+    sample = validate_sample(sample, sample['gateway_id'])
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+sample = {'capture_seq': 1, 'config_revision': 'r1', 'device_id': 'd1', 'gateway_id': 'g-001665f6a4', ...}
+gateway_id = 'g-001665f6a4'
+
+    def validate_sample(sample, gateway_id):
+        if not isinstance(sample, dict) or set(sample) != SAMPLE_KEYS:
+            raise ValueError('sample schema')
+        if sample['gateway_id'] != identifier(gateway_id):
+            raise ValueError('gateway mismatch')
+        for key in ('device_id', 'config_revision', 'profile_version'):
+            identifier(sample[key])
+        for key in ('sample_id', 'stream_id', 'window_id'):
+            uuid_text(sample[key])
+        for key in ('capture_seq', 'sampled_at_us'):
+            if type(sample[key]) is not int or not 1 &lt;= sample[key] &lt;= 2**63 - 1:
+                raise ValueError('sample integer')
+        if sample['time_quality'] != 'trusted':
+            raise ValueError('time quality')
+        measurements = sample['measurements']
+        if not isinstance(measurements, dict) or set(measurements) != set(FIELDS):
+            raise ValueError('measurement schema')
+        normalized = dict(sample, measurements={})
+        for key, value in measurements.items():
+            if type(value) not in (int, float) or not 0 &lt;= value &lt;= 1e15 or not math.isfinite(value):
+                raise ValueError('measurement value')
+            normalized['measurements'][key] = float(value) if value else 0.0
+        if not isinstance(sample['payload_hash'], str) or not re.fullmatch('[0-9a-f]{64}', sample['payload_hash']):
+            raise ValueError('sample hash shape')
+        if sample_hash(normalized) != sample['payload_hash'] or len(canonical(normalized)) &gt; MAX_SAMPLE:
+&gt;           raise ValueError('sample hash or size')
+E           ValueError: sample hash or size
+
+services/delta/delta_device/reliable_wire.py:100: ValueError</failure></testcase><testcase classname="tests.integration.test_edge_receipts" name="test_missing_projection_parallel_repair_inserts_once_and_bad_projection_rejected" time="0.246" /><testcase classname="tests.integration.test_edge_receipts" name="test_partial_database_failure_rolls_back_receipt_and_retries_original" time="0.102" /><testcase classname="tests.integration.test_edge_receipts" name="test_same_timestamp_different_sample_identity_both_survive" time="0.091" /><testcase classname="tests.integration.test_edge_receipts" name="test_timestamp_outside_database_utc_window_is_rejected[-7862400000000]" time="0.021" /><testcase classname="tests.integration.test_edge_receipts" name="test_timestamp_outside_database_utc_window_is_rejected[121000000]" time="0.019" /><testcase classname="services.edge-receiver.tests.test_receiver" name="test_authority_binds_device_stream_revision_profile_and_effective_window" time="0.000" /><testcase classname="services.edge-receiver.tests.test_receiver" name="test_generation_requires_external_nonempty_uuid_file" time="0.001" /><testcase classname="services.edge-receiver.tests.test_receiver" name="test_samples_rate_has_independent_40_per_second_and_burst_64" time="0.000" /></testsuite></testsuites>

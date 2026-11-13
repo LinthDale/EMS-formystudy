@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "request_id": "c145f83f-70cc-4865-a8ce-b56e6e926fc9",
+  "op": "wal_probe_wrong_ca",
+  "kind": "wrong_ca",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "2c977e90c3794a588b9fe6c8c0a181a04477c4fa00ace8cf5a45c0221ae9d237",
+  "replication_peer_absent": true,
+  "tls_verify_code": 19,
+  "client_verify_code": null
+}

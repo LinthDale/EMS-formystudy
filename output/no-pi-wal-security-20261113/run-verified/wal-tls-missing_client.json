@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "kind": "missing_client",
+  "probe": {
+    "passed": true,
+    "request_id": "56abf58a-88a5-4e5f-a7e9-7a723134e640",
+    "op": "wal_probe_missing_client",
+    "kind": "missing_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "0eea47f37f3dfaf34157c59cbc6710750c53ea33dfbb2d22aaaa27a8f1d942cc",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": null
+  },
+  "recovered_slot": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1FC7370",
+    "lag_bytes": 0,
+    "slot_retained_bytes": 0,
+    "active": true,
+    "peer_tls": true,
+    "peer_role": "ems_wal_archive",
+    "peer_client_dn": "/CN=ems_wal_archive",
+    "flush_lsn": "0/1FC7370"
+  },
+  "source_preserved": true,
+  "rows": 1,
+  "pending_end": 0
+}

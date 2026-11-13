@@ -1,0 +1,42 @@
+{
+  "original": {
+    "files": 770,
+    "mismatches": [],
+    "passed": true
+  },
+  "v2_repair": {
+    "files": 752,
+    "mismatches": [],
+    "passed": true
+  },
+  "interruption_audit": {
+    "files": 18,
+    "mismatches": [],
+    "passed": true
+  },
+  "single_sample": {
+    "files": 7,
+    "mismatches": [],
+    "passed": true
+  },
+  "archived_frozen": {
+    "files": 17,
+    "mismatches": [],
+    "passed": true
+  },
+  "windows_frozen": {
+    "files": 17,
+    "mismatches": [],
+    "passed": true
+  },
+  "verifier_dependencies": {
+    "files": 3,
+    "mismatches": [],
+    "passed": true
+  },
+  "production_delta_unchanged": {
+    "files": 14,
+    "mismatches": [],
+    "passed": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "source_exit": 1,
+  "source_passed": null,
+  "source_verified": null,
+  "source_cases": 0,
+  "cleanup_exit": 1,
+  "cleanup_passed": null,
+  "cleanup_complete": null,
+  "cleanup_cases": 0,
+  "passed": true
+}

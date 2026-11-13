@@ -1,0 +1,24 @@
+{
+  "scope": "100 records actually rendered in Monitor, checked against original live ledger and DB",
+  "ledger": {
+    "expected": 100,
+    "received": 100,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "database": {
+    "expected": 100,
+    "received": 100,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "passed": true
+}

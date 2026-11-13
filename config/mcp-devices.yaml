@@ -1,4 +1,4 @@
-# Device profile for kc-mcp-server.
+# Device profile for kc-mcp-server. ADR-033: simulator writes use the audited BFF API.
 
 devices:
   energy_meter:
@@ -68,7 +68,7 @@ devices:
         data_type: uint16
         scale: 1.0
         unit: "RPM"
-        access: read_write
+        access: read
         description: "Motor speed setpoint"
       pressure:
         address: 0
@@ -82,11 +82,11 @@ devices:
         address: 0
         function_code: 1
         data_type: bool
-        access: read_write
+        access: read
         description: "Pump state"
       valve_open:
         address: 1
         function_code: 1
         data_type: bool
-        access: read_write
+        access: read
         description: "Valve state"

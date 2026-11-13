@@ -1,0 +1,158 @@
+{
+ "pymupdf": "1.27.2.3",
+ "page_count": 3,
+ "metadata": {
+  "format": "PDF 1.4",
+  "title": "20260922_星洋taistro_LOGO",
+  "author": "",
+  "subject": "",
+  "keywords": "",
+  "creator": "Adobe Illustrator 30.8 (Windows)",
+  "producer": "Adobe PDF library 18.00",
+  "creationDate": "D:20260922142816+08'00'",
+  "modDate": "D:20260922142816+08'00'",
+  "trapped": "",
+  "encryption": null
+ },
+ "is_pdf": true,
+ "pages": [
+  {
+   "no": 1,
+   "mediabox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "cropbox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "rotation": 0,
+   "n_drawings": 19,
+   "fills": {
+    "#383739": 10,
+    "#FFFFFF": 9
+   },
+   "strokes": {},
+   "images": [],
+   "fonts": [],
+   "text": "",
+   "drawings_bbox": [
+    130.597,
+    113.333,
+    711.293,
+    481.944
+   ]
+  },
+  {
+   "no": 2,
+   "mediabox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "cropbox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "rotation": 0,
+   "n_drawings": 9,
+   "fills": {
+    "#FFFFFF": 9
+   },
+   "strokes": {},
+   "images": [],
+   "fonts": [
+    [
+     37,
+     "ttf",
+     "Type0",
+     "WRERGL+NotoSansTC-Thin",
+     "C2_0",
+     "Identity-H",
+     0
+    ],
+    [
+     36,
+     "ttf",
+     "TrueType",
+     "KZFSUJ+NotoSansTC-Thin",
+     "TT0",
+     "WinAnsiEncoding",
+     0
+    ]
+   ],
+   "text": "星洋智能科技股份有限公司\ntAistro co., ltd.\n",
+   "drawings_bbox": [
+    248.841,
+    210.464,
+    593.048,
+    277.916
+   ]
+  },
+  {
+   "no": 3,
+   "mediabox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "cropbox": [
+    0.0,
+    0.0,
+    841.8900146484375,
+    595.2760009765625
+   ],
+   "rotation": 0,
+   "n_drawings": 9,
+   "fills": {
+    "#383739": 9
+   },
+   "strokes": {},
+   "images": [
+    {
+     "xref": 32,
+     "w": 1866,
+     "h": 381,
+     "bpc": 8,
+     "cs": "Indexed",
+     "name": "Im0",
+     "filter": "FlateDecode",
+     "rects": [
+      [
+       197.7522735595703,
+       199.29705810546875,
+       645.59228515625,
+       290.737060546875
+      ]
+     ]
+    }
+   ],
+   "fonts": [
+    [
+     36,
+     "ttf",
+     "TrueType",
+     "KZFSUJ+NotoSansTC-Thin",
+     "TT0",
+     "WinAnsiEncoding",
+     0
+    ]
+   ],
+   "text": "tAistro co., ltd.\n",
+   "drawings_bbox": [
+    199.232,
+    200.779,
+    642.657,
+    287.675
+   ]
+  }
+ ]
+}

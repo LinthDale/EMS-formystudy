@@ -1,0 +1,25 @@
+{
+  "passed": true,
+  "old_worked_before": true,
+  "new_worked_before": true,
+  "same_gateway": "qa-edge",
+  "revocation": {
+    "passed": true,
+    "request_id": "ca5ae072-8116-4c3c-a22e-c657e7f81281",
+    "op": "revoke_old_client",
+    "container_id": "59169b711da6409256430e96987ed10eb1e1fd7a597c5b5ee8186d5af6bd25f8",
+    "started_at": "2026-11-13T04:09:11.03565932Z",
+    "before_started_at": "2026-11-13T04:08:38.344445962Z",
+    "running": true,
+    "serial_revoked": "675CC3B369D3C131D56CAAEA37EA57E88E6F69EC",
+    "crl_verified": true,
+    "revocation_verify_error": 23,
+    "crl_sha256": "53c049325fa751277a6949c0829caf54851fccf18c512d4ecda31b31979cd956"
+  },
+  "old_rejected_after": true,
+  "original_pending_id": "a3f56524-dccf-45f0-8498-6816fc900c96",
+  "active_old_session_disconnected": true,
+  "new_worked_after": true,
+  "projections_each": 1,
+  "pending_end": 0
+}

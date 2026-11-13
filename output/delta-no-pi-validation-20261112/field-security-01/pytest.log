@@ -1,0 +1,259 @@
+FF.F........                                                             [100%]
+=================================== FAILURES ===================================
+____ test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains ____
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ca0828d6550>
+modbus_server = 36235
+receiver = [('ems/devices/clock-probe/measurements', 'electricity_measurements,device_id=clock-probe voltage=230.0,current=13.05,...measurements,device_id=clock-probe voltage=230.0,current=13.09,power_kw=9.035,energy_kwh=1234.56 1800000003000000000')]
+record = <function record.<locals>.save at 0x7ca0825ba5c0>
+
+    def test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains(monkeypatch,modbus_server,receiver,record):
+>       with runtime(monkeypatch,modbus_server,'clock-phases',upload=False) as (drive,upload,commits,ledger,settings):
+
+tests/field_checks/test_clock_runtime.py:138: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/contextlib.py:144: in __exit__
+    next(self.gen)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ca0828d6550>
+port = 36235, name = 'clock-phases', upload = False
+
+    @contextmanager
+    def runtime(monkeypatch, port, name, upload=True):
+        directory = EVIDENCE/name
+        directory.mkdir(exist_ok=True)
+        synced = directory/'synchronized'
+        settings = validate(dict(mode='field',device_id='clock-probe',
+            modbus=dict(transport='tcp',host='127.0.0.1',port=port,unit_id=1,address_base=1,timeout=1),
+            mqtt=config(),outbox_path=str(directory/'state/outbox.db'),clock_sync_file=str(synced)))
+        settings['poll_interval'] = .01  # Phase pacing only; not a sampling-rate acceptance test.
+        requested, permits, progress = queue.Queue(), queue.Queue(), queue.Queue()
+        shutdown, errors, polls, commits, publishers = {}, [], [], [], []
+        uploading = threading.Event()
+        if upload: uploading.set()
+        class InjectedClock(ClockGuard):
+            def timestamp(self, now=None):
+                requested.put(True)
+                value = permits.get(timeout=10)
+                if value is None: raise StopIteration('test phase complete')
+                return super().timestamp(now=value)
+        class ObservedPoller(Poller):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                polls.append(self)
+            def sample(self):
+                value = super().sample()
+                polled.append(value)
+                return value
+        polled=[]
+        class ObservedBox(Outbox):
+            def enqueue(self,*args):
+                super().enqueue(*args)
+                commits.append(args)
+        class GatedPublisher(Publisher):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                publishers.append(self)
+            def publish(self,payload):
+                return super().publish(payload) if uploading.is_set() else False
+        class Progress(logging.Handler):
+            def emit(self, record):
+                if record.msg.startswith(('sample_queued','sample_rejected')):
+                    progress.put(record.getMessage().split()[0])
+        handler = Progress()
+        previous_level = edge.LOG.level
+        edge.LOG.setLevel(logging.INFO)
+        edge.LOG.addHandler(handler)
+        def worker():
+            try: edge.run(settings)
+            except BaseException as exc: errors.append(type(exc).__name__)
+        thread = threading.Thread(target=worker,name='isolated-clock-edge')
+        ledger=[]
+        def drive(label, now, synchronized, accepted):
+            requested.get(timeout=10)
+            if synchronized: synced.touch()
+            else: synced.unlink(missing_ok=True)
+            before = len(polled), len(commits)
+            permits.put(now)
+            result = progress.get(timeout=10)
+            assert result == ('sample_queued' if accepted else 'sample_rejected'), label
+            assert (len(polled)-before[0],len(commits)-before[1]) == ((1,1) if accepted else (0,0)), label
+            ledger.append(dict(phase=label,injected_time_ns=now,synchronized=synchronized,
+                               accepted=accepted,polls=len(polled)-before[0],commits=len(commits)-before[1]))
+        with monkeypatch.context() as patch:
+            patch.setattr(edge,'ClockGuard',InjectedClock)
+            patch.setattr(edge,'Poller',ObservedPoller)
+            patch.setattr(edge,'Outbox',ObservedBox)
+            patch.setattr(edge,'Publisher',GatedPublisher)
+            patch.setattr(edge.signal,'signal',lambda sig,fn:shutdown.__setitem__(sig,fn))
+            thread.start()
+            try:
+                until(lambda:bool(publishers) and publishers[0].ready.is_set())
+                yield drive,uploading,commits,ledger,settings
+            finally:
+                if signal.SIGTERM in shutdown: shutdown[signal.SIGTERM](None,None)
+                permits.put(None)
+                thread.join(timeout=12)
+>               for poller in polls: poller.close()
+                                     ^^^^^^^^^^^^
+E               AttributeError: 'ObservedPoller' object has no attribute 'close'
+
+tests/field_checks/test_clock_runtime.py:125: AttributeError
+------------------------------ Captured log call -------------------------------
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=ValueError
+INFO     delta_device.edge:edge.py:57 sample_queued device_id=clock-probe time_ns=1800000000000000000 pending_rows=1
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=ValueError
+INFO     delta_device.edge:edge.py:39 broker_ack samples=1
+INFO     delta_device.edge:edge.py:57 sample_queued device_id=clock-probe time_ns=1800000002000000000 pending_rows=1
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=ValueError
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=ValueError
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=ValueError
+INFO     delta_device.edge:edge.py:57 sample_queued device_id=clock-probe time_ns=1800000003000000000 pending_rows=2
+INFO     delta_device.edge:edge.py:39 broker_ack samples=2
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=StopIteration
+__________________ test_restart_uses_persisted_last_timestamp __________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ca0825b0290>
+modbus_server = 37545
+receiver = [('ems/devices/clock-probe/measurements', 'electricity_measurements,device_id=clock-probe voltage=230.0,current=13.040000000000001,power_kw=9.004,energy_kwh=1234.56 1800000010000000000')]
+record = <function record.<locals>.save at 0x7ca084555f80>
+
+    def test_restart_uses_persisted_last_timestamp(monkeypatch,modbus_server,receiver,record):
+        all_commits=[]
+        all_phases=[]
+        for boot in (1,2):
+>           with runtime(monkeypatch,modbus_server,'clock-restart') as (drive,upload,commits,ledger,settings):
+
+tests/field_checks/test_clock_runtime.py:164: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/contextlib.py:144: in __exit__
+    next(self.gen)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7ca0825b0290>
+port = 37545, name = 'clock-restart', upload = True
+
+    @contextmanager
+    def runtime(monkeypatch, port, name, upload=True):
+        directory = EVIDENCE/name
+        directory.mkdir(exist_ok=True)
+        synced = directory/'synchronized'
+        settings = validate(dict(mode='field',device_id='clock-probe',
+            modbus=dict(transport='tcp',host='127.0.0.1',port=port,unit_id=1,address_base=1,timeout=1),
+            mqtt=config(),outbox_path=str(directory/'state/outbox.db'),clock_sync_file=str(synced)))
+        settings['poll_interval'] = .01  # Phase pacing only; not a sampling-rate acceptance test.
+        requested, permits, progress = queue.Queue(), queue.Queue(), queue.Queue()
+        shutdown, errors, polls, commits, publishers = {}, [], [], [], []
+        uploading = threading.Event()
+        if upload: uploading.set()
+        class InjectedClock(ClockGuard):
+            def timestamp(self, now=None):
+                requested.put(True)
+                value = permits.get(timeout=10)
+                if value is None: raise StopIteration('test phase complete')
+                return super().timestamp(now=value)
+        class ObservedPoller(Poller):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                polls.append(self)
+            def sample(self):
+                value = super().sample()
+                polled.append(value)
+                return value
+        polled=[]
+        class ObservedBox(Outbox):
+            def enqueue(self,*args):
+                super().enqueue(*args)
+                commits.append(args)
+        class GatedPublisher(Publisher):
+            def __init__(self,*a,**kw):
+                super().__init__(*a,**kw)
+                publishers.append(self)
+            def publish(self,payload):
+                return super().publish(payload) if uploading.is_set() else False
+        class Progress(logging.Handler):
+            def emit(self, record):
+                if record.msg.startswith(('sample_queued','sample_rejected')):
+                    progress.put(record.getMessage().split()[0])
+        handler = Progress()
+        previous_level = edge.LOG.level
+        edge.LOG.setLevel(logging.INFO)
+        edge.LOG.addHandler(handler)
+        def worker():
+            try: edge.run(settings)
+            except BaseException as exc: errors.append(type(exc).__name__)
+        thread = threading.Thread(target=worker,name='isolated-clock-edge')
+        ledger=[]
+        def drive(label, now, synchronized, accepted):
+            requested.get(timeout=10)
+            if synchronized: synced.touch()
+            else: synced.unlink(missing_ok=True)
+            before = len(polled), len(commits)
+            permits.put(now)
+            result = progress.get(timeout=10)
+            assert result == ('sample_queued' if accepted else 'sample_rejected'), label
+            assert (len(polled)-before[0],len(commits)-before[1]) == ((1,1) if accepted else (0,0)), label
+            ledger.append(dict(phase=label,injected_time_ns=now,synchronized=synchronized,
+                               accepted=accepted,polls=len(polled)-before[0],commits=len(commits)-before[1]))
+        with monkeypatch.context() as patch:
+            patch.setattr(edge,'ClockGuard',InjectedClock)
+            patch.setattr(edge,'Poller',ObservedPoller)
+            patch.setattr(edge,'Outbox',ObservedBox)
+            patch.setattr(edge,'Publisher',GatedPublisher)
+            patch.setattr(edge.signal,'signal',lambda sig,fn:shutdown.__setitem__(sig,fn))
+            thread.start()
+            try:
+                until(lambda:bool(publishers) and publishers[0].ready.is_set())
+                yield drive,uploading,commits,ledger,settings
+            finally:
+                if signal.SIGTERM in shutdown: shutdown[signal.SIGTERM](None,None)
+                permits.put(None)
+                thread.join(timeout=12)
+>               for poller in polls: poller.close()
+                                     ^^^^^^^^^^^^
+E               AttributeError: 'ObservedPoller' object has no attribute 'close'
+
+tests/field_checks/test_clock_runtime.py:125: AttributeError
+------------------------------ Captured log call -------------------------------
+INFO     delta_device.edge:edge.py:57 sample_queued device_id=clock-probe time_ns=1800000010000000000 pending_rows=1
+INFO     delta_device.edge:edge.py:39 broker_ack samples=1
+ERROR    delta_device.edge:edge.py:62 sample_rejected kind=StopIteration
+_ test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-20] _
+
+case = 'untrusted-ca', port = 1883, ca = 'rogue-ca.crt', verify_code = 20
+receiver = [], record = <function record.<locals>.save at 0x7ca082414220>
+
+    @pytest.mark.parametrize('case,port,ca,verify_code',[
+        ('untrusted-ca',1883,'rogue-ca.crt',20),
+        ('wrong-host',8884,'ca.crt',64),
+        ('expired',8885,'ca.crt',10),
+    ])
+    def test_invalid_server_certificate_preserves_pending(case,port,ca,verify_code,receiver,record):
+        context = ssl.create_default_context(cafile=str(PKI/ca))
+        with socket.create_connection(('127.0.0.1',port),timeout=3) as raw:
+            with pytest.raises(ssl.SSLCertVerificationError) as error:
+                context.wrap_socket(raw,server_hostname='127.0.0.1')
+>       assert error.value.verify_code==verify_code, 'certificate was not rejected for the expected reason'
+E       AssertionError: certificate was not rejected for the expected reason
+E       assert 19 == 20
+E        +  where 19 = SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)').verify_code
+E        +    where SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') = <ExceptionInfo SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1016)') tblen=4>.value
+
+tests/field_checks/test_tls_transport.py:80: AssertionError
+=============================== warnings summary ===============================
+tests/field_checks/test_clock_runtime.py:19
+  /app/tests/field_checks/test_clock_runtime.py:19: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.integration
+
+tests/field_checks/test_tls_transport.py:12
+  /app/tests/field_checks/test_tls_transport.py:12: PytestUnknownMarkWarning: Unknown pytest.mark.integration - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    pytestmark = pytest.mark.integration
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+------------------- generated xml file: /evidence/junit.xml --------------------
+=========================== short test summary info ============================
+FAILED tests/field_checks/test_clock_runtime.py::test_unsynced_backward_equal_invalid_time_rejects_while_backlog_drains
+FAILED tests/field_checks/test_clock_runtime.py::test_restart_uses_persisted_last_timestamp
+FAILED tests/field_checks/test_tls_transport.py::test_invalid_server_certificate_preserves_pending[untrusted-ca-1883-rogue-ca.crt-20]
+3 failed, 9 passed, 2 warnings in 11.68s

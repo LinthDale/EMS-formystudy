@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="0.040" timestamp="2026-11-13T02:17:41.775623+00:00" hostname="4dc6c1faeee6"><testcase classname="tests.test_reliable_retention" name="test_real_full_schema_two_upgrades_without_room_for_indexes_and_keeps_collecting" time="0.002"><failure message="sqlite3.OperationalError: database or disk is full">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_real_full_schema_two_upgr0')
+caplog = &lt;_pytest.logging.LogCaptureFixture object at 0x71f9d5ca7fd0&gt;
+
+    def test_real_full_schema_two_upgrades_without_room_for_indexes_and_keeps_collecting(tmp_path,caplog):
+        fixture=Path(__file__).parent/'fixtures/schema2-full.db'
+        path=tmp_path/'legacy'/'q.db';path.parent.mkdir()
+        path.write_bytes(fixture.read_bytes())
+        with sqlite3.connect(path) as db:
+            identity=json.loads(db.execute("SELECT value FROM metadata WHERE key='identity'").fetchone()[0])
+            before=[json.loads(r[0]) for r in db.execute('SELECT payload FROM queue ORDER BY capture_seq')]
+            assert db.execute('PRAGMA user_version').fetchone()[0]==2, 'fixture is not real old schema'
+            assert db.execute("SELECT COUNT(*) FROM sqlite_master WHERE type='index' AND name LIKE 'audit_%'").fetchone()[0]==0, 'fixture already has new indexes'
+&gt;       box=ReliableOutbox(path,100,**identity,byte_limit=65536,audit_limit=100)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+services/delta/tests/test_reliable_retention.py:205: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;delta_device.reliable_store.ReliableOutbox object at 0x71f9d5c9b510&gt;
+path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_real_full_schema_two_upgr0/legacy/q.db')
+limit = 100, gateway_id = 'legacy-full', device_id = 'd1'
+stream_id = '00000000-0000-4000-8000-000000000001', config_revision = 'r1'
+profile_version = 'v135', byte_limit = 65536, audit_limit = 100
+
+    def __init__(self, path, limit, gateway_id, device_id, stream_id, config_revision,
+                 profile_version, byte_limit=4 * 1024**3, audit_limit=600000):
+        self.path = Path(path)
+        self.limit, self.byte_limit, self.audit_limit = limit, byte_limit, audit_limit
+        if (type(limit) is not int or not 1 &lt;= limit &lt;= 1000000
+                or type(byte_limit) is not int or not 65536 &lt;= byte_limit &lt;= 64 * 1024**3
+                or type(audit_limit) is not int or not 1 &lt;= audit_limit &lt;= 6000000):
+            raise ValueError('queue capacity')
+        self.identity = dict(gateway_id=identifier(gateway_id), device_id=identifier(device_id),
+                             stream_id=uuid_text(stream_id), config_revision=identifier(config_revision),
+                             profile_version=identifier(profile_version))
+        if self.path.is_symlink() or self.path.parent.is_symlink():
+            raise ValueError('queue symlink')
+        self.path.parent.mkdir(parents=True, mode=0o700, exist_ok=True)
+        self.path.parent.chmod(0o700)
+        fd = os.open(self.path, os.O_CREAT | os.O_WRONLY | getattr(os, 'O_NOFOLLOW', 0), 0o600)
+        os.close(fd)
+        self.path.chmod(0o600)
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE')
+            version_number = db.execute('PRAGMA user_version').fetchone()[0]
+            if version_number not in (0, 2, 3):
+                raise ValueError('queue schema version')
+            tables = {row[0] for row in db.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+            if 'outbox' in tables:
+                raise ValueError('legacy outbox requires offline migration')
+            required_tables = {'metadata', 'windows', 'queue', 'audit'}
+            if tables and tables != required_tables:
+                raise ValueError('dedicated reliable queue required')
+            if tables:
+                columns = {
+                    'metadata': {'key', 'value'},
+                    'windows': {'bucket', 'window_id'},
+                    'queue': {'sample_id', 'capture_seq', 'payload_hash', 'payload', 'state', 'snapshot'},
+                    'audit': {'sample_id', 'payload_hash', 'capture_seq', 'window_id', 'sampled_at_us', 'state', 'acknowledged_us'},
+                }
+                for table, names in columns.items():
+                    if {row[1] for row in db.execute('PRAGMA table_info(' + table + ')')} != names:
+                        raise ValueError('incompatible reliable schema')
+                metadata = dict(db.execute('SELECT key,value FROM metadata'))
+                if not {'protocol', 'identity', 'sequence', 'latest_timestamp'} &lt;= metadata.keys() or metadata['protocol'] != '2':
+                    raise ValueError('incomplete reliable metadata')
+                for name in ('sequence', 'latest_timestamp'):
+                    if not metadata[name].isdigit() or not 0 &lt;= int(metadata[name]) &lt;= 2**63 - 1:
+                        raise ValueError('invalid reliable metadata')
+                if version_number not in (2, 3) or db.execute('PRAGMA quick_check').fetchone()[0] != 'ok':
+                    raise ValueError('reliable database integrity')
+                if version_number == 3:
+                    if 'retention' not in metadata:
+                        raise ValueError('missing retention metadata')
+                    read_retention(metadata['retention'])
+            db.execute('CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY,value TEXT NOT NULL)')
+            version = db.execute("SELECT value FROM metadata WHERE key='protocol'").fetchone()
+            if version and version[0] != '2':
+                raise ValueError('queue schema mismatch')
+            identity = canonical(self.identity).decode()
+            old = db.execute("SELECT value FROM metadata WHERE key='identity'").fetchone()
+            if old and old[0] != identity:
+                raise ValueError('queue identity mismatch')
+            db.executemany('INSERT OR IGNORE INTO metadata VALUES (?,?)',
+                           [('protocol', '2'), ('identity', identity), ('sequence', '0'), ('latest_timestamp', '0')])
+            db.execute('CREATE TABLE IF NOT EXISTS windows (bucket INTEGER PRIMARY KEY,window_id TEXT NOT NULL)')
+            db.execute('CREATE TABLE IF NOT EXISTS queue (sample_id TEXT PRIMARY KEY, capture_seq INTEGER UNIQUE NOT NULL, '
+                       'payload_hash TEXT NOT NULL, payload TEXT NOT NULL, state TEXT NOT NULL, snapshot TEXT NOT NULL)')
+            db.execute('CREATE TABLE IF NOT EXISTS audit (sample_id TEXT PRIMARY KEY, payload_hash TEXT NOT NULL, '
+                       'capture_seq INTEGER NOT NULL, window_id TEXT NOT NULL, sampled_at_us INTEGER NOT NULL, '
+                       'state TEXT NOT NULL, acknowledged_us INTEGER)')
+            db.execute('CREATE INDEX IF NOT EXISTS audit_sequence ON audit(capture_seq)')
+&gt;           db.execute('CREATE INDEX IF NOT EXISTS audit_window ON audit(window_id)')
+E           sqlite3.OperationalError: database or disk is full
+
+services/delta/delta_device/reliable_store.py:108: OperationalError</failure></testcase></testsuite></testsuites>

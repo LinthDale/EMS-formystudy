@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "mqtt_messages": 200,
+  "unique_source_samples": 1,
+  "messages": 200,
+  "dropped": 135,
+  "peak": 64,
+  "total_messages_including_recovery": 204,
+  "rate_denied": 65,
+  "receiver_capacity": 64,
+  "actual_db_lock_observed": true,
+  "no_committed_ack_while_locked": true,
+  "original_sample_id": "fec53ab1-50bc-4c4e-a8d5-f692aa416703",
+  "original_rows": 1,
+  "fresh_rows": 1,
+  "pending_end": 0
+}

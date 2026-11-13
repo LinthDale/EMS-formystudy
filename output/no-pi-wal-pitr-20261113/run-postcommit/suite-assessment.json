@@ -1,0 +1,29 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 36,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 36,
+  "observed_tests": 36,
+  "evidence_checks": {
+    "wal_outage_kept_source": true,
+    "postcommit_wal_loss_kept_source": true,
+    "migration_least_privilege": true,
+    "postbackup_acked_payload_absent": true,
+    "original_primary_stopped": true,
+    "original_pgdata_not_used": true,
+    "backup_and_wal_identity_match": true,
+    "pitr_excluded_after_target": true,
+    "old_ack_rejected": true,
+    "missing_wal_failed_closed": true,
+    "recovered_sync_wal_ready": true,
+    "recovered_once": true
+  }
+}

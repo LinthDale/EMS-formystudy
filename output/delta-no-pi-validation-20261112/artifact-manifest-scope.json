@@ -1,0 +1,11 @@
+{
+  "captured_utc": "2026-11-12T07:27:11.477780+00:00",
+  "files": 770,
+  "excluded": [
+    "artifact-sha256.json",
+    "artifact-manifest-scope.json",
+    "soak-sequence-01/** (ongoing sequence; separate frozen source manifest)"
+  ],
+  "prior_check": "field-checks-final-verification.json",
+  "scope": "completed static evidence, docs and independent reviews; active long-test excluded"
+}

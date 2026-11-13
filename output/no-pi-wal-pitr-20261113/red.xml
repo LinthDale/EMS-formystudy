@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="9" time="0.080" timestamp="2026-11-13T05:41:11.203138+00:00" hostname="a3d44a3b2cd8"><testcase classname="" name="test_field_defaults_to_synchronous_wal_and_forbids_local_downgrade" time="0.001"><failure message="KeyError: 'ack_durability'">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_field_defaults_to_synchro0')
+
+    def test_field_defaults_to_synchronous_wal_and_forbids_local_downgrade(tmp_path):
+        value=validate_config(config(tmp_path))
+&gt;       assert value['ack_durability']=='sync_wal' and value['wal_standby_name']=='ems_archive', 'field ACK lacks WAL guard'
+               ^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'ack_durability'
+
+services/edge-receiver/tests/test_wal_durability.py:23: KeyError</failure></testcase><testcase classname="" name="test_wal_standby_name_cannot_select_arbitrary_or_multiple_peers[]" time="0.001" /><testcase classname="" name="test_wal_standby_name_cannot_select_arbitrary_or_multiple_peers[*]" time="0.000" /><testcase classname="" name="test_wal_standby_name_cannot_select_arbitrary_or_multiple_peers[ems_archive,other]" time="0.000" /><testcase classname="" name="test_wal_standby_name_cannot_select_arbitrary_or_multiple_peers[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]" time="0.000" /><testcase classname="" name="test_wal_standby_name_cannot_select_arbitrary_or_multiple_peers[12]" time="0.000" /><testcase classname="" name="test_demo_local_is_explicitly_separate_from_field" time="0.000"><failure message="KeyError: 'ack_durability'">tmp_path = PosixPath('/tmp/pytest-of-unknown/pytest-0/test_demo_local_is_explicitly_0')
+
+    def test_demo_local_is_explicitly_separate_from_field(tmp_path):
+        value=config(tmp_path);value.pop('ack_durability',None);value['mode']='demo'
+&gt;       assert validate_config(value)['ack_durability']=='local', 'legacy isolated demo changed'
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'ack_durability'
+
+services/edge-receiver/tests/test_wal_durability.py:36: KeyError</failure></testcase><testcase classname="" name="test_remote_flush_gate_requires_named_peer_at_fixed_lsn" time="0.001"><failure message="TypeError: ReceiptStore.__init__() got an unexpected keyword argument 'standby_name'">def test_remote_flush_gate_requires_named_peer_at_fixed_lsn():
+        db=AsyncMock();db.fetchval.return_value=False
+&gt;       store=ReceiptStore('private',timeout=1,standby_name='ems_archive')
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       TypeError: ReceiptStore.__init__() got an unexpected keyword argument 'standby_name'
+
+services/edge-receiver/tests/test_wal_durability.py:41: TypeError</failure></testcase><testcase classname="" name="test_remote_flush_gate_accepts_only_true_boolean" time="0.001"><failure message="TypeError: ReceiptStore.__init__() got an unexpected keyword argument 'standby_name'">def test_remote_flush_gate_accepts_only_true_boolean():
+        for value in (None,False,0,'t'):
+            db=AsyncMock();db.fetchval.return_value=value
+&gt;           with pytest.raises(ValueError):asyncio.run(ReceiptStore('private',standby_name='ems_archive').require_wal(db))
+                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E           TypeError: ReceiptStore.__init__() got an unexpected keyword argument 'standby_name'
+
+services/edge-receiver/tests/test_wal_durability.py:50: TypeError</failure></testcase></testsuite></testsuites>

@@ -1,0 +1,249 @@
+[
+  {
+    "passed": true,
+    "request_id": "a66cd31a-98d9-4cd3-914d-288f6b27c2bf",
+    "op": "db_cert_wrong_host",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "983bb910-25c5-48a4-af74-e57aa527cff6",
+    "op": "db_cert_good",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "7b43ea3d-6d70-4e1e-92ea-e66ef0305155",
+    "op": "db_cert_expired",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "2d754e1f-d2b2-49be-aa37-98ca111b0f81",
+    "op": "db_cert_good",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "424b3607-d04e-4fca-8333-decf89a4b8ee",
+    "op": "db_client_probe_begin",
+    "started": true
+  },
+  {
+    "passed": true,
+    "request_id": "2c59a10d-5b8b-41ad-b7a6-4a7c10223749",
+    "op": "db_client_probe_end",
+    "server_rejected_client_ca": true
+  },
+  {
+    "passed": true,
+    "request_id": "c3325f2f-d309-4cb0-b24d-e7a17e3cd9b9",
+    "op": "wal_probe_wrong_ca",
+    "kind": "wrong_ca",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "e4b02d4eeb2ad01f031c3603d6ac8f2e7f3ff4f71294c59f92ec6be5cee18277",
+    "replication_peer_absent": true,
+    "tls_verify_code": 19
+  },
+  {
+    "passed": true,
+    "request_id": "6e83ce04-6076-4395-a3ee-0880fa37d36e",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC0D30",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "795c8283-f502-40b6-a07c-f0b606293776",
+    "op": "wal_probe_wrong_host",
+    "kind": "wrong_host",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "88d02ba491af43bb4efd60be5ac01550c65e3c8ac227b841e15af48d3c4a991a",
+    "replication_peer_absent": true,
+    "tls_verify_code": 64
+  },
+  {
+    "passed": true,
+    "request_id": "e57ccc42-1c02-4f37-bbb1-fc7faf6d03cd",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC1388",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "601dd1c1-14be-428b-b818-35a87c9b9ba4",
+    "op": "wal_probe_expired",
+    "kind": "expired",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "c4abbaf6a84aea4b552f0c18c8af9d4e60a916cb1162f6e2620a1b2e114e14b0",
+    "replication_peer_absent": true,
+    "tls_verify_code": 10
+  },
+  {
+    "passed": true,
+    "request_id": "9d4abd7a-27ac-49b0-9d5b-78e130f0482e",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC19E0",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "af3d6733-b0d0-41a2-9e73-acc10928e88b",
+    "op": "wal_probe_missing_client",
+    "kind": "missing_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "924b7f00357389d5d9d59b87698b5e0db6d2804302b8907933dbb43d1647c69c",
+    "replication_peer_absent": true,
+    "tls_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "17cb62de-0443-4d6a-96c6-fea6fde2aeab",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC2088",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "6ae825d7-1b00-4a4b-806b-8e60dfc5fe81",
+    "op": "wal_probe_untrusted_client",
+    "kind": "untrusted_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "2f27b7d7068b7b6367672990c212b32fdbe2bfad27db2e64e914b61b705619f7",
+    "replication_peer_absent": true,
+    "tls_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "b398b1f2-45a8-4f77-8be2-7821201cac82",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC26E0",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "09b46d28-db51-4f83-bf1b-70db7e923244",
+    "op": "wal_probe_wrong_user",
+    "kind": "wrong_user",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "c13836b583b6de4340c6d246a4723a27e32be7c4fa20304be739293c9e871381",
+    "replication_peer_absent": true,
+    "tls_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "e3e4790e-3c9f-49b2-8889-16ba5c9ae2cc",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC2D38",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "3788282b-be51-4a52-ac48-aa248713991c",
+    "op": "wal_probe_plaintext",
+    "kind": "plaintext",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "d971cf34761cd734db8a7f0545fd9332259242f2463cd4aabcc0fea7eee5414d",
+    "replication_peer_absent": true,
+    "tls_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "2701f146-3c36-4a07-9793-3e481fd1b625",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC3390",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "c89d83ba-cad6-4d32-bb38-4a0845eb5f55",
+    "op": "wal_gate_plaintext",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": false,
+      "client_dn": null,
+      "username": "ems_wal_archive",
+      "guard": false
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "e1a856cd-6c58-458a-ba4d-5f9ee686b42e",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC3A20",
+      "lag_bytes": 0,
+      "active": true
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "12466f2a-303d-42b3-91c0-00dca371e95e",
+    "op": "wal_gate_wrong_role",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": true,
+      "client_dn": "/CN=postgres",
+      "username": "postgres",
+      "guard": false
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "93d31a43-e75b-4683-b71d-db8497deaef3",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC4090",
+      "lag_bytes": 0,
+      "active": true
+    }
+  }
+]

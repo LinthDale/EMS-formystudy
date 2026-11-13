@@ -1,0 +1,85 @@
+{
+  "scope": "private",
+  "device_id": "delta-private-weak-stream",
+  "started_utc": "2026-11-12T08:45:04.524552+00:00",
+  "production_db_ack": false,
+  "passed": true,
+  "configured": {
+    "output": "/evidence/weak-stream",
+    "scope": "private",
+    "device": "delta-private-weak-stream",
+    "preload": 80,
+    "live_count": 75,
+    "deadline": 210.0,
+    "rtt_ms": 200.0,
+    "jitter_ms": 50.0,
+    "rate_kib": 16.0,
+    "initial_offline": 0,
+    "flaps": "10:3,30:3,50:3"
+  },
+  "prefill_seconds": 0.21313754515722394,
+  "prefill_rows": 80,
+  "backup": {
+    "rows": 80,
+    "exact_payload_subset": true,
+    "integrity": "ok",
+    "wrong_identity_rejected": true
+  },
+  "expected": 155,
+  "received": 155,
+  "missing_count": 0,
+  "unexpected_count": 0,
+  "duplicate_count": 0,
+  "pending_end": 0,
+  "completion_passed": true,
+  "unique_delivery_passed": true,
+  "live_committed": 75,
+  "runtime_seconds": 75.16368392203003,
+  "publisher_connections": [
+    2360204.050477747,
+    2360217.039385645,
+    2360237.03954458,
+    2360257.041068775
+  ],
+  "network_events": [
+    {
+      "kind": "offline",
+      "monotonic": 2360213.87166199,
+      "live_committed": 10
+    },
+    {
+      "kind": "online",
+      "monotonic": 2360216.871817477
+    },
+    {
+      "kind": "offline",
+      "monotonic": 2360233.871344978,
+      "live_committed": 30
+    },
+    {
+      "kind": "online",
+      "monotonic": 2360236.871495808
+    },
+    {
+      "kind": "offline",
+      "monotonic": 2360253.871515174,
+      "live_committed": 50
+    },
+    {
+      "kind": "online",
+      "monotonic": 2360256.871618614
+    }
+  ],
+  "gate_stats": {
+    "chunks": 318,
+    "bytes": 31714,
+    "delayed_seconds": 33.6106689453125
+  },
+  "max_pending": 82,
+  "errors": [],
+  "observed_receive_per_second": 2.087917500062567,
+  "flap_contract_passed": true,
+  "sources_unchanged": true,
+  "cleanup_errors": [],
+  "finished_utc": "2026-11-12T08:46:28.990867+00:00"
+}

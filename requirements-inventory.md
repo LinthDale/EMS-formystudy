@@ -16,6 +16,8 @@ Python test/development environment.
 | KC IoT gateway container | `external/kc_iot_gateway/pyproject.toml` |
 | Python tests | `tests/requirements-test.txt` |
 | KC dashboard frontend | `external/kc_iot_gateway/dashboard/package.json` |
+| EMS BFF (PRD-0005) | `services/bff/requirements.txt` + `requirements-dev.txt` |
+| EMS frontend (PRD-0005) | `frontend/package.json` |
 | Docker services | `docker-compose.yml` |
 
 ## Required Host Tools
@@ -29,6 +31,17 @@ Python test/development environment.
 | Python | `>=3.12` recommended | Local tests and utility commands |
 | pip | `>=23` recommended | Install root/test Python dependencies |
 
+## CI（GitHub Actions）
+
+Workflow `.github/workflows/ci.yml`（PRD-0005 P1 起；API 契約治理機械化強制）:
+
+| 工具 / 需求 | 來源 | 用於 job |
+|---|---|---|
+| `ruff` | pip | `lint`（`--select E9,F63,F7,F82`）|
+| `PyYAML` | pip | `contract-drift` / `api-version-gate`（解析 `api/openapi.yml`）|
+| device-service runtime deps | `services/device-service/requirements.txt` | `contract-drift`（匯入 ASGI app 比對 runtime schema）|
+| Docker（runner 內建）| GitHub Actions | `unit`（`docker compose up -d --build simulator`）|
+
 ## Docker Images
 
 | Image | Version | Used by |
@@ -41,6 +54,8 @@ Python test/development environment.
 | local build | `services/simulator/Dockerfile` | `simulator` |
 | local build | `external/kc_modbus_mcp/Dockerfile` | `kc-modbus-sim`, `kc-mcp-server` |
 | local build | `external/kc_iot_gateway/Dockerfile` | `kc-mqtt-sim` |
+| `nginx` | `1.27-alpine` | `frontend-prod`（serve 階段）|
+| local build | `frontend/Dockerfile` | `frontend-prod`（多階段 node build → nginx）|
 
 ## Python Runtime Dependencies
 
@@ -120,7 +135,25 @@ httpx>=0.27
 psycopg2-binary>=2.9
 pymodbus==3.6.9
 paho-mqtt>=2.0
+PyYAML>=6.0
 ```
+
+### `services/bff`（PRD-0005 GATE-1，local build `python:3.11-slim`）
+
+```text
+fastapi>=0.115,<1.0
+uvicorn[standard]>=0.30,<1.0
+httpx>=0.27,<1.0
+pydantic>=2.7,<3.0
+pydantic-settings>=2.3,<3.0
+argon2-cffi>=23.1,<25.0
+authlib>=1.3,<2.0
+cryptography>=42.0,<45.0
+```
+
+Dev：`pytest>=8.0`、`pytest-cov>=5.0`（`docker build --target test -t ems-bff-test services/bff`）
+
+Runtime（compose）：volumes `simulator_audit:/data/sim-control`（ADR-033）與 `demo_alarm_state:/data/demo-alarm`（PRD-0024，展位綁定與當日計數）；出站 HTTPS api.telegram.org:443（sendMessage 與 getUpdates 長輪詢）。PRD-0024 未新增 Python 套件；前端 QR 產生器 `uqr@0.1.3`（MIT）以檔案形式 vendored 於發布包，非 npm runtime 依賴。
 
 ## Optional Host Tools
 
@@ -186,3 +219,42 @@ typescript@~5.9.3
 typescript-eslint@^8.57.0
 vite@^8.0.1
 ```
+
+## EMS 自建前端（PRD-0005，`frontend/`）
+
+Node.js `>=20`（dev 機實測 v24）、npm `>=10`。`cd frontend && npm ci && npm test && npm run build`。
+
+Runtime：`react@19`, `react-dom@19`, `echarts@5`, `i18next@25`, `react-i18next@15`, `@radix-ui/react-slot`, `class-variance-authority`, `clsx`, `tailwind-merge`, `lucide-react`, `react-router-dom@7`, `@fontsource/inter`, `@fontsource/space-grotesk`, `@fontsource/noto-sans-tc`, `@fontsource/jetbrains-mono`（自託管開源字體，離線無 CDN；§6.4 可調整/可擴充 typography）
+
+Dev：`vite@7`, `typescript@5.8`, `tailwindcss@4`(+`@tailwindcss/vite`), `vitest@3`(+`@vitest/coverage-v8`), `@testing-library/{react,jest-dom,user-event}`, `jsdom`, `openapi-typescript`（`npm run gen:api` 由 `api/openapi.yml` 生成型別，§13.2 禁手刻）
+
+Prod 服務：`frontend/Dockerfile`（多階段 node build → `nginx:1.27-alpine`）服務靜態 build，注入 §9.5 安全標頭（CSP/HSTS/X-Frame-Options/nosniff/Referrer-Policy）並同源代理 `/api`→BFF；CI `frontend-unit` job 跑 `npm run coverage`（line/stmt/branch 80% 門檻；字體 subset 收斂後 dist CSS gzip ≈ 5.6KB）。
+
+## Delta edge / simulator（PRD-0020）
+Python3.9+（本機Docker3.11）；獨立services/delta/requirements.txt固定pymodbus3.6.9、paho-mqtt2.1.0、pyserial3.5。沿ADR-002版本，未升級其他services或external submodules。測試獨立Dockerfile.test使用pytest8與pytest-cov；Pi原生venv+systemd，SIM7600 OS網路驅動/APN另行驗收。UI驗證使用已有Playwright及Edge，非edge runtime依賴。
+
+## Database local accounts (PRD-0023)
+
+- PostgreSQL private schema bff_auth, migration 018_bff_accounts.sql.
+- BFF adds asyncpg>=0.29,<1.0, already used by device-service.
+- bff_auth_reader runtime credential and bff_auth_admin host CLI credential; no account records in environment variables.
+- account-admin Compose tools service uses the BFF image with no public port.
+- Procedure: [account-management.md](doc/operations/account-management.md).
+
+## 可選測試：Delta時鐘／TLS隔離補驗（2026-11-12）
+
+`services/delta/tools/bench_field_checks.py`只在WSL測試host使用Python標準庫、Docker CLI與OpenSSL3 CLI（本次3.0.13）、已快取`ems-delta-test`及`eclipse-mosquitto:2`；後者提供mosquitto_passwd，不安裝到Pi。不新增pip或production依賴。一次性私有PKI／密碼、無host port、自有容器清理見[補驗紀錄](output/delta-no-pi-validation-20261112/field-security-02/README.md)。
+
+## Opt-in committed telemetry（ADR-043）
+
+新增`services/edge-receiver`原生Python3.11服務／可選Compose：paho-mqtt==2.1.0、asyncpg==0.31.0，根requirements已有相容依賴；未升級其他runtime。獨立Dockerfile使用python3.11-slim，無hostport；PostgreSQL群組ems_edge_receiver、migration019、mTLS broker／ACL、DB外generation與receiver設定需commission。Pi仍只需要Delta既有runtime，不新增Pi PostgreSQL/asyncpg。
+
+測試`Dockerfile.test`由現有同ABI CPython3.11的ems-delta-test＋ems-bff快取離線組合；主機只用Docker／OpenSSL CLI。`verify_private.py`建立network-none的5個自有容器，臨時PKI清除；不部署共享v1。完整需求／切換見[receiver README](services/edge-receiver/README.md)。
+
+2026-11-13 ADR-049新增正式維運依賴：PostgreSQL15 client工具pg_receivewal（必須--synchronous）、pg_basebackup、pg_verifybackup；systemd與TLS複寫client配置範本在services/edge-receiver/deploy，正式獨立持久儲存仍待部署。私有驗證沿既有timescale/timescaledb:latest-pg15 cached image，無新增pip依賴或共享服務。
+
+### 2026-11-13 DB／WAL TLS與還原預檢
+
+無新增pip依賴；ssl／tarfile／subprocess使用Python標準庫，asyncpg與PG15沿用。維運backup_preflight須同版本pg_controldata、pg_verifybackup可執行檔；TLS／WAL fixture另用既有openssl／pg_receivewal／pg_basebackup／Docker，非receiver runtime新增服務。正式server key外置PGDATA，DB與WAL client cert分開。
+
+2026-11-13 ADR-051：無新增依賴；沿Python stdlib／PG15。slot reseed依PG15 pg_receivewal READ_REPLICATION_SLOT在空目錄採restart_lsn起點，維運需鎖定PG15相容版本及完整WAL保留鏈；CLI新增必填核定timeline／target。

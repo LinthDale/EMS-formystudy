@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "sample_id": "b10f53b1-9700-43de-b737-c17a0818a697",
+  "terminated_own_backend": 180,
+  "after_failure": [
+    0,
+    0
+  ],
+  "after_retry": [
+    1,
+    1
+  ],
+  "source_still_pending": true
+}

@@ -44,7 +44,7 @@ PRD 鎖定後的架構變更，皆需以 ADR 形式登記於 `doc/adr/`，PR 連
 
 ### 6. WSL 為單一真相
 
-`/home/emsuser/synaiq/EMS/` 為權威路徑；Windows 端 `C:\Users\User\synaiq\EMS\` 僅為備份，禁止直接編輯。
+`/home/dalelin/synaiq/EMS/` 為權威路徑；Windows 端 `C:\Users\User\synaiq\EMS\` 僅為備份，禁止直接編輯。
 
 ---
 

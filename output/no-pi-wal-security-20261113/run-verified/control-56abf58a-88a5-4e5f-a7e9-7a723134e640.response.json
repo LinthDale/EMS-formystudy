@@ -1,0 +1,12 @@
+{
+  "passed": true,
+  "request_id": "56abf58a-88a5-4e5f-a7e9-7a723134e640",
+  "op": "wal_probe_missing_client",
+  "kind": "missing_client",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "0eea47f37f3dfaf34157c59cbc6710750c53ea33dfbb2d22aaaa27a8f1d942cc",
+  "replication_peer_absent": true,
+  "tls_verify_code": null,
+  "client_verify_code": null
+}

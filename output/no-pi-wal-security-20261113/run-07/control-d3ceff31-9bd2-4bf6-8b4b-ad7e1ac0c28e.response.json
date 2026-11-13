@@ -1,0 +1,21 @@
+{
+  "passed": true,
+  "request_id": "d3ceff31-9bd2-4bf6-8b4b-ad7e1ac0c28e",
+  "op": "wal_full",
+  "actual_enospc": true,
+  "archive_limit_bytes": 134217728,
+  "child_exit": 1,
+  "before": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/3050648",
+    "lag_bytes": 0,
+    "active": true
+  },
+  "after": {
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/4000000",
+    "lag_bytes": 16777216,
+    "active": false
+  },
+  "container_kept_running": true
+}

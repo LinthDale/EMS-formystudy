@@ -1,0 +1,22 @@
+[
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.040000000000001,power_kw=9.0,energy_kwh=1234.56 1794473319264459000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.08,power_kw=9.03,energy_kwh=1234.56 1794473320264537000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.13,power_kw=9.06,energy_kwh=1234.56 1794473324231188000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.17,power_kw=9.09,energy_kwh=1234.56 1794473325231122000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.21,power_kw=9.119,energy_kwh=1234.57 1794473326231134000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.25,power_kw=9.149,energy_kwh=1234.57 1794473327231121000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.3,power_kw=9.178,energy_kwh=1234.57 1794473328231123000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.34,power_kw=9.206,energy_kwh=1234.57 1794473329231245000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.38,power_kw=9.234,energy_kwh=1234.58 1794473330231142000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.42,power_kw=9.261,energy_kwh=1234.58 1794473331231125000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.46,power_kw=9.288,energy_kwh=1234.58 1794473332231133000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.49,power_kw=9.314,energy_kwh=1234.58 1794473333231141000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.530000000000001,power_kw=9.339,energy_kwh=1234.59 1794473334231129000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.57,power_kw=9.363,energy_kwh=1234.59 1794473335231132000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.6,power_kw=9.387,energy_kwh=1234.59 1794473336231145000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.63,power_kw=9.409,energy_kwh=1234.59 1794473337231135000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.66,power_kw=9.43,energy_kwh=1234.6 1794473338231136000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.69,power_kw=9.451,energy_kwh=1234.6 1794473339231127000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.72,power_kw=9.47,energy_kwh=1234.6 1794473340231197000",
+  "electricity_measurements,device_id=delta-backlog-qa-20261112 voltage=230.0,current=13.75,power_kw=9.488,energy_kwh=1234.6 1794473341231104000"
+]

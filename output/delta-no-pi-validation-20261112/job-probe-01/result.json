@@ -1,0 +1,5 @@
+{
+  "parent_exit_code": 0,
+  "grandchild_alive_after_parent_exit": true,
+  "grandchild_exited_after_job_close": true
+}

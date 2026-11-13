@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "orphan-audit",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "f53591f7-d14a-4c7f-b47d-ba9ad0b018a9",
+  "before_sha256": "b795829c55bd2c27740b440a96cae866eda01e35e3ce62f590d685a3fcd93d65",
+  "after_sha256": "b795829c55bd2c27740b440a96cae866eda01e35e3ce62f590d685a3fcd93d65"
+}

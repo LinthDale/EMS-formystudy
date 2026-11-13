@@ -1,0 +1,83 @@
+{
+  "date": "2026-11-12",
+  "scope": "Windows two-adapter bench; estimated 60cm; no Pi/4G/Delta device qualification",
+  "gate4": "COM3 pass; COM4 functional recovery observed, timing deviation retained; further manual retest canceled",
+  "gate5": {
+    "original_unbounded_late": "FAIL retained",
+    "unknown_lock": 20,
+    "qualified_lab_recovery": 20,
+    "field_lifetime_qualified": false
+  },
+  "gate6": {
+    "status": "PASS",
+    "offline_seconds": 300.01599999982864,
+    "offline_commits": 60,
+    "db_api_matched": 80
+  },
+  "gate7": {
+    "status": "PASS",
+    "forced_child_terminations": 10,
+    "committed_matched": 30,
+    "uncommitted_excluded": 10,
+    "pending_end": 0
+  },
+  "gate8": {
+    "status": "PASS isolated fault injection",
+    "os_disk_exhaustion_tested": false
+  },
+  "gate9": {
+    "status": "FAIL v1; v2 pending implementation",
+    "counterexamples_reproduced": 3,
+    "system_acceptance_passed": false,
+    "scope": "isolated real broker + production sender + controlled SQLite receiver",
+    "evidence": "ack-isolated-01/run/result.json"
+  },
+  "gate10": {
+    "ui_contract": "PASS 5/5 synthetic API cases, actual local Monitor",
+    "ui_evidence": "ui-freshness-02/result.json",
+    "one_second_one_hour": {
+      "status": "PASS",
+      "scheduled": 3600,
+      "valid": 3600,
+      "committed": 3600,
+      "db_matched": 3600,
+      "api_matched": 3600,
+      "pending_end": 0,
+      "measured_seconds": 3600,
+      "evidence": "soak-sequence-01/one-second-one-hour/soak-result.json"
+    },
+    "five_second_twenty_four_hours": {
+      "status": "RUNNING",
+      "started_utc": "2026-11-12T06:49:53.637469+00:00",
+      "expected_measurement_end_utc": "2026-11-13T06:49:53.637469+00:00",
+      "scheduled": 17280
+    },
+    "live_status": "soak-sequence-01/status.json"
+  },
+  "unit_tests": 191,
+  "production_line_coverage_percent": 96.06,
+  "deployed_to_shared_runtime": false,
+  "updated_utc": "2026-11-12T07:24:54.554670+00:00",
+  "owned_background_controller_pid": 4564,
+  "regression_skipped_private_integration": 12,
+  "supplemental_checks": {
+    "clock_full_runtime": {
+      "status": "PASS",
+      "cases": 2,
+      "phases": 11,
+      "accepted_samples": 5,
+      "rejected_phases": 6,
+      "scope": "real Modbus TCP/SQLite/TLS; injected UTC and phase pacing"
+    },
+    "real_tls": {
+      "status": "PASS",
+      "cases": 10,
+      "rejected_pending_preserved": 7,
+      "same_publisher_reconnect_seconds": 1.0273988209664822
+    },
+    "integration_evidence": "field-security-02/result.json",
+    "first_attempt": "field-security-01/result.json (FAIL retained)",
+    "production_changed": false,
+    "central_receipt_implemented": false
+  }
+}

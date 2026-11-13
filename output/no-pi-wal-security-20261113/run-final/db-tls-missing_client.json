@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "kind": "missing_client",
+  "actual_error": {
+    "kind": "InvalidAuthorizationSpecificationError",
+    "verify_code": null,
+    "certificate_identity_rejected": false,
+    "client_certificate_required": true
+  },
+  "source_preserved": true,
+  "no_partial_write": true,
+  "rows": 1,
+  "pending_end": 0
+}

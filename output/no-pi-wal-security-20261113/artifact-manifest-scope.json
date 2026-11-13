@@ -1,0 +1,9 @@
+{
+  "captured_utc": "2026-11-13T07:40:11.061033+00:00",
+  "scope": "all static evidence: original RED and failed runs, definitive run-verified, baseline regression, adjacent PITR, audit and final source hashes",
+  "excluded": [
+    "artifact-sha256.json"
+  ],
+  "no_active_soak": true,
+  "private_keys_included": false
+}

@@ -1,0 +1,18 @@
+Nov 12 16:49:41 DESKTOP-G19V1B5 systemd[1927]: Started ems-no-pi-qa-20261112.service - /usr/bin/python3 -m delta_device edge --config /home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/config.json.
+Nov 12 16:49:41 DESKTOP-G19V1B5 python3[3006082]: 2026-11-12 16:49:41,640 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473381634599000 pending_rows=1
+Nov 12 16:49:42 DESKTOP-G19V1B5 python3[3006082]: 2026-11-12 16:49:42,640 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473382634729000 pending_rows=2
+Nov 12 16:49:42 DESKTOP-G19V1B5 python3[3006082]: 2026-11-12 16:49:42,642 INFO broker_ack samples=1
+Nov 12 16:49:43 DESKTOP-G19V1B5 python3[3006082]: 2026-11-12 16:49:43,640 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473383634709000 pending_rows=2
+Nov 12 16:49:43 DESKTOP-G19V1B5 python3[3006082]: 2026-11-12 16:49:43,650 INFO broker_ack samples=2
+Nov 12 16:49:43 DESKTOP-G19V1B5 systemd[1927]: ems-no-pi-qa-20261112.service: Sent signal SIGKILL to main process 3006082 (python3) on client request.
+Nov 12 16:49:43 DESKTOP-G19V1B5 systemd[1927]: ems-no-pi-qa-20261112.service: Main process exited, code=killed, status=9/KILL
+Nov 12 16:49:43 DESKTOP-G19V1B5 systemd[1927]: ems-no-pi-qa-20261112.service: Failed with result 'signal'.
+Nov 12 16:49:56 DESKTOP-G19V1B5 systemd[1927]: ems-no-pi-qa-20261112.service: Scheduled restart job, restart counter is at 1.
+Nov 12 16:49:56 DESKTOP-G19V1B5 systemd[1927]: Started ems-no-pi-qa-20261112.service - /usr/bin/python3 -m delta_device edge --config /home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/config.json.
+Nov 12 16:49:56 DESKTOP-G19V1B5 python3[3010577]: 2026-11-12 16:49:56,914 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473396907471000 pending_rows=1
+Nov 12 16:49:57 DESKTOP-G19V1B5 python3[3010577]: 2026-11-12 16:49:57,913 INFO broker_ack samples=1
+Nov 12 16:49:57 DESKTOP-G19V1B5 python3[3010577]: 2026-11-12 16:49:57,917 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473397907575000 pending_rows=1
+Nov 12 16:49:58 DESKTOP-G19V1B5 python3[3010577]: 2026-11-12 16:49:58,916 INFO sample_queued device_id=delta-systemd-qa time_ns=1794473398907584000 pending_rows=2
+Nov 12 16:49:58 DESKTOP-G19V1B5 python3[3010577]: 2026-11-12 16:49:58,929 INFO broker_ack samples=2
+Nov 12 16:49:58 DESKTOP-G19V1B5 systemd[1927]: Stopping ems-no-pi-qa-20261112.service - /usr/bin/python3 -m delta_device edge --config /home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/config.json...
+Nov 12 16:49:59 DESKTOP-G19V1B5 systemd[1927]: Stopped ems-no-pi-qa-20261112.service - /usr/bin/python3 -m delta_device edge --config /home/dalelin/synaiq/EMS/output/no-pi-backlog-20261112/linux-service-01/config.json.

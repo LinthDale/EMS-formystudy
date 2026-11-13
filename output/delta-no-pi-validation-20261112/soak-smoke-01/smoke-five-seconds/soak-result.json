@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "valid_rate": 1.0,
+  "raw_strict_pass": true,
+  "classified_failed_slots": [],
+  "measured_seconds": 15.0,
+  "minimum_measurement_seconds": 15,
+  "name": "smoke-five-seconds",
+  "formal": false,
+  "verifier_exit_code": 0
+}

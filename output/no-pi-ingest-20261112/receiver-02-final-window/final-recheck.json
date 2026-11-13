@@ -1,0 +1,344 @@
+[
+  {
+    "kind": "baseline",
+    "expected": [
+      {
+        "sampled_ns": 1794474771702263000,
+        "voltage": 230.0,
+        "current": 5.0,
+        "power_kw": 1.0,
+        "energy_kwh": 1000.0
+      },
+      {
+        "sampled_ns": 1794474771702264000,
+        "voltage": 230.1,
+        "current": 5.01,
+        "power_kw": 1.01,
+        "energy_kwh": 1000.01
+      },
+      {
+        "sampled_ns": 1794474771702265000,
+        "voltage": 230.2,
+        "current": 5.02,
+        "power_kw": 1.02,
+        "energy_kwh": 1000.02
+      }
+    ],
+    "payloads": [
+      "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474771702263000",
+      "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.1,current=5.01,power_kw=1.01,energy_kwh=1000.01 1794474771702264000",
+      "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.2,current=5.02,power_kw=1.02,energy_kwh=1000.02 1794474771702265000"
+    ],
+    "broker_ack": true,
+    "pending_end": 0,
+    "actual": [
+      {
+        "sampled_ns": 1794474771702263000,
+        "voltage": 230,
+        "current": 5,
+        "power_kw": 1,
+        "energy_kwh": 1000
+      },
+      {
+        "sampled_ns": 1794474771702264000,
+        "voltage": 230.1,
+        "current": 5.01,
+        "power_kw": 1.01,
+        "energy_kwh": 1000.01
+      },
+      {
+        "sampled_ns": 1794474771702265000,
+        "voltage": 230.2,
+        "current": 5.02,
+        "power_kw": 1.02,
+        "energy_kwh": 1000.02
+      }
+    ],
+    "checks": {
+      "setup": true
+    },
+    "errors": [],
+    "comparison": {
+      "expected": 3,
+      "received": 3,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": true
+  },
+  {
+    "kind": "duplicate",
+    "expected": [
+      {
+        "sampled_ns": 1794474780888643000,
+        "voltage": 230.0,
+        "current": 5.0,
+        "power_kw": 1.0,
+        "energy_kwh": 1000.0
+      }
+    ],
+    "payloads": [
+      "electricity_measurements,device_id=delta-ingest-qa-duplicate voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474780888643000"
+    ],
+    "broker_ack": true,
+    "pending_end": 0,
+    "actual": [
+      {
+        "sampled_ns": 1794474780888643000,
+        "voltage": 230,
+        "current": 5,
+        "power_kw": 1,
+        "energy_kwh": 1000
+      },
+      {
+        "sampled_ns": 1794474780888643000,
+        "voltage": 230,
+        "current": 5,
+        "power_kw": 1,
+        "energy_kwh": 1000
+      }
+    ],
+    "checks": {
+      "setup": true
+    },
+    "errors": [],
+    "comparison": {
+      "expected": 1,
+      "received": 2,
+      "missing": [],
+      "extra": [],
+      "duplicates": [
+        1794474780888643000
+      ],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": false
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": false
+  },
+  {
+    "kind": "receiver-down",
+    "expected": [
+      {
+        "sampled_ns": 1794474786524683000,
+        "voltage": 230.0,
+        "current": 5.0,
+        "power_kw": 1.0,
+        "energy_kwh": 1000.0
+      }
+    ],
+    "payloads": [
+      "electricity_measurements,device_id=delta-ingest-qa-receiver-down voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474786524683000"
+    ],
+    "broker_ack": true,
+    "pending_end": 0,
+    "actual": [],
+    "checks": {
+      "setup": true,
+      "receiver_down_at_send": true,
+      "database_before_restart": 0,
+      "receiver_restarted": true,
+      "settled_seconds": 10.000053584109992
+    },
+    "errors": [],
+    "comparison": {
+      "expected": 1,
+      "received": 0,
+      "missing": [
+        1794474786524683000
+      ],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": false
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": false
+  },
+  {
+    "kind": "db-pause",
+    "expected": [
+      {
+        "sampled_ns": 1794474797094968000,
+        "voltage": 230.0,
+        "current": 5.0,
+        "power_kw": 1.0,
+        "energy_kwh": 1000.0
+      },
+      {
+        "sampled_ns": 1794474797094969000,
+        "voltage": 230.1,
+        "current": 5.01,
+        "power_kw": 1.01,
+        "energy_kwh": 1000.01
+      },
+      {
+        "sampled_ns": 1794474797094970000,
+        "voltage": 230.2,
+        "current": 5.02,
+        "power_kw": 1.02,
+        "energy_kwh": 1000.02
+      },
+      {
+        "sampled_ns": 1794474797094971000,
+        "voltage": 230.3,
+        "current": 5.03,
+        "power_kw": 1.03,
+        "energy_kwh": 1000.03
+      },
+      {
+        "sampled_ns": 1794474797094972000,
+        "voltage": 230.4,
+        "current": 5.04,
+        "power_kw": 1.04,
+        "energy_kwh": 1000.04
+      },
+      {
+        "sampled_ns": 1794474797094973000,
+        "voltage": 230.5,
+        "current": 5.05,
+        "power_kw": 1.05,
+        "energy_kwh": 1000.05
+      },
+      {
+        "sampled_ns": 1794474797094974000,
+        "voltage": 230.6,
+        "current": 5.06,
+        "power_kw": 1.06,
+        "energy_kwh": 1000.06
+      },
+      {
+        "sampled_ns": 1794474797094975000,
+        "voltage": 230.7,
+        "current": 5.07,
+        "power_kw": 1.07,
+        "energy_kwh": 1000.07
+      },
+      {
+        "sampled_ns": 1794474797094976000,
+        "voltage": 230.8,
+        "current": 5.08,
+        "power_kw": 1.08,
+        "energy_kwh": 1000.08
+      },
+      {
+        "sampled_ns": 1794474797094977000,
+        "voltage": 230.9,
+        "current": 5.09,
+        "power_kw": 1.09,
+        "energy_kwh": 1000.09
+      }
+    ],
+    "payloads": [
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474797094968000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.1,current=5.01,power_kw=1.01,energy_kwh=1000.01 1794474797094969000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.2,current=5.02,power_kw=1.02,energy_kwh=1000.02 1794474797094970000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.3,current=5.03,power_kw=1.03,energy_kwh=1000.03 1794474797094971000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.4,current=5.04,power_kw=1.04,energy_kwh=1000.04 1794474797094972000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.5,current=5.05,power_kw=1.05,energy_kwh=1000.05 1794474797094973000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.6,current=5.06,power_kw=1.06,energy_kwh=1000.06 1794474797094974000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.7,current=5.07,power_kw=1.07,energy_kwh=1000.07 1794474797094975000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.8,current=5.08,power_kw=1.08,energy_kwh=1000.08 1794474797094976000",
+      "electricity_measurements,device_id=delta-ingest-qa-db-pause voltage=230.9,current=5.09,power_kw=1.09,energy_kwh=1000.09 1794474797094977000"
+    ],
+    "broker_ack": true,
+    "pending_end": 0,
+    "actual": [
+      {
+        "sampled_ns": 1794474797094968000,
+        "voltage": 230,
+        "current": 5,
+        "power_kw": 1,
+        "energy_kwh": 1000
+      },
+      {
+        "sampled_ns": 1794474797094969000,
+        "voltage": 230.1,
+        "current": 5.01,
+        "power_kw": 1.01,
+        "energy_kwh": 1000.01
+      },
+      {
+        "sampled_ns": 1794474797094970000,
+        "voltage": 230.2,
+        "current": 5.02,
+        "power_kw": 1.02,
+        "energy_kwh": 1000.02
+      },
+      {
+        "sampled_ns": 1794474797094971000,
+        "voltage": 230.3,
+        "current": 5.03,
+        "power_kw": 1.03,
+        "energy_kwh": 1000.03
+      },
+      {
+        "sampled_ns": 1794474797094972000,
+        "voltage": 230.4,
+        "current": 5.04,
+        "power_kw": 1.04,
+        "energy_kwh": 1000.04
+      },
+      {
+        "sampled_ns": 1794474797094973000,
+        "voltage": 230.5,
+        "current": 5.05,
+        "power_kw": 1.05,
+        "energy_kwh": 1000.05
+      },
+      {
+        "sampled_ns": 1794474797094974000,
+        "voltage": 230.6,
+        "current": 5.06,
+        "power_kw": 1.06,
+        "energy_kwh": 1000.06
+      },
+      {
+        "sampled_ns": 1794474797094975000,
+        "voltage": 230.7,
+        "current": 5.07,
+        "power_kw": 1.07,
+        "energy_kwh": 1000.07
+      },
+      {
+        "sampled_ns": 1794474797094976000,
+        "voltage": 230.8,
+        "current": 5.08,
+        "power_kw": 1.08,
+        "energy_kwh": 1000.08
+      },
+      {
+        "sampled_ns": 1794474797094977000,
+        "voltage": 230.9,
+        "current": 5.09,
+        "power_kw": 1.09,
+        "energy_kwh": 1000.09
+      }
+    ],
+    "checks": {
+      "setup": true,
+      "database_paused_at_send": true,
+      "paused_seconds": 10.182791118975729
+    },
+    "errors": [],
+    "comparison": {
+      "expected": 10,
+      "received": 10,
+      "missing": [],
+      "extra": [],
+      "duplicates": [],
+      "source_duplicates": [],
+      "mismatched": [],
+      "pass": true
+    },
+    "experiment_passed": true,
+    "system_delivery_acceptance_passed": true
+  }
+]

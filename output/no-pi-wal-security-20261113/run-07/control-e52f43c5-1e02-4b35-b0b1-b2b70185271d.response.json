@@ -1,0 +1,6 @@
+{
+  "passed": true,
+  "request_id": "e52f43c5-1e02-4b35-b0b1-b2b70185271d",
+  "op": "db_client_probe_end",
+  "server_rejected_client_ca": true
+}

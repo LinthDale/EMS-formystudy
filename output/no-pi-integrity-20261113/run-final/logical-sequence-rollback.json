@@ -1,0 +1,9 @@
+{
+  "passed": true,
+  "damage": "sequence-rollback",
+  "quick_check": "ok",
+  "rejected": true,
+  "original_sample_id": "93976cf5-1b16-4e65-bb32-8eb0a5843c6c",
+  "before_sha256": "0544600cc51bc55d6df3959925cc58efe297dba7cbd4eac448a067d65656dda7",
+  "after_sha256": "0544600cc51bc55d6df3959925cc58efe297dba7cbd4eac448a067d65656dda7"
+}

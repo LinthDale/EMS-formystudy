@@ -1,0 +1,42 @@
+[
+  {
+    "path": "exit-code.txt",
+    "bytes": 2,
+    "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+  },
+  {
+    "path": "image-inspect.json",
+    "bytes": 74,
+    "sha256": "af8cbccef3f828bc053cb613f2ef990763c634c9bc2d7f9f09047385d8659dab"
+  },
+  {
+    "path": "README.md",
+    "bytes": 2503,
+    "sha256": "229c7073d596529b4ff1c39f3d6decdc03e44d1711ccde4ee15d0f158d86df13"
+  },
+  {
+    "path": "reproduce.py",
+    "bytes": 5009,
+    "sha256": "43639f2d80fdbc95ab931417691cd52b1e9496fe9d484e13e0ad6a328fa76fdb"
+  },
+  {
+    "path": "stderr.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "stdout.json",
+    "bytes": 1807,
+    "sha256": "a79bb71c2fd28f5de5b66f293dbaf38c023a636eec6a76df46916b745713abe8"
+  },
+  {
+    "path": "source\\bench_frames.py",
+    "bytes": 6877,
+    "sha256": "cda076e3b5e6a3228fe30a6842eba8149a0673f5babc8183222745ecd734e695"
+  },
+  {
+    "path": "source\\poller.py",
+    "bytes": 2571,
+    "sha256": "65abce0bc9282b82af2b9a57bcdf6a120c91d33aee0ac0484da6d7a58e618ee6"
+  }
+]

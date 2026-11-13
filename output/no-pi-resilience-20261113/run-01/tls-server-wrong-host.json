@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "verify_code": 64,
+  "real_client_rejection": true,
+  "original_sample_id": "6497a5d0-8352-4b60-a87c-6553e60e4109",
+  "original_payload_hash": "db60df17e31e2949196ddb14370b0b334bb6f0a35889a34f2fe03c90b5e21246",
+  "source_preserved_during_failure": true,
+  "projections": 1,
+  "pending_end": 0
+}

@@ -1,0 +1,466 @@
+[
+  {
+    "passed": true,
+    "request_id": "98822276-16f0-42fd-8b14-7ccdede761ad",
+    "op": "wal_status",
+    "slot": "ems_archive_slot",
+    "restart_lsn": "0/1E992B0",
+    "lag_bytes": 0,
+    "slot_retained_bytes": 0,
+    "active": true,
+    "peer_tls": true,
+    "peer_role": "ems_wal_archive",
+    "peer_client_dn": "/CN=ems_wal_archive",
+    "flush_lsn": "0/1E992B0"
+  },
+  {
+    "passed": true,
+    "request_id": "17166915-cfd5-4d04-a410-73420b3d8de7",
+    "op": "db_cert_wrong_host",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "8f8ab0c2-b39d-464d-bc43-5f760ac1aa80",
+    "op": "db_cert_good",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "78273497-658e-4ead-a973-1bdf9499b0fe",
+    "op": "db_cert_expired",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "ead7dad6-4664-43c5-a045-78778c25b65b",
+    "op": "db_cert_good",
+    "reloaded": true
+  },
+  {
+    "passed": true,
+    "request_id": "31ae6748-89ec-42fc-a258-1ee9a1d95f82",
+    "op": "db_client_probe_begin",
+    "started": true
+  },
+  {
+    "passed": true,
+    "request_id": "e4be7fd9-8d9a-43a7-a9cd-1b59a89544f9",
+    "op": "db_client_probe_end",
+    "server_rejected_client_certificate": true,
+    "client_certificate_verify_code": 20
+  },
+  {
+    "passed": true,
+    "request_id": "6f8ebfa0-b07e-4d37-971c-3019e264c5b8",
+    "op": "db_client_probe_begin",
+    "started": true
+  },
+  {
+    "passed": true,
+    "request_id": "f1616593-198a-4395-9e62-70876f19ac0b",
+    "op": "db_client_probe_end_expired",
+    "server_rejected_client_certificate": true,
+    "client_certificate_verify_code": 10
+  },
+  {
+    "passed": true,
+    "request_id": "6b584da9-6009-41c2-8ab3-cd29f9413da6",
+    "op": "wal_probe_wrong_ca",
+    "kind": "wrong_ca",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "18ba84eb871544ac31599d4ffbe7a32e09923ea2245a41daf1cd58776225d1ed",
+    "replication_peer_absent": true,
+    "tls_verify_code": 19,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "cce4e4d9-4878-4d64-9a0f-79403a97796a",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6030",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6030"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "45ec1dc4-167a-463f-8ede-724231e47b93",
+    "op": "wal_probe_wrong_host",
+    "kind": "wrong_host",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "32e7015727bc5431f57ab125aaad3ef7e757a7b09d6cd3c25f9af50f68c10f90",
+    "replication_peer_absent": true,
+    "tls_verify_code": 64,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "cdc867fd-fc83-424b-add3-1dbe63e61392",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6688",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6688"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "bf77dabc-824c-40a8-8e83-d73f13bfbf70",
+    "op": "wal_probe_expired",
+    "kind": "expired",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "1abf510c6b5b9bcf4bb30e7c83e66af369e50775026a834b4d6be9809263c852",
+    "replication_peer_absent": true,
+    "tls_verify_code": 10,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "797999ff-9e36-46fe-b580-95edbb927491",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6CE0",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6CE0"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "d868ffcc-71f8-4618-89dd-a166c90eea85",
+    "op": "wal_probe_missing_client",
+    "kind": "missing_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "2b35d69128afd14ec16771fa098f8a42608edcf51d07f46c31d6c3d47cf6d1f3",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "b306d1f9-b5b5-4256-b623-765f3f5b715a",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC7370",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC7370"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "ccd1a838-3fb0-4256-84e0-628ddee2760b",
+    "op": "wal_probe_untrusted_client",
+    "kind": "untrusted_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "5062f0d25546ccc0a16ce89006c8a7c1184391aa022819e74b319332bdae8fba",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "0a535103-49d2-4462-b70e-51e85bfa2fad",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC79C8",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC79C8"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "b48e8ce9-9969-4fb6-90b5-8c8fc8ff2519",
+    "op": "wal_probe_expired_client",
+    "kind": "expired_client",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "16833b1d697e91e16a00439d2a1304164d3dafbd386de6bf7a749e58c4669afa",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": 10
+  },
+  {
+    "passed": true,
+    "request_id": "6151c2c5-f687-46f4-8a91-e45cfb307914",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8038",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8038"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "0d6e2427-6058-4c2e-890d-2f891b1ebf8a",
+    "op": "wal_probe_wrong_user",
+    "kind": "wrong_user",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "9a3525c34983a937725aa3da86dfb642cc76ab05fd70972b21748b585b722160",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "d1b28e58-5f67-439f-aa1b-611ba2649410",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8690",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8690"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "b59172f8-47e3-4125-b804-cd2452102d26",
+    "op": "wal_probe_plaintext",
+    "kind": "plaintext",
+    "exit_code": 1,
+    "reason_verified": true,
+    "container_id": "9b5f13893bb36eba04d2a0faecd108f5f23c588ba3f047af658b3ae241f77003",
+    "replication_peer_absent": true,
+    "tls_verify_code": null,
+    "client_verify_code": null
+  },
+  {
+    "passed": true,
+    "request_id": "c3a7d2e5-0c29-4f99-8df4-60897bbac8f0",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8CE8",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8CE8"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "9aaf6034-a341-4a24-9454-9c6eda8701f4",
+    "op": "wal_gate_plaintext",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": false,
+      "client_dn": null,
+      "username": "ems_wal_archive",
+      "guard": false
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "b41bfe09-165e-4dc4-ace2-901ac4c89610",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC9378",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC9378"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "e200e618-d218-460b-8b92-a11190dcf2ec",
+    "op": "wal_gate_wrong_role",
+    "peer_connected": true,
+    "gate_rejected": true,
+    "observed": {
+      "ssl": true,
+      "client_dn": "/CN=postgres",
+      "username": "postgres",
+      "guard": false
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "4bf552eb-74ed-4c19-ad1c-d39f1b9ff776",
+    "op": "wal_resume",
+    "synchronous": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC99D0",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC99D0"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "22299d46-59b6-4f9b-8bb7-5d30877866d7",
+    "op": "recovery_matrix",
+    "expected_system_id": "7707552533515481130",
+    "foreign_system_id": "7707552795751243817",
+    "good_promoted": true,
+    "postbackup_marker_recovered": true,
+    "corrupt_backup_checksum_rejected": true,
+    "corrupt_later_wal_crc_rejected": true,
+    "foreign_wal_system_id_rejected": true,
+    "valid_foreign_bundle_rejected_before_start": true,
+    "foreign_bundle_checksum_valid": true,
+    "pristine_inputs_unchanged": true,
+    "backup_and_wal_artifacts": {
+      "base-backup_manifest": {
+        "bytes": 312491,
+        "sha256": "f83d7d319a43f397df54493c9dcedf6a1368cf4746f48021d3903ede6135502b"
+      },
+      "base-base.tar": {
+        "bytes": 36579328,
+        "sha256": "c8614ef2a627e42e5a5bec646b4de26e7eaddf34e05a64efe2536b4349db126c"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "794e78ef8cb5764a26ac7017c16084130bed4c2790a7878ac681d3feaf5d938e"
+      },
+      "wal-000000010000000000000003.partial": {
+        "bytes": 16777216,
+        "sha256": "186b16867bea80cada2f00fb75bec306123d9e4924c2d2dcd70b23813d9af0dd"
+      },
+      "wal-000000010000000000000001": {
+        "bytes": 16777216,
+        "sha256": "acb2eaab2ecd70154d594fa75d9642149e59bf01af01d66f05d0dda17d02d400"
+      },
+      "wal-000000010000000000000002": {
+        "bytes": 16777216,
+        "sha256": "20ff65b466a20acacdffcedcffffd6bbd386a0315ddfe052ae7d61d118853c06"
+      }
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "3d2dce24-3f3e-4e94-997d-aec9e97e8644",
+    "op": "wal_full",
+    "actual_enospc": true,
+    "archive_limit_bytes": 134217728,
+    "child_exit": 1,
+    "before": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/3024BE0",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/3024BE0"
+    },
+    "after": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/3024BE0",
+      "lag_bytes": 33403936,
+      "slot_retained_bytes": 33403936,
+      "active": false,
+      "peer_tls": null,
+      "peer_role": null,
+      "peer_client_dn": null,
+      "flush_lsn": null
+    },
+    "container_kept_running": true
+  },
+  {
+    "passed": true,
+    "request_id": "62305383-7796-4c10-83ca-ebba40589d8d",
+    "op": "wal_free",
+    "synchronous": true,
+    "same_slot": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/4000000",
+      "lag_bytes": 16777216,
+      "slot_retained_bytes": 16777216,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/4000000"
+    }
+  },
+  {
+    "passed": true,
+    "request_id": "2f401681-b7c1-4e2b-ae4b-a64420874912",
+    "op": "wal_caught_up",
+    "fixed_lsn": "0/5003870",
+    "flush_fence_satisfied": true,
+    "slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/5003870",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/5003870"
+    }
+  }
+]

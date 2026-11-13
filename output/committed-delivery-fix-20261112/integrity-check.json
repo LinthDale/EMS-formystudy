@@ -1,0 +1,33 @@
+{
+  "original": {
+    "files": 770,
+    "mismatches": [],
+    "passed": true
+  },
+  "backlog": {
+    "files": 384,
+    "mismatches": [],
+    "passed": true
+  },
+  "actual_ingest": {
+    "files": 321,
+    "mismatches": [],
+    "passed": true
+  },
+  "frozen_archive": {
+    "files": 17,
+    "mismatches": [],
+    "passed": true
+  },
+  "active_windows_frozen": {
+    "files": 17,
+    "mismatches": [],
+    "passed": true
+  },
+  "active_verifier_dependencies": {
+    "files": 3,
+    "mismatches": [],
+    "passed": true
+  },
+  "checked_utc": "2026-11-12T09:52:41.578098+00:00"
+}

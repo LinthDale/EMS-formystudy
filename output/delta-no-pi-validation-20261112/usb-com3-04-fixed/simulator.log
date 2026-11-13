@@ -1,0 +1,35 @@
+2026-11-12 12:11:43,643 INFO simulator_ready transport=rtu
+2026-11-12 12:15:33,142 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:35,152 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:35,152 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:37,162 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:37,162 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:39,175 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:39,176 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:41,183 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:41,183 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:43,191 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:43,191 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:45,199 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:45,199 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:47,209 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:47,209 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:49,209 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:49,209 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:51,224 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:51,224 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:53,225 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:53,225 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:55,229 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:55,229 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:57,231 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:57,231 WARNING serial_disconnected kind=OSError
+2026-11-12 12:15:59,233 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:15:59,233 WARNING serial_disconnected kind=OSError
+2026-11-12 12:16:01,248 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:16:01,248 WARNING serial_disconnected kind=OSError
+2026-11-12 12:16:03,253 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:16:03,253 WARNING serial_disconnected kind=OSError
+2026-11-12 12:16:05,258 WARNING Failed to start server could not open port 'COM3': FileNotFoundError(2, '系統找不到指定的檔案。', None, 2)
+2026-11-12 12:16:05,258 WARNING serial_disconnected kind=OSError
+2026-11-12 12:16:07,273 INFO simulator_ready transport=rtu

@@ -30,12 +30,20 @@
 | ADR-020 | DB Migration 治理（schema_migrations + runner 選型；排除 Alembic）| Proposed | 2026-06-09 |
 | ADR-021 | device_type 閉集政策（DB 自由 TEXT、應用層夾箝；+battery/solar_inverter/ev_charger/grid_meter）| Proposed | 2026-06-10 |
 | ADR-022 | 窄表 signal_measurements 通用量測儲存（恰一非 NULL CHECK + 壓縮 segmentby；unified view；ems_ingest INSERT-only）| Proposed | 2026-06-10 |
+| ADR-023 | BFF session 與 role→channel-key 授權（任何 role 變更即 revoke；SessionStore Protocol；上游 401/403→502；PostgREST hop 不花 key、AI key 不進 BFF）| Proposed | 2026-06-11 |
+| ADR-024 | BFF 認證：OIDC-first + argon2id 本地 fallback（可插拔 AuthProvider；SHA-256→argon2id；OIDC Phase-1 stub→503）| Proposed | 2026-06-15 |
+| ADR-025 | Per-device 量測 PRODUCT facade（產品語意 since/limit/order；device→domain 以 gateway_id 解析；取代 §8.2 operator 透傳；OPS-gated；量測 hop 不花 key）| Proposed | 2026-06-16 |
+| ADR-026 | BFF 設備 create/update facade（FR-502 人工兜底；POST /api/devices + PATCH /api/devices/{id} 鏡像 override pattern、verbatim forward；不暴露 DELETE，停用走 /reject；PATCH/frozen→/override 分工）| Accepted | 2026-06-18 |
 
 > ADR-009 ~ ADR-017 源自 PRD-0003（Device Registry & Auto-Discovery，Approved 2026-05-08 / DL-007），將 PRD §6.4 鎖定之 9 項架構決策正式化。
 > ADR-018 源自 PRD-0003 Phase 1.1 實作前弱點掃描 Finding B，擴充 ADR-016 的 freeze trigger 保護欄位集。
 > ADR-019 源自 PRD-0003 §8.7.3 follow-up，為 [PRD-0004](../prd/PRD-0004-device-service-observability-alerting.md) 排除之 Non-Goal；**Proposed，卡 Anthropic key**。
 > ADR-020 源自 review 對 migration 版控之關切；與 [api-contract-governance](../governance/api-contract-governance.md) 為兩條獨立治理線（DB 遷移 vs API 契約）；**Proposed，排除 Alembic（stack 非 SQLAlchemy）**。
 > ADR-021/022 源自 [PRD-0006](../prd/PRD-0006-Generic-Measurement-Pipeline-Dynamic-Visualization.md)（通用量測管線與動態可視化，Draft 2026-06-10）；021 閉集變更須同步升 PROMPT_VERSION；022 retention 數值與 cagg 屬 PRD-0006 Open Questions。
+> ADR-023 源自 [PRD-0005](../prd/PRD-0005-ems-frontend.md) §9（GATE-1 BFF，`services/bff/`）實作層安全決策；P1 in-memory session store 限單 worker，水平擴展前換 Redis。
+> ADR-024 精煉 ADR-023 的認證層；source PRD-0005 §9 + owner 決策（2026-06-15 OIDC 優先）；對應 threat-model T-26、risk-register R-015。SHA-256→argon2id 已上線，OIDC 全流程延 Phase-1。
+> ADR-025 源自 PRD-0005 §8.2/§9.3 review P2；per-device 量測 facade（產品語意，取代 operator 透傳）；device→domain 以 gateway_id 權威映射（鏡像 device-service `table_for_gateway`）；OPS-gated（domain 解析需特權讀），READONLY 量測暫走 legacy `/api/measurements/{domain}`；強化 threat-model T-08。鎖定後 PRD §8.2 變更以本 ADR 記錄，不改 PRD 主體。
+> ADR-026 源自 PRD-0005 §6（FR-502）/ §8.1，Wave 3 規劃時補齊 BFF facade 缺口（device-service 早有 create/update，BFF 未代理 → live client 404）；DELETE 經查為 soft-retire（set status=retired）非物理刪除、與 /reject 重複故不暴露；PATCH 對 confirmed/frozen 回 409（ADR-016 凍結），分類變更走 /override。Accepted 2026-06-18；S4 endpoint 實作後須補 `api/openapi.yml` + 四文件同步。
 
 ## 撰寫規則
 
@@ -43,3 +51,54 @@
 - 模板：見 `doc/PRD-架構設計-Guideline.md` §9
 - 狀態值：`Proposed` / `Accepted` / `Deprecated` / `Superseded by ADR-XXX`
 - 變更已 Accepted 的 ADR：新建後續 ADR 並反向連結，**不修改舊 ADR 內容**（僅可改狀態）
+
+- [ADR-027 有界歷史查詢](ADR-027-monitor-history.md)：延伸 ADR-025，唯讀 history / records。
+
+- [ADR-028 Telegram 示範通知](ADR-028-telegram-demo-alarm.md)：BFF 直接呼叫固定 Telegram sendMessage，與 Grafana 自動告警分開（固定單一接收者部分由 ADR-036 取代）。
+
+- [ADR-029 Delta edge telemetry](ADR-029-delta-edge-telemetry.md)：Accepted，本機獨立Python TCP/RTU採集、動態倍率、SQLite→MQTT，沿用四欄electricity投影。
+
+- [ADR-030 邊緣 SQLite 與中央提交確認](ADR-030-edge-durable-receipts.md)：Proposed；多設備outbox、中央receipt原子去重與committed ACK；未取代已部署v1。
+
+- [ADR-031 Delta RTU simulator](ADR-031-delta-rtu-simulator.md)：Accepted；PC 串口從站回應 Pi，沿用唯讀資料表與既有 TCP 模式。
+
+- [ADR-032 依採樣間距呈現监控折線](ADR-032-monitor-sampling-lines.md)：正常稀疏採樣連線、較長缺口保留。
+
+- [ADR-034 Delta demo 一秒採樣與量測誤差](ADR-034-delta-one-second-noise.md)：固定節拍、有界量測誤差、保留場景與協定。
+
+- [ADR-033 Simulator 統一控制與持久操作紀錄](ADR-033-simulator-control-audit.md)：BFF 固定 adapters + 內部認證 wrapper、SQLite intent/events、停用舊模擬器寫入旁路。
+
+- [ADR-035：本機帳號以 PostgreSQL 為唯一來源](ADR-035-database-local-accounts.md) — 取代 ADR-024 local env table；OIDC 保留。
+
+- [ADR-036：Telegram 訪客 QR 綁定採 BFF 長輪詢與單一綁定](ADR-036-telegram-visitor-binding-long-polling.md) — getUpdates（無 webhook）、輪替 start code、SQLite 單一綁定與每日 keyed 計數；部分取代 ADR-028。
+
+
+
+
+
+
+
+
+- [ADR-040：Delta RTU 模擬器串口斷線恢復](ADR-040-delta-rtu-listener-recovery.md) — Accepted（本機模擬器）；同埠重開、保留context、第一次開啟fail-fast。軟體回歸通過，物理USB恢復另驗。
+
+- [ADR-041：RTU 不確定交易鎖定與有界恢復](ADR-041-rtu-uncertainty-and-bounded-recovery.md) — Accepted（本機實作）；未知回覆上界停止新採樣，核定上界後隔離／重建／清buffer，field啟動也須隔離。真機上界待核定。
+
+
+
+- [ADR-043：opt-in 中央 committed telemetry](ADR-043-opt-in-committed-telemetry.md) — Accepted for implementation；PRD-0021 可靠送達子集已私有驗證，v2 UUID/hash／session ACK、原子 receipt＋投影／去重／缺列修復。共享 v1／長測不切換，完整多設備／對帳／Pi field 仍待驗收。
+
+
+
+- [ADR-045：最新量測優先的本地循環保留](ADR-045-newest-first-edge-retention.md) — Accepted；使用者核定滿容量按最舊seq淘汰量測以存新資料，含pending／quarantine／audit；schema3／wire2、原子淘汰＋新寫入、有界摘要，未切共享或重跑長測。部分取代ADR-030／043的滿容量拒新，控制稽核不變。
+
+
+
+
+
+- [ADR-048：v2最新與最舊補傳公平送達](ADR-048-v2-live-backlog-fairness.md) — Accepted／已私有驗證；FR-2107成功1:1交替max/min capture_seq，原ACK／wire2／schema3不變。38定點、419相鄰／12專用skip，千筆積壓下三筆新資料約1.04／2.09／2.10秒；非每筆固定SLA／20s吞吐，未切共享或重跑長測。
+
+- [ADR-049：同步WAL刷盤後ACK與實體PITR](ADR-049-synchronous-wal-ack-and-pitr.md) — Accepted／私有驗證；field不允許local降級，migration020受限boolean，PG15同步archive＋實體basebackup；正式異失效域／Pi仍待驗。
+
+- [ADR-050：DB／WAL TLS與還原身分](ADR-050-database-tls-and-recovery-identity.md) — Accepted／私有驗證；field db_tls必填、新021嚴格TLS＋固定角色predicate、外置cluster ID／checksum／tar界限；55定點、568短回歸、36 PITR通過，正式部署另驗。
+
+- [ADR-051：固定還原分支與lost slot重建保護鏈](ADR-051-pinned-recovery-and-slot-reseed.md) — Accepted／已私有短測；directory CLI必填外置timeline／target，先新slot reserve再備份／真新鏈PITR後開ACK。38定點／616短回歸；本輪必要強化收尾，無正式部署。

@@ -1,0 +1,56 @@
+ssssssssssss............................................................ [ 35%]
+........................................................................ [ 70%]
+.................F.........................................              [100%]
+=================================== FAILURES ===================================
+_________ test_demo_is_one_second_and_field_templates_keep_ten_seconds _________
+
+    def test_demo_is_one_second_and_field_templates_keep_ten_seconds():
+        folder = Path(__file__).resolve().parents[1] / "config"
+>       assert json.loads((folder / "demo.json").read_text())["poll_interval"] == 1
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests/test_sampling_noise.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+/usr/local/lib/python3.11/pathlib.py:1058: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = PosixPath('/app/config/demo.json'), mode = 'r', buffering = -1
+encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: '/app/config/demo.json'
+
+/usr/local/lib/python3.11/pathlib.py:1044: FileNotFoundError
+-------------- generated xml file: /evidence/regression-junit.xml --------------
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.11.15-final-0 _______________
+
+Name                        Stmts   Miss  Cover   Missing
+---------------------------------------------------------
+delta_device/__init__.py        0      0   100%
+delta_device/__main__.py       60      3    95%   54, 65, 71
+delta_device/config.py        100      2    98%   30, 33
+delta_device/delivery.py       87      1    99%   23
+delta_device/edge.py           54      3    94%   40-42, 60
+delta_device/poller.py        101      4    96%   45, 54, 123-124
+delta_device/protocol.py       54      1    98%   18
+delta_device/publisher.py      62      6    90%   26, 51-52, 62, 74-75
+delta_device/simulator.py     142      6    96%   26, 49, 118-119, 148, 180
+---------------------------------------------------------
+TOTAL                         660     26    96%
+Coverage JSON written to file /evidence/coverage.json
+Required test coverage of 80% reached. Total coverage: 96.06%
+=========================== short test summary info ============================
+FAILED tests/test_sampling_noise.py::test_demo_is_one_second_and_field_templates_keep_ten_seconds
+1 failed, 190 passed, 12 skipped in 11.40s

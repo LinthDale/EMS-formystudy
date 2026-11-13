@@ -1,0 +1,7 @@
+{
+  "scope": "static independent interruption audit only",
+  "exclude": [
+    "artifact-sha256.json"
+  ],
+  "original_evidence_not_rehashed": true
+}

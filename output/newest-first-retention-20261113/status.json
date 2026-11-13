@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "baseline_passed": 336,
+  "baseline_skipped": 12,
+  "capacity_cases": 23,
+  "mandatory_boundary_cases": 35,
+  "controller_guard_cases": 16,
+  "production_line_percent": 91.04377104377105,
+  "baseline_elapsed_seconds": 27.17,
+  "policy": "drop_oldest_by_capture_seq",
+  "local_schema": 3,
+  "wire_schema": 2,
+  "shared_v2_deployed": false,
+  "long_test_restarted": false,
+  "pi_field_acceptance": false,
+  "fault_cases_passed": 43,
+  "fault_cases_skipped": 0,
+  "fault_elapsed_seconds": 9.11
+}

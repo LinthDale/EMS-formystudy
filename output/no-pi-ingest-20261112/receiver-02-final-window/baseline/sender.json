@@ -1,0 +1,32 @@
+{
+  "expected": [
+    {
+      "sampled_ns": 1794474771702263000,
+      "voltage": 230.0,
+      "current": 5.0,
+      "power_kw": 1.0,
+      "energy_kwh": 1000.0
+    },
+    {
+      "sampled_ns": 1794474771702264000,
+      "voltage": 230.1,
+      "current": 5.01,
+      "power_kw": 1.01,
+      "energy_kwh": 1000.01
+    },
+    {
+      "sampled_ns": 1794474771702265000,
+      "voltage": 230.2,
+      "current": 5.02,
+      "power_kw": 1.02,
+      "energy_kwh": 1000.02
+    }
+  ],
+  "payloads": [
+    "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.0,current=5.0,power_kw=1.0,energy_kwh=1000.0 1794474771702263000",
+    "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.1,current=5.01,power_kw=1.01,energy_kwh=1000.01 1794474771702264000",
+    "electricity_measurements,device_id=delta-ingest-qa-baseline voltage=230.2,current=5.02,power_kw=1.02,energy_kwh=1000.02 1794474771702265000"
+  ],
+  "broker_ack": true,
+  "pending_end": 0
+}

@@ -24,3 +24,12 @@ pytest-asyncio>=0.23
 httpx>=0.27
 psycopg2-binary>=2.9
 paho-mqtt>=2.0
+
+# Delta native RTU transport; dedicated deploy pins live in services/delta/requirements.txt.
+pyserial==3.5
+
+# BFF database account integration (runtime: services/bff/requirements.txt)
+asyncpg>=0.29,<1.0
+
+# Committed telemetry receiver reuses these dependencies; deploy pins live in
+# services/edge-receiver/requirements.txt (paho-mqtt 2.1.0 / asyncpg 0.31.0).

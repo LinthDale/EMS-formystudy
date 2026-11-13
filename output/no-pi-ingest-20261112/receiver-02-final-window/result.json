@@ -1,0 +1,107 @@
+{
+  "started_utc": "2026-11-12T09:12:47.652236+00:00",
+  "scope": "private actual v1 ingest clone, not shared DB fault injection",
+  "verification_passed": true,
+  "system_delivery_acceptance_passed": false,
+  "meaning": "counterexamples reproduced and recovery checked; v1 has no durable central ACK/dedup",
+  "cases": [
+    {
+      "kind": "baseline",
+      "comparison": {
+        "expected": 3,
+        "received": 3,
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": true
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": true
+    },
+    {
+      "kind": "duplicate",
+      "comparison": {
+        "expected": 1,
+        "received": 2,
+        "missing": [],
+        "extra": [],
+        "duplicates": [
+          1794474780888643000
+        ],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": false
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": false
+    },
+    {
+      "kind": "receiver-down",
+      "comparison": {
+        "expected": 1,
+        "received": 0,
+        "missing": [
+          1794474786524683000
+        ],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": false
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": false
+    },
+    {
+      "kind": "db-pause",
+      "comparison": {
+        "expected": 10,
+        "received": 10,
+        "missing": [],
+        "extra": [],
+        "duplicates": [],
+        "source_duplicates": [],
+        "mismatched": [],
+        "pass": true
+      },
+      "experiment_passed": true,
+      "system_delivery_acceptance_passed": true
+    }
+  ],
+  "cleanup": [
+    {
+      "action": "remove",
+      "name": "ingest",
+      "container": "7e98f102c2fc2a02d9259bd8490bb7418f5b3374f533b04c9ee03879fe8f7039",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "worker",
+      "container": "f22452fb1a1c0920d57de9b446cd79dfb802f32f0dd4ea19df6b923eda5d4233",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "database",
+      "container": "2e18917763406638217cd711dab3d1555fd9c0164381835010857fab4f2d94fe",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "broker",
+      "container": "8193268a150d3a01e353b9d953f7f22f98362840745f88cf93ca4dcff809e9ce",
+      "passed": true
+    },
+    {
+      "action": "remove",
+      "name": "anchor",
+      "container": "0e8f68c75e47809a41f871ef2728f65689c6fb7e804441f09ce60ca0b3432bc9",
+      "passed": true
+    }
+  ],
+  "sources_unchanged": true,
+  "finished_utc": "2026-11-12T09:13:37.679020+00:00"
+}

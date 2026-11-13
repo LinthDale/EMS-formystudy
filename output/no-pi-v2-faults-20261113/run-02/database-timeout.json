@@ -1,0 +1,26 @@
+{
+  "passed": true,
+  "sample_id": "38d9e55e-4215-4df1-bf40-70827c011b9f",
+  "true_database_retryable_observed": true,
+  "received_statuses": [
+    {
+      "error_code": "database",
+      "payload_hash": "0fdeae5ee8673e70a7a13194c43c9fa1f2bd2d0b3f84acee03b30eec99d94c3a",
+      "sample_id": "38d9e55e-4215-4df1-bf40-70827c011b9f",
+      "status": "retryable"
+    },
+    {
+      "committed_at": "2026-11-13T01:25:53.230795+00:00",
+      "payload_hash": "0fdeae5ee8673e70a7a13194c43c9fa1f2bd2d0b3f84acee03b30eec99d94c3a",
+      "sample_id": "38d9e55e-4215-4df1-bf40-70827c011b9f",
+      "status": "committed"
+    }
+  ],
+  "after_failure": [
+    0,
+    0
+  ],
+  "receipts": 1,
+  "projections": 1,
+  "pending_end": 0
+}

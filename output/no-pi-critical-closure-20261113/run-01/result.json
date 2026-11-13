@@ -1,0 +1,45 @@
+{
+  "passed": false,
+  "suite": "critical",
+  "scope": "private real MQTT/PostgreSQL; no shared fault injection",
+  "error_kind": "ValueError",
+  "cleanup": [
+    {
+      "name": "worker",
+      "container": "ffc099f05378e92cea974467aebc5d9a2a657eae58651b645f89142cfdd75672",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "wal-receiver",
+      "container": "a58526ce4fae73e867d0fcaac464c358421a2121934ae22435667aa0fc8ee670",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "database",
+      "container": "78c09c86f2942e67dd7f1f8a70ade29f2aa5a65b7c1c153c4b19c94ebabf931a",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "tls-broker",
+      "container": "19f4ffa2e7e892446d398e37d16cf948814efba5b4ed14d513264baf33c66c0b",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "broker",
+      "container": "76f749f06c439bd9d79a180f7332c6cfa688b15f4d52fa853537cd44b121c703",
+      "passed": true,
+      "logs_passed": true
+    },
+    {
+      "name": "anchor",
+      "container": "6ee6de26e646e992593d75d8473a15335d3f2d61b1066dbe655e9a8a0af8fbbc",
+      "passed": true,
+      "logs_passed": true
+    }
+  ],
+  "sources_unchanged": true
+}

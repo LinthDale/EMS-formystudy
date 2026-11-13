@@ -1,0 +1,35 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 53,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 53,
+  "observed_tests": 53,
+  "evidence_checks": {
+    "positive": true,
+    "db-wrong_ca": true,
+    "db-wrong_host": true,
+    "db-expired": true,
+    "db-missing_client": true,
+    "db-untrusted_client": true,
+    "db-wrong_user": true,
+    "wal-wrong_ca": true,
+    "wal-wrong_host": true,
+    "wal-expired": true,
+    "wal-missing_client": true,
+    "wal-untrusted_client": true,
+    "wal-wrong_user": true,
+    "wal-plaintext": true,
+    "gate-plaintext": true,
+    "gate-wrong_role": true,
+    "recovery": true,
+    "enospc": true
+  }
+}

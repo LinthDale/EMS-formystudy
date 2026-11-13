@@ -1,0 +1,15 @@
+{
+  "checks": [
+    {
+      "width": 1440,
+      "rows": 100,
+      "time_cells_match": false
+    },
+    {
+      "width": 390,
+      "rows": 100,
+      "time_cells_match": false
+    }
+  ],
+  "passed": false
+}

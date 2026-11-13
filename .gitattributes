@@ -1,0 +1,27 @@
+# Preserve immutable validation bytes and their recorded SHA256 values.
+/output/committed-delivery-fix-20261112/** -text
+/output/delta-no-pi-validation-20261112/** -text
+/output/delta-rtu-bench-20261112/** -text
+/output/newest-first-retention-20261113/** -text
+/output/no-pi-backlog-20261112/** -text
+/output/no-pi-critical-closure-20261113/** -text
+/output/no-pi-cutover-20261113/** -text
+/output/no-pi-ingest-20261112/** -text
+/output/no-pi-integrity-20261113/** -text
+/output/no-pi-lifecycle-20261113/** -text
+/output/no-pi-resilience-20261113/** -text
+/output/no-pi-restore-load-20261113/** -text
+/output/no-pi-takeover-20261112-1600/** -text
+/output/no-pi-v2-faults-20261113/** -text
+/output/no-pi-wal-pitr-20261113/** -text
+/output/no-pi-wal-security-20261113/** -text
+/output/slot-5109-verification-20261113/** -text
+/output/slot-boundary-fix-20261113/** -text
+/output/soak-interruption-audit-20261113/** -text
+/services/delta/.gitignore -text
+/services/delta/README.md -text
+/services/delta/validation.md -text
+/services/edge-receiver/README.md -text
+/services/edge-receiver/tools/boundary-cases.json -text
+# Deliberate small schema-compatibility test fixture, not a runtime database.
+/services/delta/tests/fixtures/schema2-full.db binary

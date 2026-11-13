@@ -1,0 +1,499 @@
+{
+  "db-wal-tls-positive": {
+    "passed": true,
+    "database_tls": {
+      "ssl": true,
+      "version": "TLSv1.3",
+      "client_dn": "/CN=qa_tls_receiver"
+    },
+    "wal_peer": {
+      "passed": true,
+      "request_id": "57140427-8bdb-403b-b097-0f55442b3e36",
+      "op": "wal_status",
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1E992B0",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1E992B0"
+    },
+    "rows": 1,
+    "pending_end": 0,
+    "sync_wal": true
+  },
+  "recovery-inputs": {
+    "passed": true,
+    "request_id": "f5c6af55-d417-4c2c-9c90-f0f9eda7c662",
+    "op": "recovery_matrix",
+    "expected_system_id": "7707554044145840170",
+    "foreign_system_id": "7707554306294304810",
+    "good_promoted": true,
+    "postbackup_marker_recovered": true,
+    "corrupt_backup_checksum_rejected": true,
+    "corrupt_later_wal_crc_rejected": true,
+    "foreign_wal_system_id_rejected": true,
+    "valid_foreign_bundle_rejected_before_start": true,
+    "foreign_bundle_checksum_valid": true,
+    "pristine_inputs_unchanged": true
+  },
+  "wal-enospc": {
+    "passed": true,
+    "failure": {
+      "passed": true,
+      "request_id": "fa464f5c-cd2e-45f8-9585-dc9a513bb958",
+      "op": "wal_full",
+      "actual_enospc": true,
+      "archive_limit_bytes": 134217728,
+      "child_exit": 1,
+      "before": {
+        "slot": "ems_archive_slot",
+        "restart_lsn": "0/3024BE0",
+        "lag_bytes": 0,
+        "slot_retained_bytes": 0,
+        "active": true,
+        "peer_tls": true,
+        "peer_role": "ems_wal_archive",
+        "peer_client_dn": "/CN=ems_wal_archive",
+        "flush_lsn": "0/3024BE0"
+      },
+      "after": {
+        "slot": "ems_archive_slot",
+        "restart_lsn": "0/3024BE0",
+        "lag_bytes": 33403936,
+        "slot_retained_bytes": 33403936,
+        "active": false,
+        "peer_tls": null,
+        "peer_role": null,
+        "peer_client_dn": null,
+        "flush_lsn": null
+      },
+      "container_kept_running": true
+    },
+    "recovered": {
+      "passed": true,
+      "request_id": "22ed483f-55e5-4070-9b24-fcbb5c941f99",
+      "op": "wal_free",
+      "synchronous": true,
+      "same_slot": true,
+      "slot": {
+        "slot": "ems_archive_slot",
+        "restart_lsn": "0/4000000",
+        "lag_bytes": 16777216,
+        "slot_retained_bytes": 16777216,
+        "active": true,
+        "peer_tls": true,
+        "peer_role": "ems_wal_archive",
+        "peer_client_dn": "/CN=ems_wal_archive",
+        "flush_lsn": "0/4000000"
+      }
+    },
+    "caught_up": {
+      "passed": true,
+      "request_id": "58b5f116-a121-4a86-9e57-672dfbf1d81a",
+      "op": "wal_caught_up",
+      "fixed_lsn": "0/5003870",
+      "flush_fence_satisfied": true,
+      "slot": {
+        "slot": "ems_archive_slot",
+        "restart_lsn": "0/5003870",
+        "lag_bytes": 0,
+        "slot_retained_bytes": 0,
+        "active": true,
+        "peer_tls": true,
+        "peer_role": "ems_wal_archive",
+        "peer_client_dn": "/CN=ems_wal_archive",
+        "flush_lsn": "0/5003870"
+      }
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0,
+    "scope": "bounded owned tmpfs ENOSPC behavior; not nonvolatile/power-failure durability"
+  },
+  "wal-gate-plaintext": {
+    "passed": true,
+    "kind": "plaintext",
+    "gate": {
+      "passed": true,
+      "request_id": "2b27d3b5-2f29-4e5c-b8ad-018301160528",
+      "op": "wal_gate_plaintext",
+      "peer_connected": true,
+      "gate_rejected": true,
+      "observed": {
+        "ssl": false,
+        "client_dn": null,
+        "username": "ems_wal_archive",
+        "guard": false
+      }
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-gate-wrong_role": {
+    "passed": true,
+    "kind": "wrong_role",
+    "gate": {
+      "passed": true,
+      "request_id": "a87108aa-1960-476d-bc85-b3565f75c538",
+      "op": "wal_gate_wrong_role",
+      "peer_connected": true,
+      "gate_rejected": true,
+      "observed": {
+        "ssl": true,
+        "client_dn": "/CN=postgres",
+        "username": "postgres",
+        "guard": false
+      }
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-wrong_ca": {
+    "passed": true,
+    "kind": "wrong_ca",
+    "actual_error": {
+      "kind": "SSLCertVerificationError",
+      "verify_code": 19,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": false
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-wrong_host": {
+    "passed": true,
+    "kind": "wrong_host",
+    "actual_error": {
+      "kind": "SSLCertVerificationError",
+      "verify_code": 64,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": false
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-expired": {
+    "passed": true,
+    "kind": "expired",
+    "actual_error": {
+      "kind": "SSLCertVerificationError",
+      "verify_code": 10,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": false
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-missing_client": {
+    "passed": true,
+    "kind": "missing_client",
+    "actual_error": {
+      "kind": "InvalidAuthorizationSpecificationError",
+      "verify_code": null,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": true
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-untrusted_client": {
+    "passed": true,
+    "kind": "untrusted_client",
+    "actual_error": {
+      "kind": "ConnectionDoesNotExistError",
+      "verify_code": null,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": false,
+      "server_rejected_client_certificate": true,
+      "client_certificate_verify_code": 20
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-expired_client": {
+    "passed": true,
+    "kind": "expired_client",
+    "actual_error": {
+      "kind": "ConnectionDoesNotExistError",
+      "verify_code": null,
+      "certificate_identity_rejected": false,
+      "client_certificate_required": false,
+      "server_rejected_client_certificate": true,
+      "client_certificate_verify_code": 10
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "db-tls-wrong_user": {
+    "passed": true,
+    "kind": "wrong_user",
+    "actual_error": {
+      "kind": "InvalidAuthorizationSpecificationError",
+      "verify_code": null,
+      "certificate_identity_rejected": true,
+      "client_certificate_required": false
+    },
+    "source_preserved": true,
+    "no_partial_write": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-wrong_ca": {
+    "passed": true,
+    "kind": "wrong_ca",
+    "probe": {
+      "passed": true,
+      "request_id": "c145f83f-70cc-4865-a8ce-b56e6e926fc9",
+      "op": "wal_probe_wrong_ca",
+      "kind": "wrong_ca",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "2c977e90c3794a588b9fe6c8c0a181a04477c4fa00ace8cf5a45c0221ae9d237",
+      "replication_peer_absent": true,
+      "tls_verify_code": 19,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6030",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6030"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-wrong_host": {
+    "passed": true,
+    "kind": "wrong_host",
+    "probe": {
+      "passed": true,
+      "request_id": "2fe3b31b-52b2-48e6-9660-1694dac60667",
+      "op": "wal_probe_wrong_host",
+      "kind": "wrong_host",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "aa623c3b91fe66c996e672a0dda5b79f66b1f5547d374095e2aefcc36ed2aaa4",
+      "replication_peer_absent": true,
+      "tls_verify_code": 64,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6688",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6688"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-expired": {
+    "passed": true,
+    "kind": "expired",
+    "probe": {
+      "passed": true,
+      "request_id": "a6a9d0c4-a752-4599-943c-11656f7c87ba",
+      "op": "wal_probe_expired",
+      "kind": "expired",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "750d71540b3fd5304e0ce4281692b8bfc5d989213b999c9fbb4af8aacd7e3c9c",
+      "replication_peer_absent": true,
+      "tls_verify_code": 10,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC6D18",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC6D18"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-missing_client": {
+    "passed": true,
+    "kind": "missing_client",
+    "probe": {
+      "passed": true,
+      "request_id": "56abf58a-88a5-4e5f-a7e9-7a723134e640",
+      "op": "wal_probe_missing_client",
+      "kind": "missing_client",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "0eea47f37f3dfaf34157c59cbc6710750c53ea33dfbb2d22aaaa27a8f1d942cc",
+      "replication_peer_absent": true,
+      "tls_verify_code": null,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC7370",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC7370"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-untrusted_client": {
+    "passed": true,
+    "kind": "untrusted_client",
+    "probe": {
+      "passed": true,
+      "request_id": "2b38244f-e852-4b45-a6c4-d8c727e7e99f",
+      "op": "wal_probe_untrusted_client",
+      "kind": "untrusted_client",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "137cfedc4d1496fe5383ab8d5bfe133cac721c67fc656ac208412837af064f8e",
+      "replication_peer_absent": true,
+      "tls_verify_code": null,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC79C8",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC79C8"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-expired_client": {
+    "passed": true,
+    "kind": "expired_client",
+    "probe": {
+      "passed": true,
+      "request_id": "bfd0d2a4-0408-4dc7-a618-dc6fea1dca8a",
+      "op": "wal_probe_expired_client",
+      "kind": "expired_client",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "9b5c05c8e6eda8e315f41c1a1084e597fedee4e5a754b7999da01d9a4549032e",
+      "replication_peer_absent": true,
+      "tls_verify_code": null,
+      "client_verify_code": 10
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8038",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8038"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-wrong_user": {
+    "passed": true,
+    "kind": "wrong_user",
+    "probe": {
+      "passed": true,
+      "request_id": "f43d1fb8-5e0f-4daa-8982-75473c7589cd",
+      "op": "wal_probe_wrong_user",
+      "kind": "wrong_user",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "3c85343f4acc708774fbf7f5c317da6bdebb1203ac6a99a3fb5b0bcda81f8ee6",
+      "replication_peer_absent": true,
+      "tls_verify_code": null,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8690",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8690"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  },
+  "wal-tls-plaintext": {
+    "passed": true,
+    "kind": "plaintext",
+    "probe": {
+      "passed": true,
+      "request_id": "6473beb8-5408-4e05-8027-15dc6ff75b76",
+      "op": "wal_probe_plaintext",
+      "kind": "plaintext",
+      "exit_code": 1,
+      "reason_verified": true,
+      "container_id": "bef21252c3ceebe7b13a6be647d48a95b2bb3185e457c73521d29517874a5029",
+      "replication_peer_absent": true,
+      "tls_verify_code": null,
+      "client_verify_code": null
+    },
+    "recovered_slot": {
+      "slot": "ems_archive_slot",
+      "restart_lsn": "0/1FC8D20",
+      "lag_bytes": 0,
+      "slot_retained_bytes": 0,
+      "active": true,
+      "peer_tls": true,
+      "peer_role": "ems_wal_archive",
+      "peer_client_dn": "/CN=ems_wal_archive",
+      "flush_lsn": "0/1FC8D20"
+    },
+    "source_preserved": true,
+    "rows": 1,
+    "pending_end": 0
+  }
+}

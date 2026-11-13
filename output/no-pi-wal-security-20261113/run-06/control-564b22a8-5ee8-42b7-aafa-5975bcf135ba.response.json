@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "request_id": "564b22a8-5ee8-42b7-aafa-5975bcf135ba",
+  "op": "wal_probe_untrusted_client",
+  "kind": "untrusted_client",
+  "exit_code": 1,
+  "reason_verified": true,
+  "container_id": "bee87e7615a5a0c8b5ca83ba370c534c7f257a33caaa4f217fd0560fd183d4fc",
+  "replication_peer_absent": true,
+  "tls_verify_code": null
+}

@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "sample_id": "0cb803d7-f673-496b-bff9-200b79d72056",
+  "consumers": [
+    "a",
+    "b"
+  ],
+  "receipts": 1,
+  "projections": 1,
+  "pending_end": 0
+}

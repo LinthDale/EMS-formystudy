@@ -1,0 +1,51 @@
+{
+  "scope": "read-only settled prefix of RUNNING 24h test, not final acceptance",
+  "observed_utc": "2026-11-12T08:02:20.247769+00:00",
+  "snapshot_sha256": "36895e1c28eb49994d7cd8c9ebc8940192bbee3451083ceec13256cd2262b15b",
+  "snapshot_trailing_incomplete_bytes": 0,
+  "window_start_utc": "2026-11-12T06:49:53.637469+00:00",
+  "prefix_end_exclusive_utc": "2026-11-12T08:01:48.637469+00:00",
+  "scheduled_prefix_slots": 863,
+  "ledger": {
+    "scheduled": 863,
+    "attempted": 863,
+    "valid": 863,
+    "committed": 863,
+    "missing_slots": [],
+    "failed_slots": [],
+    "duplicate_attempt_slots": [],
+    "duplicate_read_slots": [],
+    "duplicate_commit_slots": [],
+    "outside_slots": [],
+    "poll_seconds": {
+      "p50": 0.29699999978765845,
+      "p95": 0.3440000000409782,
+      "p99": 0.3600000003352761,
+      "max": 0.375
+    },
+    "pass": true
+  },
+  "golden_errors": [],
+  "database": {
+    "expected": 863,
+    "received": 863,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "api": {
+    "expected": 863,
+    "received": 863,
+    "missing": [],
+    "extra": [],
+    "duplicates": [],
+    "source_duplicates": [],
+    "mismatched": [],
+    "pass": true
+  },
+  "full_24h_passed": false,
+  "prefix_passed": true
+}

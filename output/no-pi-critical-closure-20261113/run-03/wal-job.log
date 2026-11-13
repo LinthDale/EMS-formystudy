@@ -1,0 +1,6 @@
+pg_receivewal: starting log streaming at 0/3000000 (timeline 1)
+pg_receivewal: finished segment at 0/4000000 (timeline 1)
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: not renaming "000000010000000000000004.partial", segment is not complete
+pg_receivewal: received interrupt signal, exiting
+pg_receivewal: starting log streaming at 0/4000000 (timeline 1)

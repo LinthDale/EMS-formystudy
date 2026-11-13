@@ -1,0 +1,8 @@
+# prod build context 精簡（加速 build、避免把本機產物帶進 image layer）
+node_modules
+dist
+coverage
+*.local
+.DS_Store
+Dockerfile
+.dockerignore

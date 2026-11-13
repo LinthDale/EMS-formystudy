@@ -1,0 +1,30 @@
+{
+  "passed": true,
+  "boundary": {
+    "passed": true,
+    "observed_tests": 66,
+    "boundary_cases": 35,
+    "missing_groups": {},
+    "boundary_failed_or_skipped": false,
+    "missing_case_ids": [],
+    "unexpected_case_ids": [],
+    "duplicate_case_ids": []
+  },
+  "expected_tests": 66,
+  "observed_tests": 66,
+  "evidence_checks": {
+    "logical-sequence-rollback": true,
+    "logical-clock-rollback": true,
+    "logical-missing-audit": true,
+    "logical-audit-hash": true,
+    "logical-audit-state": true,
+    "logical-orphan-audit": true,
+    "logical-audit-sequence": true,
+    "malformed-bad-hash": true,
+    "malformed-duplicate-id": true,
+    "malformed-duplicate-key": true,
+    "malformed-invalid-utf8": true,
+    "malformed-excess-depth": true,
+    "sigterm-db-wait": true
+  }
+}

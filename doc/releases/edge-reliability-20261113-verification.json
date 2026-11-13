@@ -1,0 +1,22 @@
+{
+  "captured_utc": "2026-11-13T08:25:32.189379+00:00",
+  "passed": true,
+  "payload_staged_files_before_audit_record": 3405,
+  "payload_bytes": 34220262,
+  "git_blob_verification": {
+    "passed": true,
+    "evidence_count": 3240,
+    "source_count": 145,
+    "evidence_mismatches": [],
+    "source_mismatches": []
+  },
+  "relative_authority_links_valid": true,
+  "api_version_gate": true,
+  "openapi_version": "2.2.1",
+  "rest_contract_unchanged": true,
+  "whitespace_check": "non-evidence checked; CRLF and preexisting final blank lines retained; evidence preserved byte-for-byte",
+  "code_review": "APPROVE",
+  "security_review": "APPROVE; no secrets or scope blockers; 3240+145 actual index blob bytes independently verified",
+  "no_new_long_test": true,
+  "no_deployment": true
+}

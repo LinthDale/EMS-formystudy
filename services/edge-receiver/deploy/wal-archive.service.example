@@ -1,0 +1,25 @@
+# Install on an independently powered/storage host, after commissioning the
+# cluster system ID, physical slot, base backup and TLS service configuration.
+[Unit]
+Description=EMS synchronous durable WAL archive
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ems-wal
+Group=ems-wal
+Environment=PGSERVICEFILE=/etc/ems-wal/pg_service.conf
+Environment=PGPASSFILE=/run/secrets/ems-wal.pgpass
+# Replace CLUSTER_SYSTEM_ID with the verified primary system identifier.
+ExecStart=/usr/bin/pg_receivewal --dbname=service=ems_archive --directory=/var/lib/ems-wal/CLUSTER_SYSTEM_ID --synchronous --slot=ems_archive_slot --status-interval=1 --no-loop
+Restart=on-failure
+RestartSec=2
+UMask=0077
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/var/lib/ems-wal
+
+[Install]
+WantedBy=multi-user.target

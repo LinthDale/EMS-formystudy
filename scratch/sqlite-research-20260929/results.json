@@ -1,0 +1,76 @@
+{
+  "environment": {
+    "python": "3.11.15",
+    "sqlite": "3.46.1",
+    "platform": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.41",
+    "storage": "Docker temporary filesystem on WSL host; not Pi/SD"
+  },
+  "sample": {
+    "ilp_bytes": 129,
+    "snapshot_bytes": 391
+  },
+  "occupancy": [
+    {
+      "rows": 10000,
+      "db_bytes": 5881856,
+      "allocated_bytes_per_row": 588.19,
+      "count_p95_ms": 0.781
+    },
+    {
+      "rows": 60480,
+      "db_bytes": 35491840,
+      "allocated_bytes_per_row": 586.84,
+      "count_p95_ms": 4.211
+    },
+    {
+      "rows": 483840,
+      "db_bytes": 283840512,
+      "allocated_bytes_per_row": 586.64,
+      "count_p95_ms": 29.942
+    }
+  ],
+  "cycles": [
+    {
+      "mode": "DELETE",
+      "synchronous": "FULL",
+      "cycles": 250,
+      "enqueue_select_ack_p50_ms": 4.576,
+      "enqueue_select_ack_p95_ms": 5.673,
+      "note": "No WAN RTT; open/close per operation, no concurrent writers; not Pi throughput"
+    },
+    {
+      "mode": "DELETE",
+      "synchronous": "EXTRA",
+      "cycles": 250,
+      "enqueue_select_ack_p50_ms": 29.003,
+      "enqueue_select_ack_p95_ms": 37.49,
+      "note": "No WAN RTT; open/close per operation, no concurrent writers; not Pi throughput"
+    },
+    {
+      "mode": "WAL",
+      "synchronous": "FULL",
+      "cycles": 250,
+      "enqueue_select_ack_p50_ms": 25.849,
+      "enqueue_select_ack_p95_ms": 40.677,
+      "note": "No WAN RTT; open/close per operation, no concurrent writers; not Pi throughput"
+    }
+  ],
+  "process_crash": [
+    {
+      "mode": "DELETE",
+      "sync": "EXTRA",
+      "committed_rows_survived": 100,
+      "uncommitted_row_absent": true,
+      "integrity": "ok",
+      "limitation": "Process exit only; not loss of OS cache or physical power"
+    },
+    {
+      "mode": "WAL",
+      "sync": "FULL",
+      "committed_rows_survived": 100,
+      "uncommitted_row_absent": true,
+      "integrity": "ok",
+      "limitation": "Process exit only; not loss of OS cache or physical power"
+    }
+  ]
+}

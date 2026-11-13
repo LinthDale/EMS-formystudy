@@ -1,0 +1,118 @@
+{
+  "passed": true,
+  "wal_outage_kept_source": true,
+  "postcommit_wal_loss_kept_source": true,
+  "migration_least_privilege": true,
+  "postbackup_acked_payload_absent": true,
+  "original_primary_stopped": true,
+  "original_pgdata_not_used": true,
+  "backup_and_wal_identity_match": true,
+  "pitr_excluded_after_target": true,
+  "old_ack_rejected": true,
+  "missing_wal_failed_closed": true,
+  "recovered_sync_wal_ready": true,
+  "final_rows": [
+    1,
+    1,
+    1,
+    1
+  ],
+  "pending_end": 0,
+  "recovered_acked_after_backup_sample_id": "2409334e-ef6d-4f5a-b1b7-80c3de8973e6",
+  "pending_replayed_sample_id": "25295c87-babd-46ec-8d71-1e542dd60101",
+  "stopped": {
+    "passed": true,
+    "request_id": "045ef1d9-f290-445e-bd02-6d4f470caec5",
+    "op": "wal_stop",
+    "running": false,
+    "container_id": "9ae8ec5dbfa086b939f562f783ea7fb9315cb4a5e11fe08ba2bf06c2edf8cede"
+  },
+  "started": {
+    "passed": true,
+    "request_id": "4a940707-1e33-4454-bc3c-30cc7dcf2ff5",
+    "op": "wal_start",
+    "running": true,
+    "container_id": "9ae8ec5dbfa086b939f562f783ea7fb9315cb4a5e11fe08ba2bf06c2edf8cede"
+  },
+  "backup": {
+    "passed": true,
+    "request_id": "4af1a843-4803-4ce0-aa4f-221f3a7dcc3b",
+    "op": "wal_basebackup",
+    "files": {
+      "backup_manifest": {
+        "bytes": 312283,
+        "sha256": "cb45147ea51170c796b160f39b41a5ef81a8941f0b8a28e94d7c1142741b5f6a"
+      },
+      "base.tar": {
+        "bytes": 36488704,
+        "sha256": "1acd5da3ed346e3ca0b0ee4e704d09a0a937dd67c6884d05ba860de7937f62c0"
+      },
+      "pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "1b31c2c0aba4e52c07e5a6f7e5350cee83eb8b307ea1aa61209cb27abbcd1362"
+      }
+    },
+    "format": "physical-basebackup-tar"
+  },
+  "restore_point": {
+    "passed": true,
+    "request_id": "11676f09-0c2b-46ad-9175-296036e22955",
+    "op": "wal_restorepoint",
+    "restore_point": "ems_ack_boundary",
+    "target_lsn": "0/3000D98",
+    "independent_flush_verified": true
+  },
+  "primary_loss": {
+    "passed": true,
+    "request_id": "3f2c6197-c0d5-4ef6-88a6-69800f9711c5",
+    "op": "wal_primary_loss",
+    "original_primary_stopped": true,
+    "container_id": "b26c8a4552007ce5eeb473e70ed3b281fb07b2d5849bcdd49e10876516d53d38",
+    "artifacts": {
+      "base-backup_manifest": {
+        "bytes": 312283,
+        "sha256": "cb45147ea51170c796b160f39b41a5ef81a8941f0b8a28e94d7c1142741b5f6a"
+      },
+      "base-base.tar": {
+        "bytes": 36488704,
+        "sha256": "1acd5da3ed346e3ca0b0ee4e704d09a0a937dd67c6884d05ba860de7937f62c0"
+      },
+      "base-pg_wal.tar": {
+        "bytes": 16778752,
+        "sha256": "1b31c2c0aba4e52c07e5a6f7e5350cee83eb8b307ea1aa61209cb27abbcd1362"
+      },
+      "wal-000000010000000000000003.partial": {
+        "bytes": 16777216,
+        "sha256": "fc862aea478ac8d57b29f0789576716a48d923b3126b27d8f49b19c3a2d04458"
+      },
+      "wal-000000010000000000000001": {
+        "bytes": 16777216,
+        "sha256": "c15bf6071a5cec3d276658af23d1841f38934b67367ec15a87c5b450fc3ab705"
+      },
+      "wal-000000010000000000000002": {
+        "bytes": 16777216,
+        "sha256": "f9c5a2cdfe38e257003259ebdea2ffe92f098d9a4f2c36759ecd131c3677642b"
+      }
+    },
+    "original_pgdata_used_for_recovery": false
+  },
+  "missing_wal": {
+    "passed": true,
+    "request_id": "29d6f45b-6a8a-431e-8774-4938388412ba",
+    "op": "wal_missing",
+    "container_id": "88edde065ef404025a34cc221d2c04333434635c13af3f6ffdc7fe5010f09ea4",
+    "target_not_reached": true,
+    "promoted": false
+  },
+  "recovery": {
+    "passed": true,
+    "request_id": "022d968c-302a-4236-80ca-d5509d86e249",
+    "op": "wal_recover",
+    "container_id": "5ecc95010e03361d9a40adadb223078234352171322afff230103ee168254ab9",
+    "target_reached": true,
+    "promoted": true,
+    "port": 5433,
+    "backup_verified": true
+  },
+  "scope": "same-host isolated containers; physical basebackup+independently fsynced WAL, not site failure/RPO/RTO certification"
+}

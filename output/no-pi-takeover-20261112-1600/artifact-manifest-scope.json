@@ -1,0 +1,10 @@
+{
+  "files": 192,
+  "excluded": [
+    "**/__pycache__/**",
+    "**/.coverage",
+    "artifact-sha256.json",
+    "artifact-manifest-scope.json"
+  ],
+  "scope": "new takeover evidence only; original delta evidence and live soak untouched"
+}

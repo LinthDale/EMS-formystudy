@@ -1,0 +1,89 @@
+{
+  "expected": [
+    {
+      "capture_seq": 1,
+      "config_revision": "r1",
+      "device_id": "d1",
+      "gateway_id": "g-9e25171c6c8b",
+      "measurements": {
+        "current": 13.05,
+        "energy_kwh": 1234.56,
+        "power_kw": 9.009,
+        "voltage": 230.0
+      },
+      "payload_hash": "2d34d24d8b55383f0c1e921269c6c3f23bc20695da01ed89420ee9fb8f57db6c",
+      "profile_version": "delta-v135",
+      "sample_id": "f713c63a-8d23-4c90-af90-0d84a38564b1",
+      "sampled_at_us": 1794542983067933,
+      "stream_id": "cb528eef-ef1b-4e79-8925-4e0a11d46daf",
+      "time_quality": "trusted",
+      "window_id": "afb5a0fb-0429-4fe3-9c79-59a5dc1715ff"
+    },
+    {
+      "capture_seq": 2,
+      "config_revision": "r1",
+      "device_id": "d1",
+      "gateway_id": "g-9e25171c6c8b",
+      "measurements": {
+        "current": 13.1,
+        "energy_kwh": 1234.56,
+        "power_kw": 9.039,
+        "voltage": 230.0
+      },
+      "payload_hash": "a4860883540ad05ffad75c5746cb806780304f824147fa5ddf28cacc8d52539e",
+      "profile_version": "delta-v135",
+      "sample_id": "c7bb592b-f94d-4a9f-bcf9-2691caa7c6e5",
+      "sampled_at_us": 1794542984068006,
+      "stream_id": "cb528eef-ef1b-4e79-8925-4e0a11d46daf",
+      "time_quality": "trusted",
+      "window_id": "afb5a0fb-0429-4fe3-9c79-59a5dc1715ff"
+    },
+    {
+      "capture_seq": 3,
+      "config_revision": "r1",
+      "device_id": "d1",
+      "gateway_id": "g-9e25171c6c8b",
+      "measurements": {
+        "current": 13.14,
+        "energy_kwh": 1234.56,
+        "power_kw": 9.069,
+        "voltage": 230.0
+      },
+      "payload_hash": "0d9da370f956c3d6264f1a5f778b0c61f1680a983db1a6b8246598497636c0c7",
+      "profile_version": "delta-v135",
+      "sample_id": "45389b58-68be-4dd5-a292-4faefbd7c438",
+      "sampled_at_us": 1794542985068006,
+      "stream_id": "cb528eef-ef1b-4e79-8925-4e0a11d46daf",
+      "time_quality": "trusted",
+      "window_id": "afb5a0fb-0429-4fe3-9c79-59a5dc1715ff"
+    }
+  ],
+  "actual": [
+    {
+      "sample_id": "f713c63a-8d23-4c90-af90-0d84a38564b1",
+      "time": "2026-11-13T04:09:43.067933+00:00",
+      "current": 13.05,
+      "energy_kwh": 1234.56,
+      "power_kw": 9.009,
+      "voltage": 230.0
+    },
+    {
+      "sample_id": "c7bb592b-f94d-4a9f-bcf9-2691caa7c6e5",
+      "time": "2026-11-13T04:09:44.068006+00:00",
+      "current": 13.1,
+      "energy_kwh": 1234.56,
+      "power_kw": 9.039,
+      "voltage": 230.0
+    },
+    {
+      "sample_id": "45389b58-68be-4dd5-a292-4faefbd7c438",
+      "time": "2026-11-13T04:09:45.068006+00:00",
+      "current": 13.14,
+      "energy_kwh": 1234.56,
+      "power_kw": 9.069,
+      "voltage": 230.0
+    }
+  ],
+  "producer_exit": -9,
+  "pending_end": 0
+}

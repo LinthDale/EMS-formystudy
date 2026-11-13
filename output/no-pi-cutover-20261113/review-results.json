@@ -1,0 +1,19 @@
+{
+  "code": {
+    "verdict": "approve",
+    "critical": 0,
+    "high": 0,
+    "medium": 0,
+    "corrected": "collision snapshot taken at actual inflight disconnect, not after timeout"
+  },
+  "python": {
+    "verdict": "approve",
+    "blocking": 0
+  },
+  "security": {
+    "verdict": "approve",
+    "critical": 0,
+    "high": 0
+  },
+  "scope": "test code and owned-resource isolation only; no production/field deployment"
+}
