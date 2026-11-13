@@ -1,7 +1,25 @@
 {
-  "status": "prepared; final receipt is recorded after payload push",
+  "status": "payload commit pushed and independently verified",
+  "verified_utc": "2026-11-13T08:26:22.897958+00:00",
+  "remote": "git@github.com:LinthDale/EMS-formystudy.git",
   "branch": "codex/edge-reliability-20261113",
+  "payload_commit": "1e51ddb7e92f163846149cdb9466bed2a311bb0e",
   "base_commit": "79427c6e160832d297972b8c651604f4bd0ecf84",
+  "remote_ref_verified": "refs/heads/codex/edge-reliability-20261113",
+  "remote_payload_sha": "1e51ddb7e92f163846149cdb9466bed2a311bb0e",
   "version_tag": "edge-reliability-20261113",
-  "deployment": false
+  "tag_binding": "annotated tag will identify the receipt-containing commit; executable payload is the payload_commit above",
+  "validation": {
+    "targeted_passed": 38,
+    "regression_passed": 616,
+    "dedicated_skips": 12,
+    "coverage_percent": 91.73,
+    "new_units_included_in_regression": 48,
+    "git_evidence_blobs_matched": 3240,
+    "git_source_blobs_matched": 145
+  },
+  "deployment_performed": false,
+  "main_dev_modified": false,
+  "complete_raw_evidence": "local-only full archives indexed in evidence.json",
+  "original_checkout": "unchanged branch and pending work retained; delivered version is on the dedicated branch/worktree"
 }
